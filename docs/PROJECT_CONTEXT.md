@@ -106,5 +106,71 @@ File: `design/master/home.html` (± 1 MB — besar karena library WebGL & aset d
 - Halaman lain selain Home (Solutions detail, Industries detail, News detail,
   Company, Career, dll.) — belum didesain.
 
+## 7. CMS yang Dipakai — Reklamepedia CMS
+
+Alih-alih membuat CMS baru, proyek memakai CMS lama buatan sendiri: **Reklamepedia CMS**
+(PHP Native + MySQL/PDO, tanpa framework). Sudah pernah dijual, "belum sempurna, masih ada bug".
+Diimpor verbatim ke root repo. README asli: [`CMS_README.md`](CMS_README.md).
+
+### Arsitektur inti
+- **Router depan** `index.php`: parse URI → `switch` per halaman → `require theme_path('templates/pages/<x>.php')`.
+  Rute: `/` & `/home`, `/tentang-kami`, `/layanan[/slug]`, `/gallery`, `/blog[/slug]`, `/produk[/slug]`,
+  `/hubungi-kami`, custom page (slug dari tabel `pages`), plus `sitemap.xml`, `robots.txt`, `api/wa-click`.
+- **Config** `core/config/config.php`: konstanta DB, `BASE_URL` (auto, support subfolder),
+  `THEMES_PATH`, `PLUGINS_PATH` (didefinisikan tapi belum dipakai), dll.
+- **DB** `core/database/Database.php` (singleton, `fetchOne/fetchAll/execute`). Schema: `database/reklamepedia.sql`.
+- **Helpers** `core/helpers/helpers.php`: `get_setting/update_setting`, `theme_path/theme_url`,
+  `get_active_theme`, `get_content/update_content`, `get_menu_tree`, `wa_url`, CSRF, upload, SEO, dll.
+- **Admin** `/admin/` (router `admin/index.php` + `admin/views/<modul>/`). Modul: dashboard, blog,
+  produk, layanan, gallery, pages, menu, seo/iklan, pengaturan, **plugin**, **template** (theme manager),
+  users, wizard. Login default `admin` / `Admin@123`.
+
+### Sistem Theme (dasar untuk "Anima")
+- Theme aktif = setting `active_theme` (default `default`). `theme_path('f')` → `themes/<active_theme>/f`.
+- **Kontrak folder theme** (`themes/<slug>/`):
+  - `theme.json` — metadata (name, slug, version, description, author, tags, screenshot, supports, requires)
+  - `screenshot.png`
+  - `assets/{css,js,images}`
+  - `templates/layouts/` → `header.php`, `footer.php`
+  - `templates/pages/` → `home, about, layanan, layanan-detail, gallery, blog, blog-detail,
+    produk, produk-detail, contact, custom, 404` (12 file — dipanggil router)
+  - `templates/partials/` → `navbar, mobile-nav, wa-float, flex-content, logo-carousel, testimonial-carousel`
+- **Theme manager** `admin/views/template/index.php`: `scandir(/themes)` → auto-insert ke tabel `themes`
+  → tombol "Aktifkan" set `active_theme` + `themes.is_active`. Theme bawaan: `default`, `omah`, `reklamenesia`.
+
+### Sistem Plugin
+- **Feature toggle berbasis DB**: tabel `plugins` (slug, nama, deskripsi, is_active), di-toggle di
+  `admin/views/plugin/index.php`. Definisi detail (icon/fitur) masih hardcoded di view. Plugin bawaan: `marketplace`.
+- Belum ada plugin-loader dari file / sistem hook — `PLUGINS_PATH` belum dipakai. (Belum modular.)
+
+## 8. Rencana Theme "Anima"
+
+Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design/master/home.html`).
+
+- Pecah `index.html` → `templates/layouts/header.php` (head, fonts, nav, buka `<body>`) +
+  `templates/pages/home.php` (section-section) + `templates/layouts/footer.php` (footer, script, tutup body).
+- Pindah CSS/JS besar (termasuk Three.js WebGL) ke `themes/anima/assets/{css,js}` (jangan inline 1MB di PHP).
+- Ganti konten hard-coded → data CMS: `get_setting()` (brand/hero/kontak), query blog untuk News,
+  produk/layanan, testimoni, dll. Placeholder Pexels → media dari `uploads/`.
+- Lengkapi 12 page template + 6 partial sesuai kontrak. Isi `theme.json` + `screenshot.png`.
+- Daftarkan & aktifkan lewat Admin → Template Manager.
+
+> Belum dikerjakan. Menunggu instruksi setelah tahap "rapihin & benerin bug".
+
+## 9. Bug / Gap CMS yang Sudah Teridentifikasi (untuk diperbaiki)
+
+1. **Theme manager tidak membaca `theme.json`** — auto-detect hanya pakai nama folder (`ucfirst`),
+   sehingga metadata (deskripsi/versi/author/screenshot) tidak terisi otomatis.
+2. **Folder rusak** di `themes/omah/` — ada direktori literal `{assets` dan
+   `{assets/{css,js,images},templates` (sisa perintah `mkdir` yang gagal).
+3. **Sistem plugin belum modular** — hanya toggle DB + definisi hardcoded; `PLUGINS_PATH` belum dipakai,
+   tidak ada plugin-loader/hook.
+4. ⚠️ **Kredensial DB asli ter-commit** di `core/config/config.php` (dibiarkan atas keputusan pemilik repo).
+5. **Root `.htaccess` tidak ada** di paket, padahal README menyebut clean-URL butuh `mod_rewrite`
+   (`.htaccess` hanya ada di `admin/` dan `uploads/`).
+6. **Nama file schema beda** — README menyebut `database.sql`, aktualnya `database/reklamepedia.sql`.
+
+> Daftar ini akan bertambah saat proses "rapihin & benerin bug".
+
 ---
-_Master desain: `design/master/home.html`. Dokumen ini diperbarui seiring keputusan proyek._
+_Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
