@@ -423,7 +423,13 @@ kode) → desain untuk **N bahasa sejak awal**, bukan 2.
   **PO/gettext + Poedit** untuk string UI (tool penerjemah standar); **`ext-intl`** untuk format
   tanggal/angka per-locale.
 
-**KEPUTUSAN:** *(lihat sesi tanya-jawab — pola penyimpanan & tooling paket bahasa)*
+**KEPUTUSAN:**
+- **Penyimpanan = pola BARIS terjemahan (N-language ready).** Tanpa migrasi skema saat tambah bahasa.
+  Kompleksitas query diimbangi caching (manfaatkan `$GLOBALS['__content_cache']` yang sudah ada +
+  cache per-locale). UI strings tetap via language pack file.
+- **Tooling paket bahasa = FASE LANJUTAN.** Arsitektur disiapkan sekarang (registry bahasa + tabel
+  translations + fallback + router `/<code>/`), tapi export/import string & MT-assist dibangun setelah
+  web inti (Anima + admin) jadi. Rilis pertama: admin manual dengan tab per bahasa.
 
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
