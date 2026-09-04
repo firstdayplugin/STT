@@ -203,5 +203,45 @@ Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design
 **Prinsip per halaman:** markup statis dulu → preview & approve → baru wiring data CMS.
 Semua halaman berbagi design tokens & partial yang sama demi konsistensi.
 
+## 12. Keamanan & Target Audit
+
+**Konteks:** Klien = Sapta Tunas Teknologi (`saptatunas.com`), enterprise IT solution provider
+yang bisnisnya termasuk **cybersecurity**. Web lama (WordPress) pernah kena issue security dan
+mendapat **skor C** dari audit keamanan website pihak ketiga (luar negeri). Target: **minimal B,
+idealnya A**. File laporan audit tidak dipegang.
+
+**Analisis penyebab C (dugaan):** Skor huruf A–F untuk "website security" hampir selalu dari
+securityheaders.com, Mozilla Observatory, atau Qualys SSL Labs. Penyebab paling mungkin =
+**HTTP security headers hilang** (default WordPress tidak mengirim header apa pun) dan/atau
+version disclosure + admin/login tanpa rate-limit. **Bukan** karena "WordPress terlalu basic" —
+skor soal konfigurasi/higiene, bukan platform. Catatan: pindah ke CMS PHP sendiri **tidak**
+otomatis A, dan bisa lebih buruk kalau kode tidak di-harden (WordPress punya ekosistem hardening
+yang matang). *(Belum bisa live-scan: egress ke saptatunas.com diblokir dari sesi ini — minta user
+menempel hasil securityheaders / Observatory / SSL Labs untuk memastikan.)*
+
+**Keputusan:**
+- **Target grade = A** → **CSP ketat (tanpa `unsafe-inline`)**. Ini constraint arsitektur theme.
+- **Hosting/CDN = rekomendasi asisten:** origin Hostinger/Apache (header di `.htaccess`) + **Cloudflare**
+  di depan (TLS Full-Strict, HSTS, WAF, rate-limit `/admin` & login, sembunyikan origin IP).
+
+**Implikasi "Kejar A" untuk theme Anima (WAJIB saat konversi):**
+- Tanpa inline `<script>`/`<style>` → semua ke `assets/js` & `assets/css`.
+- Tanpa inline event handler — master Home masih pakai `onclick="alert(...)"` (form) & `onerror="..."`
+  (banyak `<img>`); harus diganti `addEventListener` / fallback CSS.
+- **Three.js self-host** (`assets/js/`), bukan CDN acak → `script-src 'self'`.
+- **Self-host Google Fonts** (Inter + Space Grotesk) → hindari `unsafe`/host eksternal di CSP.
+- **Self-host gambar** (ganti placeholder Pexels → `uploads/`) → `img-src 'self'`.
+- Inline tak terhindari → pakai **nonce per-request** dari server.
+
+**Header keamanan yang ditargetkan** (origin + Cloudflare): `Strict-Transport-Security`,
+`Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options`/`frame-ancestors`,
+`Referrer-Policy`, `Permissions-Policy`. Plus: cookie sesi `Secure; HttpOnly; SameSite`;
+hapus `X-Powered-By`/server tokens; matikan directory listing; `/.well-known/security.txt`.
+
+**Hardening aplikasi (mencegah breach nyata, sebagian dinilai scanner posture):** lindungi `/admin`
+(rate-limit/2FA), CSRF (CMS sudah punya — verifikasi menyeluruh), semua query prepared statement
+(verifikasi), validasi upload + blokir eksekusi PHP di `uploads/`, secret keluar dari repo/webroot
+(lihat bug #4 bagian 9), password bcrypt (sudah).
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
