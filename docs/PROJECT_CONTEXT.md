@@ -431,5 +431,16 @@ kode) → desain untuk **N bahasa sejak awal**, bukan 2.
   translations + fallback + router `/<code>/`), tapi export/import string & MT-assist dibangun setelah
   web inti (Anima + admin) jadi. Rilis pertama: admin manual dengan tab per bahasa.
 
+**Opsi GRATIS (jawaban: "pihak ke-3 gratis yang tetap /en /id"):**
+- **`/en` `/id` = router sendiri** (path-prefix, sudah diputuskan) → gratis & milik sendiri; tak perlu
+  pihak ketiga. (Bahkan SaaS berbayar baru kasih URL path-based di tier berbayar.)
+- **SaaS translate (Weglot/ConveyThis/Bablic):** free tier ada tapi menipu — batas ~1 bahasa/
+  ~2.000 kata, URL path `/en/` umumnya fitur berbayar, tetap bentrok CSP-A + langganan + bukan aset.
+  **Tidak dipakai.**
+- **FOSS gratis yang dipakai (self-host, $0, tanpa masalah CSP):** `symfony/translation` (MIT) atau
+  **gettext/PO + Poedit** untuk string UI; **`ext-intl`** untuk format locale; **LibreTranslate/Argos**
+  (self-host) sebagai MT gratis untuk draft paket bahasa (alternatif DeepL). DeepL berbayar hanya
+  dipertimbangkan bila butuh kualitas Mandarin terbaik — opsional.
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
