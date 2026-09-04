@@ -335,5 +335,39 @@ Dashboard → **Konten** (Halaman, Blog, Produk, Layanan, Galeri, Blok/Section) 
   (gratis, selaras dgn pemakaian Cloudflare) alih-alih reCAPTCHA. Query pakai prepared statement.
 - Tambahan yang mengikuti: search & pagination. (RSS feed & revisi opsional — dievaluasi nanti.)
 
+## 15. Produk Jual-Ulang (White-Label) — Konteks Strategis
+
+**Alasan utama di balik semua requirement "editable":** website ini adalah **produk yang dijual
+ulang**, bukan proyek sekali pakai. Setelah **BAST dengan Sapta Tunas**, pemilik akan mengganti
+semua teks, susunan menu, footer, logo, warna, dll lalu menjualnya ke klien lain (sudah ada pemesan).
+
+**Implikasi wajib:**
+- **Nol hardcoding.** Nama brand, logo (light/dark), **warna aksen/palet**, font, kontak, seluruh copy,
+  menu, footer, dan media — semuanya dari settings/DB. Master Home penuh string & warna hardcoded →
+  Anima **wajib meng-externalize semuanya**. Tidak boleh ada string "Sapta Tunas" yang hardcoded.
+- **Rebrand instan lewat admin.** Theme Anima membaca warna aksen & font dari settings (CMS sudah
+  punya pengaturan "Tampilan/warna aksen") → klien baru ganti identitas tanpa sentuh kode.
+- **Model deploy = 1 klien : 1 install terpisah** (DB + uploads + config masing-masing), bukan
+  multi-tenant. Lebih aman (isolasi data antar klien) & mudah BAST/handover. *(Perlu konfirmasi user.)*
+- **Starter content & reset.** Butuh jalur cepat mengganti/mengosongkan konten demo saat jual ulang:
+  seed konten awal dan/atau export-import konten. Installer (`install.php`/wizard) jadi kunci dan
+  **wajib dihapus setelah instalasi** (keamanan).
+- Konsekuensi keamanan: kredensial DB per-install harus di-set oleh installer, bukan hardcoded
+  (perkuat perbaikan bug #4 §9) — penting karena kode didistribusikan ke banyak klien.
+
+## 16. Manajemen Menu (Wajib: selevel WordPress, drag & drop, custom link)
+
+**Status:** sebagian besar SUDAH ada di `admin/views/menu/index.php`:
+- Drag & drop (SortableJS) untuk reorder + nesting (geser kanan → sub-menu, via `parent_id`).
+- Custom Link (label + URL bebas), Open in new tab (`target`), picker halaman/layanan/blog/produk/kategori.
+- Fitur auto-inject sub-menu layanan.
+
+**Gap yang harus ditutup:**
+1. **SortableJS di-load dari CDN jsdelivr** → melanggar CSP-A → **self-host**.
+2. **Belum ada "lokasi menu"** — tabel `menus` tak punya kolom lokasi; baru satu menu. Perlu tambah
+   konsep **lokasi menu** (header, footer, mobile) ala WordPress agar footer menu (§14) & jual-ulang
+   terdukung.
+3. Init script menu inline → buat CSP-safe (nonce / file eksternal).
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
