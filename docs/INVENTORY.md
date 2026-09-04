@@ -32,7 +32,7 @@ konteks) → decode base64 → PNG → dibaca visual. Halaman diambil per kebutu
 
 | # | Halaman Figma | Rute CMS | Template | Status |
 |---|---|---|---|---|
-| 1 | **Home** | `/` | `home.php` | ✅ ada (= master `design/master/home.html`) |
+| 1 | **Home** | `/` | `home.php` | ✅ **WAJIB = master `design/master/home.html`. JANGAN pakai Home Figma** (ATURAN #1) |
 | 2 | **About Us** | `/tentang-kami` | `about.php` | ✅ ada, konten jauh lebih kaya (lihat model konten) |
 | 3 | **Solutions** (landing) | *(baru)* `/solutions` | — | ⚠️ **GAP** rute |
 | 4 | **Service** (6 detail) | `/layanan/[slug]` | `layanan-detail.php` | ✅ ada, perlu tabel tier |
@@ -50,7 +50,10 @@ konteks) → decode base64 → PNG → dibaca visual. Halaman diambil per kebutu
 
 ## Model konten per halaman (untuk editable & data-driven)
 
-- **Home:** = master (hero slider, portfolio 425+/200+/100%/26, Our Solutions [orbit/cube WebGL],
+- **Home:** ⛔ **ATURAN #1 — desain = `design/master/home.html`, BUKAN Home Figma.** File Home di
+  Figma hanya rujukan nav/footer. (Catatan: nav master vs nav Figma sedikit beda — rekonsiliasi
+  header/footer antar-halaman dibahas saat mulai bangun, tanpa mengubah desain Home master.)
+  Isi master: hero slider, portfolio 425+/200+/100%/26, Our Solutions [orbit/cube WebGL],
   Our Industries [8: Financial, Education, Healthcare, Law Enforce, Manufacture, Telecom, Energy,
   Cross Industry], News, Why Us [4], Testimonials, Request Proposal). Logo partner (Solutions):
   Dell, AMD, Intel, VMware, Nutanix, Sangfor, RedHat, Microsoft, Commvault, HYCU, Veeam, Infraon

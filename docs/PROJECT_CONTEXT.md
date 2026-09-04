@@ -3,6 +3,12 @@
 > Dokumen ini adalah **sumber kebenaran (source of truth)** untuk konteks proyek.
 > Disimpan lebih dulu sebelum coding, sesuai permintaan. Belum ada implementasi CMS.
 
+> ## ⛔ ATURAN #1 (PRIORITAS TERTINGGI) — SUMBER DESAIN HOME
+> **Halaman Home WAJIB memakai `design/master/home.html`** (file `index.html` yang diupload
+> PERTAMA kali). **JANGAN pakai Home versi Figma.** Screenshot Home di Figma (`Home.png`,
+> `Home _ Service.png`, `Home SatuAI.png`, dll) **hanya referensi nav/footer**, bukan desain Home.
+> Aturan ini mengalahkan hal lain jika ada konflik soal Home.
+
 ## 1. Ringkasan Proyek
 
 Membangun **website full CMS** untuk **Sapta Tunas Teknologi (STT)** — sebuah
