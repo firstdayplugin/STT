@@ -243,5 +243,44 @@ hapus `X-Powered-By`/server tokens; matikan directory listing; `/.well-known/sec
 (verifikasi), validasi upload + blokir eksekusi PHP di `uploads/`, secret keluar dari repo/webroot
 (lihat bug #4 bagian 9), password bcrypt (sudah).
 
+## 13. Standar UX Admin, Editor, & Aturan Ikon (No-Emoji)
+
+Tiga requirement dari pemilik proyek (menentukan rombakan admin & seluruh UI):
+
+### 13.1 Rombak total halaman admin
+Admin harus **sangat intuitif & user-friendly** — "seminimalnya selevel WordPress"; siapa pun bisa
+menjalankannya. Notifikasi/warning harus jelas. Ini rombakan **tampilan + UX + komponen** (shell,
+layout, komponen), bukan bikin ulang fitur (modul sudah lengkap).
+
+Target UX terukur:
+- Layout konsisten (sidebar + topbar + breadcrumb), state aktif jelas.
+- List table standar: pencarian, filter, pagination, bulk action, empty-state membantu.
+- Aksi utama menonjol; aksi destruktif wajib konfirmasi.
+- Validasi form inline + pesan error spesifik.
+- Sistem notifikasi konsisten (toast/alert) dengan status success/info/warning/error — **ikon SVG**.
+- Microcopy Bahasa Indonesia yang ramah; tooltip bantuan.
+
+### 13.2 Editor di semua textarea konten
+- Semua textarea **konten** wajib pakai WYSIWYG yang **enak dipakai** (tidak ada bug spasi
+  "enter jadi jauh banget" — ini masalah margin `<p>` default, dibereskan lewat konfigurasi editor,
+  bukan ganti editor).
+- **Pengecualian:** field pendek/meta (meta description SEO, alamat, judul) **tetap plain text** —
+  rich editor di sini membocorkan HTML ke `<meta>` dan merusak SEO.
+- Editor **wajib self-host** (bukan CDN) demi CSP-A. Kondisi sekarang: TinyMCE 6.8.2 di-load dari
+  cdnjs (`admin/views/layout.php`), global ke `.wysiwyg` → **melanggar CSP ketat, harus diganti self-host**.
+- Catatan keamanan: endpoint upload gambar editor (`admin/index.php`) saat ini **tanpa CSRF token**
+  (hanya bergantung auth gate) — perlu diperbaiki.
+
+### 13.3 ATURAN KERAS: TANPA EMOJI — hanya ikon SVG asli
+- **Nol emoji** di mana pun: halaman admin maupun frontend. Aturan mutlak, tidak ada pengecualian.
+- Ganti dengan **sistem ikon SVG self-hosted** + helper `icon('nama')` (sprite).
+  Rekomendasi set: **Lucide** (MIT, garis tipis) — cocok dengan gaya SVG stroke-tipis di master Home,
+  dan CSP-friendly. *(Keputusan set ikon: lihat sesi tanya-jawab.)*
+- **Kondisi awal yang harus dibersihkan:** ± **187 kemunculan emoji di 34 file**, terpadat di admin
+  (`dashboard` 19, `layanan` 15, `produk` 12, `layout` 11, `wizard` 11, `pengaturan` 11, `menu` 10,
+  `template` 9, `flex-blocks` 9, `grid-icon` 8, `plugin` 7, …), sebagian di theme lama (default/omah)
+  & komentar core. Emoji di flash/notifikasi juga harus diganti ikon.
+- Theme `default`/`omah`/`reklamenesia` = legacy; theme yang dikirim (**Anima**) harus bersih emoji sejak awal.
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
