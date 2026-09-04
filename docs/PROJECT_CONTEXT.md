@@ -177,8 +177,14 @@ Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design
 - **Home**: `design/master/home.html` (master, sudah ada).
 - **Halaman lain**: Figma "dummy Web Sapta Tunas Alternatif 3"
   (`https://www.figma.com/design/L5oo8aa3AodyCSE1GSncJx/...`).
-  Figma tidak bisa diakses langsung oleh asisten (SPA + butuh login), jadi desain dibawa
-  sebagai **export PNG per halaman** yang diupload ke chat.
+  Dibawa sebagai **export PNG** di **Google Drive** folder `1E3PrfBVAINaqNwWdvRoCXbwDkvOTlJbO`
+  (± 100 file). Asisten mengaksesnya via **konektor Google Drive** (bukan link publik):
+  `download_file_content` → tersimpan ke file (tak masuk konteks) → decode base64 → PNG → dibaca.
+- **Inventory halaman lengkap + pemetaan rute + GAP: lihat [`INVENTORY.md`](INVENTORY.md).**
+  Ringkas: Home✅, About Us✅(kaya), Solutions⚠️, Service✅(perlu tabel tier), **Industries⚠️(modul baru)**,
+  What's New/blog✅(perlu arsip), **Career⚠️(modul baru + lamaran)**, Contact✅, Privacy/Compliance✅.
+  Fitur baru ditemukan: **SatuAI** (chatbot AI — ditunda). Gallery/Produk CMS tak dipakai Sapta
+  (disimpan utk white-label).
 
 ## 11. Workflow yang Disepakati
 
