@@ -172,5 +172,36 @@ Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design
 
 > Daftar ini akan bertambah saat proses "rapihin & benerin bug".
 
+## 10. Sumber Desain
+
+- **Home**: `design/master/home.html` (master, sudah ada).
+- **Halaman lain**: Figma "dummy Web Sapta Tunas Alternatif 3"
+  (`https://www.figma.com/design/L5oo8aa3AodyCSE1GSncJx/...`).
+  Figma tidak bisa diakses langsung oleh asisten (SPA + butuh login), jadi desain dibawa
+  sebagai **export PNG per halaman** yang diupload ke chat.
+
+## 11. Workflow yang Disepakati
+
+**Lingkungan sesi:** PHP 8.4 tersedia (`php -S` untuk preview). **Tidak ada MySQL** dan
+**tidak ada konektor Figma**.
+
+**Keputusan cara kerja:**
+- **Figma → PNG per halaman.** User export tiap frame jadi gambar dan upload; sebutkan nama halaman.
+- **Mulai dari inventory halaman.** Petakan semua halaman Figma → rute/template CMS, temukan gap
+  (halaman yang belum ada rutenya, dsb) sebelum membangun.
+- **Preview = mock-data mode.** Buat shim data contoh agar template Anima render via `php -S`
+  tanpa DB; wiring ke data CMS asli menyusul setelah tampilan disetujui.
+
+**Urutan fase (rencana):**
+0. Inventory & pemetaan halaman Figma → rute CMS (temukan gap). ← **tahap berikutnya**
+1. Preview harness (mock-data, `php -S`).
+2. Fondasi theme `anima/`: design tokens dari `home.html` + header/footer/partial bersama.
+3. Konversi Home (dari master) → template theme + wiring data.
+4. Konversi halaman lain satu per satu dari PNG Figma (markup → approve → wiring).
+5. Rapikan CMS & perbaiki bug (lihat bagian 9), termasuk sistem plugin bila perlu.
+
+**Prinsip per halaman:** markup statis dulu → preview & approve → baru wiring data CMS.
+Semua halaman berbagi design tokens & partial yang sama demi konsistensi.
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
