@@ -369,5 +369,27 @@ semua teks, susunan menu, footer, logo, warna, dll lalu menjualnya ke klien lain
    terdukung.
 3. Init script menu inline → buat CSP-safe (nonce / file eksternal).
 
+## 17. Fitur 2 Bahasa (EN & ID)
+
+Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik tapi klien terlayani.
+
+- **Dua tingkat teks:**
+  - **UI/tema** (label generik: "Read More", "Discover", dll) → file bahasa `lang/id.php` & `lang/en.php`
+    + helper `t('key')`. Diterjemahkan sekali oleh kita, dikirim bersama theme. Beban pemilik ~nol.
+  - **Konten** (content_blocks, halaman, artikel, label menu, tagline, dll) → disimpan **per-bahasa**
+    (mis. `konten_id`/`konten_en`), admin menampilkan **tab ID/EN** per field.
+- **Fallback wajib:** nilai bahasa kosong → jatuh ke `default_lang` (ID). Situs tak pernah rusak;
+  terjemahan bisa bertahap. Ini kunci "tidak menyusahkan".
+- **Feature flag:** setting `languages` + `default_lang` per install (i18n bisa dimatikan → switcher hilang).
+
+**KEPUTUSAN:**
+- **Strategi URL = path prefix `/en/`.** Bahasa default (ID) tanpa prefix (`/tentang-kami`);
+  EN di `/en/tentang-kami`. Tambah tag **`hreflang`** + **`og:locale`** untuk SEO. Router perlu
+  mengenali segmen bahasa terdepan (`/en`) → set current lang, sisanya route seperti biasa.
+- **Default install = bilingual (ID + EN)** (`default_lang=id`, `languages=['id','en']`).
+  Master Home sudah punya toggle ID/EN → switcher bahasa dipertahankan di header.
+- Slug: default **satu slug dipakai kedua bahasa** (dibedakan prefix `/en/`); slug terlokalisasi = opsi lanjutan.
+- (Opsional, nanti) tombol "sarankan terjemahan EN" via API — ditunda (egress/kualitas).
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
