@@ -297,6 +297,9 @@ Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):
 - `gallery`, `grid-icon`, `klien-logo`, `testimonial`, `faq`, `pages`, upload = konten & media terstruktur.
 
 ### 14.1 Semua teks editable (header + body + footer), 100% tanpa terkecuali
+- **KEPUTUSAN model edit: terstruktur per section** (bukan block-builder). Admin menampilkan field
+  per halaman → section (label + hint + thumbnail), urut seperti halaman depan. Paling mudah dicari
+  & dirawat. (`flex_blocks` tetap tersedia bila suatu area perlu blok yang bisa diurut.)
 - Tidak ada editor visual seperti Elementor Pro → penggantinya **admin terstruktur yang meniru
   struktur halaman depan**. Setiap string Anima dibaca via `get_content()`.
 - Buat **"content registry" per template** agar admin otomatis menampilkan **semua** field editable,
@@ -322,9 +325,15 @@ Dashboard → **Konten** (Halaman, Blog, Produk, Layanan, Galeri, Blok/Section) 
 
 ### 14.4 Blog/News mendekati WordPress
 - Sudah ada: kategori, tag, SEO per artikel, TinyMCE, views, penulis, slug, status.
-- Kandidat tambahan agar mendekati WP: jadwal terbit (scheduled), draft/pending, featured image +
-  excerpt rapi, revisi/riwayat, komentar + moderasi, related posts, RSS feed, reading time,
-  search & pagination. *(Komentar menambah attack surface — scope diputuskan; lihat tanya-jawab.)*
+- **KEPUTUSAN scope (wajib ada):**
+  - Jadwal terbit + status draft/pending/scheduled (auto-publish saat waktunya).
+  - Featured image + excerpt yang rapi (kartu/daftar & share sosial/OG).
+  - Related posts (kategori/tag) + reading time.
+  - **Komentar + moderasi.**
+- **Hardening komentar (karena target A):** moderasi wajib (default *pending*, tampil setelah approve),
+  escaping/sanitasi ketat (anti-XSS), CSRF + rate-limit + honeypot, dan **Cloudflare Turnstile**
+  (gratis, selaras dgn pemakaian Cloudflare) alih-alih reCAPTCHA. Query pakai prepared statement.
+- Tambahan yang mengikuti: search & pagination. (RSS feed & revisi opsional — dievaluasi nanti.)
 
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
