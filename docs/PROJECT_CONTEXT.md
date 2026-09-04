@@ -286,5 +286,45 @@ Target UX terukur:
   & komentar core. Emoji di flash/notifikasi juga harus diganti ikon.
 - Theme `default`/`omah`/`reklamenesia` = legacy; theme yang dikirim (**Anima**) harus bersih emoji sejak awal.
 
+## 14. Editabilitas Konten Menyeluruh, Media, Urutan Menu Admin, & Blog
+
+Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):
+- `content_blocks` (helper `get_content(page_key, block_key, default)` / `update_content()`,
+  kolom `page_key, block_key, block_label, block_type, konten, is_active`) = teks editable per
+  halaman/section berbasis key. Admin: `admin/views/content/`.
+- `flex_blocks` (`posisi`, `urutan`, `judul`, dll) = block builder ringan (pengganti sebagian Elementor).
+- `menu` + `get_menu_tree()` mendukung banyak lokasi menu → footer menu tinggal tambah lokasi `footer`.
+- `gallery`, `grid-icon`, `klien-logo`, `testimonial`, `faq`, `pages`, upload = konten & media terstruktur.
+
+### 14.1 Semua teks editable (header + body + footer), 100% tanpa terkecuali
+- Tidak ada editor visual seperti Elementor Pro → penggantinya **admin terstruktur yang meniru
+  struktur halaman depan**. Setiap string Anima dibaca via `get_content()`.
+- Buat **"content registry" per template** agar admin otomatis menampilkan **semua** field editable,
+  **dikelompokkan per halaman → per section**, urut sama dengan tampilan depan, label jelas + hint
+  (idealnya thumbnail section) → "mudah dicari di mana editnya".
+- **Footer** (termasuk **menu footer**) wajib editable: menu footer via modul Menu, lokasi baru `footer`.
+- Output teks user tetap di-escape/sanitasi saat render (CSP-A + anti-XSS).
+
+### 14.2 Semua aset (foto/video/ikon) editable dari admin — termasuk media animasi Three.js
+- Semua media dibaca dari CMS (bukan hardcode); placeholder Pexels di master → media dari `uploads/`.
+- **KRUSIAL:** animasi **orbit (Industries)** & **cube/prism (Solutions)** harus **data-driven** —
+  daftar gambar/video texture diinject dari PHP ke JS. Karena CSP ketat (no inline JS), caranya via
+  **`data-*` attribute** atau **`<script type="application/json">` ber-nonce**, bukan inline script.
+  Theme Anima didesain begini sejak awal.
+- Klarifikasi "ikon": **ikon UI (Lucide)** = elemen desain tetap (tidak editable). Yang editable =
+  **logo/ikon konten** (logo industri, logo klien, ikon layanan, hero image/video) = media, dikelola admin.
+
+### 14.3 Urutan menu admin (UX baca yang enak)
+Sidebar dikelompokkan & diurut logis (usulan):
+Dashboard → **Konten** (Halaman, Blog, Produk, Layanan, Galeri, Blok/Section) →
+**Tampilan** (Menu, Homepage/Section, Theme) → **Media** → **SEO & Tracking** →
+**Pengaturan** → **Plugin** → **Pengguna**. (Final menyusul saat rombak admin.)
+
+### 14.4 Blog/News mendekati WordPress
+- Sudah ada: kategori, tag, SEO per artikel, TinyMCE, views, penulis, slug, status.
+- Kandidat tambahan agar mendekati WP: jadwal terbit (scheduled), draft/pending, featured image +
+  excerpt rapi, revisi/riwayat, komentar + moderasi, related posts, RSS feed, reading time,
+  search & pagination. *(Komentar menambah attack surface — scope diputuskan; lihat tanya-jawab.)*
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
