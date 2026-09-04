@@ -108,13 +108,24 @@ Industries**. Perlu strategi pemetaan/label yang bisa diganti per klien (modul g
 diberi label sesuai klien). Modul `gallery`/`produk` tak dipakai Sapta tapi dipertahankan untuk
 klien lain.
 
-## Pertanyaan terbuka (perlu konfirmasi user)
-- **Industries:** Home menampilkan **8** industri (termasuk *Education*); halaman Industries
-  landing menampilkan **7** (tanpa *Education*). Mana yang benar?
-- **Cybersecurity Services 1/2/3:** apakah 3 halaman terpisah, atau 1 halaman multi-section?
-- **Gallery & Produk:** dimatikan untuk Sapta, tetap ada untuk white-label? (asumsi: ya)
-- **Solutions vs Service:** apakah "Solutions" = landing 4 pilar, dan "Service" = daftar layanan
-  cybersecurity spesifik? (indikasi kuat: ya)
+## Keputusan (terkonfirmasi user)
+- **Industries = 8 (dengan Education):** Financial Services & E-Commerce, Education, Healthcare,
+  Law Enforcement, Manufacture & FMCG, Telecommunication (ICT), Energy, Cross Industry. Home &
+  halaman Industries diselaraskan jadi 8 (halaman Industries di Figma yang menampilkan 7 = kurang Education).
+- **Model Industry × Pilar = konten per sel (editable penuh):** tiap kombinasi Industri × Pilar
+  (8 × 4 = hingga 32 sel; pilar: Modernize Infrastructure, Data & AI, Cybersecurity, Managed Services)
+  punya konten sendiri yang bisa diedit. Data model: entity `industries`, `solution_pillars`, dan
+  `industry_pillar_content` (industry_id, pillar_id, heading, body, feature icons) + landing per industri.
+- **Career = modul penuh:** lowongan (role, lokasi, jenjang, pengalaman, deadline, responsibilities,
+  requirements) + filter (Job Role, Location) + **form lamaran** (Full Name, Email, Phone, Subject,
+  Cover Letter, **Upload CV maks 1MB**) → `job_applications` (simpan + notifikasi + anti-spam/Turnstile +
+  upload file aman, non-executable, validasi MIME). Masuk rilis pertama.
+
+## Pertanyaan terbuka (sisa)
+- **Cybersecurity Services 1/2/3:** apakah 3 halaman terpisah, atau 1 halaman multi-section? (belum final)
+- **Gallery & Produk:** dimatikan untuk Sapta, tetap ada untuk white-label (asumsi: ya).
+- **Solutions vs Service:** "Solutions" = landing 4 pilar; "Service" = daftar layanan cybersecurity
+  spesifik (indikasi kuat: ya) — konfirmasi final saat mulai bangun.
 
 ---
 _Diambil dari Figma via Google Drive. Referensi visual bisa di-pull ulang kapan saja dari Drive._
