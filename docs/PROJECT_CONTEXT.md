@@ -391,5 +391,39 @@ Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik ta
 - Slug: default **satu slug dipakai kedua bahasa** (dibedakan prefix `/en/`); slug terlokalisasi = opsi lanjutan.
 - (Opsional, nanti) tombol "sarankan terjemahan EN" via API — ditunda (egress/kualitas).
 
+## 18. Bahasa sebagai Produk (N-language readiness & monetisasi)
+
+Tujuan pemilik: bahasa jadi **fitur yang diuangkan** — mis. jual paket **Mandarin** terpisah dengan
+harga premium di masa depan. Syaratnya: menambah bahasa baru harus **murah bagi kita** (tanpa ubah
+kode) → desain untuk **N bahasa sejak awal**, bukan 2.
+
+**Yang disiapkan sekarang (cheap now, mahal di-retrofit):**
+1. **Registry bahasa (data, bukan kode):** tabel berisi `code, nama, native_name, arah (LTR/RTL),
+   font_override, aktif, is_default, urutan`. Tambah bahasa = INSERT 1 baris + aktifkan. Router,
+   admin, switcher, tab terjemahan semua **render dinamis dari registry** (tak ada daftar hardcoded).
+2. **Penyimpanan konten skalabel — pola BARIS terjemahan** (`translations(entity, field_key,
+   lang_code, value)`), BUKAN kolom-per-bahasa. Tambah bahasa = baris baru, **nol migrasi skema**.
+   (Evolusi natural dari `content_blocks`; posts/pages/produk/layanan ikut pola sama.)
+3. **UI/tema via language pack file** (`lang/<code>.php` atau PO/gettext). **Paket bahasa = unit jual.**
+4. **Font & arah per-bahasa:** `font_override` (mis. Noto Sans SC untuk CJK — Inter/Space Grotesk tak
+   punya glyph Han); `arah` + **CSS logical properties** di Anima → siap RTL bila jual Arab/Ibrani nanti.
+5. **Router N-language:** `/en/` digeneralisasi jadi `/<code>/` (baca segmen pertama thd registry) +
+   **fallback chain** ke `default_lang`.
+6. **Tooling paket bahasa (penggerak monetisasi):** export/import semua string translatable
+   (CSV/JSON/PO). Alur jual bahasa: export → terjemah → import → aktifkan (menit, bukan proyek).
+
+**Pihak ketiga / plugin — kesimpulan:**
+- **WPML/Polylang/TranslatePress** = plugin WordPress → **tidak relevan** (stack kita PHP custom).
+- **Weglot/Bablic/ConveyThis (SaaS translate runtime)** = **TIDAK worth it**: langganan berulang
+  (makan margin jual-ulang), **bentrok CSP-A** (butuh domain eksternal di script/connect-src),
+  translate DOM sisi-klien rawan pada home WebGL, dan kita jadi sekadar reseller fitur yang justru
+  mau dijual sendiri.
+- **Worth it (alat PRODUKSI, bukan runtime):** **DeepL/Google Translate API** untuk draft paket
+  bahasa (lalu review manusia) → dipakai saat membuat paket, tak menyentuh situs live/CSP;
+  **PO/gettext + Poedit** untuk string UI (tool penerjemah standar); **`ext-intl`** untuk format
+  tanggal/angka per-locale.
+
+**KEPUTUSAN:** *(lihat sesi tanya-jawab — pola penyimpanan & tooling paket bahasa)*
+
 ---
 _Master desain: `design/master/home.html`. CMS: root repo. Dokumen ini diperbarui seiring keputusan proyek._
