@@ -270,12 +270,16 @@ Target UX terukur:
   cdnjs (`admin/views/layout.php`), global ke `.wysiwyg` → **melanggar CSP ketat, harus diganti self-host**.
 - Catatan keamanan: endpoint upload gambar editor (`admin/index.php`) saat ini **tanpa CSRF token**
   (hanya bergantung auth gate) — perlu diperbaiki.
+- **KEPUTUSAN editor: TinyMCE, di-self-host + dikonfigurasi ulang.** Alasan: rework terkecil (sudah
+  terintegrasi + endpoint upload), output HTML matang untuk CMS PHP, aman CSP-A (self-host,
+  tanpa `unsafe-eval`, area edit dalam iframe sendiri). Tugas saat rombak: self-host TinyMCE,
+  perbaiki spacing/toolbar/paste, pasang hanya di field konten, tambal CSRF endpoint upload.
 
 ### 13.3 ATURAN KERAS: TANPA EMOJI — hanya ikon SVG asli
 - **Nol emoji** di mana pun: halaman admin maupun frontend. Aturan mutlak, tidak ada pengecualian.
 - Ganti dengan **sistem ikon SVG self-hosted** + helper `icon('nama')` (sprite).
-  Rekomendasi set: **Lucide** (MIT, garis tipis) — cocok dengan gaya SVG stroke-tipis di master Home,
-  dan CSP-friendly. *(Keputusan set ikon: lihat sesi tanya-jawab.)*
+  **KEPUTUSAN set ikon: Lucide** (MIT, garis tipis) — cocok dengan gaya SVG stroke-tipis di master Home,
+  dan CSP-friendly. Self-host + helper `icon('nama')` (sprite).
 - **Kondisi awal yang harus dibersihkan:** ± **187 kemunculan emoji di 34 file**, terpadat di admin
   (`dashboard` 19, `layanan` 15, `produk` 12, `layout` 11, `wizard` 11, `pengaturan` 11, `menu` 10,
   `template` 9, `flex-blocks` 9, `grid-icon` 8, `plugin` 7, …), sebagian di theme lama (default/omah)
