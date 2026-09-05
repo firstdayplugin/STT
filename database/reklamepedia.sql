@@ -268,6 +268,7 @@ CREATE TABLE `testimonial` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL, `jabatan` varchar(150) DEFAULT NULL, `perusahaan` varchar(150) DEFAULT NULL,
   `isi` text NOT NULL, `rating` tinyint(1) NOT NULL DEFAULT 5, `foto` varchar(255) DEFAULT NULL,
+  `tipe` enum('text','video') NOT NULL DEFAULT 'text', `video_url` varchar(255) DEFAULT NULL,
   `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -396,3 +397,20 @@ INSERT INTO `blog` (`judul`,`slug`,`user_id`,`konten`,`excerpt`,`gambar_utama`,`
 
 INSERT INTO `blog_kategori_rel` (`blog_id`,`kategori_id`) VALUES
 (1,4),(2,1),(3,2),(4,1),(5,2),(6,4);
+
+-- ---------- Seed: testimonials (home) ----------
+INSERT INTO `testimonial` (`nama`,`jabatan`,`perusahaan`,`isi`,`rating`,`tipe`,`urutan`,`is_active`) VALUES
+('Yonathan Moniaga','Chief Information Officer','Erha Clinic Indonesia','Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.',5,'video',1,1),
+('IT Director','Financial Services','','Migrasi sistem transaksi kami berjalan mulus dan aman. Tim STT memahami kebutuhan compliance industri finansial dengan baik.',5,'text',2,1),
+('Head of Operations','Manufacture & FMCG','','Otomatisasi supply chain dari STT memangkas waktu proses secara signifikan. Partner yang benar-benar paham operasional pabrik.',5,'video',3,1),
+('Chief Technology Officer','E-Commerce Platform','','Platform kami kini scalable menghadapi lonjakan traffic. Arsitektur yang dirancang STT terbukti andal saat peak season.',5,'text',4,1),
+('VP Technology','Enterprise IT','','Implementasi cloud, data, dan AI berjalan sesuai roadmap. Eksekusi rapi dan komunikasi transparan sepanjang proyek.',5,'video',5,1),
+('IT Manager','Healthcare Group','','Dukungan managed IT 24/7 membuat operasional rumah sakit kami jauh lebih tenang. Highly recommended.',5,'text',6,1);
+
+-- ---------- Seed: hero slides (Home cinematic slider) ----------
+INSERT INTO `hero_slides` (`judul`,`subtitle`,`gambar`,`urutan`,`is_active`) VALUES
+('Growing The Global','Technology Industry','',1,1),
+('AI-driven','Smart Hospital','',2,1),
+('Resilient','Cloud Infrastructure','',3,1),
+('Cybersecurity','Without Compromise','',4,1),
+('Data-driven','Intelligence','',5,1);

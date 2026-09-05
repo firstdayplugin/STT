@@ -11,25 +11,36 @@
 // Home is the hero page: nav stays transparent over the hero (no 'page-inner' body class).
 $seo = ['title' => get_setting('site_title', 'Sapta Tunas Teknologi — Enterprise Solution Provider')];
 $anima_load_home_js = true;
+
+// Live data for the News & Testimonials sections (safe if no DB / preview harness).
+$db = $db ?? (class_exists('Database') ? Database::getInstance() : null);
+$Q  = function (string $sql, array $p = []) use ($db) { try { return $db ? $db->fetchAll($sql, $p) : []; } catch (\Throwable $e) { return []; } };
+$home_news = $Q("SELECT b.*, (SELECT bk.nama FROM blog_kategori_rel r JOIN blog_kategori bk ON bk.id=r.kategori_id WHERE r.blog_id=b.id LIMIT 1) AS kategori FROM blog b WHERE b.status='published' ORDER BY b.created_at DESC LIMIT 6");
+$home_testi = $Q("SELECT * FROM testimonial WHERE is_active=1 ORDER BY urutan, id LIMIT 8");
+$hero_rows  = $Q("SELECT judul, subtitle, gambar FROM hero_slides WHERE is_active=1 ORDER BY urutan, id");
+$hero_json  = [];
+foreach ($hero_rows as $hs) { $hero_json[] = ['bg' => !empty($hs['gambar']) ? uploads_url($hs['gambar']) : '', 'h' => (string)($hs['judul'] ?? ''), 'sub' => (string)($hs['subtitle'] ?? '')]; }
+$h0 = $hero_json[0] ?? ['bg' => '', 'h' => 'Growing The Global', 'sub' => 'Technology Industry'];
+
 include theme_path('templates/layouts/header.php');
 ?>
 
 <!-- ===== HERO (dark cinematic WebGL) ===== -->
 <section class="v3hero" id="hero">
   <div class="v3hero-in">
-    <div class="tk-stage">
+    <div class="tk-stage"<?= $hero_json ? ' data-hero="' . htmlspecialchars(json_encode($hero_json), ENT_QUOTES) . '"' : '' ?>>
       <div class="tk-cur" id="tkCur">
-        <div class="tk-bg" id="tkCurBg" style="background-image:url(https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=1600)"></div>
+        <div class="tk-bg" id="tkCurBg"></div>
         <div class="tk-ov"></div>
-        <div class="tk-eyebrow" id="tkEye">Technology Industry</div>
-        <h1 class="tk-h1" id="tkH1">Growing The Global</h1>
+        <div class="tk-eyebrow" id="tkEye"><?= htmlspecialchars($h0['sub']) ?></div>
+        <h1 class="tk-h1" id="tkH1"><?= htmlspecialchars($h0['h']) ?></h1>
         <div class="tk-foot">
           <a class="tk-btn" href="#contact">Get in Touch <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <div class="tk-dots" id="tkDots"></div>
         </div>
       </div>
       <div class="tk-next" id="tkNext">
-        <div class="tk-bg" id="tkNextBg" style="background-image:url(https://images.pexels.com/photos/17323801/pexels-photo-17323801.jpeg?auto=compress&cs=tinysrgb&w=1000)"></div>
+        <div class="tk-bg" id="tkNextBg"></div>
         <div class="tk-ov2"></div>
       </div>
       <!-- Telkom corner masks sit OUTSIDE the image clipping containers. This is important: the SVG must be able to overlap the image edge cleanly. -->
@@ -41,7 +52,7 @@ include theme_path('templates/layouts/header.php');
     </div>
     <div class="tk-below">
       <div class="tk-below-l">
-        <h2 class="tk-sub"><span class="blue" id="tkSub">Technology Industry</span></h2>
+        <h2 class="tk-sub"><span class="blue" id="tkSub"><?= htmlspecialchars($h0['sub']) ?></span></h2>
         <p><?= hc('hero_subcopy') ?></p>
       </div>
       <div class="tk-discover">
@@ -144,6 +155,19 @@ include theme_path('templates/layouts/header.php');
     </div>
     <div class="news-viewport">
       <div class="news-track" id="newsTrack">
+        <?php if (!empty($home_news)): foreach ($home_news as $np): $nimg = !empty($np['gambar_utama']) ? uploads_url($np['gambar_utama']) : ''; ?>
+        <article class="ncard">
+          <div class="ncard-img">
+            <?php if ($nimg): ?><img src="<?= htmlspecialchars($nimg) ?>" data-fallback="bg" alt="" loading="lazy" decoding="async"><?php endif; ?>
+            <div class="ncard-ribbon"><span class="date"><?= htmlspecialchars(date('F j, Y', strtotime($np['created_at']))) ?></span><?php if (!empty($np['kategori'])): ?><span class="cat"><?= htmlspecialchars($np['kategori']) ?></span><?php endif; ?></div>
+          </div>
+          <div class="ncard-body">
+            <h3><a href="<?= url('blog/' . $np['slug']) ?>"><?= htmlspecialchars($np['judul']) ?></a></h3>
+            <p><?= htmlspecialchars($np['excerpt'] ?? '') ?></p>
+            <a class="read" href="<?= url('blog/' . $np['slug']) ?>">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+        <?php endforeach; else: ?>
         <article class="ncard">
           <div class="ncard-img">
             <img src="https://images.pexels.com/photos/36169769/pexels-photo-36169769.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
@@ -188,6 +212,7 @@ include theme_path('templates/layouts/header.php');
             <a class="read" href="#">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
         </article>
+        <?php endif; ?>
       </div>
     </div>
   </div>
@@ -246,6 +271,20 @@ include theme_path('templates/layouts/header.php');
       <p><?= hc('testi_intro') ?></p>
     </div>
     <div class="tst-grid">
+      <?php if (!empty($home_testi)): foreach ($home_testi as $t):
+        $tv = (($t['tipe'] ?? 'text') === 'video');
+        $tav = !empty($t['foto']) ? uploads_url($t['foto']) : '';
+        $trole = trim(($t['jabatan'] ?? '') . (!empty($t['perusahaan']) ? ', ' . $t['perusahaan'] : '')); ?>
+      <a class="tcard" href="#testimonial-detail">
+        <span class="tbadge <?= $tv ? 'video' : 'text' ?>"><?php if ($tv): ?><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video<?php else: ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text<?php endif; ?></span>
+        <p class="quote">&ldquo;<?= htmlspecialchars($t['isi']) ?>&rdquo;</p>
+        <div class="person">
+          <div class="tperson-av"><?php if ($tav): ?><img src="<?= htmlspecialchars($tav) ?>" data-fallback="remove" alt=""><?php endif; ?><?php if ($tv): ?><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span><?php endif; ?></div>
+          <div><div class="pname"><?= htmlspecialchars($t['nama']) ?></div><div class="prole"><?= htmlspecialchars($trole) ?></div></div>
+        </div>
+        <span class="watch"><?= $tv ? 'Watch story' : 'Read story' ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <?php endforeach; else: ?>
       <a class="tcard" href="#testimonial-detail">
         <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
         <p class="quote">&ldquo;Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.&rdquo;</p>
@@ -300,6 +339,7 @@ include theme_path('templates/layouts/header.php');
         </div>
         <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
+      <?php endif; ?>
     </div>
   </div>
 </section>

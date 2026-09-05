@@ -269,13 +269,13 @@ requestAnimationFrame(frame);
 })();
 ;
 (function(){
-  var S=[
-   {bg:'https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=1600',h:'Growing The Global',sub:'Technology Industry'},
-   {bg:'https://images.pexels.com/photos/17323801/pexels-photo-17323801.jpeg?auto=compress&cs=tinysrgb&w=1400',h:'AI-driven',sub:'Smart Hospital'},
-   {bg:'https://images.pexels.com/photos/36169769/pexels-photo-36169769.jpeg?auto=compress&cs=tinysrgb&w=1400',h:'Resilient',sub:'Cloud Infrastructure'},
-   {bg:'https://images.pexels.com/photos/17489158/pexels-photo-17489158.jpeg?auto=compress&cs=tinysrgb&w=1400',h:'Cybersecurity',sub:'Without Compromise'},
-   {bg:'https://images.pexels.com/photos/32324512/pexels-photo-32324512.jpeg?auto=compress&cs=tinysrgb&w=1400',h:'Data-driven',sub:'Intelligence'}
-  ];
+  var S=(function(){try{var el=document.querySelector('.tk-stage');var d=el&&el.getAttribute('data-hero');var a=d?JSON.parse(d):null;if(a&&a.length)return a;}catch(e){}return [
+   {bg:'',h:'Growing The Global',sub:'Technology Industry'},
+   {bg:'',h:'AI-driven',sub:'Smart Hospital'},
+   {bg:'',h:'Resilient',sub:'Cloud Infrastructure'},
+   {bg:'',h:'Cybersecurity',sub:'Without Compromise'},
+   {bg:'',h:'Data-driven',sub:'Intelligence'}
+  ];})();
   var curBg=document.getElementById('tkCurBg'),nextBg=document.getElementById('tkNextBg'),h1=document.getElementById('tkH1'),sub=document.getElementById('tkSub'),dotsEl=document.getElementById('tkDots');
   if(!curBg||!nextBg)return;
   var i=0,N=S.length,timer,busy=false;
