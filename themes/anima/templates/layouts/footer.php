@@ -66,7 +66,9 @@
     </button>
   </div>
 </footer>
+<?php if (!empty($anima_load_home_js)): ?>
 <script src="<?= theme_url('assets/js/anima.js') ?>"></script>
+<?php endif; ?>
 <script src="<?= theme_url('assets/js/anima-ui.js') ?>"></script>
 </body>
 </html>

@@ -8,7 +8,10 @@
  * PHP->JS (CSP-safe, §14.2); news cards -> blog module; testimonial cards -> testimonial module;
  * media (hero/portfolio bg, card images) -> uploads/ (replaces Pexels placeholders).
  */
-require_once __DIR__ . '/../../inc/anima.php';
+// Home is the hero page: nav stays transparent over the hero (no 'page-inner' body class).
+$seo = ['title' => get_setting('site_title', 'Sapta Tunas Teknologi — Enterprise Solution Provider')];
+$anima_load_home_js = true;
+include theme_path('templates/layouts/header.php');
 ?>
 
 <!-- ===== HERO (dark cinematic WebGL) ===== -->
@@ -323,3 +326,5 @@ require_once __DIR__ . '/../../inc/anima.php';
 </section>
 
 
+
+<?php include theme_path('templates/layouts/footer.php'); ?>

@@ -12,9 +12,21 @@
   }, true);
   // Delegated clicks (was inline onclick).
   document.addEventListener('click', function(e){
-    var el = e.target.closest ? e.target.closest('[data-scrolltop],[data-proposal-submit]') : null;
+    var el = e.target.closest ? e.target.closest('[data-scrolltop],[data-proposal-submit],[data-contact-submit]') : null;
     if (!el) return;
     if (el.hasAttribute('data-scrolltop')) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
     else if (el.hasAttribute('data-proposal-submit')) { e.preventDefault(); /* TODO: POST Request Proposal to CMS endpoint */ }
+    else if (el.hasAttribute('data-contact-submit')) { e.preventDefault(); /* TODO: POST Contact form to CMS endpoint */ }
   });
+})();
+
+/* Generic nav behaviors (all pages). On hero pages anima.js also drives this — idempotent. */
+(function(){
+  var hd = document.querySelector('header'); if (!hd) return;
+  if (!document.body.classList.contains('page-inner')) {
+    var on = function(){ hd.classList.toggle('scrolled', (window.scrollY||document.documentElement.scrollTop) > 70); };
+    addEventListener('scroll', on, { passive:true }); on();
+  }
+  var hamb = hd.querySelector('.hamb');
+  if (hamb) hamb.addEventListener('click', function(){ document.body.classList.toggle('nav-open'); });
 })();
