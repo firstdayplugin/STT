@@ -395,7 +395,12 @@ Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):
     `data-img`/`data-c1`/`data-c2`; driver orbit di `anima.js` cat foto (background-image) / gradient
     per kartu via JS style props (CSP-safe, no inline style).
   - Seed default = warna/teks master → install tanpa edit tampil identik; media (foto/video/logo)
-    kosong = fallback generate (sama seperti master). Admin CRUD modul Solutions/Industries menyusul.
+    kosong = fallback generate (sama seperti master).
+  - **Admin CRUD SELESAI (Langkah 2):** `admin/views/industri/` (kartu orbit: label/judul/subtitle/
+    foto/warna/link/urutan) & `admin/views/solusi/` (slide cube: eyebrow/judul/deskripsi/label/
+    **foto ATAU video**/3 warna/**logo multi-upload+key/URL**/link/urutan). Helper `upload_video()`
+    (mp4/webm, 15MB). Terdaftar di router + sidebar (Konten). Pipeline penuh terverifikasi
+    end-to-end: form upload → uploads/ → DB → `home.php` `data-orbit`/`data-slides` → anima.js.
 - Klarifikasi "ikon": **ikon UI (Lucide)** = elemen desain tetap (tidak editable). Yang editable =
   **logo/ikon konten** (logo industri, logo klien, ikon layanan, hero image/video) = media, dikelola admin.
 
