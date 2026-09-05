@@ -61,11 +61,12 @@
         <span><a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Compliance Policy</a> &nbsp;|&nbsp; <a href="#">Enterprise Solution Provider</a></span>
       </div>
     </div>
-    <button class="tel-footer-top" type="button" aria-label="Back to top" onclick="window.scrollTo(0,0)">
+    <button class="tel-footer-top" type="button" aria-label="Back to top" data-scrolltop>
       <svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg>
     </button>
   </div>
 </footer>
 <script src="<?= theme_url('assets/js/anima.js') ?>"></script>
+<script src="<?= theme_url('assets/js/anima-ui.js') ?>"></script>
 </body>
 </html>

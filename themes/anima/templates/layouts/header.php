@@ -17,9 +17,7 @@ $__site_desc  = get_setting('site_description', 'Sapta Tunas Teknologi — estab
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($__site_title) ?></title>
 <meta name="description" content="<?= htmlspecialchars($__site_desc) ?>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?= theme_url('assets/fonts/fonts.css') ?>">
 <link rel="stylesheet" href="<?= theme_url('assets/css/anima.css') ?>">
 </head>
 <body>

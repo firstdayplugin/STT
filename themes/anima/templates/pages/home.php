@@ -139,7 +139,7 @@
       <div class="news-track" id="newsTrack">
         <article class="ncard">
           <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/36169769/pexels-photo-36169769.jpeg?auto=compress&cs=tinysrgb&w=1000" onerror="this.parentElement.style.background='linear-gradient(135deg,#dceafb,#eef4fc)'" alt="" loading="lazy" decoding="async">
+            <img src="https://images.pexels.com/photos/36169769/pexels-photo-36169769.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
             <div class="ncard-ribbon"><span class="date">July 9, 2026</span><span class="cat">Awards</span></div>
           </div>
           <div class="ncard-body">
@@ -150,7 +150,7 @@
         </article>
         <article class="ncard">
           <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=1000" onerror="this.parentElement.style.background='linear-gradient(135deg,#dceafb,#eef4fc)'" alt="" loading="lazy" decoding="async">
+            <img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
             <div class="ncard-ribbon"><span class="date">February 9, 2026</span><span class="cat">Articles & News</span></div>
           </div>
           <div class="ncard-body">
@@ -161,7 +161,7 @@
         </article>
         <article class="ncard">
           <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/32324512/pexels-photo-32324512.jpeg?auto=compress&cs=tinysrgb&w=1000" onerror="this.parentElement.style.background='linear-gradient(135deg,#dceafb,#eef4fc)'" alt="" loading="lazy" decoding="async">
+            <img src="https://images.pexels.com/photos/32324512/pexels-photo-32324512.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
             <div class="ncard-ribbon"><span class="date">January 22, 2026</span><span class="cat">Insight</span></div>
           </div>
           <div class="ncard-body">
@@ -172,7 +172,7 @@
         </article>
         <article class="ncard">
           <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/17489158/pexels-photo-17489158.jpeg?auto=compress&cs=tinysrgb&w=1000" onerror="this.parentElement.style.background='linear-gradient(135deg,#dceafb,#eef4fc)'" alt="" loading="lazy" decoding="async">
+            <img src="https://images.pexels.com/photos/17489158/pexels-photo-17489158.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
             <div class="ncard-ribbon"><span class="date">December 3, 2025</span><span class="cat">Security</span></div>
           </div>
           <div class="ncard-body">
@@ -196,34 +196,34 @@
   <div class="whyloop">
     <div class="whyloop-track" id="whyTrack">
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">1</span><div class="wl-t">Tailored Solutions</div><div class="wl-s">10+ tahun pengalaman, solusi dirancang khusus untukmu</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">2</span><div class="wl-t">Broad Range of Solution &amp; Service</div><div class="wl-s">Dari infrastruktur, cloud, hingga AI dalam satu atap</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">3</span><div class="wl-t">AI-Powered Assistance</div><div class="wl-s">SatuAI siap membantu kapan pun kamu butuh</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">4</span><div class="wl-t">Customer Satisfaction</div><div class="wl-s">Success-first, komitmen penuh di tiap proyek</div></div>
         </div><div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">1</span><div class="wl-t">Tailored Solutions</div><div class="wl-s">10+ tahun pengalaman, solusi dirancang khusus untukmu</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">2</span><div class="wl-t">Broad Range of Solution &amp; Service</div><div class="wl-s">Dari infrastruktur, cloud, hingga AI dalam satu atap</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">3</span><div class="wl-t">AI-Powered Assistance</div><div class="wl-s">SatuAI siap membantu kapan pun kamu butuh</div></div>
         </div>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" onerror="this.remove()" alt="" loading="lazy" decoding="async"></div>
+          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
           <div class="wl-body"><span class="wl-num">4</span><div class="wl-t">Customer Satisfaction</div><div class="wl-s">Success-first, komitmen penuh di tiap proyek</div></div>
         </div>
     </div>
@@ -243,7 +243,7 @@
         <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
         <p class="quote">&ldquo;Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
           <div><div class="pname">Yonathan Moniaga</div><div class="prole">Chief Information Officer, Erha Clinic Indonesia</div></div>
         </div>
         <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -252,7 +252,7 @@
         <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
         <p class="quote">&ldquo;Migrasi sistem transaksi kami berjalan mulus dan aman. Tim STT memahami kebutuhan compliance industri finansial dengan baik.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
           <div><div class="pname">IT Director</div><div class="prole">Financial Services</div></div>
         </div>
         <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -261,7 +261,7 @@
         <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
         <p class="quote">&ldquo;Otomatisasi supply chain dari STT memangkas waktu proses secara signifikan. Partner yang benar-benar paham operasional pabrik.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
           <div><div class="pname">Head of Operations</div><div class="prole">Manufacture &amp; FMCG</div></div>
         </div>
         <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -270,7 +270,7 @@
         <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
         <p class="quote">&ldquo;Platform kami kini scalable menghadapi lonjakan traffic. Arsitektur yang dirancang STT terbukti andal saat peak season.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
           <div><div class="pname">Chief Technology Officer</div><div class="prole">E-Commerce Platform</div></div>
         </div>
         <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -279,7 +279,7 @@
         <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
         <p class="quote">&ldquo;Implementasi cloud, data, dan AI berjalan sesuai roadmap. Eksekusi rapi dan komunikasi transparan sepanjang proyek.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
           <div><div class="pname">VP Technology</div><div class="prole">Enterprise IT</div></div>
         </div>
         <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -288,7 +288,7 @@
         <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
         <p class="quote">&ldquo;Dukungan managed IT 24/7 membuat operasional rumah sakit kami jauh lebih tenang. Highly recommended.&rdquo;</p>
         <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" onerror="this.remove()" alt=""></div>
+          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
           <div><div class="pname">IT Manager</div><div class="prole">Healthcare Group</div></div>
         </div>
         <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -313,7 +313,7 @@
       </div>
       <div class="field full"><label for="ms">Message</label>
         <textarea id="ms" placeholder="What can we help you with?"></textarea></div>
-      <button class="form-submit" onclick="alert('Hubungkan ke endpoint form Request Proposal.')">Submit <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <button class="form-submit" type="button" data-proposal-submit>Submit <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
   </div>
 </section>
