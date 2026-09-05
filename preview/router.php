@@ -17,6 +17,7 @@ $map  = [
   'about'        => 'about',
 ];
 $page = $map[$seg] ?? null;
+if ($page === null && strpos($seg, 'layanan/') === 0) { $page = 'layanan-detail'; }
 if ($page === null) { http_response_code(404); $page = 'home'; }
 
 $tpl = theme_path('templates/pages/' . $page . '.php');
