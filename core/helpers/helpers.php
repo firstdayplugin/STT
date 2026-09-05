@@ -271,7 +271,35 @@ function upload_image(array $file, string $folder = 'general') {
     if (move_uploaded_file($file['tmp_name'], $target)) {
         return $folder . '/' . $filename;
     }
-    
+
+    return false;
+}
+
+// Upload short video (for cube/prism panels). Returns "folder/file" or false.
+// Allows mp4/webm; larger cap than images. Used by the Solutions module.
+function upload_video(array $file, string $folder = 'solutions', int $maxBytes = 15728640) {
+    if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) return false;
+    if ($file['size'] > $maxBytes) return false;
+
+    $allowed_mimes = ['video/mp4', 'video/webm', 'video/ogg'];
+    $allowed_exts  = ['mp4', 'webm', 'ogv', 'ogg'];
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    if (!in_array($mime, $allowed_mimes, true)) return false;
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowed_exts, true)) return false;
+
+    $dir = UPLOADS_PATH . '/' . $folder;
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+    $filename = uniqid() . '_' . time() . '.' . $ext;
+    $target = $dir . '/' . $filename;
+    if (move_uploaded_file($file['tmp_name'], $target)) {
+        return $folder . '/' . $filename;
+    }
     return false;
 }
 

@@ -28,6 +28,8 @@ $nav_sections = [
                 ['url'=>admin_url('?page=produk-kategori'),               'label'=>'Kategori', 'match'=>fn($p,$a)=>$p==='produk-kategori'],
             ]],
         ['page'=>'layanan',   'label'=>'Layanan',        'icon'=>'service'],
+        ['page'=>'solusi',    'label'=>'Solutions (Cube)',    'icon'=>'box'],
+        ['page'=>'industri',  'label'=>'Industries (Orbit)',  'icon'=>'compass'],
         ['page'=>'gallery',   'label'=>'Galeri',         'icon'=>'gallery'],
         ['page'=>'testimonial','label'=>'Testimoni',     'icon'=>'testimonial'],
         ['page'=>'faq',       'label'=>'FAQ',            'icon'=>'faq'],
@@ -197,6 +199,18 @@ function can_access_safe($role, $page) {
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
 }
+
+// Color pickers: keep <input type=color data-sync="id"> and its #id text field in sync (both ways).
+document.addEventListener('input', function (e) {
+  var t = e.target;
+  if (t.matches && t.matches('input[type=color][data-sync]')) {
+    var f = document.getElementById(t.getAttribute('data-sync'));
+    if (f) f.value = t.value;
+  } else if (t.matches && t.matches('input[type=text][id]')) {
+    var picker = document.querySelector('input[type=color][data-sync="' + t.id + '"]');
+    if (picker && /^#[0-9a-fA-F]{6}$/.test(t.value)) picker.value = t.value;
+  }
+});
 
 // Auto-dismiss success alerts after 4 seconds
 document.querySelectorAll('.alert-success').forEach(alert => {
