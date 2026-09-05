@@ -13,6 +13,8 @@ $map  = [
   'home'         => 'home',
   'hubungi-kami' => 'contact',
   'contact'      => 'contact',
+  'tentang-kami' => 'about',
+  'about'        => 'about',
 ];
 $page = $map[$seg] ?? null;
 if ($page === null) { http_response_code(404); $page = 'home'; }
