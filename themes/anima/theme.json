@@ -1,0 +1,22 @@
+{
+  "name": "Anima",
+  "slug": "anima",
+  "version": "0.1.0",
+  "description": "Tema enterprise sinematik untuk Sapta Tunas Teknologi. Home dari master design (WebGL neural core, orbit, prism) — CSP-safe (CSS/JS eksternal). Halaman lain dari desain Figma.",
+  "author": "Custom build (Anima)",
+  "tags": ["enterprise", "it", "cybersecurity", "webgl", "dark", "blue"],
+  "screenshot": "screenshot.png",
+  "supports": {
+    "settings_accent_color": true,
+    "settings_logo": true,
+    "settings_logo_dark": true,
+    "hero_settings": true,
+    "i18n": true,
+    "menu_locations": ["header", "footer"]
+  },
+  "requires": {
+    "cms": "Reklamepedia CMS >= 1.0.0",
+    "php": ">=8.0",
+    "browser": "Evergreen (Chrome/Edge/Safari/Firefox terbaru)"
+  }
+}
