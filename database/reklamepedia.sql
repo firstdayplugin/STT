@@ -380,3 +380,19 @@ CREATE TABLE `themes` (
 INSERT INTO `themes` (`slug`,`nama`,`deskripsi`,`author`,`version`,`screenshot`,`is_installed`,`is_active`) VALUES
 ('default','Default','Tema default bawaan CMS.','Reklamepedia','1.0','',1,0),
 ('anima','Anima','Tema enterprise sinematik Sapta Tunas (Home dari master, halaman lain dari Figma). CSP-safe.','Anima','0.1.0','/themes/anima/screenshot.png',1,1);
+
+-- ---------- Seed: blog categories + starter articles (What's New) ----------
+INSERT INTO `blog_kategori` (`nama`,`slug`,`urutan`) VALUES
+('Awards','awards',1),('Articles & News','articles-news',2),('Event','event',3),
+('Insight','insight',4),('Security','security',5),('Program Promo','program-promo',6);
+
+INSERT INTO `blog` (`judul`,`slug`,`user_id`,`konten`,`excerpt`,`gambar_utama`,`status`,`created_at`) VALUES
+('Andalkan AI Assistant untuk Troubleshooting Cepat dan Navigasi Proteksi Data Perusahaan Anda','ai-assistant-troubleshooting',1,'<p>Tim IT Anda masih troubleshooting secara manual? Saatnya andalkan AI Assistant untuk mempercepat navigasi dan proteksi data perusahaan.</p>','Tim IT Anda masih troubleshooting secara manual di tengah kompleksitas infrastruktur modern…','','published','2026-07-15 09:00:00'),
+('Mengatasi Kompleksitas Jaringan Enterprise Lewat Pendekatan Otomatisasi Cisco AgenticOps','cisco-agenticops',1,'<p>Paradoks baru dunia TI: sisi positif dan tantangan di balik kehadiran AI.</p>','Paradoks baru dunia TI: sisi positif dan tantangan di balik kehadiran AI. Perkembangan teknologi kecerdasan buatan…','','published','2026-07-09 10:00:00'),
+('Era Agentic AI: Solusi Infrastruktur IT untuk Inovasi Bisnis Skala Besar','era-agentic-ai',1,'<p>Adopsi kecerdasan buatan di dunia bisnis telah mencapai titik balik yang signifikan.</p>','Adopsi kecerdasan buatan (Artificial Intelligence) di dunia bisnis telah mencapai titik balik yang signifikan…','','published','2026-02-09 10:00:00'),
+('Platform SecOps Terpadu: Deteksi, Investigasi, dan Respons Keamanan Perusahaan','platform-secops-terpadu',1,'<p>Hari ini taktik serangan siber tidak lagi mengetuk pintu depan secara terang-terangan.</p>','Hari ini taktik yang digunakan dalam serangan siber tidak lagi mengetuk pintu depan secara terang-terangan…','','published','2026-07-09 11:00:00'),
+('Menjaga Rahasia Enterprise di Era LLM: Pentingnya Solusi Keamanan Data yang Cerdas','menjaga-rahasia-enterprise-llm',1,'<p>Tantangan baru keamanan data di era adopsi AI enterprise.</p>','Tantangan Baru Keamanan Data di Era Adopsi AI Enterprise. Mayoritas pemimpin perusahaan saat ini sepakat…','','published','2026-02-09 12:00:00'),
+('Membangun Infrastruktur Cloud yang Resilient untuk Skala Enterprise','infrastruktur-cloud-resilient',1,'<p>Strategi arsitektur cloud modern yang menjaga uptime, keamanan, dan efisiensi biaya.</p>','Strategi arsitektur cloud modern yang menjaga uptime, keamanan, dan efisiensi biaya di tengah pertumbuhan bisnis…','','published','2026-01-22 09:00:00');
+
+INSERT INTO `blog_kategori_rel` (`blog_id`,`kategori_id`) VALUES
+(1,4),(2,1),(3,2),(4,1),(5,2),(6,4);
