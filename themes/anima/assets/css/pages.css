@@ -173,3 +173,4 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 .tval-yes svg{width:15px;height:15px;stroke:var(--blue);stroke-width:2.6;fill:none}
 .tval-no{color:var(--dim)}
 .tval-hl{color:var(--blue-600);font-weight:700}
+.page-prose{max-width:74ch;margin:0 auto;padding:8px 0 60px;color:var(--ink-2);line-height:1.8}.page-prose h2,.page-prose h3{color:var(--blue-ink);margin:22px 0 10px}.page-prose p{margin:0 0 14px}

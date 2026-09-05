@@ -175,17 +175,18 @@ Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design
 5. **Root `.htaccess` tidak ada** di paket, padahal README menyebut clean-URL butuh `mod_rewrite`
    (`.htaccess` hanya ada di `admin/` dan `uploads/`).
 6. **Nama file schema beda** — README menyebut `database.sql`, aktualnya `database/reklamepedia.sql`.
-7. 🔴 **KRITIS — Schema `database/reklamepedia.sql` TIDAK cocok dengan kode.** SQL yang di-ship
-   memakai penamaan berbeda dari yang di-query kode aplikasi:
-   - Tabel: schema `services` / `products` / `blog_posts` / `custom_texts` / `whatsapp_numbers` vs
-     kode `layanan` / `produk` / `blog` / `content_blocks` / `wa_contacts`.
-   - Kolom `themes`: schema `versi` / `preview_image` / `status` vs kode admin
-     `version` / `screenshot` / `author` / `is_installed`.
-   Akibat: **theme `default` & banyak modul admin 500 pada DB yang di-ship** (mis. home.php default
-   query `layanan` yang tak ada; theme-manager INSERT kolom `author` yang tak ada). Ini blocker utama
-   agar CMS benar-benar jalan. **Fix yang benar: regenerasi `database/reklamepedia.sql` agar cocok
-   dengan kode** (kode = source of truth, jauh lebih lengkap) atau buat migrasi. Task besar tersendiri.
-   *(Anima home.php TIDAK terpengaruh — hanya pakai get_setting/get_content yang ber-try/catch.)*
+7. ✅ **RESOLVED — Schema `database/reklamepedia.sql` diregenerasi agar cocok dengan kode.**
+   Sebelumnya SQL yang di-ship memakai penamaan berbeda (schema `services`/`products`/`blog_posts`/
+   `custom_texts` & kolom `themes.versi/preview_image/status` vs kode `layanan`/`produk`/`blog`/
+   `content_blocks` & `themes.version/screenshot/author/is_installed`) → theme default & seluruh admin 500.
+   **`database/reklamepedia.sql` ditulis ulang** (34 tabel, nama/kolom sesuai kode) + perbaikan kolom
+   yang ketahuan saat iterasi lawan `error.log`: `users.is_active` (bukan `status`), `produk.gambar_utama`
+   (bukan `gambar`). `install.php` diperbaiki merujuk `database/reklamepedia.sql` (bug #6). Anima juga
+   dilengkapi 12 template (404/custom/blog/produk/gallery/layanan + detail).
+   **Hasil uji (MariaDB lokal): login ✓, admin 22/22 modul 200 tanpa error, frontend 9/9 rute 200,
+   `error.log` bersih.** CMS kini benar-benar jalan penuh (frontend + admin + theme Anima).
+   *(Metode: bangun schema → import → jalankan rute → baca error.log yang menyebut tabel/kolom hilang →
+   perbaiki → ulang, dengan kode sebagai oracle.)*
 
 ## 9a. Status Aktivasi Anima di CMS (uji end-to-end — SUDAH)
 - `config.php` kini **override via env `CMS_DB_*`** (default hosting tetap; dev/staging bisa override,

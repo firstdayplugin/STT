@@ -1,8 +1,10 @@
 -- ============================================================
--- REKLAMEPEDIA CMS DATABASE SCHEMA
--- Version: 1.0.0
+-- REKLAMEPEDIA CMS — DATABASE SCHEMA (regenerated to match the application code)
+-- The previous schema shipped table/column names that did not match the code
+-- (services vs layanan, blog_posts vs blog, custom_texts vs content_blocks,
+--  themes.versi/preview_image/status vs version/screenshot/author/is_installed, ...).
+-- This version aligns names/columns with what the code actually queries.
 -- ============================================================
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+07:00";
 SET NAMES utf8mb4;
@@ -10,596 +12,371 @@ SET NAMES utf8mb4;
 CREATE DATABASE IF NOT EXISTS `reklamepedia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `reklamepedia`;
 
--- ============================================================
--- PENGATURAN UMUM WEBSITE
--- ============================================================
+-- ---------- Settings ----------
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `setting_key` varchar(100) NOT NULL,
   `setting_value` longtext DEFAULT NULL,
   `setting_group` varchar(50) DEFAULT 'general',
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `setting_key` (`setting_key`)
+  PRIMARY KEY (`id`), UNIQUE KEY `setting_key` (`setting_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_group`) VALUES
-('site_name', 'Reklamepedia', 'general'),
-('site_tagline', 'Mitra Terpercaya untuk Kebutuhan Reklame & Advertising', 'general'),
-('site_description', 'Reklamepedia adalah perusahaan advertising berpengalaman lebih dari 15 tahun yang menghadirkan solusi reklame berkualitas untuk meningkatkan visibilitas brand di seluruh Indonesia.', 'general'),
-('site_logo', '', 'general'),
-('site_logo_type', 'text', 'general'),
-('site_favicon', '', 'general'),
-('site_email', 'reklamepedia@gmail.com', 'general'),
-('site_phone', '+62 123 456 7890', 'general'),
-('site_whatsapp', '6212345678900', 'general'),
-('site_address', 'Jl. Contoh No. 123, Yogyakarta', 'general'),
-('site_jam_operasional', 'Senin - Sabtu: 08.00 - 17.00 WIB', 'general'),
-('site_maps_embed', '', 'general'),
-('active_theme', 'default', 'general'),
-('setup_completed', '0', 'general'),
-('wa_float_enabled', '1', 'whatsapp'),
-('wa_float_message', 'Halo, saya ingin konsultasi mengenai reklame', 'whatsapp'),
-('hero_type', 'single', 'hero'),
-('hero_title', 'Mitra Terpercaya untuk Kebutuhan Reklame & Advertising', 'hero'),
-('hero_subtitle', 'Bangun visibilitas dan perkuat branding bisnis Anda melalui solusi reklame yang strategis dan berdampak. Lebih dari 1.200 klien di seluruh Indonesia telah mempercayakan kebutuhan advertising mereka kepada kami.', 'hero'),
-('hero_image', '', 'hero'),
-('hero_cta_text', 'Hubungi Kami!', 'hero'),
-('hero_cta_url', '/contact', 'hero'),
-('about_title', 'Reklamepedia hadir untuk membantu meningkatkan visibilitas dan memperkuat identitas bisnis anda melalui solusi reklame berkualitas berpengalaman lebih dari 15 tahun.', 'about'),
-('about_description', 'Reklamepedia adalah perusahaan advertising berpengalaman lebih dari 15 tahun yang menghadirkan solusi reklame berkualitas untuk meningkatkan visibilitas brand di seluruh Indonesia.', 'about'),
-('stat_projects', '700+', 'stats'),
-('stat_cities', '14', 'stats'),
-('stat_clients', '10k', 'stats'),
-('performance_title', 'Built on Experience, Driven by Results', 'stats'),
-('performance_desc', 'Selama lebih dari 15 tahun, kami telah membantu berbagai bisnis memperkuat identitas dan meningkatkan visibilitas brand melalui solusi reklame yang konsisten dan terpercaya.', 'stats'),
-('footer_description', 'Reklamepedia adalah perusahaan advertising berpengalaman lebih dari 15 tahun yang menghadirkan solusi reklame berkualitas untuk meningkatkan visibilitas brand di seluruh Indonesia.', 'footer'),
-('cta_section_title', "Let's Elevate Your Brand Visibility.", 'cta'),
-('cta_section_subtitle', 'Solusi reklame efektif untuk meningkatkan daya tarik dan eksistensi brand Anda.', 'cta'),
-('cta_button_text', 'Hubungi Kami!', 'cta'),
-('social_instagram', '', 'social'),
-('social_facebook', '', 'social'),
-('social_tiktok', '', 'social'),
-('social_youtube', '', 'social'),
-('meta_title', 'Reklamepedia - Solusi Reklame Terpercaya Indonesia', 'seo'),
-('meta_description', 'Reklamepedia hadir sebagai mitra terpercaya untuk kebutuhan reklame dan advertising bisnis Anda.', 'seo'),
-('meta_keywords', 'reklame, neon box, billboard, huruf timbul, advertising, signage', 'seo'),
-('google_analytics_id', '', 'analytics'),
-('google_tag_manager', '', 'analytics'),
-('meta_pixel_id', '', 'analytics'),
-('tiktok_pixel_id', '', 'analytics'),
-('custom_header_script', '', 'analytics'),
-('custom_footer_script', '', 'analytics'),
-('google_search_console', '', 'seo'),
-('robots_txt_extra', '', 'seo');
+INSERT INTO `settings` (`setting_key`,`setting_value`,`setting_group`) VALUES
+('site_name','Sapta Tunas Teknologi','general'),
+('site_title','Sapta Tunas Teknologi — Enterprise Solution Provider','general'),
+('site_tagline','Enterprise Solution Provider','general'),
+('site_description','Sapta Tunas Teknologi — established 2015. Business Technology Solutions & Services di Indonesia: IT & Cloud Infrastructure, Cybersecurity, Data & AI.','general'),
+('site_logo','','general'),('site_favicon','','general'),
+('site_email','marketing@saptatunas.com','general'),
+('site_email_prosupport','prosupport@saptatunas.com','general'),
+('site_phone','+62 21-5028 1717','general'),
+('site_phone_prosupport','021-2410 1568','general'),
+('site_address','Komplek Perkantoran Agung Sedayu Blok H No.28-30, Jl. Arteri Mangga Dua Raya, Jakarta Pusat, DKI Jakarta, Indonesia 10730','general'),
+('site_maps_embed','','general'),
+('wa_number','6282110001087','whatsapp'),
+('wa_display','+62 821-1000-1087','whatsapp'),
+('wa_text','Halo, saya ingin konsultasi solusi IT.','whatsapp'),
+('wa_float_enabled','1','whatsapp'),
+('linkedin_url','#','social'),('instagram_url','#','social'),('facebook_url','#','social'),('youtube_url','#','social'),
+('active_theme','anima','general'),
+('default_lang','id','i18n'),('languages','id,en','i18n'),
+('setup_completed','1','general'),
+('meta_title_default','Sapta Tunas Teknologi','seo'),
+('meta_desc_default','Enterprise Solution Provider','seo'),
+('accent_color','#2478E0','tampilan');
 
--- ============================================================
--- PENGGUNA ADMIN
--- ============================================================
+-- ---------- Users ----------
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(150) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('superadmin','penulis','admin_produk','tim_ads') NOT NULL DEFAULT 'penulis',
+  `role` enum('superadmin','admin','penulis','admin_produk','tim_ads') NOT NULL DEFAULT 'penulis',
   `foto` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `last_login` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
+  PRIMARY KEY (`id`), UNIQUE KEY `username` (`username`), UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- password default: "password"
+INSERT INTO `users` (`nama`,`username`,`email`,`password`,`role`) VALUES
+('Super Admin','admin','admin@saptatunas.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','superadmin');
 
-INSERT INTO `users` (`nama`, `username`, `email`, `password`, `role`) VALUES
-('Super Admin', 'admin', 'admin@reklamepedia.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'superadmin');
--- password default: password
-
--- ============================================================
--- MENU NAVIGASI
--- ============================================================
+-- ---------- Menus (multi-location: header/footer) ----------
 CREATE TABLE `menus` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL,
   `url` varchar(255) NOT NULL,
+  `lokasi` varchar(30) NOT NULL DEFAULT 'header',
+  `target` varchar(10) NOT NULL DEFAULT '_self',
   `urutan` int(11) NOT NULL DEFAULT 0,
   `parent_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`), KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `menus` (`nama`,`url`,`lokasi`,`urutan`,`is_active`,`is_default`) VALUES
+('About Us','/tentang-kami','header',1,1,1),
+('Solutions','/solutions','header',2,1,1),
+('Service','#','header',3,1,1),
+('Industry','#','header',4,1,1),
+('What''s New','/blog','header',5,1,1),
+('Career','/career','header',6,1,1),
+('Contact Us','/hubungi-kami','header',7,1,1);
+
+-- ---------- Content blocks (editable text per page) ----------
+CREATE TABLE `content_blocks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_key` varchar(80) NOT NULL,
+  `block_key` varchar(120) NOT NULL,
+  `block_label` varchar(200) DEFAULT NULL,
+  `block_type` varchar(30) NOT NULL DEFAULT 'text',
+  `konten` longtext DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`), UNIQUE KEY `page_block` (`page_key`,`block_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `menus` (`nama`, `url`, `urutan`, `status`, `is_default`) VALUES
-('Home', '/', 1, 1, 1),
-('Tentang Kami', '/about', 2, 1, 1),
-('Layanan', '/services', 3, 1, 1),
-('Gallery', '/gallery', 4, 1, 1),
-('Blog', '/blog', 5, 1, 1),
-('Hubungi Kami', '/contact', 6, 1, 1);
+-- ---------- Per-page SEO ----------
+CREATE TABLE `page_seo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_key` varchar(80) NOT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `meta_keywords` text DEFAULT NULL,
+  `og_image` varchar(255) DEFAULT NULL,
+  `canonical_url` varchar(255) DEFAULT NULL,
+  `robots` varchar(80) DEFAULT 'index,follow',
+  PRIMARY KEY (`id`), UNIQUE KEY `page_key` (`page_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- LAYANAN
--- ============================================================
-CREATE TABLE `services` (
+-- ---------- Custom pages ----------
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `konten` longtext DEFAULT NULL,
+  `template` varchar(80) DEFAULT 'default',
+  `show_in_nav` tinyint(1) NOT NULL DEFAULT 0,
+  `status` enum('draft','published') NOT NULL DEFAULT 'published',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `pages` (`judul`,`slug`,`konten`,`status`,`is_active`) VALUES
+('Privacy Policy','privacy-policy','<p>Privacy Policy.</p>','published',1),
+('Compliance Policy','compliance-policy','<p>Compliance Policy.</p>','published',1);
+
+-- ---------- Layanan (services) ----------
+CREATE TABLE `layanan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(200) NOT NULL,
   `slug` varchar(200) NOT NULL,
-  `nomor` varchar(10) DEFAULT NULL,
-  `deskripsi_singkat` text DEFAULT NULL,
+  `tagline` varchar(255) DEFAULT NULL,
+  `deskripsi_pendek` text DEFAULT NULL,
   `deskripsi` longtext DEFAULT NULL,
-  `gambar_utama` varchar(255) DEFAULT NULL,
-  `icon` varchar(100) DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `tampil_di_menu` tinyint(1) NOT NULL DEFAULT 0,
+  `icon` varchar(120) DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL,
+  `consult_title` varchar(255) DEFAULT NULL,
+  `consult_desc` text DEFAULT NULL,
+  `section_types_title` varchar(255) DEFAULT NULL,
+  `section_types_desc` text DEFAULT NULL,
+  `section_gallery_title` varchar(255) DEFAULT NULL,
+  `section_gallery_desc` text DEFAULT NULL,
   `meta_title` varchar(255) DEFAULT NULL,
   `meta_description` text DEFAULT NULL,
-  `meta_keywords` text DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `services` (`nama`, `slug`, `nomor`, `deskripsi_singkat`, `deskripsi`, `urutan`, `status`, `tampil_di_menu`) VALUES
-('Neon Box', 'neon-box', '01', 'Spesialis dalam pembuatan Neon Box dengan pengalaman mengerjakan berbagai desain dan bentuk menggunakan beragam material berkualitas.', '<p>Kami menyediakan berbagai jenis Neon Box berkualitas tinggi untuk kebutuhan bisnis Anda.</p>', 1, 1, 1),
-('Billboard', 'billboard', '02', 'Solusi billboard premium untuk visibilitas brand yang maksimal di lokasi strategis.', '<p>Billboard kami dirancang untuk menarik perhatian dan memperkuat brand awareness.</p>', 2, 1, 1),
-('Huruf Timbul', 'huruf-timbul', '03', 'Spesialis pembuatan Signage Huruf Timbul berpengalaman 15+ tahun, dipercaya 400+ klien.', '<p>Huruf timbul berkualitas tinggi dengan berbagai pilihan material.</p>', 3, 1, 1),
-('Pylon Sign', 'pylon-sign', '04', 'Pylon sign monumental untuk identitas bisnis yang kuat dan mudah terlihat dari jarak jauh.', '<p>Pylon sign kami hadir dalam berbagai ukuran dan desain sesuai kebutuhan.</p>', 4, 1, 1),
-('Neon LED Flex', 'neon-led-flex', '05', 'Solusi pencahayaan neon LED fleksibel untuk berbagai kebutuhan dekorasi dan branding.', '<p>Neon LED Flex modern dengan efisiensi energi tinggi dan tampilan premium.</p>', 5, 1, 1),
-('Vehicle Branding', 'vehicle-branding', '06', 'Transformasi kendaraan menjadi media iklan bergerak yang efektif dan profesional.', '<p>Vehicle branding kami menggunakan material terbaik untuk ketahanan maksimal.</p>', 6, 1, 1);
-
--- ============================================================
--- SUB LAYANAN (untuk halaman detail layanan)
--- ============================================================
-CREATE TABLE `service_items` (
+CREATE TABLE `layanan_sub` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_id` int(11) NOT NULL,
+  `layanan_id` int(11) NOT NULL,
   `nama` varchar(200) NOT NULL,
   `deskripsi` text DEFAULT NULL,
+  `icon` varchar(120) DEFAULT NULL,
   `gambar` varchar(255) DEFAULT NULL,
   `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `service_id` (`service_id`),
-  CONSTRAINT `fk_service_items` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`id`), KEY `layanan_id` (`layanan_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `service_items` (`service_id`, `nama`, `deskripsi`, `urutan`) VALUES
-(1, 'Neon Box Kotak', 'Neon box kotak menjadi media promosi andalan bagi usaha kios, outlet, perusahaan, sampai instansi pemerintah.', 1),
-(1, 'Neon Box Bulat', 'Beberapa jenis bisnis yang sering menggunakan neon box jenis ini adalah cafe, food & beverages, restoran, dan lain sebagainya.', 2),
-(1, 'Neon Box Custom', 'Jenis ini paling banyak diminati oleh beberapa pebisnis yang artinya dapat dibentuk sesuai dengan desain yang diinginkan.', 3),
-(3, 'Huruf Timbul Akrilik', 'Terbuat dari bahan acrylic dan led berkualitas menjadikannya produk yang menawan dan bermutu tinggi.', 1),
-(3, 'Huruf Timbul LED', 'Jasa pembuatan huruf timbul LED. Kami berikan produk yang durable dan berkualitas untuk Anda.', 2),
-(3, 'Huruf Timbul Stainless', 'Huruf Timbul Stainless bermutu tinggi. Menggunakan material type 201 & 304 yang berdurabilitas tinggi.', 3),
-(3, 'Huruf Timbul Galvanis', 'Menggunakan finishing cat duco menjadikannya tampil sesuai desain yang anda inginkan.', 4),
-(3, 'Huruf Timbul Kuningan', 'Menggunakan material terbaik membuat huruf timbul kuningan anda tampil elegan dan mewah.', 5),
-(3, 'Huruf Timbul Akrilik Laser', 'Terbuat dari bahan acrylic dan led berkualitas menjadikannya produk yang menawan dan bermutu tinggi.', 6);
-
--- ============================================================
--- GALERI LAYANAN
--- ============================================================
-CREATE TABLE `service_gallery` (
+-- ---------- Produk ----------
+CREATE TABLE `produk_kategori` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_id` int(11) NOT NULL,
-  `gambar` varchar(255) NOT NULL,
-  `caption` varchar(255) DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `service_id` (`service_id`),
-  CONSTRAINT `fk_service_gallery` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE
+  `nama` varchar(100) NOT NULL, `slug` varchar(100) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL, `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- GALERI UTAMA
--- ============================================================
-CREATE TABLE `gallery` (
+CREATE TABLE `produk` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(255) NOT NULL,
-  `gambar` varchar(255) NOT NULL,
+  `nama` varchar(255) NOT NULL, `slug` varchar(255) NOT NULL,
   `kategori_id` int(11) DEFAULT NULL,
-  `deskripsi` text DEFAULT NULL,
+  `short_description` text DEFAULT NULL, `deskripsi` longtext DEFAULT NULL,
+  `harga` decimal(15,2) DEFAULT NULL, `harga_coret` decimal(15,2) DEFAULT NULL,
+  `gambar_utama` varchar(255) DEFAULT NULL, `badge` varchar(60) DEFAULT NULL, `label` varchar(60) DEFAULT NULL,
+  `stok` int(11) DEFAULT NULL, `berat` int(11) DEFAULT NULL,
+  `status` enum('aktif','nonaktif') NOT NULL DEFAULT 'aktif',
   `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================================
--- KATEGORI GALERI
--- ============================================================
-CREATE TABLE `gallery_categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `gallery_categories` (`nama`, `slug`, `urutan`) VALUES
-('Neon Box', 'neon-box', 1),
-('Billboard', 'billboard', 2),
-('Huruf Timbul', 'huruf-timbul', 3),
-('Pylon Sign', 'pylon-sign', 4),
-('Neon LED Flex', 'neon-led-flex', 5),
-('Vehicle Branding', 'vehicle-branding', 6);
-
--- ============================================================
--- PRODUK / KATALOG
--- ============================================================
-CREATE TABLE `product_categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `deskripsi` text DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE `products` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `kategori_id` int(11) DEFAULT NULL,
-  `deskripsi_singkat` text DEFAULT NULL,
-  `deskripsi` longtext DEFAULT NULL,
-  `harga` decimal(15,2) DEFAULT NULL,
-  `gambar_utama` varchar(255) DEFAULT NULL,
-  `featured` tinyint(1) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `meta_title` varchar(255) DEFAULT NULL,
-  `meta_description` text DEFAULT NULL,
-  `meta_keywords` text DEFAULT NULL,
+  `meta_title` varchar(255) DEFAULT NULL, `meta_description` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `product_gallery` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `gambar` varchar(255) NOT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `fk_product_gallery` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+CREATE TABLE `produk_kategori_rel` (
+  `produk_id` int(11) NOT NULL, `kategori_id` int(11) NOT NULL,
+  PRIMARY KEY (`produk_id`,`kategori_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `product_tags` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `tag` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `fk_product_tags` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+CREATE TABLE `produk_gallery` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, `produk_id` int(11) NOT NULL,
+  `gambar` varchar(255) NOT NULL, `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `produk_id` (`produk_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Plugin marketplace URLs untuk produk
-CREATE TABLE `product_marketplace` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `platform` enum('tokopedia','shopee','lazada','blibli','bukalapak') NOT NULL,
-  `url` varchar(500) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `fk_product_marketplace` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+CREATE TABLE `produk_marketplace` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, `produk_id` int(11) NOT NULL,
+  `platform` varchar(40) NOT NULL, `url` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`), KEY `produk_id` (`produk_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- BLOG
--- ============================================================
-CREATE TABLE `blog_categories` (
+-- ---------- Blog ----------
+CREATE TABLE `blog_kategori` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `deskripsi` text DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  `nama` varchar(100) NOT NULL, `slug` varchar(100) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL, `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `blog_categories` (`nama`, `slug`, `urutan`) VALUES
-('Tips Reklame', 'tips-reklame', 1),
-('Inspirasi Desain', 'inspirasi-desain', 2),
-('Berita Industri', 'berita-industri', 3),
-('Project Showcase', 'project-showcase', 4);
-
-CREATE TABLE `blog_posts` (
+CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(500) NOT NULL,
-  `slug` varchar(500) NOT NULL,
-  `kategori_id` int(11) DEFAULT NULL,
-  `author_id` int(11) NOT NULL,
-  `konten` longtext DEFAULT NULL,
-  `excerpt` text DEFAULT NULL,
+  `judul` varchar(500) NOT NULL, `slug` varchar(500) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `konten` longtext DEFAULT NULL, `excerpt` text DEFAULT NULL,
   `gambar_utama` varchar(255) DEFAULT NULL,
-  `status` enum('draft','publish','scheduled') NOT NULL DEFAULT 'draft',
+  `status` enum('draft','published','scheduled') NOT NULL DEFAULT 'draft',
   `scheduled_at` timestamp NULL DEFAULT NULL,
-  `meta_title` varchar(255) DEFAULT NULL,
-  `meta_description` text DEFAULT NULL,
-  `meta_keywords` text DEFAULT NULL,
+  `meta_title` varchar(255) DEFAULT NULL, `meta_description` text DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT 0,
-  `published_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`),
-  KEY `author_id` (`author_id`),
-  KEY `kategori_id` (`kategori_id`)
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`), KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `blog_kategori_rel` (
+  `blog_id` int(11) NOT NULL, `kategori_id` int(11) NOT NULL,
+  PRIMARY KEY (`blog_id`,`kategori_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `blog_tags` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `post_id` int(11) NOT NULL,
-  `tag` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `post_id` (`post_id`),
-  CONSTRAINT `fk_blog_tags` FOREIGN KEY (`post_id`) REFERENCES `blog_posts` (`id`) ON DELETE CASCADE
+  `id` int(11) NOT NULL AUTO_INCREMENT, `nama` varchar(100) NOT NULL, `slug` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`), UNIQUE KEY `nama` (`nama`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- HERO SLIDER
--- ============================================================
+CREATE TABLE `blog_tags_rel` (
+  `blog_id` int(11) NOT NULL, `tag_id` int(11) NOT NULL,
+  PRIMARY KEY (`blog_id`,`tag_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- Gallery ----------
+CREATE TABLE `gallery_kategori` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, `nama` varchar(100) NOT NULL, `slug` varchar(100) NOT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0, PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `gallery` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) NOT NULL, `slug` varchar(255) DEFAULT NULL,
+  `gambar` varchar(255) NOT NULL, `kategori_id` int(11) DEFAULT NULL,
+  `deskripsi` text DEFAULT NULL, `is_featured` tinyint(1) NOT NULL DEFAULT 0,
+  `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`), KEY `kategori_id` (`kategori_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- Testimonial ----------
+CREATE TABLE `testimonial` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(100) NOT NULL, `jabatan` varchar(150) DEFAULT NULL, `perusahaan` varchar(150) DEFAULT NULL,
+  `isi` text NOT NULL, `rating` tinyint(1) NOT NULL DEFAULT 5, `foto` varchar(255) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- FAQ ----------
+CREATE TABLE `faq` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pertanyaan` text NOT NULL, `jawaban` longtext NOT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `faq_layanan_rel` (
+  `faq_id` int(11) NOT NULL, `layanan_id` int(11) NOT NULL,
+  PRIMARY KEY (`faq_id`,`layanan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- Client logos ----------
+CREATE TABLE `klien_logo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(100) NOT NULL, `logo` varchar(255) DEFAULT NULL, `url` varchar(255) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- Hero slides ----------
 CREATE TABLE `hero_slides` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(255) DEFAULT NULL,
-  `subtitle` text DEFAULT NULL,
-  `gambar` varchar(255) NOT NULL,
-  `cta_text` varchar(100) DEFAULT NULL,
-  `cta_url` varchar(255) DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `judul` varchar(255) DEFAULT NULL, `subtitle` text DEFAULT NULL, `gambar` varchar(255) DEFAULT NULL,
+  `cta_text` varchar(100) DEFAULT NULL, `cta_url` varchar(255) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- TESTIMONI
--- ============================================================
-CREATE TABLE `testimonials` (
+-- ---------- Flexible content blocks ----------
+CREATE TABLE `flex_blocks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `jabatan` varchar(100) DEFAULT NULL,
-  `perusahaan` varchar(100) DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `komentar` text NOT NULL,
-  `rating` tinyint(1) NOT NULL DEFAULT 5,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `judul` varchar(255) DEFAULT NULL, `konten` longtext DEFAULT NULL,
+  `posisi` varchar(60) NOT NULL DEFAULT 'home_middle', `urutan` int(11) NOT NULL DEFAULT 0,
+  `align` varchar(20) DEFAULT 'left', `bg_color` varchar(20) DEFAULT NULL,
+  `layanan_id` int(11) DEFAULT NULL, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `testimonials` (`nama`, `jabatan`, `komentar`, `rating`, `urutan`, `status`) VALUES
-('Budi Santoso', 'CEO', 'Hasil kerja Reklamepedia sangat memuaskan. Neon box yang kami pesan selesai tepat waktu dengan kualitas yang sangat baik. Tim mereka sangat profesional dan responsif.', 5, 1, 1),
-('Sari Dewi', 'Marketing Manager', 'Sudah 3 kali menggunakan jasa Reklamepedia dan selalu puas. Kualitas material bagus, harga kompetitif, dan pelayanan ramah. Sangat recommended!', 5, 2, 1),
-('Ahmad Fauzi', 'Owner', 'Billboard yang dipasang oleh Reklamepedia benar-benar meningkatkan awareness bisnis kami. Desain sesuai ekspektasi dan pemasangan sangat rapi.', 5, 3, 1);
-
--- ============================================================
--- FAQ
--- ============================================================
-CREATE TABLE `faqs` (
+-- ---------- Grid icon box ----------
+CREATE TABLE `grid_icon_box` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pertanyaan` text NOT NULL,
-  `jawaban` longtext NOT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `judul_section` varchar(255) DEFAULT NULL, `kolom` int(11) NOT NULL DEFAULT 3,
+  `posisi` varchar(60) NOT NULL DEFAULT 'home_middle', `urutan` int(11) NOT NULL DEFAULT 0,
+  `layanan_id` int(11) DEFAULT NULL, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `faqs` (`pertanyaan`, `jawaban`, `urutan`) VALUES
-('Berapa lama waktu pengerjaan reklame?', 'Waktu pengerjaan bervariasi, umumnya 1–4 minggu tergantung ukuran dan kompleksitas. Kami selalu berkomitmen memberikan hasil tepat waktu tanpa mengurangi kualitas.', 1),
-('Apakah desain dapat disesuaikan sesuai dengan brand kamu?', 'Ya, tentu saja! Kami menyediakan layanan desain custom yang sepenuhnya disesuaikan dengan kebutuhan dan identitas brand Anda. Tim desainer kami siap membantu mewujudkan visi Anda.', 2),
-('Apakah ada layanan survey lokasi?', 'Ya, kami menyediakan layanan survey lokasi gratis untuk memastikan penempatan reklame yang optimal dan sesuai dengan regulasi setempat.', 3),
-('Bagaimana dengan kualitas material yang digunakan?', 'Kami hanya menggunakan material berkualitas tinggi yang telah teruji ketahanannya. Setiap proyek menggunakan material terbaik sesuai kebutuhan dan anggaran klien.', 4),
-('Apakah ada garansi untuk reklame yang dibuat?', 'Ya, setiap produk yang kami hasilkan dilengkapi dengan garansi. Durasi garansi bervariasi tergantung jenis produk. Kami berkomitmen memberikan purna jual yang terbaik.', 5);
+CREATE TABLE `grid_icon_box_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, `grid_id` int(11) NOT NULL,
+  `icon` varchar(120) DEFAULT NULL, `judul` varchar(200) DEFAULT NULL, `deskripsi` text DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL, `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `grid_id` (`grid_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- LOGO KLIEN / PARTNER
--- ============================================================
-CREATE TABLE `client_logos` (
+-- ---------- WhatsApp contacts + click tracking ----------
+CREATE TABLE `wa_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `logo` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `nama` varchar(100) NOT NULL, `nomor` varchar(30) NOT NULL, `jabatan` varchar(100) DEFAULT NULL,
+  `pesan` varchar(255) DEFAULT NULL, `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- KEUNGGULAN / WHY CHOOSE US
--- ============================================================
-CREATE TABLE `advantages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(200) NOT NULL,
-  `deskripsi` text DEFAULT NULL,
-  `gambar` varchar(255) DEFAULT NULL,
-  `icon` varchar(100) DEFAULT NULL,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `advantages` (`judul`, `deskripsi`, `urutan`, `status`) VALUES
-('Free Consultation & Site Survey', 'Konsultasi dan survey lokasi gratis untuk memastikan solusi dan penempatan reklame yang tepat.', 1, 1),
-('Quality Assurance & Warranty', 'Setiap produk dilengkapi jaminan kualitas untuk memastikan kepuasan dan kepercayaan pelanggan.', 2, 1),
-('Experienced Professional Team', 'Dikerjakan oleh tenaga ahli berpengalaman dengan hasil rapi, presisi, dan berkualitas.', 3, 1);
-
--- ============================================================
--- GRID ICON BOX (Custom Content Blocks)
--- ============================================================
-CREATE TABLE `icon_boxes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(200) NOT NULL,
-  `deskripsi` text DEFAULT NULL,
-  `icon` varchar(100) DEFAULT NULL,
-  `link` varchar(255) DEFAULT NULL,
-  `posisi` enum('bawah_hero','tengah','atas_footer') NOT NULL DEFAULT 'tengah',
-  `kolom` enum('3','4') NOT NULL DEFAULT '3',
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================================
--- CUSTOM TEXT AREAS
--- ============================================================
-CREATE TABLE `custom_texts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(200) DEFAULT NULL,
-  `konten` longtext NOT NULL,
-  `posisi` enum('bawah_hero','tengah','atas_footer') NOT NULL DEFAULT 'tengah',
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================================
--- PESAN / KONTAK
--- ============================================================
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `telepon` varchar(20) DEFAULT NULL,
-  `pesan` text NOT NULL,
-  `status` enum('baru','dibaca','dibalas') NOT NULL DEFAULT 'baru',
-  `ip_address` varchar(45) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================================
--- VISITOR TRACKING (ringan)
--- ============================================================
-CREATE TABLE `visitor_stats` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tanggal` date NOT NULL,
-  `total_kunjungan` int(11) NOT NULL DEFAULT 0,
-  `unique_visitor` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `tanggal` (`tanggal`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================================
--- WA CLICK TRACKING
--- ============================================================
 CREATE TABLE `wa_clicks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tanggal` date NOT NULL,
-  `jumlah` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `tanggal` (`tanggal`)
+  `id` int(11) NOT NULL AUTO_INCREMENT, `contact_id` int(11) NOT NULL,
+  `clicks` int(11) NOT NULL DEFAULT 0, `created_at` date NOT NULL,
+  PRIMARY KEY (`id`), UNIQUE KEY `contact_date` (`contact_id`,`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- ACTIVITY LOG
--- ============================================================
+-- ---------- Visitor stats ----------
+CREATE TABLE `statistik_visitor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT, `tanggal` date NOT NULL,
+  `page` varchar(255) NOT NULL DEFAULT '/', `views` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), UNIQUE KEY `tanggal_page` (`tanggal`,`page`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- Activity log ----------
 CREATE TABLE `activity_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `aksi` varchar(255) NOT NULL,
-  `detail` text DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT, `user_id` int(11) DEFAULT NULL,
+  `aksi` varchar(255) NOT NULL, `keterangan` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
+  PRIMARY KEY (`id`), KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- PLUGIN SYSTEM
--- ============================================================
+-- ---------- Plugins (feature toggles) ----------
 CREATE TABLE `plugins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `versi` varchar(20) NOT NULL DEFAULT '1.0.0',
-  `deskripsi` text DEFAULT NULL,
-  `author` varchar(100) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0,
-  `installed_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  `nama` varchar(100) NOT NULL, `slug` varchar(100) NOT NULL,
+  `deskripsi` text DEFAULT NULL, `is_active` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `plugins` (`nama`,`slug`,`deskripsi`,`is_active`) VALUES
+('Marketplace','marketplace','Tombol beli ke marketplace pada halaman produk.',0);
 
-INSERT INTO `plugins` (`nama`, `slug`, `versi`, `deskripsi`, `author`, `status`) VALUES
-('Marketplace URL Produk', 'marketplace-url', '1.0.0', 'Menambahkan URL marketplace (Tokopedia, Shopee, Lazada, Blibli, Bukalapak) pada produk.', 'Reklamepedia', 1);
-
--- ============================================================
--- TEMA / TEMPLATE SYSTEM
--- ============================================================
+-- ---------- Themes ----------
 CREATE TABLE `themes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL,
-  `versi` varchar(20) NOT NULL DEFAULT '1.0.0',
-  `deskripsi` text DEFAULT NULL,
-  `preview_image` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0,
-  `is_active` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  `slug` varchar(100) NOT NULL, `nama` varchar(100) NOT NULL,
+  `deskripsi` text DEFAULT NULL, `author` varchar(120) DEFAULT NULL,
+  `version` varchar(20) NOT NULL DEFAULT '1.0', `screenshot` varchar(255) DEFAULT NULL,
+  `demo_url` varchar(255) DEFAULT NULL,
+  `is_installed` tinyint(1) NOT NULL DEFAULT 1, `is_active` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `themes` (`nama`, `slug`, `versi`, `deskripsi`, `status`, `is_active`) VALUES
-('Reklamepedia Default', 'default', '1.0.0', 'Template default Reklamepedia dengan desain modern futuristik 2026.', 1, 1);
-
--- ============================================================
--- SETUP WIZARD PROGRESS
--- ============================================================
-CREATE TABLE `setup_wizard` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `step` int(11) NOT NULL,
-  `nama_step` varchar(100) NOT NULL,
-  `selesai` tinyint(1) NOT NULL DEFAULT 0,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `step` (`step`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `setup_wizard` (`step`, `nama_step`, `selesai`) VALUES
-(1, 'Nama Bisnis', 0), (2, 'Upload Logo', 0), (3, 'Upload Favicon', 0),
-(4, 'Tipe Logo', 0), (5, 'Nomor WhatsApp', 0), (6, 'Email', 0),
-(7, 'Alamat', 0), (8, 'Jam Operasional', 0), (9, 'Upload Hero Image', 0),
-(10, 'Pilih Template', 0), (11, 'Sosial Media', 0), (12, 'Style Warna', 0),
-(13, 'Google Maps', 0), (14, 'Setup SEO', 0), (15, 'Floating WhatsApp', 0),
-(16, 'Setup Marketplace', 0), (17, 'Google Analytics', 0), (18, 'Google Search Console', 0),
-(19, 'Selesai', 0);
-
--- ============================================================
--- WHATSAPP MULTI NOMOR
--- ============================================================
-CREATE TABLE `whatsapp_numbers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `nomor` varchar(20) NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `jabatan` varchar(100) DEFAULT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `urutan` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `whatsapp_numbers` (`nama`, `nomor`, `jabatan`, `is_default`, `status`) VALUES
-('Tim Sales', '6212345678900', 'Customer Service', 1, 1);
-
--- ============================================================
--- PERMALINK SETTINGS
--- ============================================================
-CREATE TABLE `permalink_settings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(50) NOT NULL,
-  `struktur` varchar(255) NOT NULL DEFAULT '/%slug%',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `permalink_settings` (`type`, `struktur`) VALUES
-('blog', '/blog/%slug%'),
-('produk', '/produk/%slug%'),
-('layanan', '/layanan/%slug%'),
-('gallery', '/gallery/%slug%');
+INSERT INTO `themes` (`slug`,`nama`,`deskripsi`,`author`,`version`,`screenshot`,`is_installed`,`is_active`) VALUES
+('default','Default','Tema default bawaan CMS.','Reklamepedia','1.0','',1,0),
+('anima','Anima','Tema enterprise sinematik Sapta Tunas (Home dari master, halaman lain dari Figma). CSP-safe.','Anima','0.1.0','/themes/anima/screenshot.png',1,1);

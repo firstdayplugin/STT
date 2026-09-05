@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             $pdo = new PDO($dsn, $db_user, $db_pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
             // Run schema
-            $sql = file_get_contents(__DIR__ . '/database.sql');
+            $sql = file_get_contents(__DIR__ . '/database/reklamepedia.sql');
             // Split by statement
             $statements = array_filter(array_map('trim', explode(";\n", $sql)));
             foreach ($statements as $stmt) {
