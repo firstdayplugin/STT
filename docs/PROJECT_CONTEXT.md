@@ -175,8 +175,38 @@ Membuat theme baru `themes/anima/` yang mereproduksi master desain Home (`design
 5. **Root `.htaccess` tidak ada** di paket, padahal README menyebut clean-URL butuh `mod_rewrite`
    (`.htaccess` hanya ada di `admin/` dan `uploads/`).
 6. **Nama file schema beda** — README menyebut `database.sql`, aktualnya `database/reklamepedia.sql`.
+7. 🔴 **KRITIS — Schema `database/reklamepedia.sql` TIDAK cocok dengan kode.** SQL yang di-ship
+   memakai penamaan berbeda dari yang di-query kode aplikasi:
+   - Tabel: schema `services` / `products` / `blog_posts` / `custom_texts` / `whatsapp_numbers` vs
+     kode `layanan` / `produk` / `blog` / `content_blocks` / `wa_contacts`.
+   - Kolom `themes`: schema `versi` / `preview_image` / `status` vs kode admin
+     `version` / `screenshot` / `author` / `is_installed`.
+   Akibat: **theme `default` & banyak modul admin 500 pada DB yang di-ship** (mis. home.php default
+   query `layanan` yang tak ada; theme-manager INSERT kolom `author` yang tak ada). Ini blocker utama
+   agar CMS benar-benar jalan. **Fix yang benar: regenerasi `database/reklamepedia.sql` agar cocok
+   dengan kode** (kode = source of truth, jauh lebih lengkap) atau buat migrasi. Task besar tersendiri.
+   *(Anima home.php TIDAK terpengaruh — hanya pakai get_setting/get_content yang ber-try/catch.)*
 
-> Daftar ini akan bertambah saat proses "rapihin & benerin bug".
+## 9a. Status Aktivasi Anima di CMS (uji end-to-end — SUDAH)
+- `config.php` kini **override via env `CMS_DB_*`** (default hosting tetap; dev/staging bisa override,
+  langkah awal mitigasi bug #4 kredensial).
+- Theme-manager (`admin/views/template/index.php`) auto-detect kini **membaca `theme.json`**
+  (name/description/author/version/screenshot), dibungkus try/catch agar tak fatal saat schema belum selaras.
+- **Anima diaktifkan & diuji lewat CMS asli** (MariaDB lokal): `/` , `/hubungi-kami`, `/tentang-kami`
+  render **200** end-to-end (index.php → theme_path → Anima). `/layanan/[slug]` masih 500 (router CMS
+  query tabel `layanan` yang hilang — efek bug #7, bukan Anima).
+- Registrasi live memakai kolom schema aktual (`versi`/`preview_image`/`status`) sebagai workaround
+  bug #7; fix theme.json di kode ditulis untuk skema kode (akan benar setelah #7 dibereskan).
+
+## 9b. Menjalankan CMS lokal (dev, tanpa Hostinger)
+Sesi ini memasang MariaDB via apt (ada mirror lokal). Langkah:
+1. `mariadb-install-db --datadir=/tmp/mariadb-data` lalu jalankan `mariadbd ... --port=3307 --socket=/tmp/mysqld.sock`.
+2. Import: `mariadb ... < database/reklamepedia.sql` (membuat DB `reklamepedia`).
+3. Buat user dev, lalu jalankan CMS:
+   `CMS_DB_HOST='127.0.0.1;port=3307' CMS_DB_NAME='reklamepedia' CMS_DB_USER=... CMS_DB_PASS=... php -S 127.0.0.1:8124 -t . preview/cms-router.php`
+4. Frontend Anima aktif via CMS asli. (Preview mock-data tetap: `preview/router.php`.)
+
+> Daftar bug akan bertambah saat proses "rapihin & benerin bug".
 
 ## 10. Sumber Desain
 

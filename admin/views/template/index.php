@@ -65,15 +65,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Auto-detect themes in /themes folder that aren't in DB
+// Auto-detect themes in /themes folder that aren't in DB.
+// Metadata is read from each theme's theme.json when present (name, description, author,
+// version, screenshot). Falls back to the folder name when theme.json is missing/invalid.
 $themes_dir = BASE_PATH . '/themes';
 if (is_dir($themes_dir)) {
     foreach (scandir($themes_dir) as $dir) {
         if ($dir === '.' || $dir === '..' || !is_dir($themes_dir . '/' . $dir)) continue;
-        $exists = $db->fetchOne("SELECT id FROM themes WHERE slug = ?", [$dir]);
-        if (!$exists) {
-            $db->execute("INSERT IGNORE INTO themes (slug, nama, is_installed, is_active) VALUES (?, ?, 1, 0)",
-                [$dir, ucfirst(str_replace(['-', '_'], ' ', $dir))]);
+
+        $meta = [];
+        $tj = $themes_dir . '/' . $dir . '/theme.json';
+        if (is_file($tj)) {
+            $j = json_decode((string) file_get_contents($tj), true);
+            if (is_array($j)) $meta = $j;
+        }
+        $nama       = $meta['name']        ?? ucfirst(str_replace(['-', '_'], ' ', $dir));
+        $deskripsi  = $meta['description'] ?? '';
+        $author     = $meta['author']      ?? '';
+        $version    = $meta['version']     ?? '1.0';
+        $screenshot = !empty($meta['screenshot'])
+            ? THEMES_URL . '/' . $dir . '/' . ltrim($meta['screenshot'], '/')
+            : '';
+
+        // NOTE: the shipped database/reklamepedia.sql `themes` table is out of sync with this code
+        // (it ships versi/preview_image/status instead of version/screenshot/author/is_installed) — part
+        // of a wider schema<->code mismatch that must be reconciled (see docs). Wrapped in try/catch so a
+        // column mismatch degrades gracefully (theme just isn't auto-registered) instead of a 500.
+        try {
+            $exists = $db->fetchOne("SELECT id, deskripsi FROM themes WHERE slug = ?", [$dir]);
+            if (!$exists) {
+                $db->execute(
+                    "INSERT INTO themes (slug, nama, deskripsi, author, version, screenshot, is_installed, is_active)
+                     VALUES (?, ?, ?, ?, ?, ?, 1, 0)",
+                    [$dir, $nama, $deskripsi, $author, $version, $screenshot]
+                );
+            } elseif ($meta && empty($exists['deskripsi'])) {
+                // Backfill metadata from theme.json for rows detected before (without overwriting manual edits).
+                $db->execute(
+                    "UPDATE themes SET nama = ?, deskripsi = ?, author = ?, version = ?, screenshot = ? WHERE slug = ?",
+                    [$nama, $deskripsi, $author, $version, $screenshot, $dir]
+                );
+            }
+        } catch (\Throwable $e) {
+            // schema mismatch or DB error — skip auto-registration for this theme
         }
     }
 }

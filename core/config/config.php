@@ -11,10 +11,13 @@ define('CMS_NAME', 'Reklamepedia CMS');
 // ============================================
 // ⚠️ GANTI sesuai kredensial hosting Anda!
 // Di cPanel biasanya format: namauser_namadatabase
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'u780175149_reklamenesia');   // Ganti dengan nama database Anda
-define('DB_USER', 'u780175149_reklamenesia');   // Ganti dengan username database Anda
-define('DB_PASS', 'pLBs059>y9!');                    // Isi password database Anda
+// Values may be overridden by environment variables (CMS_DB_*) — useful for local dev,
+// staging, and keeping secrets out of source. When the env var is unset, the hosting
+// default below is used, so existing deployments are unaffected.
+define('DB_HOST', getenv('CMS_DB_HOST') !== false ? getenv('CMS_DB_HOST') : 'localhost');
+define('DB_NAME', getenv('CMS_DB_NAME') !== false ? getenv('CMS_DB_NAME') : 'u780175149_reklamenesia');   // Ganti dengan nama database Anda
+define('DB_USER', getenv('CMS_DB_USER') !== false ? getenv('CMS_DB_USER') : 'u780175149_reklamenesia');   // Ganti dengan username database Anda
+define('DB_PASS', getenv('CMS_DB_PASS') !== false ? getenv('CMS_DB_PASS') : 'pLBs059>y9!');                    // Isi password database Anda
 define('DB_CHARSET', 'utf8mb4');
 
 // ============================================
