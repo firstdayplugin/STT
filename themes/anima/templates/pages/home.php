@@ -22,6 +22,54 @@ $hero_json  = [];
 foreach ($hero_rows as $hs) { $hero_json[] = ['bg' => !empty($hs['gambar']) ? uploads_url($hs['gambar']) : '', 'h' => (string)($hs['judul'] ?? ''), 'sub' => (string)($hs['subtitle'] ?? '')]; }
 $h0 = $hero_json[0] ?? ['bg' => '', 'h' => 'Growing The Global', 'sub' => 'Technology Industry'];
 
+// §14.2 — data-driven animations. Cube (Solutions prism) & orbit (Our Industries)
+// cards are editable + media-capable; config is injected CSP-safely via data-* attrs
+// (anima.js falls back to its built-in arrays when an attribute is absent/empty).
+$orbit_rows = $Q("SELECT label, judul, subtitle, gambar, warna1, warna2, url FROM industri WHERE is_active=1 ORDER BY urutan, id");
+$orbit_json = [];
+foreach ($orbit_rows as $r) {
+    $orbit_json[] = [
+        'label' => (string)($r['label'] ?? ''),
+        'title' => (string)($r['judul'] ?? ''),
+        'sub'   => (string)($r['subtitle'] ?? ''),
+        'img'   => !empty($r['gambar']) ? uploads_url($r['gambar']) : '',
+        'c1'    => (string)($r['warna1'] ?? '#0f2a54'),
+        'c2'    => (string)($r['warna2'] ?? '#357be0'),
+        'url'   => (string)($r['url'] ?? ''),
+    ];
+}
+$slide_rows = $Q("SELECT eyebrow, judul, deskripsi, label, gambar, video_url, warna_dark, warna_mid, warna_accent, logos, url FROM solution_slides WHERE is_active=1 ORDER BY urutan, id");
+$slides_json = [];
+foreach ($slide_rows as $r) {
+    $logos = [];
+    if (!empty($r['logos'])) {
+        $dec = json_decode($r['logos'], true);
+        if (is_array($dec)) {
+            foreach ($dec as $lg) {
+                $lg = (string) $lg;
+                // A path/URL (contains a slash or file extension) is used as-is (resolving
+                // uploads-relative paths); a bare token is a built-in logo key for anima.js.
+                if ($lg !== '' && !preg_match('#^(https?:|/|data:)#', $lg) && str_contains($lg, '.')) { $lg = uploads_url($lg); }
+                elseif ($lg !== '' && !preg_match('#^(https?:|/|data:)#', $lg) && str_contains($lg, '/')) { $lg = uploads_url($lg); }
+                $logos[] = $lg;
+            }
+        }
+    }
+    $slides_json[] = [
+        'eyebrow' => (string)($r['eyebrow'] ?? ''),
+        'h'       => (string)($r['judul'] ?? ''),
+        'p'       => (string)($r['deskripsi'] ?? ''),
+        'label'   => (string)($r['label'] ?? ''),
+        'img'     => !empty($r['gambar']) ? uploads_url($r['gambar']) : '',
+        'video'   => !empty($r['video_url']) ? (preg_match('#^https?:#', $r['video_url']) ? $r['video_url'] : uploads_url($r['video_url'])) : '',
+        'dark'    => (string)($r['warna_dark'] ?? '#0a1430'),
+        'mid'     => (string)($r['warna_mid'] ?? '#123a6a'),
+        'accent'  => (string)($r['warna_accent'] ?? '#42a0ff'),
+        'logos'   => $logos,
+        'url'     => (string)($r['url'] ?? ''),
+    ];
+}
+
 include theme_path('templates/layouts/header.php');
 ?>
 
@@ -98,7 +146,7 @@ include theme_path('templates/layouts/header.php');
 
 
 <!-- ===== PRISM (WebGL scroll story) ===== -->
-<section class="prism" id="solutions">
+<section class="prism" id="solutions"<?= $slides_json ? ' data-slides="' . htmlspecialchars(json_encode($slides_json), ENT_QUOTES) . '"' : '' ?>>
   <div class="stage">
     <canvas id="prismCanvas"></canvas>
     <div class="prism-hint" id="prismHint">Scroll</div>
@@ -119,17 +167,22 @@ include theme_path('templates/layouts/header.php');
   </div>
 </section>
 
-<!-- ===== ORBIT (WebGL) ===== -->
-<section class="ind2" id="industries">
+<!-- ===== ORBIT (Our Industries) ===== -->
+<?php
+// Editable orbit cards from the `industri` module (§14.2). Each card carries its own
+// image + gradient via data-* attributes; anima.js positions them and paints the media
+// CSP-safely (no inline styles). Falls back to hc('ind1..8') labels if the table is empty.
+$orbit_cards = $orbit_json;
+if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => hc('ind' . $i, true), 'title' => '', 'sub' => '', 'img' => '', 'c1' => '', 'c2' => '', 'url' => '']; } }
+?>
+<section class="ind2" id="industries"<?= $orbit_json ? ' data-orbit="' . htmlspecialchars(json_encode($orbit_json), ENT_QUOTES) . '"' : '' ?>>
   <div class="ind2-cards" id="ind2cards">
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind1') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind2') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind3') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind4') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind5') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind6') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind7') ?></span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind8') ?></span></a>
+    <?php foreach ($orbit_cards as $c): ?>
+      <a class="ind2-card" href="<?= htmlspecialchars($c['url'] !== '' ? url(ltrim($c['url'], '/')) : '#') ?>"
+         <?php if ($c['img'] !== ''): ?>data-img="<?= htmlspecialchars($c['img']) ?>"<?php endif; ?>
+         <?php if ($c['c1'] !== ''): ?>data-c1="<?= htmlspecialchars($c['c1']) ?>" data-c2="<?= htmlspecialchars($c['c2']) ?>"<?php endif; ?>>
+        <span class="ex">EXPLORE →</span><span class="lbl"><?= htmlspecialchars($c['label']) ?></span></a>
+    <?php endforeach; ?>
   </div>
   <div class="ind2-center">
     <div class="ind2-eye"><?= hc('industries_eyebrow') ?></div>

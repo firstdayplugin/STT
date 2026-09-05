@@ -364,9 +364,19 @@ Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):
     (THREE.TextureLoader / THREE.VideoTexture, ganti texture generate) + baris **logos editable**.
   - **Orbit (Our Industries):** tiap kartu (`.ind2-card`) **editable** (label — sudah via `hc`) + bisa
     diisi **image/foto** per kartu (background-image dari CMS).
-- **Status (per sesi ini):** Hero slider ✅ SUDAH data-driven (`hero_slides`, via `data-hero`) — jadi
-  **pola/pembuktiannya sudah ada**. **Cube (SLIDES+logos+media) dan Orbit (gambar per kartu) BELUM**
-  di-wire (masih hardcoded di `anima.js`) → dikerjakan bersama modul Solutions-pilar & Industries.
+- **Status (per sesi ini):**
+  - Hero slider ✅ data-driven (`hero_slides`, via `data-hero`).
+  - **Cube (Solutions prism) ✅ SUDAH data-driven.** Tabel `solution_slides` (eyebrow/judul/deskripsi/
+    label/gambar/video_url/warna_dark|mid|accent/logos(JSON)/url). `home.php` inject `data-slides`
+    (JSON) di `<section class="prism">`; `anima.js` baca+override array `SLIDES`, `slideTex()` pilih
+    `THREE.VideoTexture` (video) / `THREE.TextureLoader` (image) / `makeTex()` (fallback generate).
+    Logos: entri URL/path dipakai langsung, token → base64 built-in `LOGOS`.
+  - **Orbit (Our Industries) ✅ SUDAH data-driven.** Tabel `industri` (label/judul/subtitle/gambar/
+    warna1/warna2/url). `home.php` render `.ind2-card` dari DB + `data-orbit`, tiap kartu bawa
+    `data-img`/`data-c1`/`data-c2`; driver orbit di `anima.js` cat foto (background-image) / gradient
+    per kartu via JS style props (CSP-safe, no inline style).
+  - Seed default = warna/teks master → install tanpa edit tampil identik; media (foto/video/logo)
+    kosong = fallback generate (sama seperti master). Admin CRUD modul Solutions/Industries menyusul.
 - Klarifikasi "ikon": **ikon UI (Lucide)** = elemen desain tetap (tidak editable). Yang editable =
   **logo/ikon konten** (logo industri, logo klien, ikon layanan, hero image/video) = media, dikelola admin.
 

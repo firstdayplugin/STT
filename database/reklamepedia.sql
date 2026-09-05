@@ -414,3 +414,63 @@ INSERT INTO `hero_slides` (`judul`,`subtitle`,`gambar`,`urutan`,`is_active`) VAL
 ('Resilient','Cloud Infrastructure','',3,1),
 ('Cybersecurity','Without Compromise','',4,1),
 ('Data-driven','Intelligence','',5,1);
+
+-- ============================================================
+--  Home animations — data-driven (editable text + media)
+--  §14.2: cube (Solutions prism) & orbit (Our Industries) cards
+--  are 100% editable from admin and support image/photo (+ video
+--  for the cube). PHP injects config CSP-safely via data-* attrs.
+-- ============================================================
+
+-- ---------- Our Industries (orbit animation cards) ----------
+CREATE TABLE `industri` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(100) NOT NULL,                       -- short label on the card + center eyebrow
+  `judul` varchar(255) DEFAULT NULL,                   -- center title (HTML allowed: <b>..</b>)
+  `subtitle` varchar(255) DEFAULT NULL,                -- center sub-line
+  `gambar` varchar(255) DEFAULT NULL,                  -- card image/photo (uploads/); overrides gradient
+  `warna1` varchar(20) NOT NULL DEFAULT '#0f2a54',     -- gradient start (fallback when no image)
+  `warna2` varchar(20) NOT NULL DEFAULT '#357be0',     -- gradient end
+  `url` varchar(255) DEFAULT NULL,                     -- link target for the card
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Default gradient (#1d478c -> #3f80e2) matches the theme's .ind2-card so an unedited
+-- install renders exactly like the master design; admin can recolor per card.
+INSERT INTO `industri` (`label`,`judul`,`subtitle`,`gambar`,`warna1`,`warna2`,`urutan`,`is_active`) VALUES
+('Financial','Financial Services <b>& E-Commerce</b>','Secure digital transactions','','#1d478c','#3f80e2',1,1),
+('Education','<b>Education</b>','E-learning & smart campus','','#1d478c','#3f80e2',2,1),
+('Manufacture','Manufacture <b>& FMCG</b>','Supply chain automation','','#1d478c','#3f80e2',3,1),
+('Healthcare','<b>Healthcare</b>','Secure patient data','','#1d478c','#3f80e2',4,1),
+('Law Enforce','Law <b>Enforcement</b>','Encrypted data systems','','#1d478c','#3f80e2',5,1),
+('Energy','<b>Energy</b>','Smart grid monitoring','','#1d478c','#3f80e2',6,1),
+('Telecom','Telecommunication <b>(ICT)</b>','High-speed cloud network','','#1d478c','#3f80e2',7,1),
+('Cross Industry','Cross <b>Industry</b>','Custom IT solutions','','#1d478c','#3f80e2',8,1);
+
+-- ---------- Solutions (cube / prism animation slides) ----------
+CREATE TABLE `solution_slides` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `eyebrow` varchar(150) DEFAULT NULL,                 -- caption eyebrow
+  `judul` varchar(255) DEFAULT NULL,                   -- caption heading (HTML allowed)
+  `deskripsi` text DEFAULT NULL,                       -- caption paragraph
+  `label` varchar(60) DEFAULT NULL,                    -- watermark on the generated panel texture
+  `gambar` varchar(255) DEFAULT NULL,                  -- panel image/photo (uploads/); overrides generated
+  `video_url` varchar(255) DEFAULT NULL,               -- panel short video (uploads/ or URL); overrides image
+  `warna_dark` varchar(20) NOT NULL DEFAULT '#0a1430', -- gradient dark (fallback texture)
+  `warna_mid` varchar(20) NOT NULL DEFAULT '#123a6a',  -- gradient mid
+  `warna_accent` varchar(20) NOT NULL DEFAULT '#42a0ff',
+  `logos` text DEFAULT NULL,                           -- JSON array of partner logos (uploads path/URL, or built-in key)
+  `url` varchar(255) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `solution_slides` (`eyebrow`,`judul`,`deskripsi`,`label`,`gambar`,`video_url`,`warna_dark`,`warna_mid`,`warna_accent`,`logos`,`urutan`,`is_active`) VALUES
+('Modernize Infrastructure','Modernize <b>Infrastructure</b>','Private cloud, migrasi, hingga cloud repatriation — dirancang untuk kebutuhan Anda.','INFRA','','','#0a1430','#123a6a','#42a0ff','["dell","nut","vmware","sangfor"]',1,1),
+('Cybersecurity','<b>Cybersecurity</b>','Perlindungan menyeluruh untuk aset digital dan operasional bisnis.','SECURITY','','','#101430','#20306e','#6f8bff','["sangfor","redhat","microsoft"]',2,1),
+('Data','Data & <b>Analytics</b>','Dari data mentah menjadi keputusan cerdas yang terlindungi.','DATA','','','#0c1838','#164079','#4f9bff','["comm","hyu","vee","redhat"]',3,1),
+('AI','Artificial <b>Intelligence</b>','AI yang berjalan di atas infrastruktur nyata dan andal.','AI','','','#0a1c3a','#12386e','#3f8bff','["microsoft","intel","amd"]',4,1),
+('AI Platform Application','AI Platform <b>Application</b>','Aplikasi cerdas siap pakai untuk mempercepat bisnis Anda.','APPS','','','#0e1630','#1a4079','#4fb0ff','["infra","microsoft","dell","intel"]',5,1);
