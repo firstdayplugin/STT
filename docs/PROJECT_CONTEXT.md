@@ -357,6 +357,16 @@ Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):
   daftar gambar/video texture diinject dari PHP ke JS. Karena CSP ketat (no inline JS), caranya via
   **`data-*` attribute** atau **`<script type="application/json">` ber-nonce**, bukan inline script.
   Theme Anima didesain begini sejak awal.
+- **Detail requirement (WAJIB, ditegaskan pemilik):**
+  - **Cube (prism, Solutions):** array `SLIDES` di `anima.js` (Modernize Infrastructure, Cybersecurity,
+    Data & Analytics, Artificial Intelligence, AI Platform Application). Tiap slide **editable**
+    (eyebrow/judul/deskripsi) + panel cube bisa diisi **image/foto ATAU video pendek**
+    (THREE.TextureLoader / THREE.VideoTexture, ganti texture generate) + baris **logos editable**.
+  - **Orbit (Our Industries):** tiap kartu (`.ind2-card`) **editable** (label — sudah via `hc`) + bisa
+    diisi **image/foto** per kartu (background-image dari CMS).
+- **Status (per sesi ini):** Hero slider ✅ SUDAH data-driven (`hero_slides`, via `data-hero`) — jadi
+  **pola/pembuktiannya sudah ada**. **Cube (SLIDES+logos+media) dan Orbit (gambar per kartu) BELUM**
+  di-wire (masih hardcoded di `anima.js`) → dikerjakan bersama modul Solutions-pilar & Industries.
 - Klarifikasi "ikon": **ikon UI (Lucide)** = elemen desain tetap (tidak editable). Yang editable =
   **logo/ikon konten** (logo industri, logo klien, ikon layanan, hero image/video) = media, dikelola admin.
 
