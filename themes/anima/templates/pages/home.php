@@ -2,9 +2,13 @@
 /**
  * Anima theme — Home page.
  * PROJECT RULE #1: Home uses design/master/home.html (NOT the Figma Home).
- * Sections below are ported verbatim from the master; content-editability wiring (get_content/get_setting)
- * comes in a later pass. Header/footer live in layouts/.
+ * Static text is editable via hc('key') -> get_content('home', key) with defaults in home.registry.php
+ * (§14 content registry). Header/footer live in layouts/.
+ * TODO(next passes): hero slider / orbit / prism content is JS-driven (anima.js) -> inject config
+ * PHP->JS (CSP-safe, §14.2); news cards -> blog module; testimonial cards -> testimonial module;
+ * media (hero/portfolio bg, card images) -> uploads/ (replaces Pexels placeholders).
  */
+require_once __DIR__ . '/../../inc/anima.php';
 ?>
 
 <!-- ===== HERO (dark cinematic WebGL) ===== -->
@@ -35,17 +39,17 @@
     <div class="tk-below">
       <div class="tk-below-l">
         <h2 class="tk-sub"><span class="blue" id="tkSub">Technology Industry</span></h2>
-        <p>Sapta Tunas Teknologi is established in 2015 with high passion and commitment for <b>providing Business Technology Solutions and Services</b> in Indonesia.</p>
+        <p><?= hc('hero_subcopy') ?></p>
       </div>
       <div class="tk-discover">
-        <div class="tk-disc-h">Discover Our Company</div>
+        <div class="tk-disc-h"><?= hc('discover_heading') ?></div>
         <div class="tk-disc-grid">
-          <a href="#portfolio">Our Portfolio <i>↗</i></a>
-          <a href="#news">News <i>↗</i></a>
-          <a href="#solutions">Our Solution <i>↗</i></a>
-          <a href="#why">Why Us <i>↗</i></a>
-          <a href="#industries">Our Industries <i>↗</i></a>
-          <a href="#testimonials">What They Say About Us? <i>↗</i></a>
+          <a href="#portfolio"><?= hc('discover_portfolio') ?> <i>↗</i></a>
+          <a href="#news"><?= hc('discover_news') ?> <i>↗</i></a>
+          <a href="#solutions"><?= hc('discover_solution') ?> <i>↗</i></a>
+          <a href="#why"><?= hc('discover_why') ?> <i>↗</i></a>
+          <a href="#industries"><?= hc('discover_industries') ?> <i>↗</i></a>
+          <a href="#testimonials"><?= hc('discover_testi') ?> <i>↗</i></a>
         </div>
       </div>
     </div>
@@ -62,15 +66,15 @@
         <div class="tfi-media-ov"></div>
       </div>
       <div class="tfi-panel" id="tfiPanel">
-        <div class="tfi-eyebrow">Our Track Record</div>
-        <h2 class="tfi-title">Our <span class="hl">Portfolio</span></h2>
-        <p class="tfi-lead">The numbers behind our journey delivering business technology solutions across Indonesia since 2015.</p>
+        <div class="tfi-eyebrow"><?= hc('portfolio_eyebrow') ?></div>
+        <h2 class="tfi-title"><?= hc('portfolio_title') ?></h2>
+        <p class="tfi-lead"><?= hc('portfolio_lead') ?></p>
         <div class="tfi-list" id="tfiList">
           <div class="tfi-prog"><span class="tfi-prog-fill" id="tfiFill"></span></div>
-          <div class="tfi-item act" data-i="0"><h3><b>425+</b> Project</h3><div class="tfi-d">Delivered projects across enterprise and government sectors.</div></div>
-          <div class="tfi-item dim" data-i="1"><h3><b>200+</b> Clients</h3><div class="tfi-d">Clients trusting Sapta Tunas for their technology transformation.</div></div>
-          <div class="tfi-item dim" data-i="2"><h3><b>100%</b> Satisfaction</h3><div class="tfi-d">Customer satisfaction driven by our success-first approach.</div></div>
-          <div class="tfi-item dim" data-i="3"><h3><b>26</b> Awards</h3><div class="tfi-d">Industry awards recognising our delivery and expertise.</div></div>
+          <div class="tfi-item act" data-i="0"><h3><b><?= hc('pf1_num') ?></b> <?= hc('pf1_label') ?></h3><div class="tfi-d"><?= hc('pf1_desc') ?></div></div>
+          <div class="tfi-item dim" data-i="1"><h3><b><?= hc('pf2_num') ?></b> <?= hc('pf2_label') ?></h3><div class="tfi-d"><?= hc('pf2_desc') ?></div></div>
+          <div class="tfi-item dim" data-i="2"><h3><b><?= hc('pf3_num') ?></b> <?= hc('pf3_label') ?></h3><div class="tfi-d"><?= hc('pf3_desc') ?></div></div>
+          <div class="tfi-item dim" data-i="3"><h3><b><?= hc('pf4_num') ?></b> <?= hc('pf4_label') ?></h3><div class="tfi-d"><?= hc('pf4_desc') ?></div></div>
           </div>
       </div>
     </div>
@@ -96,7 +100,7 @@
 <section class="statement" id="statement">
   <div class="stmt-sticky">
     <div class="wrap">
-      <p class="stmt" id="stmtText">Sapta Tunas Teknologi is established in 2015 with high passion and commitment for providing Business Technology Solutions and Services in Indonesia.</p>
+      <p class="stmt" id="stmtText"><?= hc('statement_text') ?></p>
     </div>
   </div>
 </section>
@@ -104,19 +108,19 @@
 <!-- ===== ORBIT (WebGL) ===== -->
 <section class="ind2" id="industries">
   <div class="ind2-cards" id="ind2cards">
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Financial</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Education</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Healthcare</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Law Enforce</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Manufacture</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Telecom</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Energy</span></a>
-      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl">Cross Industry</span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind1') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind2') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind3') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind4') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind5') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind6') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind7') ?></span></a>
+      <a class="ind2-card" href="#"><span class="ex">EXPLORE →</span><span class="lbl"><?= hc('ind8') ?></span></a>
   </div>
   <div class="ind2-center">
-    <div class="ind2-eye">Industries We Serve</div>
-    <h2 class="ind2-word">Our <b>Industries</b></h2>
-    <div class="ind2-sub">Solusi teknologi untuk beragam industri.</div>
+    <div class="ind2-eye"><?= hc('industries_eyebrow') ?></div>
+    <h2 class="ind2-word"><?= hc('industries_title') ?></h2>
+    <div class="ind2-sub"><?= hc('industries_sub') ?></div>
   </div>
 </section>
 
@@ -127,9 +131,9 @@
   <div class="news-aurora"><i class="n1"></i><i class="n2"></i></div>
   <div class="wrap news-in">
     <div class="news-intro">
-      <h2>News</h2>
+      <h2><?= hc('news_heading') ?></h2>
       <div class="news-line"></div>
-      <p>Explore the latest news, updates, and innovations driving the future of enterprise tech.</p>
+      <p><?= hc('news_intro') ?></p>
       <div class="news-nav">
         <button class="nprev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
         <button class="nnext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -189,42 +193,42 @@
 <!-- ===== WHY US ===== -->
 <section class="why2" id="why">
   <div class="why2-head">
-    <div class="why2-eye">Why Sapta Tunas</div>
-    <h2>What Sets Us <span class="b">Apart</span></h2>
-    <p>Alasan enterprise mempercayakan transformasi teknologinya pada STT.</p>
+    <div class="why2-eye"><?= hc('why_eyebrow') ?></div>
+    <h2><?= hc('why_title') ?></h2>
+    <p><?= hc('why_intro') ?></p>
   </div>
   <div class="whyloop">
     <div class="whyloop-track" id="whyTrack">
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t">Tailored Solutions</div><div class="wl-s">10+ tahun pengalaman, solusi dirancang khusus untukmu</div></div>
+          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t"><?= hc('why1_title') ?></div><div class="wl-s"><?= hc('why1_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t">Broad Range of Solution &amp; Service</div><div class="wl-s">Dari infrastruktur, cloud, hingga AI dalam satu atap</div></div>
+          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t"><?= hc('why2_title') ?></div><div class="wl-s"><?= hc('why2_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t">AI-Powered Assistance</div><div class="wl-s">SatuAI siap membantu kapan pun kamu butuh</div></div>
+          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t"><?= hc('why3_title') ?></div><div class="wl-s"><?= hc('why3_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t">Customer Satisfaction</div><div class="wl-s">Success-first, komitmen penuh di tiap proyek</div></div>
+          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t"><?= hc('why4_title') ?></div><div class="wl-s"><?= hc('why4_sub') ?></div></div>
         </div><div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t">Tailored Solutions</div><div class="wl-s">10+ tahun pengalaman, solusi dirancang khusus untukmu</div></div>
+          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t"><?= hc('why1_title') ?></div><div class="wl-s"><?= hc('why1_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t">Broad Range of Solution &amp; Service</div><div class="wl-s">Dari infrastruktur, cloud, hingga AI dalam satu atap</div></div>
+          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t"><?= hc('why2_title') ?></div><div class="wl-s"><?= hc('why2_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t">AI-Powered Assistance</div><div class="wl-s">SatuAI siap membantu kapan pun kamu butuh</div></div>
+          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t"><?= hc('why3_title') ?></div><div class="wl-s"><?= hc('why3_sub') ?></div></div>
         </div>
         <div class="wl-card">
           <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t">Customer Satisfaction</div><div class="wl-s">Success-first, komitmen penuh di tiap proyek</div></div>
+          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t"><?= hc('why4_title') ?></div><div class="wl-s"><?= hc('why4_sub') ?></div></div>
         </div>
     </div>
   </div>
@@ -234,9 +238,9 @@
 <section class="testi" id="testimonials">
   <div class="wrap">
     <div class="testi-head">
-      <div class="testi-eye">Customer Testimonials</div>
-      <h2>What They Say <span class="b">About Us?</span></h2>
-      <p>Cerita nyata dari klien lintas industri. Klik untuk melihat testimoni lengkap — video maupun tulisan.</p>
+      <div class="testi-eye"><?= hc('testi_eyebrow') ?></div>
+      <h2><?= hc('testi_title') ?></h2>
+      <p><?= hc('testi_intro') ?></p>
     </div>
     <div class="tst-grid">
       <a class="tcard" href="#testimonial-detail">
@@ -300,9 +304,9 @@
 <section class="contact-sec" id="contactSection">
   <div class="wrap">
     <div class="form" id="contact">
-      <div class="form-eyebrow">Let's Collaborate</div>
-      <h3>Request Proposal</h3>
-      <p>Unlock your business potential — get the best IT solutions tailored just for you. Let's collaborate!</p>
+      <div class="form-eyebrow"><?= hc('contact_eyebrow') ?></div>
+      <h3><?= hc('contact_title') ?></h3>
+      <p><?= hc('contact_intro') ?></p>
       <div class="form-grid">
         <div class="field"><label for="em">Email</label>
           <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
