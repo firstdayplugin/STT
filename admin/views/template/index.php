@@ -120,7 +120,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
 
 <div class="page-header">
   <div>
-    <h1>🎨 Template Manager</h1>
+    <h1><?= icon('palette', 16) ?> Template Manager</h1>
     <div class="page-header-sub">Kelola template website. Aktifkan satu template sekaligus.</div>
   </div>
   <div class="page-actions">
@@ -133,7 +133,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
 <div class="card">
   <div class="card-header">
     <div>
-      <div class="card-title">📦 Daftarkan Template Baru</div>
+      <div class="card-title"><?= icon('product', 16) ?> Daftarkan Template Baru</div>
       <div class="card-subtitle">Tambah entry template baru. File template harus sudah diupload ke folder <code>/themes/[slug]/</code></div>
     </div>
   </div>
@@ -155,7 +155,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
     
     <div class="form-group">
       <label>Deskripsi</label>
-      <textarea name="deskripsi" rows="2" placeholder="Template modern untuk bisnis advertising..."></textarea>
+      <textarea class="no-wysiwyg" name="deskripsi" rows="2" placeholder="Template modern untuk bisnis advertising..."></textarea>
     </div>
     
     <div class="form-row cols-3">
@@ -196,7 +196,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
     
     <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:16px;border-top:1px solid var(--border)">
       <a href="<?= admin_url('?page=template') ?>" class="btn btn-secondary">Batal</a>
-      <button type="submit" class="btn btn-primary">💾 Daftarkan</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Daftarkan</button>
     </div>
   </form>
 </div>
@@ -215,16 +215,16 @@ $show_add = $_GET['action'] ?? '' === 'add';
       <?php if ($t['screenshot']): ?>
         <img src="<?= htmlspecialchars($t['screenshot']) ?>" style="width:100%;height:100%;object-fit:cover" alt="<?= htmlspecialchars($t['nama']) ?>">
       <?php else: ?>
-        <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:0.3">🎨</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:0.3"><?= icon('palette', 16) ?></div>
       <?php endif; ?>
       <?php if ($is_active): ?>
         <div style="position:absolute;top:12px;left:12px;background:var(--primary);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600">
-          ✓ AKTIF
+          <?= icon('check', 16) ?> AKTIF
         </div>
       <?php endif; ?>
       <?php if (!$theme_dir_exists): ?>
         <div style="position:absolute;top:12px;right:12px;background:var(--danger);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600">
-          ⚠ File Hilang
+          <?= icon('warning', 16) ?> File Hilang
         </div>
       <?php endif; ?>
     </div>
@@ -244,7 +244,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
       
       <div style="display:flex;gap:8px">
         <?php if ($is_active): ?>
-          <button class="btn btn-success flex-1" disabled>✓ Sedang Aktif</button>
+          <button class="btn btn-success flex-1" disabled><?= icon('check', 16) ?> Sedang Aktif</button>
         <?php elseif (!$theme_dir_exists): ?>
           <button class="btn btn-secondary flex-1" disabled title="Folder template tidak ditemukan">Tidak Tersedia</button>
         <?php else: ?>
@@ -257,7 +257,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
         <?php endif; ?>
         
         <?php if ($t['demo_url']): ?>
-          <a href="<?= htmlspecialchars($t['demo_url']) ?>" target="_blank" class="btn btn-secondary">👁 Demo</a>
+          <a href="<?= htmlspecialchars($t['demo_url']) ?>" target="_blank" class="btn btn-secondary"><?= icon('eye', 16) ?> Demo</a>
         <?php endif; ?>
       </div>
       
@@ -266,7 +266,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
         <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
         <input type="hidden" name="action" value="delete">
         <input type="hidden" name="slug" value="<?= htmlspecialchars($t['slug']) ?>">
-        <button type="submit" class="btn btn-ghost btn-sm btn-block" style="color:var(--danger)">🗑 Hapus dari Daftar</button>
+        <button type="submit" class="btn btn-ghost btn-sm btn-block" style="color:var(--danger)"><?= icon('trash', 16) ?> Hapus dari Daftar</button>
       </form>
       <?php endif; ?>
     </div>
@@ -276,7 +276,7 @@ $show_add = $_GET['action'] ?? '' === 'add';
 
 <div class="card mt-3" style="background:#EFF6FF;border-color:#BFDBFE">
   <div style="display:flex;gap:14px;align-items:flex-start">
-    <div style="font-size:28px">💡</div>
+    <div style="font-size:28px"><?= icon('lightbulb', 16) ?></div>
     <div style="flex:1">
       <div style="font-weight:700;margin-bottom:6px">Cara Menambahkan Template Baru</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.7">

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute("DELETE FROM faq_layanan_rel WHERE faq_id=?", [$id]);
             $db->execute("DELETE FROM faq WHERE id = ?", [$id]);
             log_activity('delete', 'FAQ ID ' . $id);
-            set_flash('success', '🗑️ FAQ berhasil dihapus.');
+            set_flash('success', 'FAQ berhasil dihapus.');
             redirect(admin_url('?page=faq'));
         }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             log_activity('create', 'FAQ: ' . substr($data['pertanyaan'], 0, 80));
-            set_flash('success', '✅ FAQ berhasil ditambahkan.');
+            set_flash('success', 'FAQ berhasil ditambahkan.');
         } elseif ($action_post === 'update' && $id > 0) {
             $db->execute("UPDATE faq SET pertanyaan=?, jawaban=?, urutan=?, is_active=? WHERE id=?",
                 [$data['pertanyaan'], $data['jawaban'], $data['urutan'], $data['is_active'], $id]);
@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             log_activity('update', 'FAQ ID ' . $id);
-            set_flash('success', '✅ FAQ berhasil diupdate.');
+            set_flash('success', 'FAQ berhasil diupdate.');
         }
     } catch (Throwable $e) {
-        set_flash('error', '❌ Gagal: ' . $e->getMessage());
+        set_flash('error', 'Gagal: ' . $e->getMessage());
     }
     redirect(admin_url('?page=faq'));
 }
@@ -91,7 +91,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>❓ FAQ (Frequently Asked Questions)</h1>
+    <h1><?= icon('faq', 16) ?> FAQ (Frequently Asked Questions)</h1>
     <div class="page-header-sub">Kelola FAQ. Bisa di-assign ke halaman home + detail layanan tertentu.</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -135,7 +135,7 @@ $csrf = generate_csrf();
   <div class="card">
     <div class="card-header">
       <div>
-        <div class="card-title">📍 Tampilkan di Halaman Mana?</div>
+        <div class="card-title"><?= icon('pin', 16) ?> Tampilkan di Halaman Mana?</div>
         <div class="card-subtitle">FAQ tampil di halaman Home & detail layanan yang dipilih</div>
       </div>
     </div>
@@ -145,7 +145,7 @@ $csrf = generate_csrf();
         <input type="checkbox" name="show_global" value="1" id="show-global-cb" 
                <?= (empty($edit_layanan_ids) && ($action === 'create' || !empty($edit_item))) ? 'checked' : '' ?>
                onchange="toggleGlobalFaq(this)">
-        🌐 Tampilkan di Home + Semua Halaman Detail Layanan
+        <?= icon('globe', 16) ?> Tampilkan di Home + Semua Halaman Detail Layanan
       </label>
       <div class="form-hint">Aktifkan jika FAQ bersifat umum. Nonaktifkan untuk pilih layanan spesifik.</div>
     </div>
@@ -170,7 +170,7 @@ $csrf = generate_csrf();
   
   <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px">
     <a href="<?= admin_url('?page=faq') ?>" class="btn btn-secondary">Batal</a>
-    <button type="submit" class="btn btn-primary btn-lg">💾 Simpan FAQ</button>
+    <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan FAQ</button>
   </div>
 </form>
 
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <?php if (empty($items)): ?>
   <div class="card"><div class="empty-state">
-    <div class="empty-state-icon">❓</div>
+    <div class="empty-state-icon"><?= icon('faq', 16) ?></div>
     <div class="empty-title">Belum ada FAQ</div>
     <div class="empty-text">Tambah pertanyaan & jawaban yang sering ditanyakan</div>
     <a href="<?= admin_url('?page=faq&action=create') ?>" class="btn btn-primary mt-2">+ Tambah FAQ Pertama</a>
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </td>
           <td>
             <?php if (empty($rels)): ?>
-              <span class="badge badge-info">🌐 Global (Home + Semua Detail)</span>
+              <span class="badge badge-info"><?= icon('globe', 16) ?> Global (Home + Semua Detail)</span>
             <?php else: ?>
               <?php foreach ($rels as $r): ?>
                 <span class="badge badge-gray" style="font-size:10px;display:inline-block;margin:2px"><?= htmlspecialchars($r['nama']) ?></span>
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <form method="POST" action="<?= admin_url('?page=faq&action=delete&id='.$f['id']) ?>" style="display:inline" onsubmit="return confirm('Hapus FAQ ini?')">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="action" value="delete">
-                <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                <button type="submit" class="btn btn-danger btn-sm"><?= icon('trash', 16) ?></button>
               </form>
             </div>
           </td>

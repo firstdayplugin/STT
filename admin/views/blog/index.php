@@ -166,10 +166,10 @@ if ($action === 'kategori'):
 ?>
 <div class="page-header">
   <div>
-    <h1>🏷️ Kategori Artikel</h1>
+    <h1><?= icon('tag', 16) ?> Kategori Artikel</h1>
     <div class="page-header-sub">Kelola kategori untuk artikel blog</div>
   </div>
-  <div class="page-actions"><a href="<?= admin_url('?page=blog') ?>" class="btn btn-secondary">← Kembali ke Artikel</a></div>
+  <div class="page-actions"><a href="<?= admin_url('?page=blog') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali ke Artikel</a></div>
 </div>
 
 <?php $bk_has_parent = in_array('parent_id', $db->getColumns('blog_kategori')); ?>
@@ -220,12 +220,12 @@ if ($action === 'kategori'):
           <?php else: foreach ($kategori_list as $k): ?>
             <tr data-bkat-id="<?= $k['id'] ?>">
               <td style="font-weight:600">
-                <?php if (!empty($k['_depth'])): ?><span style="display:inline-block;width:<?= $k['_depth'] * 18 ?>px"></span>↳ <?php endif; ?>
+                <?php if (!empty($k['_depth'])): ?><span style="display:inline-block;width:<?= $k['_depth'] * 18 ?>px"></span><?= icon('corner-down-right', 16) ?> <?php endif; ?>
                 <?= htmlspecialchars($k['nama']) ?>
               </td>
               <td><code style="font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:4px"><?= htmlspecialchars($k['slug']) ?></code></td>
               <td><?= $k['jml'] ?></td>
-              <td><button type="button" class="btn btn-danger btn-sm" onclick="delBlogKat(<?= $k['id'] ?>, this)">🗑</button></td>
+              <td><button type="button" class="btn btn-danger btn-sm" onclick="delBlogKat(<?= $k['id'] ?>, this)"><?= icon('trash', 16) ?></button></td>
             </tr>
           <?php endforeach; endif; ?>
         </tbody>
@@ -243,7 +243,7 @@ function saveBlogKat() {
   const fb = document.getElementById('bkat-feedback');
   const nama = input.value.trim();
   if (!nama) { input.focus(); return; }
-  btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
   const parentSel = document.getElementById('new-bkat-parent');
   const fd = new FormData();
   fd.append('csrf_token', BKAT_CSRF); fd.append('nama', nama);
@@ -261,16 +261,16 @@ function saveBlogKat() {
         tr.setAttribute('data-bkat-id', d.kategori.id);
         tr.innerHTML = '<td style="font-weight:600">'+escBK(d.kategori.nama)+'</td>'+
           '<td><code style="font-size:11px;background:var(--surface-2);padding:2px 6px;border-radius:4px">'+escBK(d.kategori.slug)+'</code></td>'+
-          '<td>0</td><td><button type="button" class="btn btn-danger btn-sm" onclick="delBlogKat('+d.kategori.id+', this)">🗑</button></td>';
+          '<td>0</td><td><button type="button" class="btn btn-danger btn-sm" onclick="delBlogKat('+d.kategori.id+', this)"></button></td>';
         tbody.appendChild(tr);
         input.value = '';
-        fb.innerHTML = '<span style="color:#16a34a">✓ Kategori ditambahkan</span>';
+        fb.innerHTML = '<span style="color:#16a34a">Kategori ditambahkan</span>';
         setTimeout(()=>fb.innerHTML='', 2500);
         input.focus();
       } else {
-        fb.innerHTML = '<span style="color:#dc2626">✕ '+escBK(d.error||'Gagal')+'</span>';
+        fb.innerHTML = '<span style="color:#dc2626">'+escBK(d.error||'Gagal')+'</span>';
       }
-    }).catch(e => { btn.disabled=false; btn.textContent='+ Tambah Kategori'; fb.innerHTML='<span style="color:#dc2626">✕ '+escBK(e.message)+'</span>'; });
+    }).catch(e => { btn.disabled=false; btn.textContent='+ Tambah Kategori'; fb.innerHTML='<span style="color:#dc2626">'+escBK(e.message)+'</span>'; });
 }
 function delBlogKat(id, btn) {
   if (!confirm('Hapus kategori ini? Artikel tidak akan terhapus.')) return;
@@ -296,9 +296,9 @@ $page_title = $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru';
 ?>
 
 <div class="page-header">
-    <div class="page-title"><?= $action === 'edit' ? 'Edit Artikel' : '✏️ Tulis Artikel Baru' ?></div>
+    <div class="page-title"><?= $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru' ?></div>
     <div class="page-actions">
-        <a href="<?= admin_url('?page=blog') ?>" class="btn btn-secondary">← Kembali</a>
+        <a href="<?= admin_url('?page=blog') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali</a>
     </div>
 </div>
 
@@ -346,7 +346,7 @@ $page_title = $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru';
                     </div>
                     <div class="form-group mb-0">
                         <label>Meta Description</label>
-                        <textarea name="meta_desc" class="form-control" rows="3"
+                        <textarea name="meta_desc" class="form-control no-wysiwyg" rows="3"
                                   id="meta-desc-input"
                                   placeholder="Deskripsi singkat untuk mesin pencari (max 160 karakter)"><?= htmlspecialchars($edit_post['meta_description'] ?? '') ?></textarea>
                         <div class="form-help" id="meta-desc-count">0 / 160 karakter</div>
@@ -363,8 +363,8 @@ $page_title = $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru';
                     <div class="form-group">
                         <label>Status</label>
                         <select name="status" class="form-control">
-                            <option value="draft" <?= ($edit_post['status'] ?? 'draft') === 'draft' ? 'selected' : '' ?>>📝 Draft</option>
-                            <option value="published" <?= ($edit_post['status'] ?? '') === 'published' ? 'selected' : '' ?>>🌐 Published</option>
+                            <option value="draft" <?= ($edit_post['status'] ?? 'draft') === 'draft' ? 'selected' : '' ?>>Draft</option>
+                            <option value="published" <?= ($edit_post['status'] ?? '') === 'published' ? 'selected' : '' ?>>Published</option>
                         </select>
                     </div>
                     <div class="form-group mb-0">
@@ -380,7 +380,7 @@ $page_title = $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru';
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"
                             onclick="document.querySelector('[name=status]').value='published'">
-                        Publish →
+                        Publish <?= icon('arrow-right', 16) ?>
                     </button>
                 </div>
             </div>
@@ -484,11 +484,11 @@ document.querySelector('[name="meta_desc"]')?.addEventListener('input', function
 <?php else: // LIST VIEW ?>
 
 <div class="page-header">
-    <div class="page-title">📝 Blog & Artikel
+    <div class="page-title"><?= icon('content', 16) ?> Blog & Artikel
         <small><?= number_format($total_posts) ?> artikel total</small>
     </div>
     <div class="page-actions" style="display:flex;gap:8px">
-        <a href="<?= admin_url('?page=blog-kategori') ?>" class="btn btn-secondary">🏷️ Kelola Kategori</a>
+        <a href="<?= admin_url('?page=blog-kategori') ?>" class="btn btn-secondary"><?= icon('tag', 16) ?> Kelola Kategori</a>
         <a href="<?= admin_url('?page=blog&action=create') ?>" class="btn btn-primary">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             Tulis Artikel
@@ -533,7 +533,7 @@ document.querySelector('[name="meta_desc"]')?.addEventListener('input', function
             <?php if (empty($posts)): ?>
                 <tr><td colspan="7">
                     <div class="empty-state">
-                        <div class="empty-icon">📝</div>
+                        <div class="empty-icon"><?= icon('content', 40) ?></div>
                         <div class="empty-title">Belum ada artikel</div>
                         <div class="empty-text">Mulai menulis artikel pertama Anda.</div>
                     </div>
@@ -548,7 +548,7 @@ document.querySelector('[name="meta_desc"]')?.addEventListener('input', function
                         <?php if ($post['gambar_utama']): ?>
                             <img src="<?= uploads_url($post['gambar_utama']) ?>" class="table-img" alt="">
                         <?php else: ?>
-                            <div style="width:48px;height:40px;background:var(--surface3);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-dim)">📷</div>
+                            <div style="width:48px;height:40px;background:var(--surface3);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-dim)"><?= icon('camera', 16) ?></div>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -572,15 +572,15 @@ document.querySelector('[name="meta_desc"]')?.addEventListener('input', function
                     <td>
                         <div style="display:flex;gap:6px">
                             <a href="<?= admin_url('?page=blog&action=edit&id='.$post['id']) ?>"
-                               class="btn btn-xs btn-secondary" title="Edit">✏️</a>
+                               class="btn btn-xs btn-secondary" title="Edit"><?= icon('pencil', 16) ?></a>
                             <a href="<?= url('/blog/'.$post['slug']) ?>" target="_blank"
-                               class="btn btn-xs btn-secondary" title="Lihat">🔗</a>
+                               class="btn btn-xs btn-secondary" title="Lihat"><?= icon('link', 16) ?></a>
                             <form method="POST" style="display:inline">
                                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                                 <input type="hidden" name="_action" value="delete">
                                 <input type="hidden" name="del_id" value="<?= $post['id'] ?>">
                                 <button type="submit" class="btn btn-xs btn-danger"
-                                        data-confirm="Hapus artikel '<?= htmlspecialchars(addslashes($post['judul'])) ?>'?">🗑️</button>
+                                        data-confirm="Hapus artikel '<?= htmlspecialchars(addslashes($post['judul'])) ?>'?"><?= icon('trash', 16) ?></button>
                             </form>
                         </div>
                     </td>
@@ -599,14 +599,14 @@ if ($total_pages > 1):
 ?>
 <div class="pagination">
     <?php if ($current_page > 1): ?>
-        <a href="?page=blog&p=<?= $current_page-1 ?>&search=<?= urlencode($search) ?>&status=<?= $filter_status ?>" class="page-link">←</a>
+        <a href="?page=blog&p=<?= $current_page-1 ?>&search=<?= urlencode($search) ?>&status=<?= $filter_status ?>" class="page-link"><?= icon('arrow-left', 16) ?></a>
     <?php endif; ?>
     <?php for ($i = max(1,$current_page-2); $i <= min($total_pages,$current_page+2); $i++): ?>
         <a href="?page=blog&p=<?= $i ?>&search=<?= urlencode($search) ?>&status=<?= $filter_status ?>"
            class="page-link <?= $i === $current_page ? 'active' : '' ?>"><?= $i ?></a>
     <?php endfor; ?>
     <?php if ($current_page < $total_pages): ?>
-        <a href="?page=blog&p=<?= $current_page+1 ?>&search=<?= urlencode($search) ?>&status=<?= $filter_status ?>" class="page-link">→</a>
+        <a href="?page=blog&p=<?= $current_page+1 ?>&search=<?= urlencode($search) ?>&status=<?= $filter_status ?>" class="page-link"><?= icon('arrow-right', 16) ?></a>
     <?php endif; ?>
 </div>
 <?php endif; ?>

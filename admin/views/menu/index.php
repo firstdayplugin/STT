@@ -25,11 +25,11 @@ $csrf = generate_csrf();
 
 <div class="page-header">
     <div>
-        <h1>🧭 Menu Navigasi</h1>
+        <h1><?= icon('compass', 16) ?> Menu Navigasi</h1>
         <div class="page-header-sub">Bangun menu navigasi website. Drag &amp; drop untuk reorder, geser ke kanan untuk membuat sub-menu.</div>
     </div>
     <div class="page-actions">
-        <button type="button" id="save-menu-btn" class="btn btn-primary">💾 Simpan Menu</button>
+        <button type="button" id="save-menu-btn" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Menu</button>
     </div>
 </div>
 
@@ -39,11 +39,11 @@ $csrf = generate_csrf();
   <!-- LEFT: item picker -->
   <aside class="menu-picker">
     <div class="card menu-picker-card">
-      <div class="card-header"><div class="card-title">📌 Tambah Item ke Menu</div></div>
+      <div class="card-header"><div class="card-title"><?= icon('pin', 16) ?> Tambah Item ke Menu</div></div>
       <div class="card-body" style="padding:0">
         
         <details class="menu-picker-group" open>
-          <summary><strong>📄 Halaman</strong></summary>
+          <summary><strong><?= icon('page', 16) ?> Halaman</strong></summary>
           <div class="menu-picker-list">
             <label class="menu-picker-item"><input type="checkbox" data-label="Beranda" data-url="/"> Beranda</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Tentang Kami" data-url="/tentang-kami"> Tentang Kami</label>
@@ -64,7 +64,7 @@ $csrf = generate_csrf();
         
         <?php if (!empty($layanan_ref)): ?>
         <details class="menu-picker-group">
-          <summary><strong>🎨 Layanan</strong></summary>
+          <summary><strong><?= icon('palette', 16) ?> Layanan</strong></summary>
           <div class="menu-picker-list">
             <?php foreach ($layanan_ref as $l): ?>
             <label class="menu-picker-item">
@@ -79,7 +79,7 @@ $csrf = generate_csrf();
         
         <?php if (!empty($blog_kat_ref)): ?>
         <details class="menu-picker-group">
-          <summary><strong>🏷️ Kategori Blog</strong></summary>
+          <summary><strong><?= icon('tag', 16) ?> Kategori Blog</strong></summary>
           <div class="menu-picker-list">
             <?php foreach ($blog_kat_ref as $k): ?>
             <label class="menu-picker-item">
@@ -94,7 +94,7 @@ $csrf = generate_csrf();
         
         <?php if (!empty($blog_ref)): ?>
         <details class="menu-picker-group">
-          <summary><strong>📰 Artikel Blog</strong> <small>(50 terbaru)</small></summary>
+          <summary><strong><?= icon('blog', 16) ?> Artikel Blog</strong> <small>(50 terbaru)</small></summary>
           <div class="menu-picker-list">
             <?php foreach ($blog_ref as $b): ?>
             <label class="menu-picker-item">
@@ -109,7 +109,7 @@ $csrf = generate_csrf();
         
         <?php if (!empty($produk_kat_ref)): ?>
         <details class="menu-picker-group">
-          <summary><strong>🗂️ Kategori Produk</strong></summary>
+          <summary><strong><?= icon('folder', 16) ?> Kategori Produk</strong></summary>
           <div class="menu-picker-list">
             <?php foreach ($produk_kat_ref as $k): ?>
             <label class="menu-picker-item">
@@ -124,7 +124,7 @@ $csrf = generate_csrf();
         
         <?php if (!empty($produk_ref)): ?>
         <details class="menu-picker-group">
-          <summary><strong>📦 Produk</strong> <small>(50 pertama)</small></summary>
+          <summary><strong><?= icon('product', 16) ?> Produk</strong> <small>(50 pertama)</small></summary>
           <div class="menu-picker-list">
             <?php foreach ($produk_ref as $p): ?>
             <label class="menu-picker-item">
@@ -138,7 +138,7 @@ $csrf = generate_csrf();
         <?php endif; ?>
         
         <details class="menu-picker-group">
-          <summary><strong>🔗 Custom Link</strong></summary>
+          <summary><strong><?= icon('link', 16) ?> Custom Link</strong></summary>
           <div class="menu-picker-list" style="padding:12px">
             <input type="text" id="custom-link-label" placeholder="Label (cth: Toko Online)" style="width:100%;padding:8px;margin-bottom:6px;border:1px solid var(--border);border-radius:6px">
             <input type="text" id="custom-link-url" placeholder="URL: https://... atau /halaman" style="width:100%;padding:8px;margin-bottom:6px;border:1px solid var(--border);border-radius:6px">
@@ -147,7 +147,7 @@ $csrf = generate_csrf();
         </details>
         
         <details class="menu-picker-group">
-          <summary><strong>⚓ Anchor Link</strong></summary>
+          <summary><strong><?= icon('anchor', 16) ?> Anchor Link</strong></summary>
           <div class="menu-picker-list">
             <label class="menu-picker-item"><input type="checkbox" data-label="FAQ" data-url="#faq"> #faq</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Testimoni" data-url="#testimoni"> #testimoni</label>
@@ -165,7 +165,7 @@ $csrf = generate_csrf();
   <main class="menu-structure">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📋 Struktur Menu</div>
+        <div class="card-title"><?= icon('block', 16) ?> Struktur Menu</div>
         <div style="font-size:12px;color:var(--text-muted)">Drag untuk reorder. Geser ke kanan untuk membuat sub-menu.</div>
       </div>
       <div class="card-body">
@@ -190,25 +190,25 @@ $csrf = generate_csrf();
                   echo     '<span class="menu-node-label">'.htmlspecialchars($n['label']).'</span>';
                   echo     '<span class="menu-node-meta">'.htmlspecialchars($url_raw).'</span>';
                   if ($will_auto_inject) {
-                      echo '<span class="menu-auto-badge" title="Frontend otomatis menampilkan semua layanan sebagai sub-menu">⚡ Auto: '.count($auto_layanan).' layanan</span>';
+                      echo '<span class="menu-auto-badge" title="Frontend otomatis menampilkan semua layanan sebagai sub-menu">Auto: '.count($auto_layanan).' layanan</span>';
                   }
-                  echo     '<button type="button" class="menu-node-edit" onclick="this.closest(\'.menu-node\').classList.toggle(\'editing\')">✏️</button>';
-                  echo     '<button type="button" class="menu-node-delete" onclick="if(confirm(\'Hapus item menu ini?\')) this.closest(\'.menu-node\').remove()">🗑</button>';
+                  echo     '<button type="button" class="menu-node-edit" onclick="this.closest(\'.menu-node\').classList.toggle(\'editing\')"></button>';
+                  echo     '<button type="button" class="menu-node-delete" onclick="if(confirm(\'Hapus item menu ini?\')) this.closest(\'.menu-node\').remove()"></button>';
                   echo   '</div>';
                   echo   '<div class="menu-node-edit-panel">';
                   echo     '<div class="form-grid"><div class="form-group"><label>Navigation Label</label><input type="text" class="menu-field" data-field="label" value="'.htmlspecialchars($n['label']).'"></div>';
                   echo     '<div class="form-group"><label>URL</label><input type="text" class="menu-field" data-field="url" value="'.htmlspecialchars($url_raw).'"></div></div>';
                   echo     '<div class="form-grid"><div class="form-group"><label>Open</label><select class="menu-field" data-field="target"><option value="_self"'.((($n['target']??'_self')==='_self')?' selected':'').'>Same window</option><option value="_blank"'.((($n['target']??'')==='_blank')?' selected':'').'>New tab</option></select></div>';
                   echo     '<div class="form-group"><label>CSS Class (opsional)</label><input type="text" class="menu-field" data-field="css_class" value="'.htmlspecialchars($n['css_class'] ?? '').'" placeholder="cth: highlight-cta"></div></div>';
-                  echo     '<div class="form-group"><label>Icon emoji/text (opsional)</label><input type="text" class="menu-field" data-field="icon" value="'.htmlspecialchars($n['icon'] ?? '').'" placeholder="cth: 🏠"></div>';
+                  echo     '<div class="form-group"><label>Icon emoji/text (opsional)</label><input type="text" class="menu-field" data-field="icon" value="'.htmlspecialchars($n['icon'] ?? '').'" placeholder="cth:"></div>';
                   echo   '</div>';
                   
                   // Visual placeholder for auto-injected items (BEFORE children container, so admin sees it)
                   if ($will_auto_inject) {
                       echo '<div class="menu-auto-preview" title="Otomatis dari Layanan aktif di database">';
-                      echo   '<div class="menu-auto-preview-head">⚡ <strong>Auto-injected sub-menu:</strong> Frontend otomatis menampilkan semua layanan di sini. Untuk override, tambahkan item manual ke menu ini lewat panel kiri.</div>';
+                      echo   '<div class="menu-auto-preview-head"><strong>Auto-injected sub-menu:</strong> Frontend otomatis menampilkan semua layanan di sini. Untuk override, tambahkan item manual ke menu ini lewat panel kiri.</div>';
                       foreach ($auto_layanan as $al) {
-                          echo '<div class="menu-auto-preview-item">↳ '.htmlspecialchars($al['nama']).' <span class="menu-auto-preview-url">/layanan/'.htmlspecialchars($al['slug']).'</span></div>';
+                          echo '<div class="menu-auto-preview-item">'.htmlspecialchars($al['nama']).' <span class="menu-auto-preview-url">/layanan/'.htmlspecialchars($al['slug']).'</span></div>';
                       }
                       echo '</div>';
                   }
@@ -351,8 +351,8 @@ $csrf = generate_csrf();
         <span class="menu-drag-handle" title="Drag untuk reorder">⋮⋮</span>
         <span class="menu-node-label">${safeLabel}</span>
         <span class="menu-node-meta">${safeUrl}</span>
-        <button type="button" class="menu-node-edit" onclick="this.closest('.menu-node').classList.toggle('editing')">✏️</button>
-        <button type="button" class="menu-node-delete" onclick="if(confirm('Hapus item menu ini?')) this.closest('.menu-node').remove()">🗑</button>
+        <button type="button" class="menu-node-edit" onclick="this.closest('.menu-node').classList.toggle('editing')"></button>
+        <button type="button" class="menu-node-delete" onclick="if(confirm('Hapus item menu ini?')) this.closest('.menu-node').remove()"></button>
       </div>
       <div class="menu-node-edit-panel">
         <div class="form-grid">
@@ -363,7 +363,7 @@ $csrf = generate_csrf();
           <div class="form-group"><label>Open</label><select class="menu-field" data-field="target"><option value="_self">Same window</option><option value="_blank">New tab</option></select></div>
           <div class="form-group"><label>CSS Class</label><input type="text" class="menu-field" data-field="css_class" placeholder="cth: highlight-cta"></div>
         </div>
-        <div class="form-group"><label>Icon</label><input type="text" class="menu-field" data-field="icon" placeholder="cth: 🏠"></div>
+        <div class="form-group"><label>Icon</label><input type="text" class="menu-field" data-field="icon" placeholder="cth:"></div>
       </div>
       <div class="menu-children menu-sortable"></div>
     </div>`;
@@ -436,7 +436,7 @@ $csrf = generate_csrf();
   document.getElementById('save-menu-btn').addEventListener('click', async function() {
     const btn = this;
     const fb = document.getElementById('menu-feedback');
-    btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+    btn.disabled = true; btn.textContent = 'Menyimpan...';
     fb.innerHTML = '';
     
     const struct = collectStructure(tree);
@@ -448,15 +448,15 @@ $csrf = generate_csrf();
       const r = await fetch('<?= admin_url('?ajax=save_menu_structure') ?>', { method: 'POST', body: fd, headers: {'Accept': 'application/json'} });
       const data = await r.json();
       if (data.ok) {
-        fb.innerHTML = `<div class="alert alert-success" style="padding:12px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;color:#15803d">✅ Menu berhasil disimpan! (${data.kept} item)</div>`;
+        fb.innerHTML = `<div class="alert alert-success" style="padding:12px;background:#dcfce7;border:1px solid #86efac;border-radius:8px;color:#15803d">Menu berhasil disimpan! (${data.kept} item)</div>`;
         setTimeout(() => location.reload(), 1000);
       } else {
-        fb.innerHTML = `<div class="alert alert-error" style="padding:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;color:#b91c1c">❌ ${data.error || 'Gagal menyimpan'}</div>`;
+        fb.innerHTML = `<div class="alert alert-error" style="padding:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;color:#b91c1c">${data.error || 'Gagal menyimpan'}</div>`;
       }
     } catch (e) {
-      fb.innerHTML = `<div class="alert alert-error" style="padding:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;color:#b91c1c">❌ Network error: ${e.message}</div>`;
+      fb.innerHTML = `<div class="alert alert-error" style="padding:12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;color:#b91c1c">Network error: ${e.message}</div>`;
     } finally {
-      btn.disabled = false; btn.textContent = '💾 Simpan Menu';
+      btn.disabled = false; btn.textContent = 'Simpan Menu';
     }
   });
 })();

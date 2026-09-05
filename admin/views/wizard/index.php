@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 8: // Complete
             update_setting('wizard_complete', 1);
             update_setting('wizard_step', $total_steps);
-            set_flash('success','🎉 Setup selesai! Website Anda siap digunakan.');
+            set_flash('success','Setup selesai! Website Anda siap digunakan.');
             redirect(admin_url());
     }
 
@@ -73,10 +73,10 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 ?>
 
 <div class="page-header">
-    <div class="page-title">🚀 Setup Wizard
+    <div class="page-title"><?= icon('rocket', 16) ?> Setup Wizard
         <small>Langkah <?= $current_step ?> dari <?= $total_steps ?></small>
     </div>
-    <a href="<?= admin_url() ?>" class="btn btn-secondary btn-sm">Lewati →</a>
+    <a href="<?= admin_url() ?>" class="btn btn-secondary btn-sm">Lewati <?= icon('arrow-right', 16) ?></a>
 </div>
 
 <!-- Progress -->
@@ -84,7 +84,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
     <?php for ($s = 1; $s <= $total_steps; $s++): ?>
         <div class="wizard-step">
             <div class="step-circle <?= $s < $current_step ? 'done' : ($s === $current_step ? 'active' : '') ?>">
-                <?= $s < $current_step ? '✓' : $s ?>
+                <?= $s < $current_step ? '' : $s ?>
             </div>
             <?php if ($s < $total_steps): ?>
             <div class="step-line <?= $s < $current_step ? 'done' : '' ?>"></div>
@@ -95,7 +95,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
 <?php foreach ($step_labels as $si => $sl): ?>
 <span style="font-size:11px;color:<?= ($si+1)===$current_step?'var(--accent)':($si+1<$current_step?'var(--success)':'var(--text-dim)') ?>">
-    <?= ($si+1<$current_step?'✓ ':'') . $sl ?>
+    <?= ($si+1<$current_step?'':'') . $sl ?>
 </span>
 <?php if ($si < count($step_labels)-1): ?><span style="color:var(--text-dim);font-size:11px">·</span><?php endif; ?>
 <?php endforeach; ?>
@@ -107,14 +107,14 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php if ($current_step === 1): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">🏢 Informasi Bisnis Anda</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('client', 16) ?> Informasi Bisnis Anda</div></div>
     <div class="card-body">
         <div class="form-group"><label>Nama Brand / Perusahaan <span class="required">*</span></label>
             <input type="text" name="site_name" class="form-control" value="<?= htmlspecialchars(get_setting('site_name','')) ?>" placeholder="Reklamepedia" required></div>
         <div class="form-group"><label>Tagline</label>
             <input type="text" name="site_tagline" class="form-control" value="<?= htmlspecialchars(get_setting('site_tagline','')) ?>" placeholder="Solusi Periklanan Terbaik"></div>
         <div class="form-group"><label>Deskripsi Bisnis</label>
-            <textarea name="site_description" class="form-control" rows="3" placeholder="Ceritakan singkat tentang bisnis Anda..."><?= htmlspecialchars(get_setting('site_description','')) ?></textarea></div>
+            <textarea name="site_description" class="form-control no-wysiwyg" rows="3" placeholder="Ceritakan singkat tentang bisnis Anda..."><?= htmlspecialchars(get_setting('site_description','')) ?></textarea></div>
         <div class="form-grid">
             <div class="form-group mb-0"><label>Email</label>
                 <input type="email" name="site_email" class="form-control" value="<?= htmlspecialchars(get_setting('site_email','')) ?>" placeholder="info@bisnis.com"></div>
@@ -122,7 +122,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
                 <input type="text" name="site_phone" class="form-control" value="<?= htmlspecialchars(get_setting('site_phone','')) ?>" placeholder="0811-xxxx-xxxx"></div>
         </div>
         <div class="form-group" style="margin-top:18px"><label>Alamat</label>
-            <textarea name="site_address" class="form-control" rows="2" placeholder="Jl. Contoh No. 1, Kota, Provinsi"><?= htmlspecialchars(get_setting('site_address','')) ?></textarea></div>
+            <textarea name="site_address" class="form-control no-wysiwyg" rows="2" placeholder="Jl. Contoh No. 1, Kota, Provinsi"><?= htmlspecialchars(get_setting('site_address','')) ?></textarea></div>
         <div class="form-group mb-0"><label>Logo Perusahaan</label>
             <?php $logo=get_setting('logo'); if($logo): ?><img src="<?= uploads_url($logo) ?>" style="height:40px;margin-bottom:8px"><br><?php endif; ?>
             <input type="file" name="logo" class="form-control" accept="image/*"></div>
@@ -131,17 +131,17 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 2): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">🖼️ Tampilan Hero / Banner Utama</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('image', 16) ?> Tampilan Hero / Banner Utama</div></div>
     <div class="card-body">
         <div class="form-group"><label>Mode Hero</label>
             <select name="hero_mode" class="form-control">
-                <option value="single" <?= get_setting('hero_mode')==='single'?'selected':'' ?>>🖼️ Single Image</option>
-                <option value="slideshow" <?= get_setting('hero_mode')==='slideshow'?'selected':'' ?>>🎠 Slideshow Otomatis</option>
+                <option value="single" <?= get_setting('hero_mode')==='single'?'selected':'' ?>>Single Image</option>
+                <option value="slideshow" <?= get_setting('hero_mode')==='slideshow'?'selected':'' ?>>Slideshow Otomatis</option>
             </select></div>
         <div class="form-group"><label>Judul Utama (Heading)</label>
             <input type="text" name="hero_judul" class="form-control" value="<?= htmlspecialchars(get_setting('hero_judul','')) ?>" placeholder="Solusi Periklanan Premium Terpercaya"></div>
         <div class="form-group"><label>Sub-judul</label>
-            <textarea name="hero_subtitle" class="form-control" rows="3" placeholder="Deskripsi singkat yang menarik perhatian..."><?= htmlspecialchars(get_setting('hero_subtitle','')) ?></textarea></div>
+            <textarea name="hero_subtitle" class="form-control no-wysiwyg" rows="3" placeholder="Deskripsi singkat yang menarik perhatian..."><?= htmlspecialchars(get_setting('hero_subtitle','')) ?></textarea></div>
         <div class="form-group mb-0"><label>Teks Tombol CTA</label>
             <input type="text" name="hero_cta_text" class="form-control" value="<?= htmlspecialchars(get_setting('hero_cta_text','Hubungi Kami')) ?>" placeholder="Hubungi Kami"></div>
     </div>
@@ -149,7 +149,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 3): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">💬 WhatsApp Business</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('message', 16) ?> WhatsApp Business</div></div>
     <div class="card-body">
         <div class="form-group"><label>Nomor WhatsApp Utama <span class="required">*</span></label>
             <input type="text" name="wa_number" class="form-control" id="wa-num"
@@ -173,7 +173,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 4): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">📱 Media Sosial</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('smartphone', 16) ?> Media Sosial</div></div>
     <div class="card-body">
         <?php $socials=[['sosial_instagram','Instagram','https://instagram.com/...'],['sosial_facebook','Facebook','https://facebook.com/...'],['sosial_tiktok','TikTok','https://tiktok.com/@...'],['sosial_youtube','YouTube','https://youtube.com/channel/...']]; ?>
         <?php foreach ($socials as [$k,$l,$ph]): ?>
@@ -187,13 +187,13 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 5): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">🔍 Pengaturan SEO</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('search', 16) ?> Pengaturan SEO</div></div>
     <div class="card-body">
         <div class="form-group"><label>Meta Title Default</label>
             <input type="text" name="meta_title_default" class="form-control" value="<?= htmlspecialchars(get_setting('meta_title_default','')) ?>"
                    placeholder="<?= htmlspecialchars(get_setting('site_name','Brand')) ?> | Solusi Periklanan Terbaik"></div>
         <div class="form-group"><label>Meta Description Default</label>
-            <textarea name="meta_desc_default" class="form-control" rows="4" placeholder="Deskripsi bisnis yang akan tampil di hasil pencarian Google. Max 160 karakter."><?= htmlspecialchars(get_setting('meta_desc_default','')) ?></textarea></div>
+            <textarea name="meta_desc_default" class="form-control no-wysiwyg" rows="4" placeholder="Deskripsi bisnis yang akan tampil di hasil pencarian Google. Max 160 karakter."><?= htmlspecialchars(get_setting('meta_desc_default','')) ?></textarea></div>
         <div class="form-group mb-0"><label>Kata Kunci (Keywords)</label>
             <input type="text" name="meta_keywords" class="form-control" value="<?= htmlspecialchars(get_setting('meta_keywords','')) ?>"
                    placeholder="reklame, papan nama, neon box, spanduk, ...">
@@ -203,7 +203,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 6): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">📊 Tracking & Analytics (Opsional)</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('chart', 16) ?> Tracking & Analytics (Opsional)</div></div>
     <div class="card-body">
         <div class="alert alert-info mb-16"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         Semua field opsional. Isi jika Anda sudah memiliki akun di platform tersebut.</div>
@@ -218,9 +218,9 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
 
 <?php elseif ($current_step === 7): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">🔐 Keamanan Akun</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('lock', 16) ?> Keamanan Akun</div></div>
     <div class="card-body">
-        <div class="alert alert-warning mb-16">⚠️ Sangat disarankan untuk mengganti password default sekarang.</div>
+        <div class="alert alert-warning mb-16"><?= icon('warning', 16) ?> Sangat disarankan untuk mengganti password default sekarang.</div>
         <div class="form-group"><label>Password Baru (opsional, min 8 karakter)</label>
             <input type="password" name="new_password" class="form-control" autocomplete="new-password" placeholder="Min 8 karakter..."></div>
         <div class="form-group mb-0"><label>Konfirmasi Password</label>
@@ -238,9 +238,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
 <?php elseif ($current_step === 8): ?>
 <div class="card">
-    <div class="card-header"><div class="card-title">🎉 Setup Selesai!</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('party', 16) ?> Setup Selesai!</div></div>
     <div class="card-body" style="text-align:center;padding:40px">
-        <div style="font-size:64px;margin-bottom:20px">🚀</div>
+        <div style="font-size:64px;margin-bottom:20px"><?= icon('rocket', 16) ?></div>
         <h2 style="font-size:22px;font-weight:700;margin-bottom:12px">Website Anda Siap!</h2>
         <p class="text-muted" style="margin-bottom:24px">Semua pengaturan dasar telah dikonfigurasi. Anda bisa mulai menambahkan konten.</p>
 
@@ -250,7 +250,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
                 ['Nama Brand', get_setting('site_name','-')],
                 ['WhatsApp', get_setting('wa_number','-')],
                 ['Email', get_setting('site_email','-')],
-                ['Analytics', get_setting('ga_id') ? '✅ Terpasang' : '❌ Belum'],
+                ['Analytics', get_setting('ga_id') ? 'Terpasang' : 'Belum'],
             ];
             foreach ($summary as [$lbl,$val]): ?>
             <div style="background:var(--surface2);border-radius:10px;padding:12px">
@@ -262,13 +262,13 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
         <div class="quick-actions" style="max-width:400px;margin:0 auto">
             <a href="<?= admin_url('?page=blog&action=create') ?>" class="quick-action">
-                <div class="qa-icon" style="background:rgba(232,160,32,0.12)">✏️</div>Tulis Artikel
+                <div class="qa-icon" style="background:rgba(232,160,32,0.12)"><?= icon('pencil', 16) ?></div>Tulis Artikel
             </a>
             <a href="<?= admin_url('?page=gallery&action=create') ?>" class="quick-action">
-                <div class="qa-icon" style="background:rgba(96,165,250,0.12)">📷</div>Upload Galeri
+                <div class="qa-icon" style="background:rgba(96,165,250,0.12)"><?= icon('camera', 16) ?></div>Upload Galeri
             </a>
             <a href="<?= url('/') ?>" target="_blank" class="quick-action">
-                <div class="qa-icon" style="background:rgba(74,222,128,0.12)">🌐</div>Lihat Website
+                <div class="qa-icon" style="background:rgba(74,222,128,0.12)"><?= icon('globe', 16) ?></div>Lihat Website
             </a>
         </div>
     </div>
@@ -277,13 +277,13 @@ document.querySelector('form').addEventListener('submit', function(e) {
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px">
         <?php if ($current_step > 1): ?>
-        <a href="?page=wizard&step=<?= $current_step-1 ?>" class="btn btn-secondary">← Sebelumnya</a>
+        <a href="?page=wizard&step=<?= $current_step-1 ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Sebelumnya</a>
         <?php else: ?>
         <span></span>
         <?php endif; ?>
 
         <button type="submit" class="btn btn-primary">
-            <?= $current_step === $total_steps ? '🎉 Selesaikan Setup' : 'Lanjutkan →' ?>
+            <?= $current_step === $total_steps ? 'Selesaikan Setup' : 'Lanjutkan' ?>
         </button>
     </div>
 </form>

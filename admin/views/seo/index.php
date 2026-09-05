@@ -63,7 +63,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>🔍 SEO per Halaman</h1>
+    <h1><?= icon('search', 16) ?> SEO per Halaman</h1>
     <div class="page-header-sub">Atur meta title, description, dan SEO untuk setiap halaman</div>
   </div>
 </div>
@@ -74,7 +74,7 @@ $csrf = generate_csrf();
     <?php foreach ($pages_list as $key => $label): ?>
     <a href="<?= admin_url('?page=seo&p=' . urlencode($key)) ?>"
        class="shortcut-card" style="<?= $current_page === $key ? 'border-color:var(--primary);background:var(--primary-soft)' : '' ?>">
-      <div class="shortcut-icon">🔍</div>
+      <div class="shortcut-icon"><?= icon('search', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title"><?= htmlspecialchars($label) ?></div>
         <div class="shortcut-sub"><?= $key ?></div>
@@ -107,7 +107,7 @@ $csrf = generate_csrf();
     
     <div class="form-group">
       <label>Meta Description</label>
-      <textarea name="meta_description" rows="3" maxlength="160"
+      <textarea class="no-wysiwyg" name="meta_description" rows="3" maxlength="160"
                 placeholder="Deskripsi singkat tentang halaman ini..."><?= htmlspecialchars($seo_data['meta_description'] ?? '') ?></textarea>
       <div class="form-hint">Optimal 150-160 karakter. Tampil di bawah judul hasil pencarian Google.</div>
     </div>
@@ -146,7 +146,7 @@ $csrf = generate_csrf();
     </div>
     
     <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:16px;border-top:1px solid var(--border)">
-      <button type="submit" class="btn btn-primary">💾 Simpan SEO Halaman</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan SEO Halaman</button>
     </div>
   </form>
 </div>
@@ -158,7 +158,7 @@ $csrf = generate_csrf();
     <input type="hidden" name="action" value="save_global">
     <div class="form-group">
       <label>robots.txt</label>
-      <textarea name="robots_txt" rows="6" style="font-family:monospace;font-size:12px"><?= htmlspecialchars($robots_txt) ?></textarea>
+      <textarea class="no-wysiwyg" name="robots_txt" rows="6" style="font-family:monospace;font-size:12px"><?= htmlspecialchars($robots_txt) ?></textarea>
       <div class="form-hint">Akan tersedia di <a href="<?= url('/robots.txt') ?>" target="_blank"><?= url('/robots.txt') ?></a></div>
     </div>
     <div class="form-group">
@@ -168,7 +168,7 @@ $csrf = generate_csrf();
       </div>
     </div>
     <div style="display:flex;justify-content:flex-end">
-      <button type="submit" class="btn btn-primary">💾 Simpan</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
     </div>
   </form>
 </div>

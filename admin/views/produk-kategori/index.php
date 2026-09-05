@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute("DELETE FROM $REL WHERE kategori_id = ?", [$del_id]);
             $db->execute("DELETE FROM $TABLE WHERE id = ?", [$del_id]);
             log_activity('delete', "Kategori produk ID $del_id", $user['id']);
-            set_flash('success', '🗑️ Kategori berhasil dihapus.');
+            set_flash('success', 'Kategori berhasil dihapus.');
         }
         redirect(admin_url("?page=$BASE_URL_KEY"));
     }
@@ -66,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute("INSERT INTO $TABLE (nama, slug, parent_id, urutan) VALUES (?,?,?,?)",
                 [$nama, $slug, $parent_id, $urutan]);
             log_activity('create', "Kategori produk: $nama", $user['id']);
-            set_flash('success', '✅ Kategori berhasil ditambahkan.');
+            set_flash('success', 'Kategori berhasil ditambahkan.');
         } else {
             $db->execute("UPDATE $TABLE SET nama=?, slug=?, parent_id=?, urutan=? WHERE id=?",
                 [$nama, $slug, $parent_id, $urutan, $id]);
             log_activity('update', "Kategori produk: $nama", $user['id']);
-            set_flash('success', '✅ Kategori berhasil diperbarui.');
+            set_flash('success', 'Kategori berhasil diperbarui.');
         }
         redirect(admin_url("?page=$BASE_URL_KEY"));
     }

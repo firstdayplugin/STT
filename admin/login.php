@@ -320,11 +320,11 @@ body::before {
 
     <?php if ($is_locked): ?>
       <div class="alert alert-lockout">
-        <div>🔒 Akun dikunci karena terlalu banyak percobaan gagal.</div>
+        <div><?= icon('lock', 16) ?> Akun dikunci karena terlalu banyak percobaan gagal.</div>
         <div class="lockout-timer" id="lockout-timer"><?= gmdate('i:s', $remaining) ?></div>
       </div>
     <?php elseif ($error): ?>
-      <div class="alert alert-error">⚠️ <?= htmlspecialchars($error) ?></div>
+      <div class="alert alert-error"><?= icon('warning', 16) ?> <?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <?php if (!$is_locked): ?>
@@ -359,7 +359,7 @@ body::before {
     <?php endif; ?>
 
     <div class="back-link">
-      <a href="<?= url('/') ?>">← Kembali ke Website</a>
+      <a href="<?= url('/') ?>"><?= icon('arrow-left', 15) ?> Kembali ke Website</a>
     </div>
   </div>
 </div>

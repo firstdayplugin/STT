@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $db->execute($sql, array_values($data_safe));
                         $id = $db->lastInsertId();
                         log_activity('create', 'Layanan: '.$data_safe['nama']);
-                        set_flash('success', '✅ Layanan "'.$data_safe['nama'].'" berhasil ditambahkan.');
+                        set_flash('success', 'Layanan "'.$data_safe['nama'].'" berhasil ditambahkan.');
                     } else {
                         $set_parts = [];
                         $params = [];
@@ -65,10 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $params[] = $id;
                         $db->execute("UPDATE layanan SET " . implode(',', $set_parts) . " WHERE id = ?", $params);
                         log_activity('update', 'Layanan: '.$data_safe['nama']);
-                        set_flash('success', '✅ Layanan "'.$data_safe['nama'].'" berhasil diupdate.');
+                        set_flash('success', 'Layanan "'.$data_safe['nama'].'" berhasil diupdate.');
                     }
                 } catch (Throwable $e) {
-                    set_flash('error', '❌ Gagal menyimpan: ' . $e->getMessage());
+                    set_flash('error', 'Gagal menyimpan: ' . $e->getMessage());
                     redirect(admin_url('?page=layanan'));
                 }
                 
@@ -141,7 +141,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>🎨 Layanan</h1>
+    <h1><?= icon('palette', 16) ?> Layanan</h1>
     <div class="page-header-sub">Kelola layanan yang ditawarkan + semua elemen di halaman detail</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -169,7 +169,7 @@ $csrf = generate_csrf();
     <!-- TAB 1: BASIC INFO -->
     <div class="tab-content active" id="tab-basic">
       <div class="card">
-        <div class="card-header"><div class="card-title">📋 Informasi Dasar Layanan</div></div>
+        <div class="card-header"><div class="card-title"><?= icon('block', 16) ?> Informasi Dasar Layanan</div></div>
         
         <div class="form-row">
           <div class="form-group">
@@ -200,7 +200,7 @@ $csrf = generate_csrf();
         
         <div class="form-row">
           <div class="form-group">
-            <label>🖼️ Gambar Utama (header hero halaman detail)</label>
+            <label><?= icon('image', 16) ?> Gambar Utama (header hero halaman detail)</label>
             <?php if (!empty($edit_item['gambar'])): ?>
               <div class="img-upload-row" style="margin-bottom:8px">
                 <div class="img-preview"><img src="<?= uploads_url($edit_item['gambar']) ?>"></div>
@@ -210,7 +210,7 @@ $csrf = generate_csrf();
             <input type="file" name="gambar" accept="image/*">
           </div>
           <div class="form-group">
-            <label>🖼️ Gambar Footer (tampil di bagian bawah)</label>
+            <label><?= icon('image', 16) ?> Gambar Footer (tampil di bagian bawah)</label>
             <?php if (!empty($edit_item['gambar_footer'])): ?>
               <div class="img-upload-row" style="margin-bottom:8px">
                 <div class="img-preview"><img src="<?= uploads_url($edit_item['gambar_footer']) ?>"></div>
@@ -224,7 +224,7 @@ $csrf = generate_csrf();
         <div class="form-row cols-3">
           <div class="form-group">
             <label>Icon (emoji)</label>
-            <input type="text" name="icon" value="<?= htmlspecialchars($edit_item['icon'] ?? '') ?>" placeholder="🎨">
+            <input type="text" name="icon" value="<?= htmlspecialchars($edit_item['icon'] ?? '') ?>" placeholder="">
           </div>
           <div class="form-group">
             <label>Urutan</label>
@@ -245,7 +245,7 @@ $csrf = generate_csrf();
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">📦 Section "Layanan [Nama] Berkualitas"</div>
+            <div class="card-title"><?= icon('product', 16) ?> Section "Layanan [Nama] Berkualitas"</div>
             <div class="card-subtitle">Heading section dimana sub-layanan ditampilkan</div>
           </div>
         </div>
@@ -267,7 +267,7 @@ $csrf = generate_csrf();
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">🖼️ Section "Galeri Proyek"</div>
+            <div class="card-title"><?= icon('image', 16) ?> Section "Galeri Proyek"</div>
             <div class="card-subtitle">Heading section galeri proyek di halaman detail</div>
           </div>
         </div>
@@ -292,7 +292,7 @@ $csrf = generate_csrf();
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">💼 Section "Consult With Us"</div>
+            <div class="card-title"><?= icon('briefcase', 16) ?> Section "Consult With Us"</div>
             <div class="card-subtitle">Section ajakan konsultasi di bawah halaman detail</div>
           </div>
         </div>
@@ -314,7 +314,7 @@ $csrf = generate_csrf();
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">🔧 Variasi / Tipe Layanan</div>
+            <div class="card-title"><?= icon('wrench', 16) ?> Variasi / Tipe Layanan</div>
             <div class="card-subtitle">Tampil sebagai grid kartu (contoh: Neon Box Kotak, Neon Box Bulat, Neon Box Custom)</div>
           </div>
           <button type="button" onclick="addSubItem()" class="btn btn-secondary btn-sm">+ Tambah Tipe</button>
@@ -329,7 +329,7 @@ $csrf = generate_csrf();
                     <?php if (!empty($sub['gambar'])): ?>
                       <img src="<?= uploads_url($sub['gambar']) ?>" style="width:100%;height:100%;object-fit:cover">
                     <?php else: ?>
-                      <span style="font-size:36px;opacity:0.35"><?= $sub['icon'] ?: '🖼️' ?></span>
+                      <span style="font-size:36px;opacity:0.35"><?= $sub['icon'] ?: '' ?></span>
                     <?php endif; ?>
                   </div>
                   <input type="hidden" name="sub_layanan[<?= $i ?>][gambar_lama]" value="<?= htmlspecialchars($sub['gambar'] ?? '') ?>">
@@ -340,11 +340,11 @@ $csrf = generate_csrf();
                 <!-- Fields column -->
                 <div style="display:grid;gap:8px">
                   <div style="display:grid;grid-template-columns:70px 1fr;gap:8px">
-                    <input type="text" name="sub_layanan[<?= $i ?>][icon]" value="<?= htmlspecialchars($sub['icon']) ?>" placeholder="🎨">
+                    <input type="text" name="sub_layanan[<?= $i ?>][icon]" value="<?= htmlspecialchars($sub['icon']) ?>" placeholder="">
                     <input type="text" name="sub_layanan[<?= $i ?>][nama]" value="<?= htmlspecialchars($sub['nama']) ?>" placeholder="Nama tipe (cth: Neon Box Kotak)">
                   </div>
-                  <textarea name="sub_layanan[<?= $i ?>][deskripsi]" rows="3" placeholder="Deskripsi"><?= htmlspecialchars($sub['deskripsi']) ?></textarea>
-                  <button type="button" class="btn btn-danger btn-sm" style="justify-self:start" onclick="this.closest('.sub-item').remove()">🗑 Hapus tipe ini</button>
+                  <textarea class="no-wysiwyg" name="sub_layanan[<?= $i ?>][deskripsi]" rows="3" placeholder="Deskripsi"><?= htmlspecialchars($sub['deskripsi']) ?></textarea>
+                  <button type="button" class="btn btn-danger btn-sm" style="justify-self:start" onclick="this.closest('.sub-item').remove()"><?= icon('trash', 16) ?> Hapus tipe ini</button>
                 </div>
               </div>
             </div>
@@ -361,22 +361,22 @@ $csrf = generate_csrf();
     <!-- TAB 6: SEO -->
     <div class="tab-content" id="tab-seo">
       <div class="card">
-        <div class="card-header"><div class="card-title">🔍 SEO Layanan</div></div>
+        <div class="card-header"><div class="card-title"><?= icon('search', 16) ?> SEO Layanan</div></div>
         <div class="form-group">
           <label>Meta Title</label>
           <input type="text" name="meta_title" value="<?= htmlspecialchars($edit_item['meta_title'] ?? '') ?>">
         </div>
         <div class="form-group">
           <label>Meta Description</label>
-          <textarea name="meta_description" rows="3"><?= htmlspecialchars($edit_item['meta_description'] ?? '') ?></textarea>
+          <textarea class="no-wysiwyg" name="meta_description" rows="3"><?= htmlspecialchars($edit_item['meta_description'] ?? '') ?></textarea>
         </div>
       </div>
     </div>
     
     <!-- SAVE BUTTON (sticky bottom) -->
     <div style="position:sticky;bottom:0;background:white;padding:16px 0;border-top:1px solid var(--border);margin-top:16px;display:flex;justify-content:space-between;align-items:center;z-index:10">
-      <a href="<?= admin_url('?page=layanan') ?>" class="btn btn-secondary">← Kembali</a>
-      <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Layanan</button>
+      <a href="<?= admin_url('?page=layanan') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali</a>
+      <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Layanan</button>
     </div>
   </form>
 
@@ -384,7 +384,7 @@ $csrf = generate_csrf();
   
   <?php if (empty($items)): ?>
     <div class="card"><div class="empty-state">
-      <div class="empty-state-icon">🎨</div>
+      <div class="empty-state-icon"><?= icon('palette', 16) ?></div>
       <div>Belum ada layanan.</div>
       <a href="<?= admin_url('?page=layanan&action=create') ?>" class="btn btn-primary mt-2">+ Tambah Layanan Pertama</a>
     </div></div>
@@ -408,7 +408,7 @@ $csrf = generate_csrf();
               <?php if ($l['gambar']): ?>
                 <div class="img-preview" style="width:50px;height:50px"><img src="<?= uploads_url($l['gambar']) ?>"></div>
               <?php else: ?>
-                <div class="img-preview" style="width:50px;height:50px"><?= $l['icon'] ?: '🎨' ?></div>
+                <div class="img-preview" style="width:50px;height:50px"><?= $l['icon'] ?: '' ?></div>
               <?php endif; ?>
             </td>
             <td>
@@ -420,12 +420,12 @@ $csrf = generate_csrf();
             <td><?= $l['is_active'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-gray">Nonaktif</span>' ?></td>
             <td>
               <div class="table-actions">
-                <a href="<?= url('/layanan/'.$l['slug']) ?>" target="_blank" class="btn btn-ghost btn-sm">👁</a>
+                <a href="<?= url('/layanan/'.$l['slug']) ?>" target="_blank" class="btn btn-ghost btn-sm"><?= icon('eye', 16) ?></a>
                 <a href="<?= admin_url('?page=layanan&action=edit&id='.$l['id']) ?>" class="btn btn-secondary btn-sm">Edit</a>
                 <form method="POST" action="<?= admin_url('?page=layanan&action=delete&id='.$l['id']) ?>" style="display:inline" onsubmit="return confirm('Hapus layanan <?= htmlspecialchars($l['nama']) ?>?')">
                   <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                   <input type="hidden" name="action" value="delete">
-                  <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                  <button type="submit" class="btn btn-danger btn-sm"><?= icon('trash', 16) ?></button>
                 </form>
               </div>
             </td>
@@ -454,7 +454,7 @@ function addSubItem() {
       <div style="display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:start">
         <div>
           <div class="sub-photo-preview" style="width:130px;height:130px;border-radius:8px;border:1px solid var(--border);overflow:hidden;background:var(--bg-cream-2);display:flex;align-items:center;justify-content:center;margin-bottom:6px">
-            <span style="font-size:36px;opacity:0.35">🖼️</span>
+            <span style="font-size:36px;opacity:0.35"></span>
           </div>
           <input type="hidden" name="sub_layanan[${idx}][gambar_lama]" value="">
           <input type="file" name="sub_gambar_${idx}" accept="image/*" style="font-size:11px;width:130px" onchange="previewSubPhoto(this)">
@@ -462,11 +462,11 @@ function addSubItem() {
         </div>
         <div style="display:grid;gap:8px">
           <div style="display:grid;grid-template-columns:70px 1fr;gap:8px">
-            <input type="text" name="sub_layanan[${idx}][icon]" placeholder="🎨">
+            <input type="text" name="sub_layanan[${idx}][icon]" placeholder="">
             <input type="text" name="sub_layanan[${idx}][nama]" placeholder="Nama tipe (cth: Neon Box Kotak)">
           </div>
-          <textarea name="sub_layanan[${idx}][deskripsi]" rows="3" placeholder="Deskripsi"></textarea>
-          <button type="button" class="btn btn-danger btn-sm" style="justify-self:start" onclick="this.closest('.sub-item').remove()">🗑 Hapus tipe ini</button>
+          <textarea class="no-wysiwyg" name="sub_layanan[${idx}][deskripsi]" rows="3" placeholder="Deskripsi"></textarea>
+          <button type="button" class="btn btn-danger btn-sm" style="justify-self:start" onclick="this.closest('.sub-item').remove()">Hapus tipe ini</button>
         </div>
       </div>
     </div>`;

@@ -329,6 +329,25 @@ Target UX terukur:
   & komentar core. Emoji di flash/notifikasi juga harus diganti ikon.
 - Theme `default`/`omah`/`reklamenesia` = legacy; theme yang dikirim (**Anima**) harus bersih emoji sejak awal.
 
+### 13.4 STATUS — Rombak shell admin (Langkah 1, SELESAI sesi ini)
+- **Ikon Lucide self-host.** `core/helpers/icons.php` = helper `icon($name,$size,$class,$attr)` +
+  `the_icon()`, 108+ ikon inline-SVG (di-generate dari `lucide-static`, ISC; stroke `currentColor`,
+  CSP-safe, tanpa aset eksternal). Di-`require` dari `core/helpers/helpers.php` → tersedia global
+  (admin + frontend).
+- **Emoji = NOL di seluruh admin.** 414 emoji di 25 file dibersihkan lewat sweep sadar-konteks:
+  di HTML text-node → diganti `<?= icon() ?>` (240 ikon), di string PHP/JS/atribut/`<option>` →
+  di-strip aman. `layout.php` (sidebar/topbar), `login.php`, semua `views/*` bersih. Diverifikasi: 0 emoji.
+- **TinyMCE self-host** di `admin/assets/vendor/tinymce/` (v6.8.2, 4.4MB) — **bukan CDN lagi**.
+  Plugin **emoticons DIHAPUS** (aturan no-emoji). `layout.php` init: `base_url` ke vendor, dua tier —
+  editor penuh untuk `textarea:not(.no-wysiwyg):not(.wysiwyg-min)`, editor ringkas untuk `.wysiwyg-min`.
+  Semua field teknis (CSS/script/robots/meta/alamat) diberi `no-wysiwyg` → tetap plain (tidak regresi).
+  Semua aset vendor mereturn 200; editor boot & render terverifikasi (screenshot).
+- **CSS** `admin.css` +blok align ikon `.lc`. Sidebar/topbar/dashboard/form terverifikasi rapi
+  (WordPress-level), ikon konsisten.
+- **BELUM (menyusul):** tambal CSRF endpoint upload editor (§13.2), sweep emoji di theme legacy
+  (default/omah) — tidak dipakai Anima, prioritas rendah; naikkan sebagian field `.wysiwyg-min`
+  saat rombak per-modul.
+
 ## 14. Editabilitas Konten Menyeluruh, Media, Urutan Menu Admin, & Blog
 
 Fondasi yang sudah ada di CMS (dimanfaatkan, bukan bikin dari nol):

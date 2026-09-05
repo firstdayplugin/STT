@@ -52,7 +52,7 @@ $breadcrumbs = [['label'=>'Halaman','url'=>admin_url('?page=pages')]];
 ?>
 <div class="page-header">
     <div class="page-title"><?= $page_title ?></div>
-    <a href="<?= admin_url('?page=pages') ?>" class="btn btn-secondary">← Kembali</a>
+    <a href="<?= admin_url('?page=pages') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali</a>
 </div>
 
 <form method="POST">
@@ -82,7 +82,7 @@ $breadcrumbs = [['label'=>'Halaman','url'=>admin_url('?page=pages')]];
             <div class="form-group"><label>Meta Title</label>
                 <input type="text" name="meta_title" class="form-control" value="<?= htmlspecialchars($edit['meta_title'] ?? '') ?>"></div>
             <div class="form-group mb-0"><label>Meta Description</label>
-                <textarea name="meta_desc" class="form-control" rows="3"><?= htmlspecialchars($edit['meta_description'] ?? '') ?></textarea></div>
+                <textarea name="meta_desc" class="form-control no-wysiwyg" rows="3"><?= htmlspecialchars($edit['meta_description'] ?? '') ?></textarea></div>
         </div>
     </div>
 </div>
@@ -92,8 +92,8 @@ $breadcrumbs = [['label'=>'Halaman','url'=>admin_url('?page=pages')]];
         <div class="card-body">
             <div class="form-group"><label>Status</label>
                 <select name="status" class="form-control">
-                    <option value="draft" <?= ($edit['status']??'draft')==='draft'?'selected':'' ?>>📝 Draft</option>
-                    <option value="published" <?= ($edit['status']??'')==='published'?'selected':'' ?>>🌐 Published</option>
+                    <option value="draft" <?= ($edit['status']??'draft')==='draft'?'selected':'' ?>>Draft</option>
+                    <option value="published" <?= ($edit['status']??'')==='published'?'selected':'' ?>>Published</option>
                 </select></div>
             <div class="form-group"><label>Template</label>
                 <select name="template" class="form-control">
@@ -109,7 +109,7 @@ $breadcrumbs = [['label'=>'Halaman','url'=>admin_url('?page=pages')]];
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary w-full" style="justify-content:center">💾 Simpan Halaman</button>
+            <button type="submit" class="btn btn-primary w-full" style="justify-content:center"><?= icon('save', 16) ?> Simpan Halaman</button>
         </div>
     </div>
 </div>
@@ -124,7 +124,7 @@ sp.addEventListener('input',()=>{sp.dataset.m='1';prev.textContent=sp.value;});
 
 <?php else: ?>
 <div class="page-header">
-    <div class="page-title">📄 Halaman <small><?= count($all_pages) ?> halaman</small></div>
+    <div class="page-title"><?= icon('page', 16) ?> Halaman <small><?= count($all_pages) ?> halaman</small></div>
     <a href="<?= admin_url('?page=pages&action=create') ?>" class="btn btn-primary">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
         Buat Halaman
@@ -136,7 +136,7 @@ sp.addEventListener('input',()=>{sp.dataset.m='1';prev.textContent=sp.value;});
             <thead><tr><th>Judul</th><th>Slug</th><th>Template</th><th>Status</th><th>Di Nav</th><th>Aksi</th></tr></thead>
             <tbody>
             <?php if (empty($all_pages)): ?>
-            <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📄</div><div class="empty-title">Belum ada halaman kustom</div></div></td></tr>
+            <tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><?= icon('page', 40) ?></div><div class="empty-title">Belum ada halaman kustom</div></div></td></tr>
             <?php else: ?>
             <?php foreach ($all_pages as $p): ?>
             <tr>
@@ -144,16 +144,16 @@ sp.addEventListener('input',()=>{sp.dataset.m='1';prev.textContent=sp.value;});
                 <td><code class="text-sm" style="color:var(--accent)">/<?= htmlspecialchars($p['slug']) ?></code></td>
                 <td><span class="badge badge-muted"><?= $p['template'] ?></span></td>
                 <td><?= $p['status']==='published'?'<span class="badge badge-success">Publish</span>':'<span class="badge badge-muted">Draft</span>' ?></td>
-                <td><?= $p['show_in_nav'] ? '✅' : '—' ?></td>
+                <td><?= $p['show_in_nav'] ? '' : '—' ?></td>
                 <td>
                     <div style="display:flex;gap:6px">
-                        <a href="<?= admin_url('?page=pages&action=edit&id='.$p['id']) ?>" class="btn btn-xs btn-secondary">✏️</a>
-                        <a href="<?= url('/'.$p['slug']) ?>" target="_blank" class="btn btn-xs btn-secondary">🔗</a>
+                        <a href="<?= admin_url('?page=pages&action=edit&id='.$p['id']) ?>" class="btn btn-xs btn-secondary"><?= icon('pencil', 16) ?></a>
+                        <a href="<?= url('/'.$p['slug']) ?>" target="_blank" class="btn btn-xs btn-secondary"><?= icon('link', 16) ?></a>
                         <form method="POST" style="display:inline">
                             <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                             <input type="hidden" name="_action" value="delete">
                             <input type="hidden" name="del_id" value="<?= $p['id'] ?>">
-                            <button class="btn btn-xs btn-danger" data-confirm="Hapus halaman ini?">🗑️</button>
+                            <button class="btn btn-xs btn-danger" data-confirm="Hapus halaman ini?"><?= icon('trash', 16) ?></button>
                         </form>
                     </div>
                 </td>

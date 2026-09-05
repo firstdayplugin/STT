@@ -43,11 +43,11 @@ $flatten($tree);
 
 <div class="page-header">
   <div>
-    <h1>🏷️ Kategori <?= htmlspecialchars($LABEL) ?></h1>
+    <h1><?= icon('tag', 16) ?> Kategori <?= htmlspecialchars($LABEL) ?></h1>
     <div class="page-header-sub">Kelola kategori dan hierarki untuk <?= strtolower(htmlspecialchars($LABEL)) ?>.</div>
   </div>
   <div class="page-actions" style="display:flex;gap:8px">
-    <a href="<?= htmlspecialchars($BACK_URL) ?>" class="btn btn-secondary">← Kembali ke <?= htmlspecialchars($LABEL) ?></a>
+    <a href="<?= htmlspecialchars($BACK_URL) ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali ke <?= htmlspecialchars($LABEL) ?></a>
     <?php if ($action !== 'create' && $action !== 'edit'): ?>
     <a href="<?= admin_url("?page=$BASE_URL_KEY&action=create") ?>" class="btn btn-primary">+ Tambah Kategori</a>
     <?php endif; ?>
@@ -60,7 +60,7 @@ $flatten($tree);
   <div class="card">
     <div class="card-header">
       <div class="card-title">
-        <?= $action === 'edit' ? '✏️ Edit Kategori' : '➕ Tambah Kategori Baru' ?>
+        <?= $action === 'edit' ? 'Edit Kategori' : 'Tambah Kategori Baru' ?>
       </div>
     </div>
     <form method="POST" class="card-body">
@@ -115,7 +115,7 @@ $flatten($tree);
       </div>
       
       <button type="submit" class="btn btn-primary btn-block">
-        <?= $action === 'edit' ? '💾 Simpan Perubahan' : '+ Tambah Kategori' ?>
+        <?= $action === 'edit' ? 'Simpan Perubahan' : '+ Tambah Kategori' ?>
       </button>
       <?php if ($action === 'edit'): ?>
         <a href="<?= admin_url("?page=$BASE_URL_KEY") ?>" class="btn btn-secondary btn-block" style="margin-top:8px;text-align:center">Batal</a>
@@ -154,7 +154,7 @@ $flatten($tree);
             <td style="font-weight:600">
               <?php if (!empty($k['_depth'])): ?>
                 <span style="display:inline-block;width:<?= $k['_depth'] * 20 ?>px"></span>
-                <span style="color:var(--text-muted);font-weight:400">↳ </span>
+                <span style="color:var(--text-muted);font-weight:400"><?= icon('corner-down-right', 16) ?> </span>
               <?php endif; ?>
               <?= htmlspecialchars($k['nama']) ?>
             </td>
@@ -163,11 +163,11 @@ $flatten($tree);
             <td style="text-align:center"><?= (int) $k['jml_item'] ?></td>
             <td style="text-align:center">
               <a href="<?= admin_url("?page=$BASE_URL_KEY&action=edit&id={$k['id']}") ?>" class="btn btn-sm btn-secondary">Edit</a>
-              <form method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus kategori &quot;<?= htmlspecialchars($k['nama'], ENT_QUOTES) ?>&quot;?<?php if ($k['jml_item'] > 0): ?>\n\n⚠️ Kategori ini punya <?= (int)$k['jml_item'] ?> item terkait — relasi akan hilang tapi item tetap aman.<?php endif; ?>')">
+              <form method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus kategori &quot;<?= htmlspecialchars($k['nama'], ENT_QUOTES) ?>&quot;?<?php if ($k['jml_item'] > 0): ?>\n\nKategori ini punya <?= (int)$k['jml_item'] ?> item terkait — relasi akan hilang tapi item tetap aman.<?php endif; ?>')">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="_action" value="delete">
                 <input type="hidden" name="id" value="<?= $k['id'] ?>">
-                <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                <button type="submit" class="btn btn-sm btn-danger"><?= icon('trash', 16) ?></button>
               </form>
             </td>
           </tr>

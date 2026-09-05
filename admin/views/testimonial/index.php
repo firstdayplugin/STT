@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_action'] ?? '') === 'caro
         foreach (['testimonial_autoplay','testimonial_loop','testimonial_show_dots','testimonial_show_nav','testimonial_show_services'] as $k) {
             update_setting($k, isset($_POST[$k]) ? '1' : '0');
         }
-        set_flash('success', '✅ Pengaturan testimoni disimpan.');
+        set_flash('success', 'Pengaturan testimoni disimpan.');
     }
     redirect(admin_url('?page=testimonial'));
 }
@@ -82,7 +82,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>💬 Testimoni Klien</h1>
+    <h1><?= icon('message', 16) ?> Testimoni Klien</h1>
     <div class="page-header-sub">Kelola testimoni yang tampil di halaman home</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -99,7 +99,7 @@ $csrf = generate_csrf();
   <input type="hidden" name="csrf_token" value="<?= $csrf_ts ?>">
   <input type="hidden" name="_action" value="carousel_settings">
   <div class="card-header"><div>
-    <div class="card-title">🎠 Pengaturan Tampilan Carousel Testimoni</div>
+    <div class="card-title"><?= icon('carousel', 16) ?> Pengaturan Tampilan Carousel Testimoni</div>
     <div class="card-subtitle">Auto-slide, jumlah kolom, dan tampil di halaman layanan</div>
   </div></div>
   <div class="card-body">
@@ -153,7 +153,7 @@ $csrf = generate_csrf();
       </label>
     </div>
     <div style="text-align:right;margin-top:14px">
-      <button type="submit" class="btn btn-primary">💾 Simpan Pengaturan Carousel</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Pengaturan Carousel</button>
     </div>
   </div>
 </form>
@@ -222,7 +222,7 @@ $csrf = generate_csrf();
       
       <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
         <a href="<?= admin_url('?page=testimonial') ?>" class="btn btn-secondary">Batal</a>
-        <button type="submit" class="btn btn-primary">💾 Simpan</button>
+        <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
       </div>
     </form>
   </div>
@@ -232,7 +232,7 @@ $csrf = generate_csrf();
   <?php if (empty($items)): ?>
     <div class="card">
       <div class="empty-state">
-        <div class="empty-state-icon">💬</div>
+        <div class="empty-state-icon"><?= icon('message', 16) ?></div>
         <div>Belum ada testimoni.</div>
         <a href="<?= admin_url('?page=testimonial&action=create') ?>" class="btn btn-primary mt-2">+ Tambah Testimoni Pertama</a>
       </div>
@@ -265,7 +265,7 @@ $csrf = generate_csrf();
               <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($t['jabatan'] ?? '') ?><?= !empty($t['perusahaan']) ? ' • '.htmlspecialchars($t['perusahaan']) : '' ?></div>
             </td>
             <td style="max-width:400px"><?= excerpt(htmlspecialchars($t['isi']), 100) ?></td>
-            <td><?= str_repeat('⭐', (int)$t['rating']) ?></td>
+            <td><?= str_repeat('', (int)$t['rating']) ?></td>
             <td><?= $t['is_active'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-gray">Nonaktif</span>' ?></td>
             <td>
               <div class="table-actions">

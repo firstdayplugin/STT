@@ -3,14 +3,14 @@
 $db = Database::getInstance();
 
 $pages_meta = [
-    'home'    => ['label' => 'Halaman Home / Beranda',   'icon' => '🏠'],
-    'about'   => ['label' => 'Halaman Tentang Kami',     'icon' => '👥'],
-    'layanan' => ['label' => 'Halaman Layanan (List)',   'icon' => '🎨'],
-    'gallery' => ['label' => 'Halaman Galeri',           'icon' => '🖼️'],
-    'blog'    => ['label' => 'Halaman Blog',             'icon' => '📰'],
-    'produk'  => ['label' => 'Halaman Produk',           'icon' => '📦'],
-    'kontak'  => ['label' => 'Halaman Kontak',           'icon' => '📞'],
-    'global'  => ['label' => 'Global (Footer CTA, dll)', 'icon' => '🌐'],
+    'home'    => ['label' => 'Halaman Home / Beranda',   'icon' => ''],
+    'about'   => ['label' => 'Halaman Tentang Kami',     'icon' => ''],
+    'layanan' => ['label' => 'Halaman Layanan (List)',   'icon' => ''],
+    'gallery' => ['label' => 'Halaman Galeri',           'icon' => ''],
+    'blog'    => ['label' => 'Halaman Blog',             'icon' => ''],
+    'produk'  => ['label' => 'Halaman Produk',           'icon' => ''],
+    'kontak'  => ['label' => 'Halaman Kontak',           'icon' => ''],
+    'global'  => ['label' => 'Global (Footer CTA, dll)', 'icon' => ''],
 ];
 
 $current_page = $_GET['p'] ?? 'home';
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
     $redirect_to = admin_url('?page=content&p=' . urlencode($_POST['page_key'] ?? $current_page));
     
     if (!verify_csrf($_POST['csrf_token'] ?? '')) {
-        set_flash('error', '❌ Token keamanan tidak valid. Silakan refresh halaman dan coba lagi.');
+        set_flash('error', 'Token keamanan tidak valid. Silakan refresh halaman dan coba lagi.');
         redirect($redirect_to);
     }
     
@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
         
         log_activity('content_update', "Update $saved blok, buat $created blok baru di halaman: " . ($pages_meta[$page_key]['label'] ?? $page_key));
         
-        $msg = "✅ Berhasil menyimpan! ";
+        $msg = "Berhasil menyimpan! ";
         if ($saved > 0) $msg .= "$saved blok diupdate. ";
         if ($created > 0) $msg .= "$created blok baru dibuat.";
         set_flash('success', $msg);
     } catch (Throwable $e) {
-        set_flash('error', '❌ Gagal menyimpan: ' . $e->getMessage());
+        set_flash('error', 'Gagal menyimpan: ' . $e->getMessage());
     }
     
     redirect($redirect_to);
@@ -97,7 +97,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>📝 Konten Halaman</h1>
+    <h1><?= icon('content', 16) ?> Konten Halaman</h1>
     <div class="page-header-sub">Edit semua text di website. Pilih halaman lalu edit per elemen.</div>
   </div>
 </div>
@@ -122,10 +122,10 @@ $csrf = generate_csrf();
 <?php if ($current_page === 'home'): ?>
 <div class="card" style="background:#FFF7E0;border:1px solid #F0B100;margin-bottom:16px">
   <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
-    <div style="font-size:22px;flex-shrink:0">💡</div>
+    <div style="font-size:22px;flex-shrink:0"><?= icon('lightbulb', 16) ?></div>
     <div style="font-size:13px;color:#7C5A00;line-height:1.6">
       <strong>Pengaturan HERO homepage (judul, subtitle, gambar, slideshow, CTA) sekarang dipusatkan di:</strong>
-      <a href="<?= admin_url('?page=pengaturan&tab=hero') ?>" style="color:#7C5A00;text-decoration:underline;font-weight:700">Pengaturan → 🎬 Hero/Slide</a>.<br>
+      <a href="<?= admin_url('?page=pengaturan&tab=hero') ?>" style="color:#7C5A00;text-decoration:underline;font-weight:700">Pengaturan <?= icon('arrow-right', 16) ?> <?= icon('film', 16) ?> Hero/Slide</a>.<br>
       Konten di halaman ini hanya untuk section <em>selain</em> hero (About, Performance, Services, FAQ, dll).
     </div>
   </div>
@@ -135,7 +135,7 @@ $csrf = generate_csrf();
 <?php if (empty($blocks)): ?>
   <div class="card">
     <div class="empty-state">
-      <div class="empty-state-icon">📝</div>
+      <div class="empty-state-icon"><?= icon('content', 16) ?></div>
       <div class="empty-title">Belum ada blok konten untuk halaman ini</div>
       <div class="empty-text">Halaman akan menggunakan teks default. Buka halaman ini di website untuk lihat versi default.</div>
     </div>
@@ -178,9 +178,9 @@ $csrf = generate_csrf();
   <!-- Sticky save bar -->
   <div style="position:sticky;bottom:0;background:white;padding:16px;border-top:2px solid var(--border);margin:16px -16px -16px;display:flex;justify-content:space-between;align-items:center;z-index:10;box-shadow:0 -4px 12px rgba(0,0,0,0.04)">
     <div style="font-size:13px;color:var(--text-muted)">
-      💾 <?= count($blocks) ?> field siap disimpan
+      <?= icon('save', 16) ?> <?= count($blocks) ?> field siap disimpan
     </div>
-    <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Perubahan</button>
+    <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Perubahan</button>
   </div>
 </form>
 
@@ -190,7 +190,7 @@ document.getElementById('content-form')?.addEventListener('submit', function() {
   const btn = this.querySelector('button[type=submit]');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '⏳ Menyimpan...';
+    btn.innerHTML = 'Menyimpan...';
   }
 });
 </script>

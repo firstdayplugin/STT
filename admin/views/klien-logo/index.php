@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_action'] ?? '') === 'caro
         }
         $cb = array_merge($cb, ['logo_carousel_autoplay','logo_carousel_pause_hover']);
         foreach ($cb as $k) update_setting($k, isset($_POST[$k]) ? '1' : '0');
-        set_flash('success', '✅ Pengaturan carousel logo disimpan.');
+        set_flash('success', 'Pengaturan carousel logo disimpan.');
     }
     redirect(admin_url('?page=klien-logo'));
 }
@@ -58,7 +58,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>🏢 Logo Klien</h1>
+    <h1><?= icon('client', 16) ?> Logo Klien</h1>
     <div class="page-header-sub">Kelola logo klien yang tampil di halaman About</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -78,7 +78,7 @@ $csrf = generate_csrf();
   <input type="hidden" name="csrf_token" value="<?= $csrf_lc ?>">
   <input type="hidden" name="_action" value="carousel_settings">
   <div class="card-header"><div>
-    <div class="card-title">🎠 Pengaturan Tampilan Carousel Logo</div>
+    <div class="card-title"><?= icon('carousel', 16) ?> Pengaturan Tampilan Carousel Logo</div>
     <div class="card-subtitle">Atur jumlah kolom, animasi, warna, dan tampil di halaman layanan</div>
   </div></div>
   <div class="card-body">
@@ -116,7 +116,7 @@ $csrf = generate_csrf();
     </div>
     
     <div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border)">
-      <div style="font-weight:600;font-size:13px;margin-bottom:10px">⚙️ Pengaturan Animasi Slide (hanya untuk mode "Slide")</div>
+      <div style="font-weight:600;font-size:13px;margin-bottom:10px"><?= icon('settings', 16) ?> Pengaturan Animasi Slide (hanya untuk mode "Slide")</div>
       <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
         <div class="form-group" style="margin-bottom:0">
           <label>Kecepatan Animasi</label>
@@ -143,7 +143,7 @@ $csrf = generate_csrf();
       </div>
     </div>
     <div style="text-align:right;margin-top:12px">
-      <button type="submit" class="btn btn-primary">💾 Simpan Pengaturan Carousel</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Pengaturan Carousel</button>
     </div>
   </div>
 </form>
@@ -188,14 +188,14 @@ $csrf = generate_csrf();
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
         <a href="<?= admin_url('?page=klien-logo') ?>" class="btn btn-secondary">Batal</a>
-        <button type="submit" class="btn btn-primary">💾 Simpan</button>
+        <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
       </div>
     </form>
   </div>
 <?php else: ?>
   <?php if (empty($items)): ?>
     <div class="card"><div class="empty-state">
-      <div class="empty-state-icon">🏢</div>
+      <div class="empty-state-icon"><?= icon('client', 16) ?></div>
       <div>Belum ada logo klien.</div>
       <a href="<?= admin_url('?page=klien-logo&action=create') ?>" class="btn btn-primary mt-2">+ Tambah Logo Pertama</a>
     </div></div>
@@ -212,7 +212,7 @@ $csrf = generate_csrf();
             <form method="POST" action="<?= admin_url('?page=klien-logo&action=delete&id='.$k['id']) ?>" style="display:inline" onsubmit="return confirm('Hapus logo '.<?= json_encode($k['nama']) ?>'?')">
               <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
               <input type="hidden" name="action" value="delete">
-              <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+              <button type="submit" class="btn btn-danger btn-sm"><?= icon('trash', 16) ?></button>
             </form>
           </div>
         </div>

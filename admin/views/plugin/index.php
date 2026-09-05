@@ -26,7 +26,7 @@ $csrf = generate_csrf();
 // Built-in plugin definitions
 $plugin_defs = [
     'marketplace' => [
-        'icon'    => '🛍️',
+        'icon'    => '',
         'version' => '1.0.0',
         'author'  => 'Reklamepedia',
         'desc'    => 'Tambahkan tombol beli ke marketplace (Tokopedia, Shopee, Lazada, dll) di halaman produk.',
@@ -36,7 +36,7 @@ $plugin_defs = [
 ?>
 
 <div class="page-header">
-    <div class="page-title">🧩 Plugin Manager
+    <div class="page-title"><?= icon('puzzle', 16) ?> Plugin Manager
         <small>Aktifkan / nonaktifkan fitur tambahan</small>
     </div>
 </div>
@@ -53,14 +53,14 @@ $plugin_defs = [
 <div class="card" style="<?= $plugin['is_active'] ? 'border-color:rgba(232,160,32,0.3)' : '' ?>">
     <div class="card-header">
         <div style="display:flex;align-items:center;gap:12px">
-            <div style="font-size:28px"><?= $def['icon'] ?? '🔌' ?></div>
+            <div style="font-size:28px"><?= $def['icon'] ?? '' ?></div>
             <div>
                 <div class="card-title"><?= htmlspecialchars($plugin['nama']) ?></div>
                 <div class="text-xs text-muted">v<?= $def['version'] ?? '1.0' ?> by <?= $def['author'] ?? 'Unknown' ?></div>
             </div>
         </div>
         <span class="badge <?= $plugin['is_active'] ? 'badge-success' : 'badge-muted' ?>">
-            <?= $plugin['is_active'] ? '✓ Aktif' : 'Nonaktif' ?>
+            <?= $plugin['is_active'] ? 'Aktif' : 'Nonaktif' ?>
         </span>
     </div>
     <div class="card-body">
@@ -71,7 +71,7 @@ $plugin_defs = [
         <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
             <?php foreach ($def['features'] as $feat): ?>
             <li style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted)">
-                <span style="color:var(--success)">✓</span> <?= $feat ?>
+                <span style="color:var(--success)"><?= icon('check', 16) ?></span> <?= $feat ?>
             </li>
             <?php endforeach; ?>
         </ul>
@@ -83,7 +83,7 @@ $plugin_defs = [
             <button type="submit" class="btn w-full <?= $plugin['is_active'] ? 'btn-danger' : 'btn-primary' ?>"
                     style="justify-content:center"
                     <?= $user['role'] !== 'superadmin' && $user['role'] !== 'admin' ? 'disabled' : '' ?>>
-                <?= $plugin['is_active'] ? '⛔ Nonaktifkan Plugin' : '✅ Aktifkan Plugin' ?>
+                <?= $plugin['is_active'] ? 'Nonaktifkan Plugin' : 'Aktifkan Plugin' ?>
             </button>
         </form>
     </div>
@@ -93,7 +93,7 @@ $plugin_defs = [
 <!-- Coming Soon -->
 <div class="card" style="border-style:dashed;opacity:0.5">
     <div class="card-body" style="text-align:center;padding:40px">
-        <div style="font-size:36px;margin-bottom:12px">🔜</div>
+        <div style="font-size:36px;margin-bottom:12px"><?= icon('arrow-right', 16) ?></div>
         <div style="font-weight:600;margin-bottom:8px">Plugin Lebih Banyak</div>
         <div class="text-muted text-sm">Plugin tambahan akan tersedia dalam update berikutnya</div>
     </div>

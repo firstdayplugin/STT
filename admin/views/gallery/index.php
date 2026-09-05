@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute("UPDATE gallery SET kategori_id=NULL WHERE kategori_id=?", [$del_kat]);
             $db->execute("DELETE FROM gallery_kategori WHERE id=?", [$del_kat]);
             log_activity('delete', 'Kategori galeri ID ' . $del_kat);
-            $msg = '🗑️ Kategori berhasil dihapus.';
+            $msg = 'Kategori berhasil dihapus.';
             if ($used > 0) $msg .= " $used foto sekarang tidak berkategori (foto tidak terhapus).";
             set_flash('success', $msg);
         }
@@ -105,7 +105,7 @@ $csrf = generate_csrf();
 ?>
 
 <div class="page-header">
-    <div class="page-title">🖼️ Galeri
+    <div class="page-title"><?= icon('image', 16) ?> Galeri
         <small><?= number_format($total) ?> foto</small>
     </div>
 </div>
@@ -113,7 +113,7 @@ $csrf = generate_csrf();
 <!-- Upload Area -->
 <div class="card mb-24">
     <div class="card-header">
-        <div class="card-title">📤 Upload Foto Baru</div>
+        <div class="card-title"><?= icon('upload', 16) ?> Upload Foto Baru</div>
     </div>
     <div class="card-body">
         <form method="POST" enctype="multipart/form-data">
@@ -145,7 +145,7 @@ $csrf = generate_csrf();
 
             <!-- Dropzone -->
             <div class="upload-area" id="dropzone" onclick="document.getElementById('file-input').click()">
-                <div class="upload-icon">📁</div>
+                <div class="upload-icon"><?= icon('folder', 16) ?></div>
                 <div class="upload-text">Klik atau <strong>drag & drop</strong> foto di sini</div>
                 <div class="upload-hint">JPG, PNG, WebP — Bisa pilih banyak sekaligus — Maks 5MB per file</div>
                 <div id="file-count" style="margin-top:8px;color:var(--accent);font-weight:600"></div>
@@ -157,7 +157,7 @@ $csrf = generate_csrf();
 
             <div style="margin-top:16px;text-align:right">
                 <button type="submit" class="btn btn-primary" id="upload-btn" disabled>
-                    📤 Upload Foto
+                    <?= icon('upload', 16) ?> Upload Foto
                 </button>
             </div>
         </form>
@@ -200,7 +200,7 @@ $csrf = generate_csrf();
 <!-- Gallery Grid -->
 <?php if (empty($items)): ?>
 <div class="card"><div class="empty-state">
-    <div class="empty-icon">🖼️</div>
+    <div class="empty-icon"><?= icon('image', 40) ?></div>
     <div class="empty-title">Belum ada foto di galeri</div>
     <div class="empty-text">Upload foto pertama menggunakan form di atas.</div>
 </div></div>
@@ -214,15 +214,15 @@ $csrf = generate_csrf();
              onmouseover="this.style.transform='scale(1.05)'"
              onmouseout="this.style.transform='scale(1)'">
         <?php if ($item['is_featured']): ?>
-        <div style="position:absolute;top:8px;left:8px"><span class="badge badge-accent">⭐ Featured</span></div>
+        <div style="position:absolute;top:8px;left:8px"><span class="badge badge-accent"><?= icon('star', 16) ?> Featured</span></div>
         <?php endif; ?>
         <div style="position:absolute;top:8px;right:8px;display:flex;gap:6px">
-            <button onclick="openEdit(<?= $item['id'] ?>)" class="btn btn-xs btn-secondary" style="backdrop-filter:blur(8px)">✏️</button>
+            <button onclick="openEdit(<?= $item['id'] ?>)" class="btn btn-xs btn-secondary" style="backdrop-filter:blur(8px)"><?= icon('pencil', 16) ?></button>
             <form method="POST" style="display:inline">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="_action" value="delete">
                 <input type="hidden" name="del_id" value="<?= $item['id'] ?>">
-                <button type="submit" class="btn btn-xs btn-danger" data-confirm="Hapus foto ini?">🗑️</button>
+                <button type="submit" class="btn btn-xs btn-danger" data-confirm="Hapus foto ini?"><?= icon('trash', 16) ?></button>
             </form>
         </div>
     </div>
@@ -232,7 +232,7 @@ $csrf = generate_csrf();
         <span class="badge badge-muted" style="margin-top:4px"><?= htmlspecialchars($item['kat_nama']) ?></span>
         <?php endif; ?>
         <?php if ($item['project']): ?>
-        <div class="text-xs text-muted" style="margin-top:4px">📁 <?= htmlspecialchars($item['project']) ?></div>
+        <div class="text-xs text-muted" style="margin-top:4px"><?= icon('folder', 16) ?> <?= htmlspecialchars($item['project']) ?></div>
         <?php endif; ?>
     </div>
 </div>
@@ -241,11 +241,11 @@ $csrf = generate_csrf();
 
 <?php $total_pages=ceil($total/$per_page); if($total_pages>1): ?>
 <div class="pagination mt-16">
-    <?php if($cp>1): ?><a href="?page=gallery&p=<?=$cp-1?>&kat=<?=$filter_kat?>" class="page-link">←</a><?php endif; ?>
+    <?php if($cp>1): ?><a href="?page=gallery&p=<?=$cp-1?>&kat=<?=$filter_kat?>" class="page-link"><?= icon('arrow-left', 16) ?></a><?php endif; ?>
     <?php for($i=max(1,$cp-2);$i<=min($total_pages,$cp+2);$i++): ?>
     <a href="?page=gallery&p=<?=$i?>&kat=<?=$filter_kat?>" class="page-link <?=$i===$cp?'active':''?>"><?=$i?></a>
     <?php endfor; ?>
-    <?php if($cp<$total_pages): ?><a href="?page=gallery&p=<?=$cp+1?>&kat=<?=$filter_kat?>" class="page-link">→</a><?php endif; ?>
+    <?php if($cp<$total_pages): ?><a href="?page=gallery&p=<?=$cp+1?>&kat=<?=$filter_kat?>" class="page-link"><?= icon('arrow-right', 16) ?></a><?php endif; ?>
 </div>
 <?php endif; ?>
 <?php endif; ?>
@@ -255,7 +255,7 @@ $csrf = generate_csrf();
     <div class="modal">
         <div class="modal-header">
             <div class="modal-title">Edit Info Foto</div>
-            <button class="modal-close" onclick="closeEdit()">✕</button>
+            <button class="modal-close" onclick="closeEdit()"><?= icon('x', 16) ?></button>
         </div>
         <form method="POST" id="edit-form">
             <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
@@ -286,12 +286,12 @@ $csrf = generate_csrf();
                 </div>
                 <div class="form-check mt-16">
                     <input type="checkbox" name="is_featured" id="edit-featured" value="1">
-                    <label class="form-check-label" for="edit-featured">⭐ Featured (tampil menonjol di galeri)</label>
+                    <label class="form-check-label" for="edit-featured"><?= icon('star', 16) ?> Featured (tampil menonjol di galeri)</label>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" onclick="closeEdit()" class="btn btn-secondary">Batal</button>
-                <button type="submit" class="btn btn-primary">💾 Simpan</button>
+                <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
             </div>
         </form>
     </div>

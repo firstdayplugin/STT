@@ -56,16 +56,16 @@ $edit_item = ($action === 'edit' && $id > 0) ? $db->fetchOne("SELECT * FROM grid
 $edit_box_items = ($edit_item) ? $db->fetchAll("SELECT * FROM grid_icon_box_items WHERE grid_id=? ORDER BY urutan", [$id]) : [];
 
 $position_labels = [
-    'home_after_hero'        => '🏠 Home — Setelah Hero',
-    'home_middle'            => '🏠 Home — Tengah halaman',
-    'home_before_footer'     => '🏠 Home — Sebelum Footer',
-    'about_top'              => '👥 About — Atas',
-    'about_bottom'           => '👥 About — Bawah',
-    'layanan_top'            => '🎨 Halaman Layanan (list) — Atas',
-    'layanan_bottom'         => '🎨 Halaman Layanan (list) — Bawah',
-    'layanan_detail_top'     => '✨ Detail Layanan — Setelah Hero',
-    'layanan_detail_middle'  => '✨ Detail Layanan — Tengah',
-    'layanan_detail_bottom'  => '✨ Detail Layanan — Sebelum Footer',
+    'home_after_hero'        => 'Home — Setelah Hero',
+    'home_middle'            => 'Home — Tengah halaman',
+    'home_before_footer'     => 'Home — Sebelum Footer',
+    'about_top'              => 'About — Atas',
+    'about_bottom'           => 'About — Bawah',
+    'layanan_top'            => 'Halaman Layanan (list) — Atas',
+    'layanan_bottom'         => 'Halaman Layanan (list) — Bawah',
+    'layanan_detail_top'     => 'Detail Layanan — Setelah Hero',
+    'layanan_detail_middle'  => 'Detail Layanan — Tengah',
+    'layanan_detail_bottom'  => 'Detail Layanan — Sebelum Footer',
 ];
 
 $all_layanan = $db->fetchAll("SELECT id, nama FROM layanan WHERE is_active=1 ORDER BY urutan, nama");
@@ -74,7 +74,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>🎁 Grid Icon Box</h1>
+    <h1><?= icon('grid', 16) ?> Grid Icon Box</h1>
     <div class="page-header-sub">Tambahkan grid icon + text (3 atau 4 kolom) di halaman</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -164,7 +164,7 @@ $csrf = generate_csrf();
         <div class="form-row">
           <div class="form-group" style="margin-bottom:8px">
             <label>Icon (emoji)</label>
-            <input type="text" name="items[<?= $i ?>][icon]" value="<?= htmlspecialchars($it['icon']) ?>" placeholder="✨" maxlength="10">
+            <input type="text" name="items[<?= $i ?>][icon]" value="<?= htmlspecialchars($it['icon']) ?>" placeholder="" maxlength="10">
           </div>
           <div class="form-group" style="margin-bottom:8px">
             <label>Judul *</label>
@@ -173,14 +173,14 @@ $csrf = generate_csrf();
         </div>
         <div class="form-group" style="margin-bottom:8px">
           <label>Deskripsi</label>
-          <textarea name="items[<?= $i ?>][deskripsi]" rows="2"><?= htmlspecialchars($it['deskripsi']) ?></textarea>
+          <textarea class="no-wysiwyg" name="items[<?= $i ?>][deskripsi]" rows="2"><?= htmlspecialchars($it['deskripsi']) ?></textarea>
         </div>
         <div class="form-row" style="align-items:end">
           <div class="form-group" style="margin-bottom:0">
             <label>Link (opsional)</label>
             <input type="text" name="items[<?= $i ?>][link]" value="<?= htmlspecialchars($it['link']) ?>" placeholder="/layanan/neon-box">
           </div>
-          <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.grid-item').remove()">🗑 Hapus Item</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.grid-item').remove()"><?= icon('trash', 16) ?> Hapus Item</button>
         </div>
       </div>
       <?php endforeach; ?>
@@ -195,7 +195,7 @@ $csrf = generate_csrf();
   
   <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px">
     <a href="<?= admin_url('?page=grid-icon') ?>" class="btn btn-secondary">Batal</a>
-    <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Grid</button>
+    <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Grid</button>
   </div>
 </form>
 
@@ -207,13 +207,13 @@ function addItem() {
   container.insertAdjacentHTML('beforeend', `
     <div class="grid-item" style="padding:14px;background:var(--surface-2);border-radius:10px;margin-bottom:10px">
       <div class="form-row">
-        <div class="form-group" style="margin-bottom:8px"><label>Icon (emoji)</label><input type="text" name="items[${i}][icon]" placeholder="✨" maxlength="10"></div>
+        <div class="form-group" style="margin-bottom:8px"><label>Icon (emoji)</label><input type="text" name="items[${i}][icon]" placeholder="" maxlength="10"></div>
         <div class="form-group" style="margin-bottom:8px"><label>Judul *</label><input type="text" name="items[${i}][judul]" required></div>
       </div>
-      <div class="form-group" style="margin-bottom:8px"><label>Deskripsi</label><textarea name="items[${i}][deskripsi]" rows="2"></textarea></div>
+      <div class="form-group" style="margin-bottom:8px"><label>Deskripsi</label><textarea class="no-wysiwyg" name="items[${i}][deskripsi]" rows="2"></textarea></div>
       <div class="form-row" style="align-items:end">
         <div class="form-group" style="margin-bottom:0"><label>Link</label><input type="text" name="items[${i}][link]" placeholder="/layanan/neon-box"></div>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.grid-item').remove()">🗑 Hapus</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.grid-item').remove()">Hapus</button>
       </div>
     </div>
   `);
@@ -224,7 +224,7 @@ function addItem() {
 
 <?php if (empty($items)): ?>
   <div class="card"><div class="empty-state">
-    <div class="empty-state-icon">🎁</div>
+    <div class="empty-state-icon"><?= icon('grid', 16) ?></div>
     <div class="empty-title">Belum ada Grid Icon Box</div>
     <div class="empty-text">Tambahkan grid 3 atau 4 kolom dengan icon + text</div>
     <a href="<?= admin_url('?page=grid-icon&action=create') ?>" class="btn btn-primary mt-2">+ Tambah Grid Pertama</a>
@@ -244,7 +244,7 @@ function addItem() {
             <?php if (!empty($g['layanan_id'])): 
               $l_nama = $db->fetchOne("SELECT nama FROM layanan WHERE id=?", [$g['layanan_id']])['nama'] ?? '?';
             ?>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">→ <?= htmlspecialchars($l_nama) ?></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px"><?= icon('arrow-right', 16) ?> <?= htmlspecialchars($l_nama) ?></div>
             <?php endif; ?>
           </td>
           <td><?= $g['kolom'] ?> kolom</td>
@@ -256,7 +256,7 @@ function addItem() {
               <form method="POST" action="<?= admin_url('?page=grid-icon&action=delete&id='.$g['id']) ?>" style="display:inline" onsubmit="return confirm('Hapus grid ini?')">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="action" value="delete">
-                <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                <button type="submit" class="btn btn-danger btn-sm"><?= icon('trash', 16) ?></button>
               </form>
             </div>
           </td>

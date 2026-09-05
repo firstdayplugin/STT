@@ -7,45 +7,45 @@ $site_name = get_setting('site_name', 'Reklamepedia');
 $logo      = get_setting('logo');
 $doc_url   = get_setting('docs_url', '#');
 
-// Sidebar navigation - LIGHT THEME, simple icons
+// Sidebar navigation. Icons are Lucide names (see core/helpers/icons.php) — NO EMOJI.
 $nav_sections = [
     'Utama' => [
-        ['page'=>'dashboard', 'label'=>'Dashboard', 'icon'=>'🏠'],
-        ['page'=>'wizard',    'label'=>'Setup Wizard', 'icon'=>'🚀'],
+        ['page'=>'dashboard', 'label'=>'Dashboard', 'icon'=>'dashboard'],
+        ['page'=>'wizard',    'label'=>'Setup Wizard', 'icon'=>'rocket'],
     ],
     'Konten' => [
-        ['page'=>'content',   'label'=>'Konten Halaman', 'icon'=>'📝', 'highlight'=>true],
-        ['page'=>'blog',      'label'=>'Blog / Artikel', 'icon'=>'📰',
+        ['page'=>'content',   'label'=>'Konten Halaman', 'icon'=>'content', 'highlight'=>true],
+        ['page'=>'blog',      'label'=>'Blog / Artikel', 'icon'=>'blog',
             'children'=>[
                 ['url'=>admin_url('?page=blog'),                          'label'=>'Semua Artikel', 'match'=>fn($p,$a)=>$p==='blog' && !in_array($a,['create','kategori'])],
                 ['url'=>admin_url('?page=blog&action=create'),            'label'=>'Tambah Artikel', 'match'=>fn($p,$a)=>$p==='blog' && $a==='create'],
                 ['url'=>admin_url('?page=blog-kategori'),                 'label'=>'Kategori', 'match'=>fn($p,$a)=>$p==='blog-kategori'],
             ]],
-        ['page'=>'produk',    'label'=>'Produk',         'icon'=>'📦',
+        ['page'=>'produk',    'label'=>'Produk',         'icon'=>'product',
             'children'=>[
                 ['url'=>admin_url('?page=produk'),                        'label'=>'Semua Produk', 'match'=>fn($p,$a)=>$p==='produk' && !in_array($a,['create','kategori'])],
                 ['url'=>admin_url('?page=produk&action=create'),          'label'=>'Tambah Produk', 'match'=>fn($p,$a)=>$p==='produk' && $a==='create'],
                 ['url'=>admin_url('?page=produk-kategori'),               'label'=>'Kategori', 'match'=>fn($p,$a)=>$p==='produk-kategori'],
             ]],
-        ['page'=>'layanan',   'label'=>'Layanan',        'icon'=>'🎨'],
-        ['page'=>'gallery',   'label'=>'Galeri',         'icon'=>'🖼️'],
-        ['page'=>'testimonial','label'=>'Testimoni',     'icon'=>'💬'],
-        ['page'=>'faq',       'label'=>'FAQ',            'icon'=>'❓'],
-        ['page'=>'klien-logo','label'=>'Logo Klien',     'icon'=>'🏢'],
-        ['page'=>'flex-blocks','label'=>'Content Block', 'icon'=>'📋'],
-        ['page'=>'grid-icon', 'label'=>'Grid Icon Box',  'icon'=>'🎁'],
-        ['page'=>'pages',     'label'=>'Halaman Custom', 'icon'=>'📄'],
-        ['page'=>'menu',      'label'=>'Menu Navigasi',  'icon'=>'☰'],
+        ['page'=>'layanan',   'label'=>'Layanan',        'icon'=>'service'],
+        ['page'=>'gallery',   'label'=>'Galeri',         'icon'=>'gallery'],
+        ['page'=>'testimonial','label'=>'Testimoni',     'icon'=>'testimonial'],
+        ['page'=>'faq',       'label'=>'FAQ',            'icon'=>'faq'],
+        ['page'=>'klien-logo','label'=>'Logo Klien',     'icon'=>'client'],
+        ['page'=>'flex-blocks','label'=>'Content Block', 'icon'=>'block'],
+        ['page'=>'grid-icon', 'label'=>'Grid Icon Box',  'icon'=>'grid'],
+        ['page'=>'pages',     'label'=>'Halaman Custom', 'icon'=>'page'],
+        ['page'=>'menu',      'label'=>'Menu Navigasi',  'icon'=>'menu'],
     ],
     'Marketing' => [
-        ['page'=>'seo',       'label'=>'SEO per Halaman', 'icon'=>'🔍'],
-        ['page'=>'ads',       'label'=>'Iklan & Pixel',   'icon'=>'📊'],
+        ['page'=>'seo',       'label'=>'SEO per Halaman', 'icon'=>'seo'],
+        ['page'=>'ads',       'label'=>'Iklan & Pixel',   'icon'=>'ads'],
     ],
     'Sistem' => [
-        ['page'=>'pengaturan','label'=>'Pengaturan',  'icon'=>'⚙️'],
-        ['page'=>'template',  'label'=>'Template',    'icon'=>'🎨'],
-        ['page'=>'plugin',    'label'=>'Plugin',      'icon'=>'🔌'],
-        ['page'=>'users',     'label'=>'Pengguna',    'icon'=>'👥'],
+        ['page'=>'pengaturan','label'=>'Pengaturan',  'icon'=>'settings'],
+        ['page'=>'template',  'label'=>'Template',    'icon'=>'template'],
+        ['page'=>'plugin',    'label'=>'Plugin',      'icon'=>'plugin'],
+        ['page'=>'users',     'label'=>'Pengguna',    'icon'=>'users'],
     ],
 ];
 
@@ -64,8 +64,9 @@ function can_access_safe($role, $page) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<?= admin_url('assets/css/admin.css') ?>?v=5">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
+<link rel="stylesheet" href="<?= admin_url('assets/css/admin.css') ?>?v=6">
+<!-- Self-hosted TinyMCE (no CDN, emoticons plugin removed per no-emoji rule) -->
+<script src="<?= admin_url('assets/vendor/tinymce/tinymce.min.js') ?>" referrerpolicy="origin"></script>
 </head>
 <body>
 
@@ -113,7 +114,7 @@ function can_access_safe($role, $page) {
         <?php if ($has_children): ?>
           <div class="sidebar-group <?= $parent_active ? 'open active' : '' ?>">
             <button type="button" class="sidebar-item sidebar-group-toggle <?= $parent_active ? 'active' : '' ?>" onclick="this.parentElement.classList.toggle('open')">
-              <span class="sidebar-item-icon"><?= $item['icon'] ?></span>
+              <span class="sidebar-item-icon"><?= icon($item['icon'], 18) ?></span>
               <span><?= htmlspecialchars($item['label']) ?></span>
               <svg class="sidebar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:auto"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             </button>
@@ -122,7 +123,7 @@ function can_access_safe($role, $page) {
                 $is_active = $child['match']($request, $current_action);
               ?>
               <a href="<?= htmlspecialchars($child['url']) ?>" class="sidebar-subitem <?= $is_active ? 'active' : '' ?>">
-                <span class="sidebar-sub-dash">—</span>
+                <span class="sidebar-sub-dash"><?= icon('corner-down-right', 13) ?></span>
                 <span><?= htmlspecialchars($child['label']) ?></span>
               </a>
               <?php endforeach; ?>
@@ -131,7 +132,7 @@ function can_access_safe($role, $page) {
         <?php else: ?>
           <a href="<?= admin_url('?page=' . $item['page']) ?>"
              class="sidebar-item <?= $request === $item['page'] ? 'active' : '' ?>">
-            <span class="sidebar-item-icon"><?= $item['icon'] ?></span>
+            <span class="sidebar-item-icon"><?= icon($item['icon'], 18) ?></span>
             <span><?= htmlspecialchars($item['label']) ?></span>
           </a>
         <?php endif; ?>
@@ -139,14 +140,14 @@ function can_access_safe($role, $page) {
     <?php endforeach; ?>
 
     <div class="sidebar-section">Bantuan</div>
-    <a href="<?= htmlspecialchars($doc_url ?: '#') ?>" 
+    <a href="<?= htmlspecialchars($doc_url ?: '#') ?>"
        <?= ($doc_url && $doc_url !== '#') ? 'target="_blank"' : '' ?>
        class="sidebar-item">
-      <span class="sidebar-item-icon">📚</span>
+      <span class="sidebar-item-icon"><?= icon('docs', 18) ?></span>
       <span>Dokumentasi</span>
     </a>
     <a href="<?= url('/') ?>" target="_blank" class="sidebar-item">
-      <span class="sidebar-item-icon">🌐</span>
+      <span class="sidebar-item-icon"><?= icon('globe', 18) ?></span>
       <span>Lihat Website</span>
     </a>
   </div>
@@ -156,7 +157,7 @@ function can_access_safe($role, $page) {
 <div class="main">
   <header class="topbar">
     <div class="flex items-center gap-3">
-      <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu"><?= icon('menu', 22) ?></button>
       <div>
         <div class="topbar-title"><?= htmlspecialchars($page_title) ?></div>
         <?php if (!empty($breadcrumbs)): ?>
@@ -207,37 +208,42 @@ document.querySelectorAll('.alert-success').forEach(alert => {
   }, 4000);
 });
 </script>
-<!-- Global TinyMCE init: any <textarea class="wysiwyg"> gets rich text editor -->
+<!-- Global TinyMCE init (self-hosted). Project rule: EVERY textarea is a rich editor.
+     Opt out with class "no-wysiwyg" (raw HTML/JSON/CSS/script fields);
+     use "wysiwyg-min" for a compact single-row toolbar (short copy fields). -->
 <script>
 (function(){
+  var UP = '<?= admin_url('?ajax=upload_editor_image') ?>';
+  var common = {
+    base_url: '<?= admin_url('assets/vendor/tinymce') ?>',
+    suffix: '.min',
+    skin: 'oxide', content_css: 'default',
+    branding: false, promotion: false,
+    relative_urls: false, remove_script_host: false, convert_urls: true,
+    images_upload_url: UP, images_upload_credentials: true,
+    automatic_uploads: true, file_picker_types: 'image',
+    content_style: 'body{font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.7;padding:12px}img{max-width:100%;height:auto}'
+  };
   function initWysiwyg() {
-    if (typeof tinymce === 'undefined') { setTimeout(initWysiwyg, 200); return; }
-    tinymce.init({
-      selector: 'textarea.wysiwyg',
-      skin: 'oxide',
-      content_css: 'default',
+    if (typeof tinymce === 'undefined') { setTimeout(initWysiwyg, 150); return; }
+    // Full editor — main content textareas.
+    tinymce.init(Object.assign({}, common, {
+      selector: 'textarea:not(.no-wysiwyg):not(.wysiwyg-min)',
       height: 420,
       menubar: 'edit insert view format table',
-      branding: false,
-      promotion: false,
-      relative_urls: false,
-      remove_script_host: false,
-      convert_urls: true,
-      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen code hr',
-      toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table blockquote hr | removeformat code fullscreen',
-      content_style: 'body { font-family: Inter, system-ui, sans-serif; font-size: 14px; line-height: 1.7; padding: 12px; } img { max-width: 100%; height: auto; }',
-      // Image upload integration: POSTs to admin/?ajax=upload_editor_image
-      images_upload_url: '<?= admin_url('?ajax=upload_editor_image') ?>',
-      images_upload_credentials: true,
-      automatic_uploads: true,
-      file_picker_types: 'image',
-    });
+      plugins: 'anchor autolink charmap codesample image link lists media searchreplace table visualblocks wordcount fullscreen code preview quickbars',
+      toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table blockquote | removeformat code fullscreen'
+    }));
+    // Compact editor — short fields (excerpts, captions, meta copy).
+    tinymce.init(Object.assign({}, common, {
+      selector: 'textarea.wysiwyg-min',
+      height: 180, menubar: false, statusbar: false,
+      plugins: 'autolink link lists searchreplace wordcount',
+      toolbar: 'bold italic underline | bullist numlist | link | removeformat'
+    }));
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initWysiwyg);
-  } else {
-    initWysiwyg();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initWysiwyg);
+  else initWysiwyg();
 })();
 </script>
 </body>

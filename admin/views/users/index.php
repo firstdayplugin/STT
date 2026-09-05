@@ -3,7 +3,7 @@ $page_title = 'Manajemen Pengguna';
 
 // Only superadmin can manage users
 if ($user['role'] !== 'superadmin') {
-    echo '<div class="alert alert-error">⛔ Hanya superadmin yang dapat mengakses halaman ini.</div>';
+    echo '<div class="alert alert-error">Hanya superadmin yang dapat mengakses halaman ini.</div>';
     return;
 }
 
@@ -101,7 +101,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
 
 <div class="page-header">
     <div class="page-title"><?= $page_title ?></div>
-    <a href="<?= admin_url('?page=users') ?>" class="btn btn-secondary">← Kembali</a>
+    <a href="<?= admin_url('?page=users') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali</a>
 </div>
 
 <div style="max-width:600px">
@@ -174,7 +174,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
 
     <div style="text-align:right">
         <a href="<?= admin_url('?page=users') ?>" class="btn btn-secondary">Batal</a>
-        <button type="submit" class="btn btn-primary">💾 Simpan Pengguna</button>
+        <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Pengguna</button>
     </div>
 </form>
 </div>
@@ -182,7 +182,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
 <?php else: ?>
 
 <div class="page-header">
-    <div class="page-title">👥 Pengguna
+    <div class="page-title"><?= icon('users', 16) ?> Pengguna
         <small><?= count($all_users) ?> pengguna terdaftar</small>
     </div>
     <a href="<?= admin_url('?page=users&action=create') ?>" class="btn btn-primary">
@@ -230,7 +230,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
                 <td class="text-xs text-muted"><?= $u['last_login'] ? time_ago($u['last_login']) : 'Belum pernah' ?></td>
                 <td>
                     <div style="display:flex;gap:6px">
-                        <a href="<?= admin_url('?page=users&action=edit&id='.$u['id']) ?>" class="btn btn-xs btn-secondary">✏️</a>
+                        <a href="<?= admin_url('?page=users&action=edit&id='.$u['id']) ?>" class="btn btn-xs btn-secondary"><?= icon('pencil', 16) ?></a>
                         <?php if ($u['id'] != $user['id']): ?>
                         <form method="POST" style="display:inline">
                             <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
@@ -238,7 +238,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
                             <input type="hidden" name="tid" value="<?= $u['id'] ?>">
                             <button type="submit" class="btn btn-xs <?= $u['is_active']?'btn-warning':'btn-success' ?>"
                                     title="<?= $u['is_active']?'Nonaktifkan':'Aktifkan' ?>">
-                                <?= $u['is_active'] ? '🔒' : '🔓' ?>
+                                <?= $u['is_active'] ? '' : '' ?>
                             </button>
                         </form>
                         <form method="POST" style="display:inline">
@@ -246,7 +246,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
                             <input type="hidden" name="_action" value="delete">
                             <input type="hidden" name="del_id" value="<?= $u['id'] ?>">
                             <button type="submit" class="btn btn-xs btn-danger"
-                                    data-confirm="Hapus pengguna '<?= htmlspecialchars(addslashes($u['nama'])) ?>'?">🗑️</button>
+                                    data-confirm="Hapus pengguna '<?= htmlspecialchars(addslashes($u['nama'])) ?>'?"><?= icon('trash', 16) ?></button>
                         </form>
                         <?php endif; ?>
                     </div>

@@ -21,6 +21,9 @@ if (!function_exists('mb_strtolower')) {
 // REKLAMEPEDIA CMS - Helper Functions
 // ============================================
 
+// Lucide inline-SVG icon library — project rule: NO EMOJI, real icons only.
+require_once __DIR__ . '/icons.php';
+
 // ============================================
 // STRING HELPERS
 // ============================================

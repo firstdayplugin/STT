@@ -1059,3 +1059,16 @@ td .table-img { margin: 0; }
 .sidebar-subitem.active { background: var(--accent-soft, #eff6ff); color: var(--accent, #2563eb); font-weight: 600; }
 .sidebar-sub-dash { opacity: 0.4; margin-right: 4px; font-weight: 400; }
 .sidebar-subitem.active .sidebar-sub-dash { opacity: 0.8; }
+
+/* ============================================
+   Lucide inline icons — replaces all former emoji (project rule: no emoji).
+   ============================================ */
+.lc { vertical-align: -0.15em; flex-shrink: 0; }
+h1 .lc, h2 .lc, h3 .lc, .page-title .lc, .card-title .lc,
+.section-title .lc, label .lc, .stat-label .lc { vertical-align: -0.12em; }
+.page-title .lc, .card-title .lc { margin-right: 4px; }
+.sidebar-item-icon { display: inline-flex; align-items: center; }
+.sidebar-item-icon .lc { width: 18px; height: 18px; vertical-align: middle; }
+.sidebar-sub-dash { display: inline-flex; align-items: center; }
+.sidebar-sub-dash .lc { width: 13px; height: 13px; }
+.empty-icon .lc, .empty-state-icon .lc { width: 40px; height: 40px; opacity: .45; vertical-align: middle; }

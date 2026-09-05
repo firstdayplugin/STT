@@ -203,11 +203,11 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
 ?>
 
 <div class="page-header">
-    <div class="page-title">⚙️ Pengaturan Website</div>
+    <div class="page-title"><?= icon('settings', 16) ?> Pengaturan Website</div>
 </div>
 
 <div class="tabs">
-    <?php $tabs = ['general'=>'🏠 Umum','gambar'=>'🖼️ Gambar Website','whitelabel'=>'🏷️ Branding Admin','hero'=>'🎬 Hero/Slide','homepage'=>'🏡 Homepage','kontak'=>'📞 Kontak & WA','sosial'=>'📱 Media Sosial','ads'=>'🎯 Conversion','tampilan'=>'🎨 Tampilan','docs'=>'📚 Dokumentasi','seo_settings'=>'🔍 SEO Default']; ?>
+    <?php $tabs = ['general'=>'Umum','gambar'=>'Gambar Website','whitelabel'=>'Branding Admin','hero'=>'Hero/Slide','homepage'=>'Homepage','kontak'=>'Kontak & WA','sosial'=>'Media Sosial','ads'=>'Conversion','tampilan'=>'Tampilan','docs'=>'Dokumentasi','seo_settings'=>'SEO Default']; ?>
     <?php foreach ($tabs as $tk => $tl): ?>
     <button type="button" class="tab-btn <?= $tab===$tk?'active':'' ?>" data-tab="<?= $tk ?>" onclick="switchTab('<?= $tk ?>', this)"><?= $tl ?></button>
     <?php endforeach; ?>
@@ -226,13 +226,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 <div class="form-group"><label>Tagline</label>
                     <input type="text" name="site_tagline" class="form-control" value="<?= s('site_tagline') ?>"></div>
                 <div class="form-group"><label>Deskripsi Singkat</label>
-                    <textarea name="site_description" class="form-control" rows="3"><?= s('site_description') ?></textarea></div>
+                    <textarea name="site_description" class="form-control no-wysiwyg" rows="3"><?= s('site_description') ?></textarea></div>
                 <div class="form-group"><label>Email</label>
                     <input type="email" name="site_email" class="form-control" value="<?= s('site_email') ?>"></div>
                 <div class="form-group"><label>Telepon</label>
                     <input type="text" name="site_phone" class="form-control" value="<?= s('site_phone') ?>"></div>
                 <div class="form-group"><label>Alamat Lengkap</label>
-                    <textarea name="site_address" class="form-control" rows="3"><?= s('site_address') ?></textarea></div>
+                    <textarea name="site_address" class="form-control no-wysiwyg" rows="3"><?= s('site_address') ?></textarea></div>
                 <div class="form-group mb-0"><label>Google Maps Embed URL</label>
                     <input type="url" name="site_maps_embed" class="form-control" value="<?= s('site_maps_embed') ?>"
                            placeholder="https://www.google.com/maps/embed?pb=..."></div>
@@ -283,7 +283,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
             </div>
             <div class="card">
                 <div class="card-body" style="text-align:right">
-                    <button type="submit" class="btn btn-primary">💾 Simpan Pengaturan Umum</button>
+                    <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Pengaturan Umum</button>
                 </div>
             </div>
         </div>
@@ -301,13 +301,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 <div class="form-group">
                     <label>Tipe Hero</label>
                     <select name="hero_mode" class="form-control" onchange="toggleHeroMode(this.value)" id="hero-mode-select">
-                        <option value="single" <?= (get_setting('hero_mode','single')==='single')?'selected':'' ?>>🖼️ Single Image</option>
-                        <option value="slideshow" <?= get_setting('hero_mode')==='slideshow'?'selected':'' ?>>🎠 Slideshow</option>
+                        <option value="single" <?= (get_setting('hero_mode','single')==='single')?'selected':'' ?>>Single Image</option>
+                        <option value="slideshow" <?= get_setting('hero_mode')==='slideshow'?'selected':'' ?>>Slideshow</option>
                     </select>
                 </div>
                 
                 <div class="form-group" id="hero-single-image-wrap">
-                    <label>🖼️ Hero Image (untuk Mode Single Image)</label>
+                    <label><?= icon('image', 16) ?> Hero Image (untuk Mode Single Image)</label>
                     <?php $hi = get_setting('hero_gambar'); if ($hi): ?>
                       <div style="margin-bottom:8px"><img src="<?= uploads_url($hi) ?>" style="height:80px;border-radius:8px;border:1px solid var(--border)"></div>
                     <?php endif; ?>
@@ -318,7 +318,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                     <input type="text" name="hero_judul" class="form-control" value="<?= s('hero_judul') ?>"
                            placeholder="Heading utama di hero section"></div>
                 <div class="form-group"><label>Sub-judul</label>
-                    <textarea name="hero_subtitle" class="form-control" rows="3"><?= s('hero_subtitle') ?></textarea></div>
+                    <textarea name="hero_subtitle" class="form-control no-wysiwyg" rows="3"><?= s('hero_subtitle') ?></textarea></div>
                 <div class="form-group"><label>Teks CTA Button</label>
                     <input type="text" name="hero_cta_text" class="form-control" value="<?= s('hero_cta_text','Hubungi Kami') ?>"></div>
                 <div class="form-group mb-0"><label>URL CTA Button</label>
@@ -337,13 +337,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                     <div class="form-help">Geser untuk atur transparansi overlay gelap di atas gambar hero. 0% = tanpa overlay, 100% = full hitam. Default: 50%</div>
                 </div>
             </div>
-            <div class="modal-footer"><button type="submit" class="btn btn-primary">💾 Simpan Hero</button></div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Hero</button></div>
         </div>
 
         <!-- Slides -->
         <div class="card" id="slides-card-wrap">
             <div class="card-header">
-                <div class="card-title">🎠 Slide (untuk Slideshow)</div>
+                <div class="card-title"><?= icon('carousel', 16) ?> Slide (untuk Slideshow)</div>
                 <button type="button" onclick="addSlide()" class="btn btn-sm btn-secondary">+ Slide</button>
             </div>
             <div class="card-body" id="slides-list">
@@ -372,7 +372,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
     
     <div class="card">
         <div class="card-header"><div>
-            <div class="card-title">📋 Pengaturan FAQ</div>
+            <div class="card-title"><?= icon('block', 16) ?> Pengaturan FAQ</div>
             <div class="card-subtitle">Jumlah maksimum FAQ yang ditampilkan</div>
         </div></div>
         <div class="card-body">
@@ -391,7 +391,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
 
     <div class="card">
         <div class="card-header"><div>
-            <div class="card-title">📰 Tampilkan Blog di Homepage</div>
+            <div class="card-title"><?= icon('blog', 16) ?> Tampilkan Blog di Homepage</div>
             <div class="card-subtitle">Section blog otomatis muncul di bawah FAQ — bagus untuk SEO dan internal linking</div>
         </div></div>
         <div class="card-body">
@@ -425,18 +425,18 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
             </div>
             <div class="form-group" style="margin-bottom:12px">
                 <label>Judul Section</label>
-                <textarea name="homepage_blog_title" class="form-control" rows="2"><?= s('homepage_blog_title',"Insights & Tips\nFrom Our Blog") ?></textarea>
+                <textarea name="homepage_blog_title" class="form-control no-wysiwyg" rows="2"><?= s('homepage_blog_title',"Insights & Tips\nFrom Our Blog") ?></textarea>
                 <div class="form-help">Gunakan Enter untuk pindah baris</div>
             </div>
             <div class="form-group mb-0">
                 <label>Deskripsi</label>
-                <textarea name="homepage_blog_desc" class="form-control" rows="2"><?= s('homepage_blog_desc','Artikel terbaru seputar dunia reklame, branding, dan tips bisnis.') ?></textarea>
+                <textarea name="homepage_blog_desc" class="form-control no-wysiwyg" rows="2"><?= s('homepage_blog_desc','Artikel terbaru seputar dunia reklame, branding, dan tips bisnis.') ?></textarea>
             </div>
         </div>
     </div>
 
     <div style="text-align:right;margin-top:20px">
-        <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Pengaturan Homepage</button>
+        <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Pengaturan Homepage</button>
     </div>
 </form>
 
@@ -460,7 +460,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                            placeholder="Senin – Sabtu, 08.00 – 17.00"></div>
                 
                 <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
-                <div style="font-size:13px;font-weight:600;margin-bottom:12px">💬 Greeting Bubble (sapaan otomatis)</div>
+                <div style="font-size:13px;font-weight:600;margin-bottom:12px"><?= icon('message', 16) ?> Greeting Bubble (sapaan otomatis)</div>
                 
                 <div class="form-group">
                     <label class="checkbox-label">
@@ -472,7 +472,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                     <input type="text" name="wa_greeting_title" class="form-control" value="<?= s('wa_greeting_title','Kami Online!') ?>"></div>
                 <div class="form-group"><label>Isi Pesan Greeting</label>
                     <input type="text" name="wa_greeting_text" class="form-control" value="<?= s('wa_greeting_text','Bagaimana saya bisa membantu Anda hari ini?') ?>"></div>
-                <div class="form-group"><label>⏱️ Delay Muncul (detik)</label>
+                <div class="form-group"><label><?= icon('clock', 16) ?> Delay Muncul (detik)</label>
                     <input type="number" name="wa_greeting_delay" class="form-control" value="<?= s('wa_greeting_delay','5') ?>" min="0" max="60">
                     <div class="form-hint">Berapa detik setelah halaman dibuka, bubble muncul. Default 5 detik.</div></div>
                 <div class="form-group mb-0">
@@ -485,7 +485,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="card-title">👥 Kontak WhatsApp (Panel Float)</div>
+                <div class="card-title"><?= icon('users', 16) ?> Kontak WhatsApp (Panel Float)</div>
                 <button type="button" onclick="addWa()" class="btn btn-sm btn-secondary">+ Tambah</button>
             </div>
             <div class="card-body" id="wa-list">
@@ -500,7 +500,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 </div>
                 <div class="form-group mb-8"><label>Posisi / Deskripsi</label>
                     <input type="text" name="wa_desc[]" class="form-control" value="<?= htmlspecialchars($wc['deskripsi'] ?? '') ?>"></div>
-                <button type="button" data-wa-id="<?= $wc['id'] ?>" onclick="removeWa(this, <?= $wc['id'] ?>)" class="btn btn-xs btn-danger">🗑️ Hapus Kontak</button>
+                <button type="button" data-wa-id="<?= $wc['id'] ?>" onclick="removeWa(this, <?= $wc['id'] ?>)" class="btn btn-xs btn-danger"><?= icon('trash', 16) ?> Hapus Kontak</button>
             </div>
             <?php endforeach; ?>
             </div>
@@ -509,7 +509,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
         </div>
     </div>
     <div style="margin-top:16px;text-align:right">
-        <button type="submit" class="btn btn-primary">💾 Simpan Kontak & WA</button>
+        <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Kontak & WA</button>
     </div>
 </form>
 
@@ -518,7 +518,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
     <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
     <input type="hidden" name="_action" value="sosial">
     <div class="card" style="max-width:600px">
-        <div class="card-header"><div class="card-title">📱 Link Media Sosial</div></div>
+        <div class="card-header"><div class="card-title"><?= icon('smartphone', 16) ?> Link Media Sosial</div></div>
         <div class="card-body">
             <?php $socials=[['key'=>'sosial_instagram','label'=>'Instagram','ph'=>'https://instagram.com/...'],['key'=>'sosial_facebook','label'=>'Facebook','ph'=>'https://facebook.com/...'],['key'=>'sosial_tiktok','label'=>'TikTok','ph'=>'https://tiktok.com/@...'],['key'=>'sosial_youtube','label'=>'YouTube','ph'=>'https://youtube.com/...'],['key'=>'sosial_twitter','label'=>'X / Twitter','ph'=>'https://twitter.com/...'],['key'=>'sosial_linkedin','label'=>'LinkedIn','ph'=>'https://linkedin.com/company/...']]; ?>
             <?php foreach ($socials as $sc): ?>
@@ -526,7 +526,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 <input type="url" name="<?= $sc['key'] ?>" class="form-control" value="<?= s($sc['key']) ?>" placeholder="<?= $sc['ph'] ?>"></div>
             <?php endforeach; ?>
         </div>
-        <div class="modal-footer"><button type="submit" class="btn btn-primary">💾 Simpan Media Sosial</button></div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Media Sosial</button></div>
     </div>
 </form>
 
@@ -536,7 +536,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
     <input type="hidden" name="_action" value="tampilan">
     <div class="grid-2" style="align-items:start;gap:20px">
         <div class="card">
-            <div class="card-header"><div class="card-title">🎨 Warna & Font</div></div>
+            <div class="card-header"><div class="card-title"><?= icon('palette', 16) ?> Warna & Font</div></div>
             <div class="card-body">
                 <div class="form-group">
                     <label>Warna Aksen Utama</label>
@@ -600,13 +600,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 </div>
                 <div class="form-group mb-0">
                     <label>Custom CSS Tambahan</label>
-                    <textarea name="custom_css" class="form-control" rows="8"
+                    <textarea name="custom_css" class="form-control no-wysiwyg" rows="8"
                               style="font-family:monospace;font-size:13px"
                               placeholder="/* CSS kustom Anda */"><?= s('custom_css') ?></textarea>
                     <div class="form-help">Akan ditambahkan ke semua halaman</div>
                 </div>
             </div>
-            <div class="modal-footer"><button type="submit" class="btn btn-primary">💾 Simpan Tampilan</button></div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Tampilan</button></div>
         </div>
     </div>
 </form>
@@ -616,13 +616,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
     <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
     <input type="hidden" name="_action" value="seo_settings">
     <div class="card" style="max-width:700px">
-        <div class="card-header"><div class="card-title">🔍 SEO Default</div></div>
+        <div class="card-header"><div class="card-title"><?= icon('search', 16) ?> SEO Default</div></div>
         <div class="card-body">
             <div class="form-group"><label>Meta Title Default</label>
                 <input type="text" name="meta_title_default" class="form-control" value="<?= s('meta_title_default') ?>"
                        placeholder="Reklamepedia | Solusi Periklanan Terbaik"></div>
             <div class="form-group"><label>Meta Description Default</label>
-                <textarea name="meta_desc_default" class="form-control" rows="3"><?= s('meta_desc_default') ?></textarea></div>
+                <textarea name="meta_desc_default" class="form-control no-wysiwyg" rows="3"><?= s('meta_desc_default') ?></textarea></div>
             <div class="form-group"><label>Meta Keywords</label>
                 <input type="text" name="meta_keywords" class="form-control" value="<?= s('meta_keywords') ?>"
                        placeholder="reklame, papan nama, neon box, ..."></div>
@@ -639,7 +639,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                     <option value="noindex,nofollow" <?= get_setting('robots_default')==='noindex,nofollow'?'selected':'' ?>>noindex, nofollow (Sembunyikan)</option>
                 </select></div>
         </div>
-        <div class="modal-footer"><button type="submit" class="btn btn-primary">💾 Simpan SEO</button></div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan SEO</button></div>
     </div>
 </form>
 
@@ -733,7 +733,7 @@ function addWa() {
     <div class="card">
       <div class="card-header">
         <div>
-          <div class="card-title">🖼️ Gambar Hero Beranda</div>
+          <div class="card-title"><?= icon('image', 16) ?> Gambar Hero Beranda</div>
           <div class="card-subtitle">Background image di section hero halaman beranda</div>
         </div>
       </div>
@@ -751,7 +751,7 @@ function addWa() {
     <div class="card">
       <div class="card-header">
         <div>
-          <div class="card-title">📸 Foto Halaman About / Tentang Kami</div>
+          <div class="card-title"><?= icon('camera', 16) ?> Foto Halaman About / Tentang Kami</div>
           <div class="card-subtitle">3 foto yang muncul di grid "Advantage" di halaman About</div>
         </div>
       </div>
@@ -771,7 +771,7 @@ function addWa() {
     <div class="card">
       <div class="card-header">
         <div>
-          <div class="card-title">🏢 Foto Halaman Services (Why Choose Us)</div>
+          <div class="card-title"><?= icon('client', 16) ?> Foto Halaman Services (Why Choose Us)</div>
           <div class="card-subtitle">3 foto di section "Where Quality Meets Reliability" halaman Services</div>
         </div>
       </div>
@@ -789,7 +789,7 @@ function addWa() {
     </div>
     
     <div style="display:flex;justify-content:flex-end;padding-top:16px">
-      <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Gambar</button>
+      <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Gambar</button>
     </div>
   </form>
 </div>
@@ -800,14 +800,14 @@ function addWa() {
     <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
     <input type="hidden" name="_action" value="docs">
     <div class="card">
-      <div class="card-header"><div class="card-title">📚 URL Dokumentasi</div></div>
+      <div class="card-header"><div class="card-title"><?= icon('docs', 16) ?> URL Dokumentasi</div></div>
       <div class="form-group">
         <label>URL Dokumentasi (untuk menu Sidebar Admin)</label>
         <input type="url" name="docs_url" value="<?= s('docs_url', '#') ?>" placeholder="https://docs.example.com">
         <div class="form-hint">URL ini akan jadi link "Dokumentasi" di sidebar admin.</div>
       </div>
       <div style="display:flex;justify-content:flex-end">
-        <button type="submit" class="btn btn-primary">💾 Simpan</button>
+        <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
       </div>
     </div>
   </form>
@@ -833,14 +833,14 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="card">
     <div class="card-header">
       <div>
-        <div class="card-title">🏷️ Branding Admin (White-Label)</div>
+        <div class="card-title"><?= icon('tag', 16) ?> Branding Admin (White-Label)</div>
         <div class="card-subtitle">Kustomisasi tampilan halaman login & sidebar admin. Cocok jika sistem dijual ke client.</div>
       </div>
     </div>
     
     <div class="form-row">
       <div class="form-group">
-        <label>🖼️ Logo Admin (sidebar & favicon admin)</label>
+        <label><?= icon('image', 16) ?> Logo Admin (sidebar & favicon admin)</label>
         <?php $cur_logo = get_setting('logo'); if ($cur_logo): ?>
           <div style="margin-bottom:8px;background:#1E2127;padding:12px;border-radius:8px;display:inline-block">
             <img src="<?= uploads_url($cur_logo) ?>" style="height:36px">
@@ -851,7 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       
       <div class="form-group">
-        <label>🎨 Logo Login (jika beda dari logo admin)</label>
+        <label><?= icon('palette', 16) ?> Logo Login (jika beda dari logo admin)</label>
         <?php $cur_llogo = get_setting('admin_login_logo'); if ($cur_llogo): ?>
           <div style="margin-bottom:8px;background:#1E2127;padding:12px;border-radius:8px;display:inline-block">
             <img src="<?= uploads_url($cur_llogo) ?>" style="height:48px">
@@ -885,11 +885,11 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     
     <div class="alert alert-info">
-      💡 <strong>Tip White-Label:</strong> Setelah upload logo admin, hardcoded text "Reklamepedia" otomatis diganti dengan nama dari <strong>Nama Brand</strong> di tab Umum. Nama bisa berbeda untuk tiap client.
+      <?= icon('lightbulb', 16) ?> <strong>Tip White-Label:</strong> Setelah upload logo admin, hardcoded text "Reklamepedia" otomatis diganti dengan nama dari <strong>Nama Brand</strong> di tab Umum. Nama bisa berbeda untuk tiap client.
     </div>
     
     <div style="display:flex;justify-content:flex-end;padding-top:16px">
-      <button type="submit" class="btn btn-primary btn-lg">💾 Simpan Branding</button>
+      <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Branding</button>
     </div>
   </div>
 </form>
@@ -902,7 +902,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="card">
     <div class="card-header">
       <div>
-        <div class="card-title">🎯 Google Ads Conversion Tracking</div>
+        <div class="card-title"><?= icon('target', 16) ?> Google Ads Conversion Tracking</div>
         <div class="card-subtitle">Track klik tombol WhatsApp sebagai conversion di Google Ads</div>
       </div>
     </div>
@@ -928,20 +928,20 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     
     <div class="alert alert-info">
-      📌 <strong>Cara dapat Conversion ID & Label:</strong>
+      <?= icon('pin', 16) ?> <strong>Cara dapat Conversion ID & Label:</strong>
       <ol style="margin:8px 0 0 20px;line-height:1.7;font-size:13px">
-        <li>Login ke <a href="https://ads.google.com" target="_blank">Google Ads</a> → Tools & Settings → Conversions</li>
-        <li>Klik "+ New conversion action" → pilih "Website"</li>
+        <li>Login ke <a href="https://ads.google.com" target="_blank">Google Ads</a> <?= icon('arrow-right', 16) ?> Tools & Settings <?= icon('arrow-right', 16) ?> Conversions</li>
+        <li>Klik "+ New conversion action" <?= icon('arrow-right', 16) ?> pilih "Website"</li>
         <li>Isi nama (misal: "WhatsApp Click"), Category: "Contact", set Value</li>
         <li>Pilih "Use Google tag" sebagai installation method</li>
         <li>Salin <strong>Conversion ID</strong> (angka setelah AW-) dan <strong>Conversion Label</strong></li>
-        <li>Paste di form ini → Simpan</li>
+        <li>Paste di form ini <?= icon('arrow-right', 16) ?> Simpan</li>
       </ol>
-      <div style="margin-top:10px;font-size:13px"><strong>Test:</strong> Buka website Anda di incognito mode, klik tombol WhatsApp. Cek di Google Ads → Conversions setelah ~3 jam.</div>
+      <div style="margin-top:10px;font-size:13px"><strong>Test:</strong> Buka website Anda di incognito mode, klik tombol WhatsApp. Cek di Google Ads <?= icon('arrow-right', 16) ?> Conversions setelah ~3 jam.</div>
     </div>
     
     <div style="display:flex;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border);margin-top:16px">
-      <button type="submit" class="btn btn-primary btn-lg">💾 Simpan</button>
+      <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan</button>
     </div>
   </div>
 </form>

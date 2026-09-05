@@ -18,7 +18,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 ?>
 
 <div class="page-header">
-    <div class="page-title">📊 Iklan & Tracking Scripts
+    <div class="page-title"><?= icon('chart', 16) ?> Iklan & Tracking Scripts
         <small>Google Analytics, GTM, Meta Pixel, TikTok Pixel, Custom Scripts</small>
     </div>
 </div>
@@ -33,7 +33,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">🔵 Google Analytics (GA4)</div>
+                <div class="card-title"><?= icon('circle', 16) ?> Google Analytics (GA4)</div>
                 <span class="badge <?= get_setting('ga_id') ? 'badge-success' : 'badge-muted' ?>"><?= get_setting('ga_id') ? 'Aktif' : 'Nonaktif' ?></span>
             </div>
             <div class="card-body">
@@ -48,7 +48,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">🟠 Google Tag Manager</div>
+                <div class="card-title"><?= icon('circle', 16) ?> Google Tag Manager</div>
                 <span class="badge <?= get_setting('gtm_id') ? 'badge-success' : 'badge-muted' ?>"><?= get_setting('gtm_id') ? 'Aktif' : 'Nonaktif' ?></span>
             </div>
             <div class="card-body">
@@ -63,7 +63,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">🔵 Meta (Facebook) Pixel</div>
+                <div class="card-title"><?= icon('circle', 16) ?> Meta (Facebook) Pixel</div>
                 <span class="badge <?= get_setting('meta_pixel_id') ? 'badge-success' : 'badge-muted' ?>"><?= get_setting('meta_pixel_id') ? 'Aktif' : 'Nonaktif' ?></span>
             </div>
             <div class="card-body">
@@ -77,7 +77,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">⚫ TikTok Pixel</div>
+                <div class="card-title"><?= icon('circle', 16) ?> TikTok Pixel</div>
                 <span class="badge <?= get_setting('tiktok_pixel_id') ? 'badge-success' : 'badge-muted' ?>"><?= get_setting('tiktok_pixel_id') ? 'Aktif' : 'Nonaktif' ?></span>
             </div>
             <div class="card-body">
@@ -98,16 +98,16 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
             <div>
                 <strong>Cara Kerja Script Kustom</strong><br>
                 Script kustom di-inject ke semua halaman frontend website. Posisi injeksi:<br>
-                <code style="color:var(--accent)">&lt;head&gt;</code> → sebelum &lt;/head&gt;<br>
-                <code style="color:var(--accent)">&lt;body&gt;</code> → setelah &lt;body&gt;<br>
-                <code style="color:var(--accent)">Footer</code> → sebelum &lt;/body&gt;
+                <code style="color:var(--accent)">&lt;head&gt;</code> <?= icon('arrow-right', 16) ?> sebelum &lt;/head&gt;<br>
+                <code style="color:var(--accent)">&lt;body&gt;</code> <?= icon('arrow-right', 16) ?> setelah &lt;body&gt;<br>
+                <code style="color:var(--accent)">Footer</code> <?= icon('arrow-right', 16) ?> sebelum &lt;/body&gt;
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><div class="card-title">📄 Script di &lt;head&gt;</div></div>
+            <div class="card-header"><div class="card-title"><?= icon('page', 16) ?> Script di &lt;head&gt;</div></div>
             <div class="card-body">
-                <textarea name="custom_head_script" class="form-control" rows="8"
+                <textarea name="custom_head_script" class="form-control no-wysiwyg" rows="8"
                           style="font-family:monospace;font-size:13px"
                           placeholder="<!-- Script yang diletakkan sebelum </head> -->"><?= sv('custom_head_script') ?></textarea>
                 <div class="form-help">Untuk: meta tags kustom, preload fonts, CSS eksternal, dll</div>
@@ -115,9 +115,9 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
         </div>
 
         <div class="card">
-            <div class="card-header"><div class="card-title">⬆️ Script Awal &lt;body&gt;</div></div>
+            <div class="card-header"><div class="card-title"><?= icon('arrow-up', 16) ?> Script Awal &lt;body&gt;</div></div>
             <div class="card-body">
-                <textarea name="custom_body_script" class="form-control" rows="6"
+                <textarea name="custom_body_script" class="form-control no-wysiwyg" rows="6"
                           style="font-family:monospace;font-size:13px"
                           placeholder="<!-- Script yang diletakkan setelah <body> -->"><?= sv('custom_body_script') ?></textarea>
                 <div class="form-help">Untuk: GTM noscript, live chat widgets, dll</div>
@@ -125,9 +125,9 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
         </div>
 
         <div class="card">
-            <div class="card-header"><div class="card-title">⬇️ Script Akhir (Footer)</div></div>
+            <div class="card-header"><div class="card-title"><?= icon('arrow-down', 16) ?> Script Akhir (Footer)</div></div>
             <div class="card-body">
-                <textarea name="custom_footer_script" class="form-control" rows="6"
+                <textarea name="custom_footer_script" class="form-control no-wysiwyg" rows="6"
                           style="font-family:monospace;font-size:13px"
                           placeholder="<!-- Script yang diletakkan sebelum </body> -->"><?= sv('custom_footer_script') ?></textarea>
                 <div class="form-help">Untuk: chat widgets, popup scripts, analytics tambahan</div>
@@ -135,7 +135,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
         </div>
 
         <div style="text-align:right">
-            <button type="submit" class="btn btn-primary">💾 Simpan Semua Script</button>
+            <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan Semua Script</button>
         </div>
     </div>
 
@@ -144,7 +144,7 @@ function sv($k) { return htmlspecialchars(get_setting($k,'')); }
 
 <!-- WA Click Stats -->
 <div class="card mt-24" style="margin-top:24px">
-    <div class="card-header"><div class="card-title">📱 Statistik Klik WhatsApp</div></div>
+    <div class="card-header"><div class="card-title"><?= icon('smartphone', 16) ?> Statistik Klik WhatsApp</div></div>
     <div class="table-wrapper">
         <?php
         $wa_stats = $db->fetchAll(

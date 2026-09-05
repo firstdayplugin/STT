@@ -64,36 +64,36 @@ $active_theme = get_active_theme();
 
 <div class="page-header">
   <div>
-    <h1>👋 Selamat datang, <?= htmlspecialchars($user['nama'] ?? $user['username']) ?></h1>
+    <h1>Selamat datang, <?= htmlspecialchars($user['nama'] ?? $user['username']) ?></h1>
     <div class="page-header-sub">Berikut ringkasan website Anda hari ini</div>
   </div>
   <div class="page-actions">
-    <a href="<?= admin_url('?page=wizard') ?>" class="btn btn-primary btn-lg">🚀 Setup Wizard</a>
+    <a href="<?= admin_url('?page=wizard') ?>" class="btn btn-primary btn-lg"><?= icon('rocket', 16) ?> Setup Wizard</a>
   </div>
 </div>
 
 <!-- Top Stats -->
 <div class="grid grid-4 mb-3">
   <div class="stat-card">
-    <div class="stat-card-icon" style="background:#DCFCE7;color:#16A34A">💬</div>
+    <div class="stat-card-icon" style="background:#DCFCE7;color:#16A34A"><?= icon('message', 16) ?></div>
     <div class="stat-card-label">Klik WhatsApp Hari Ini</div>
     <div class="stat-card-value"><?= number_format($wa_clicks_today) ?></div>
     <div class="stat-card-change">Total semua: <?= number_format($wa_clicks_total) ?></div>
   </div>
   <div class="stat-card">
-    <div class="stat-card-icon" style="background:#DBEAFE;color:#2563EB">👁</div>
+    <div class="stat-card-icon" style="background:#DBEAFE;color:#2563EB"><?= icon('eye', 16) ?></div>
     <div class="stat-card-label">Visitor Hari Ini</div>
     <div class="stat-card-value"><?= number_format($visitor_today) ?></div>
     <div class="stat-card-change">7 hari: <?= number_format($visitor_week) ?></div>
   </div>
   <div class="stat-card">
-    <div class="stat-card-icon" style="background:#FEF3C7;color:#D97706">📰</div>
+    <div class="stat-card-icon" style="background:#FEF3C7;color:#D97706"><?= icon('blog', 16) ?></div>
     <div class="stat-card-label">Total Konten</div>
     <div class="stat-card-value"><?= number_format($total_blog + $total_produk + $total_gallery) ?></div>
     <div class="stat-card-change">Blog, Produk, Galeri</div>
   </div>
   <div class="stat-card">
-    <div class="stat-card-icon" style="background:#FCE7F3;color:#DB2777">💾</div>
+    <div class="stat-card-icon" style="background:#FCE7F3;color:#DB2777"><?= icon('save', 16) ?></div>
     <div class="stat-card-label">Storage Gambar</div>
     <div class="stat-card-value"><?= $uploads_mb ?> <span style="font-size:14px;color:var(--text-muted)">MB</span></div>
     <div class="stat-card-change"><?= $total_gallery ?> foto galeri</div>
@@ -103,60 +103,60 @@ $active_theme = get_active_theme();
 <!-- Shortcuts -->
 <div class="card mb-3">
   <div class="card-header">
-    <div class="card-title">⚡ Akses Cepat</div>
+    <div class="card-title"><?= icon('zap', 16) ?> Akses Cepat</div>
   </div>
   <div class="grid grid-4" style="gap:10px">
     <a href="<?= admin_url('?page=content') ?>" class="shortcut-card">
-      <div class="shortcut-icon">📝</div>
+      <div class="shortcut-icon"><?= icon('content', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Edit Konten</div>
         <div class="shortcut-sub">Semua text bisa diedit</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=blog') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#FEF3C7;color:#D97706">📰</div>
+      <div class="shortcut-icon" style="background:#FEF3C7;color:#D97706"><?= icon('blog', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Artikel Blog</div>
         <div class="shortcut-sub"><?= $total_blog ?> artikel</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=produk') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#DCFCE7;color:#16A34A">📦</div>
+      <div class="shortcut-icon" style="background:#DCFCE7;color:#16A34A"><?= icon('product', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Produk</div>
         <div class="shortcut-sub"><?= $total_produk ?> produk</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=gallery') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#FCE7F3;color:#DB2777">🖼</div>
+      <div class="shortcut-icon" style="background:#FCE7F3;color:#DB2777"><?= icon('image', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Galeri</div>
         <div class="shortcut-sub"><?= $total_gallery ?> foto</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=layanan') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#EDE9FE;color:#7C3AED">🎨</div>
+      <div class="shortcut-icon" style="background:#EDE9FE;color:#7C3AED"><?= icon('palette', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Layanan</div>
         <div class="shortcut-sub"><?= $total_layanan ?> layanan</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=testimonial') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#FED7AA;color:#EA580C">💬</div>
+      <div class="shortcut-icon" style="background:#FED7AA;color:#EA580C"><?= icon('message', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">Testimoni</div>
         <div class="shortcut-sub"><?= $total_testi ?> testimoni</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=faq') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#DBEAFE;color:#2563EB">❓</div>
+      <div class="shortcut-icon" style="background:#DBEAFE;color:#2563EB"><?= icon('faq', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">FAQ</div>
         <div class="shortcut-sub"><?= $total_faq ?> FAQ</div>
       </div>
     </a>
     <a href="<?= admin_url('?page=seo') ?>" class="shortcut-card">
-      <div class="shortcut-icon" style="background:#DCFCE7;color:#16A34A">🔍</div>
+      <div class="shortcut-icon" style="background:#DCFCE7;color:#16A34A"><?= icon('search', 16) ?></div>
       <div class="shortcut-text">
         <div class="shortcut-title">SEO</div>
         <div class="shortcut-sub"><?= $seo_complete ?>/<?= $seo_total ?> halaman</div>
@@ -169,47 +169,47 @@ $active_theme = get_active_theme();
   <!-- System Status -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">⚙️ Status Sistem</div>
+      <div class="card-title"><?= icon('settings', 16) ?> Status Sistem</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_logo ? '✅' : '⚠️' ?></span>
+        <span style="font-size:18px"><?= $has_logo ? '' : '' ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">Logo Website</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_logo ? 'Logo sudah diupload' : 'Belum ada logo (text default digunakan)' ?></div>
         </div>
-        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm">→</a>
+        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_wa ? '✅' : '⚠️' ?></span>
+        <span style="font-size:18px"><?= $has_wa ? '' : '' ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">WhatsApp</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_wa ? 'Nomor sudah terdaftar' : 'Belum ada nomor WhatsApp' ?></div>
         </div>
-        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm">→</a>
+        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_hero ? '✅' : '⚠️' ?></span>
+        <span style="font-size:18px"><?= $has_hero ? '' : '' ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">Hero Image</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_hero ? 'Gambar hero sudah ada' : 'Belum upload gambar hero' ?></div>
         </div>
-        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm">→</a>
+        <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px">🎨</span>
+        <span style="font-size:18px"><?= icon('palette', 16) ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">Template Aktif</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($active_theme) ?></div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $seo_complete === $seo_total ? '✅' : '🔍' ?></span>
+        <span style="font-size:18px"><?= $seo_complete === $seo_total ? '' : '' ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">SEO Setup</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $seo_complete ?>/<?= $seo_total ?> halaman sudah di-setup SEO-nya</div>
         </div>
-        <a href="<?= admin_url('?page=seo') ?>" class="btn btn-ghost btn-sm">→</a>
+        <a href="<?= admin_url('?page=seo') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
     </div>
   </div>
@@ -217,18 +217,18 @@ $active_theme = get_active_theme();
   <!-- Recent Activity -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">🕒 Aktivitas Terbaru</div>
+      <div class="card-title"><?= icon('clock', 16) ?> Aktivitas Terbaru</div>
     </div>
     <?php if (empty($recent_activity)): ?>
       <div class="empty-state" style="padding:30px">
-        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-icon"><?= icon('block', 16) ?></div>
         <div style="font-size:13px">Belum ada aktivitas</div>
       </div>
     <?php else: ?>
       <div style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto">
       <?php foreach ($recent_activity as $a): ?>
         <div style="display:flex;gap:10px;padding:8px;border-radius:8px;background:var(--surface-2)">
-          <div style="font-size:18px;flex-shrink:0"><?= match($a['aksi'] ?? '') { 'login' => '🔓', 'logout' => '🔒', 'content_update' => '📝', 'create' => '➕', 'update' => '✏️', 'delete' => '🗑️', 'activate' => '✅', default => '📌' } ?></div>
+          <div style="font-size:18px;flex-shrink:0"><?= match($a['aksi'] ?? '') { 'login' => '', 'logout' => '', 'content_update' => '', 'create' => '', 'update' => '', 'delete' => '', 'activate' => '', default => '' } ?></div>
           <div style="flex:1;font-size:12px">
             <div style="font-weight:500;color:var(--text)"><?= htmlspecialchars($a['keterangan'] ?: ('Aksi: ' . ($a['aksi'] ?? 'unknown'))) ?></div>
             <div style="color:var(--text-muted);font-size:11px;margin-top:2px">
@@ -246,12 +246,12 @@ $active_theme = get_active_theme();
   <!-- Latest Blog -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📰 Artikel Terbaru</div>
-      <a href="<?= admin_url('?page=blog') ?>" class="btn btn-ghost btn-sm">Lihat Semua →</a>
+      <div class="card-title"><?= icon('blog', 16) ?> Artikel Terbaru</div>
+      <a href="<?= admin_url('?page=blog') ?>" class="btn btn-ghost btn-sm">Lihat Semua <?= icon('arrow-right', 16) ?></a>
     </div>
     <?php if (empty($latest_blog)): ?>
       <div class="empty-state" style="padding:30px">
-        <div class="empty-state-icon">📰</div>
+        <div class="empty-state-icon"><?= icon('blog', 16) ?></div>
         <div style="font-size:13px">Belum ada artikel</div>
         <a href="<?= admin_url('?page=blog&action=create') ?>" class="btn btn-primary btn-sm mt-2">+ Tulis Artikel</a>
       </div>
@@ -264,7 +264,7 @@ $active_theme = get_active_theme();
             <div style="font-weight:600;font-size:13px"><?= htmlspecialchars($b['judul']) ?></div>
             <div style="font-size:11px;color:var(--text-muted);margin-top:2px"><?= format_date($b['created_at']) ?></div>
           </div>
-          <div style="color:var(--text-muted);font-size:12px;align-self:center">→</div>
+          <div style="color:var(--text-muted);font-size:12px;align-self:center"><?= icon('arrow-right', 16) ?></div>
         </a>
       <?php endforeach; ?>
       </div>
@@ -274,12 +274,12 @@ $active_theme = get_active_theme();
   <!-- Latest Products -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📦 Produk Terbaru</div>
-      <a href="<?= admin_url('?page=produk') ?>" class="btn btn-ghost btn-sm">Lihat Semua →</a>
+      <div class="card-title"><?= icon('product', 16) ?> Produk Terbaru</div>
+      <a href="<?= admin_url('?page=produk') ?>" class="btn btn-ghost btn-sm">Lihat Semua <?= icon('arrow-right', 16) ?></a>
     </div>
     <?php if (empty($latest_produk)): ?>
       <div class="empty-state" style="padding:30px">
-        <div class="empty-state-icon">📦</div>
+        <div class="empty-state-icon"><?= icon('product', 16) ?></div>
         <div style="font-size:13px">Belum ada produk</div>
         <a href="<?= admin_url('?page=produk&action=create') ?>" class="btn btn-primary btn-sm mt-2">+ Tambah Produk</a>
       </div>
@@ -291,7 +291,7 @@ $active_theme = get_active_theme();
           <?php if ($p['gambar_utama']): ?>
             <div class="img-preview" style="width:40px;height:40px;flex-shrink:0"><img src="<?= uploads_url($p['gambar_utama']) ?>"></div>
           <?php else: ?>
-            <div class="img-preview" style="width:40px;height:40px;flex-shrink:0">📦</div>
+            <div class="img-preview" style="width:40px;height:40px;flex-shrink:0"><?= icon('product', 16) ?></div>
           <?php endif; ?>
           <div style="flex:1">
             <div style="font-weight:600;font-size:13px"><?= htmlspecialchars($p['nama']) ?></div>
@@ -307,17 +307,17 @@ $active_theme = get_active_theme();
 <!-- Tips & Help -->
 <div class="card" style="background:linear-gradient(135deg, #EFF6FF, #DBEAFE);border-color:#BFDBFE">
   <div style="display:flex;gap:16px;align-items:flex-start">
-    <div style="font-size:32px">💡</div>
+    <div style="font-size:32px"><?= icon('lightbulb', 16) ?></div>
     <div style="flex:1">
       <div style="font-weight:700;font-size:15px;margin-bottom:6px">Tips Penggunaan</div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.7">
         • <strong>Edit text:</strong> Buka menu <strong>"Konten Halaman"</strong> untuk mengubah text di semua halaman, per elemen<br>
-        • <strong>Edit gambar:</strong> Buka menu <strong>"Pengaturan"</strong> → tab "Tampilan" untuk ganti hero, logo, foto About<br>
+        • <strong>Edit gambar:</strong> Buka menu <strong>"Pengaturan"</strong> <?= icon('arrow-right', 16) ?> tab "Tampilan" untuk ganti hero, logo, foto About<br>
         • <strong>SEO:</strong> Atur meta title & description di menu <strong>"SEO per Halaman"</strong><br>
         • <strong>Tracking:</strong> Pasang Google Analytics, Pixel, dll di menu <strong>"Iklan & Pixel"</strong>
       </div>
       <div style="margin-top:12px">
-        <a href="<?= get_setting('docs_url', '#') ?>" target="_blank" class="btn btn-primary btn-sm">📚 Lihat Dokumentasi Lengkap</a>
+        <a href="<?= get_setting('docs_url', '#') ?>" target="_blank" class="btn btn-primary btn-sm"><?= icon('docs', 16) ?> Lihat Dokumentasi Lengkap</a>
       </div>
     </div>
   </div>

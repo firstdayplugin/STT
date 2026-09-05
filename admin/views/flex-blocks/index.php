@@ -25,19 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cols = array_keys($data);
             $ph = implode(',', array_fill(0, count($cols), '?'));
             $db->execute("INSERT INTO flex_blocks (" . implode(',', $cols) . ") VALUES ($ph)", array_values($data));
-            set_flash('success', '✅ Content block berhasil ditambahkan.');
+            set_flash('success', 'Content block berhasil ditambahkan.');
         } elseif ($act === 'update' && $id > 0) {
             $set = implode(',', array_map(fn($k) => "$k=?", array_keys($data)));
             $params = array_values($data);
             $params[] = $id;
             $db->execute("UPDATE flex_blocks SET $set WHERE id=?", $params);
-            set_flash('success', '✅ Content block berhasil diupdate.');
+            set_flash('success', 'Content block berhasil diupdate.');
         } elseif ($act === 'delete' && $id > 0) {
             $db->execute("DELETE FROM flex_blocks WHERE id=?", [$id]);
-            set_flash('success', '🗑️ Content block berhasil dihapus.');
+            set_flash('success', 'Content block berhasil dihapus.');
         }
         } catch (Throwable $e) {
-            set_flash('error', '❌ Gagal: ' . $e->getMessage());
+            set_flash('error', 'Gagal: ' . $e->getMessage());
         }
         redirect(admin_url('?page=flex-blocks'));
     }
@@ -47,16 +47,16 @@ $items = $db->fetchAll("SELECT * FROM flex_blocks ORDER BY posisi, urutan");
 $edit_item = ($action === 'edit' && $id > 0) ? $db->fetchOne("SELECT * FROM flex_blocks WHERE id=?", [$id]) : null;
 
 $position_labels = [
-    'home_after_hero'        => '🏠 Home — Setelah Hero',
-    'home_middle'            => '🏠 Home — Tengah halaman',
-    'home_before_footer'     => '🏠 Home — Sebelum Footer',
-    'about_top'              => '👥 About — Atas',
-    'about_bottom'           => '👥 About — Bawah',
-    'layanan_top'            => '🎨 Halaman Layanan (list) — Atas',
-    'layanan_bottom'         => '🎨 Halaman Layanan (list) — Bawah',
-    'layanan_detail_top'     => '✨ Detail Layanan — Setelah Hero',
-    'layanan_detail_middle'  => '✨ Detail Layanan — Tengah',
-    'layanan_detail_bottom'  => '✨ Detail Layanan — Sebelum Footer',
+    'home_after_hero'        => 'Home — Setelah Hero',
+    'home_middle'            => 'Home — Tengah halaman',
+    'home_before_footer'     => 'Home — Sebelum Footer',
+    'about_top'              => 'About — Atas',
+    'about_bottom'           => 'About — Bawah',
+    'layanan_top'            => 'Halaman Layanan (list) — Atas',
+    'layanan_bottom'         => 'Halaman Layanan (list) — Bawah',
+    'layanan_detail_top'     => 'Detail Layanan — Setelah Hero',
+    'layanan_detail_middle'  => 'Detail Layanan — Tengah',
+    'layanan_detail_bottom'  => 'Detail Layanan — Sebelum Footer',
 ];
 
 // Get all layanan for dropdown
@@ -66,7 +66,7 @@ $csrf = generate_csrf();
 
 <div class="page-header">
   <div>
-    <h1>📝 Flexible Content Block</h1>
+    <h1><?= icon('content', 16) ?> Flexible Content Block</h1>
     <div class="page-header-sub">Tambah area text fleksibel di posisi mana saja pada halaman</div>
   </div>
   <?php if ($action === 'list'): ?>
@@ -156,7 +156,7 @@ $csrf = generate_csrf();
     
     <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
       <a href="<?= admin_url('?page=flex-blocks') ?>" class="btn btn-secondary">Batal</a>
-      <button type="submit" class="btn btn-primary">💾 Simpan</button>
+      <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>
     </div>
   </form>
 </div>
@@ -165,7 +165,7 @@ $csrf = generate_csrf();
 
 <?php if (empty($items)): ?>
   <div class="card"><div class="empty-state">
-    <div class="empty-state-icon">📝</div>
+    <div class="empty-state-icon"><?= icon('content', 16) ?></div>
     <div class="empty-title">Belum ada content block</div>
     <div class="empty-text">Tambahkan text area fleksibel untuk tampil di halaman</div>
     <a href="<?= admin_url('?page=flex-blocks&action=create') ?>" class="btn btn-primary mt-2">+ Tambah Block Pertama</a>
@@ -183,7 +183,7 @@ $csrf = generate_csrf();
             <?php if (!empty($b['layanan_id'])): 
               $l_nama = $db->fetchOne("SELECT nama FROM layanan WHERE id=?", [$b['layanan_id']])['nama'] ?? '?';
             ?>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:4px">→ <?= htmlspecialchars($l_nama) ?></div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px"><?= icon('arrow-right', 16) ?> <?= htmlspecialchars($l_nama) ?></div>
             <?php endif; ?>
           </td>
           <td style="max-width:300px;color:var(--text-muted);font-size:12px"><?= excerpt(strip_tags($b['konten']), 80) ?></td>
@@ -194,7 +194,7 @@ $csrf = generate_csrf();
               <form method="POST" action="<?= admin_url('?page=flex-blocks&action=delete&id='.$b['id']) ?>" style="display:inline" onsubmit="return confirm('Hapus block ini?')">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="action" value="delete">
-                <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+                <button type="submit" class="btn btn-danger btn-sm"><?= icon('trash', 16) ?></button>
               </form>
             </div>
           </td>

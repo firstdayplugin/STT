@@ -159,7 +159,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
 
 <div class="page-header">
     <div class="page-title"><?= $page_title ?></div>
-    <a href="<?= admin_url('?page=produk') ?>" class="btn btn-secondary">← Kembali</a>
+    <a href="<?= admin_url('?page=produk') ?>" class="btn btn-secondary"><?= icon('arrow-left', 16) ?> Kembali</a>
 </div>
 
 <form method="POST" enctype="multipart/form-data">
@@ -235,7 +235,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
     </div>
 
     <div class="card">
-        <div class="card-header"><div class="card-title">🛍️ Link Marketplace</div></div>
+        <div class="card-header"><div class="card-title"><?= icon('shopping-bag', 16) ?> Link Marketplace</div></div>
         <div class="card-body">
             <div id="mp-list">
             <?php
@@ -273,7 +273,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
             </div>
             <div class="form-group mb-0">
                 <label>Meta Description</label>
-                <textarea name="meta_desc" class="form-control" rows="3"
+                <textarea name="meta_desc" class="form-control no-wysiwyg" rows="3"
                           placeholder="Max 160 karakter"><?= htmlspecialchars($edit['meta_description'] ?? '') ?></textarea>
             </div>
         </div>
@@ -289,8 +289,8 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
             <div class="form-group">
                 <label>Status</label>
                 <select name="status" class="form-control">
-                    <option value="aktif" <?= ($edit['status'] ?? 'aktif') === 'aktif' ? 'selected' : '' ?>>✅ Aktif</option>
-                    <option value="nonaktif" <?= ($edit['status'] ?? '') === 'nonaktif' ? 'selected' : '' ?>>⛔ Nonaktif</option>
+                    <option value="aktif" <?= ($edit['status'] ?? 'aktif') === 'aktif' ? 'selected' : '' ?>>Aktif</option>
+                    <option value="nonaktif" <?= ($edit['status'] ?? '') === 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
                 </select>
             </div>
             <div class="form-group mb-0">
@@ -303,7 +303,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary w-full" style="justify-content:center">
-                💾 Simpan Produk
+                <?= icon('save', 16) ?> Simpan Produk
             </button>
         </div>
     </div>
@@ -352,7 +352,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
                   if (!empty($k['parent_id'])) $children_by_parent[$k['parent_id']][] = $k;
               }
               if (empty($all_kategori)): ?>
-                <p class="text-sm text-muted" id="no-kat-msg" style="margin:0">Belum ada kategori. Tambah di bawah ↓</p>
+                <p class="text-sm text-muted" id="no-kat-msg" style="margin:0">Belum ada kategori. Tambah di bawah <?= icon('arrow-down', 16) ?></p>
               <?php else: 
                 foreach ($parents as $kat): ?>
                   <div class="form-check mb-8" data-kat-id="<?= $kat['id'] ?>">
@@ -364,7 +364,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
                     <div class="form-check mb-8" data-kat-id="<?= $child['id'] ?>" style="padding-left:22px">
                       <input type="checkbox" name="kategori[]" id="pkat-<?= $child['id'] ?>" value="<?= $child['id'] ?>"
                              <?= in_array($child['id'], $edit_kategori) ? 'checked' : '' ?>>
-                      <label class="form-check-label" for="pkat-<?= $child['id'] ?>" style="color:var(--text-muted)">↳ <?= htmlspecialchars($child['nama']) ?></label>
+                      <label class="form-check-label" for="pkat-<?= $child['id'] ?>" style="color:var(--text-muted)"><?= icon('corner-down-right', 16) ?> <?= htmlspecialchars($child['nama']) ?></label>
                     </div>
                   <?php endforeach; ?>
                 <?php endforeach;
@@ -387,7 +387,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
                   </select>
                 </div>
                 <div style="display:flex;gap:6px">
-                  <button type="button" onclick="saveKategoriAjax()" class="btn btn-primary btn-sm" id="save-kat-btn" style="flex:1">✓ Simpan Kategori</button>
+                  <button type="button" onclick="saveKategoriAjax()" class="btn btn-primary btn-sm" id="save-kat-btn" style="flex:1"><?= icon('check', 16) ?> Simpan Kategori</button>
                   <button type="button" onclick="document.getElementById('new-kat-form').style.display='none';document.getElementById('add-kat-trigger').style.display='block'" class="btn btn-secondary btn-sm">Batal</button>
                 </div>
                 <div id="kat-feedback" style="font-size:12px;margin-top:6px"></div>
@@ -413,7 +413,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
         if (!name) { input.focus(); feedback.innerHTML = '<span style="color:#dc2626">Nama wajib diisi</span>'; return; }
         
         btn.disabled = true;
-        btn.textContent = '⏳ Menyimpan...';
+        btn.textContent = 'Menyimpan...';
         feedback.innerHTML = '';
         
         const fd = new FormData();
@@ -425,7 +425,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
           .then(r => r.json())
           .then(data => {
             btn.disabled = false;
-            btn.textContent = '✓ Simpan Kategori';
+            btn.textContent = 'Simpan Kategori';
             if (data.ok) {
               // Add checkbox to list, auto-checked
               const wrap = document.getElementById('kategori-list-wrap');
@@ -436,7 +436,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
               div.className = 'form-check mb-8';
               div.setAttribute('data-kat-id', k.id);
               if (k.parent_id) div.style.paddingLeft = '22px';
-              const prefix = k.parent_id ? '↳ ' : '';
+              const prefix = k.parent_id ? '' : '';
               const weight = k.parent_id ? 'color:var(--text-muted)' : 'font-weight:600';
               div.innerHTML = '<input type="checkbox" name="kategori[]" id="pkat-'+k.id+'" value="'+k.id+'" checked>' +
                               '<label class="form-check-label" for="pkat-'+k.id+'" style="'+weight+'">'+prefix+escapeHtml(k.nama)+'</label>';
@@ -452,17 +452,17 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
               // Reset form
               input.value = '';
               parent.value = '';
-              feedback.innerHTML = '<span style="color:#16a34a">✓ "'+escapeHtml(k.nama)+'" ditambahkan & otomatis dicentang</span>';
+              feedback.innerHTML = '<span style="color:#16a34a">"'+escapeHtml(k.nama)+'" ditambahkan & otomatis dicentang</span>';
               setTimeout(() => { feedback.innerHTML = ''; }, 3000);
               input.focus();
             } else {
-              feedback.innerHTML = '<span style="color:#dc2626">✕ ' + escapeHtml(data.error || 'Gagal') + '</span>';
+              feedback.innerHTML = '<span style="color:#dc2626">' + escapeHtml(data.error || 'Gagal') + '</span>';
             }
           })
           .catch(err => {
             btn.disabled = false;
-            btn.textContent = '✓ Simpan Kategori';
-            feedback.innerHTML = '<span style="color:#dc2626">✕ Error koneksi: ' + escapeHtml(err.message) + '</span>';
+            btn.textContent = 'Simpan Kategori';
+            feedback.innerHTML = '<span style="color:#dc2626">Error koneksi: ' + escapeHtml(err.message) + '</span>';
           });
       }
       
@@ -525,7 +525,7 @@ function addMpRow() {
 <?php else: // LIST ?>
 
 <div class="page-header">
-    <div class="page-title">📦 Produk
+    <div class="page-title"><?= icon('product', 16) ?> Produk
         <small><?= number_format($total) ?> produk total</small>
     </div>
     <a href="<?= admin_url('?page=produk&action=create') ?>" class="btn btn-primary">
@@ -559,7 +559,7 @@ function addMpRow() {
             </thead>
             <tbody>
             <?php if (empty($products)): ?>
-            <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">Belum ada produk</div></div></td></tr>
+            <tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><?= icon('product', 40) ?></div><div class="empty-title">Belum ada produk</div></div></td></tr>
             <?php else: ?>
             <?php foreach ($products as $p): ?>
             <?php $kats = $db->fetchAll("SELECT pk.nama FROM produk_kategori pk JOIN produk_kategori_rel pkr ON pk.id=pkr.kategori_id WHERE pkr.produk_id=?",[$p['id']]); ?>
@@ -568,7 +568,7 @@ function addMpRow() {
                     <?php if ($p['gambar_utama']): ?>
                     <img src="<?= uploads_url($p['gambar_utama']) ?>" class="table-img">
                     <?php else: ?>
-                    <div style="width:48px;height:40px;background:var(--surface3);border-radius:6px;display:flex;align-items:center;justify-content:center">📦</div>
+                    <div style="width:48px;height:40px;background:var(--surface3);border-radius:6px;display:flex;align-items:center;justify-content:center"><?= icon('product', 16) ?></div>
                     <?php endif; ?>
                 </td>
                 <td>
@@ -592,13 +592,13 @@ function addMpRow() {
                 </td>
                 <td>
                     <div style="display:flex;gap:6px">
-                        <a href="<?= admin_url('?page=produk&action=edit&id='.$p['id']) ?>" class="btn btn-xs btn-secondary">✏️</a>
-                        <a href="<?= url('/produk/'.$p['slug']) ?>" target="_blank" class="btn btn-xs btn-secondary">🔗</a>
+                        <a href="<?= admin_url('?page=produk&action=edit&id='.$p['id']) ?>" class="btn btn-xs btn-secondary"><?= icon('pencil', 16) ?></a>
+                        <a href="<?= url('/produk/'.$p['slug']) ?>" target="_blank" class="btn btn-xs btn-secondary"><?= icon('link', 16) ?></a>
                         <form method="POST" style="display:inline">
                             <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                             <input type="hidden" name="_action" value="delete">
                             <input type="hidden" name="del_id" value="<?= $p['id'] ?>">
-                            <button type="submit" class="btn btn-xs btn-danger" data-confirm="Hapus produk '<?= htmlspecialchars(addslashes($p['nama'])) ?>'?">🗑️</button>
+                            <button type="submit" class="btn btn-xs btn-danger" data-confirm="Hapus produk '<?= htmlspecialchars(addslashes($p['nama'])) ?>'?"><?= icon('trash', 16) ?></button>
                         </form>
                     </div>
                 </td>
@@ -612,11 +612,11 @@ function addMpRow() {
 
 <?php $total_pages = ceil($total/$per_page); if ($total_pages > 1): ?>
 <div class="pagination">
-    <?php if ($cp > 1): ?><a href="?page=produk&p=<?=$cp-1?>&search=<?=urlencode($search)?>&kat=<?=$filter_kat?>" class="page-link">←</a><?php endif; ?>
+    <?php if ($cp > 1): ?><a href="?page=produk&p=<?=$cp-1?>&search=<?=urlencode($search)?>&kat=<?=$filter_kat?>" class="page-link"><?= icon('arrow-left', 16) ?></a><?php endif; ?>
     <?php for ($i=max(1,$cp-2);$i<=min($total_pages,$cp+2);$i++): ?>
     <a href="?page=produk&p=<?=$i?>&search=<?=urlencode($search)?>&kat=<?=$filter_kat?>" class="page-link <?=$i===$cp?'active':''?>"><?=$i?></a>
     <?php endfor; ?>
-    <?php if ($cp < $total_pages): ?><a href="?page=produk&p=<?=$cp+1?>&search=<?=urlencode($search)?>&kat=<?=$filter_kat?>" class="page-link">→</a><?php endif; ?>
+    <?php if ($cp < $total_pages): ?><a href="?page=produk&p=<?=$cp+1?>&search=<?=urlencode($search)?>&kat=<?=$filter_kat?>" class="page-link"><?= icon('arrow-right', 16) ?></a><?php endif; ?>
 </div>
 <?php endif; ?>
 <?php endif; ?>
