@@ -144,7 +144,7 @@ sp.addEventListener('input',()=>{sp.dataset.m='1';prev.textContent=sp.value;});
                 <td><code class="text-sm" style="color:var(--accent)">/<?= htmlspecialchars($p['slug']) ?></code></td>
                 <td><span class="badge badge-muted"><?= $p['template'] ?></span></td>
                 <td><?= $p['status']==='published'?'<span class="badge badge-success">Publish</span>':'<span class="badge badge-muted">Draft</span>' ?></td>
-                <td><?= $p['show_in_nav'] ? '' : '—' ?></td>
+                <td><?= $p['show_in_nav'] ? icon('check', 15) : '—' ?></td>
                 <td>
                     <div style="display:flex;gap:6px">
                         <a href="<?= admin_url('?page=pages&action=edit&id='.$p['id']) ?>" class="btn btn-xs btn-secondary"><?= icon('pencil', 16) ?></a>

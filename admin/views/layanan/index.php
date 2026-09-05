@@ -329,7 +329,7 @@ $csrf = generate_csrf();
                     <?php if (!empty($sub['gambar'])): ?>
                       <img src="<?= uploads_url($sub['gambar']) ?>" style="width:100%;height:100%;object-fit:cover">
                     <?php else: ?>
-                      <span style="font-size:36px;opacity:0.35"><?= $sub['icon'] ?: '' ?></span>
+                      <span style="opacity:0.35"><?= trim((string)($sub['icon'] ?? '')) !== '' ? htmlspecialchars($sub['icon']) : icon('service', 32) ?></span>
                     <?php endif; ?>
                   </div>
                   <input type="hidden" name="sub_layanan[<?= $i ?>][gambar_lama]" value="<?= htmlspecialchars($sub['gambar'] ?? '') ?>">
@@ -408,7 +408,7 @@ $csrf = generate_csrf();
               <?php if ($l['gambar']): ?>
                 <div class="img-preview" style="width:50px;height:50px"><img src="<?= uploads_url($l['gambar']) ?>"></div>
               <?php else: ?>
-                <div class="img-preview" style="width:50px;height:50px"><?= $l['icon'] ?: '' ?></div>
+                <div class="img-preview" style="width:50px;height:50px"><?= trim((string)($l['icon'] ?? '')) !== '' ? htmlspecialchars($l['icon']) : icon('service', 26) ?></div>
               <?php endif; ?>
             </td>
             <td>

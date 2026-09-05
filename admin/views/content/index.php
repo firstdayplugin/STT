@@ -3,14 +3,14 @@
 $db = Database::getInstance();
 
 $pages_meta = [
-    'home'    => ['label' => 'Halaman Home / Beranda',   'icon' => ''],
-    'about'   => ['label' => 'Halaman Tentang Kami',     'icon' => ''],
-    'layanan' => ['label' => 'Halaman Layanan (List)',   'icon' => ''],
-    'gallery' => ['label' => 'Halaman Galeri',           'icon' => ''],
-    'blog'    => ['label' => 'Halaman Blog',             'icon' => ''],
-    'produk'  => ['label' => 'Halaman Produk',           'icon' => ''],
-    'kontak'  => ['label' => 'Halaman Kontak',           'icon' => ''],
-    'global'  => ['label' => 'Global (Footer CTA, dll)', 'icon' => ''],
+    'home'    => ['label' => 'Halaman Home / Beranda',   'icon' => 'home'],
+    'about'   => ['label' => 'Halaman Tentang Kami',     'icon' => 'users'],
+    'layanan' => ['label' => 'Halaman Layanan (List)',   'icon' => 'palette'],
+    'gallery' => ['label' => 'Halaman Galeri',           'icon' => 'image'],
+    'blog'    => ['label' => 'Halaman Blog',             'icon' => 'blog'],
+    'produk'  => ['label' => 'Halaman Produk',           'icon' => 'product'],
+    'kontak'  => ['label' => 'Halaman Kontak',           'icon' => 'phone'],
+    'global'  => ['label' => 'Global (Footer CTA, dll)', 'icon' => 'globe'],
 ];
 
 $current_page = $_GET['p'] ?? 'home';
@@ -109,7 +109,7 @@ $csrf = generate_csrf();
     <?php foreach ($pages_meta as $key => $meta): ?>
     <a href="<?= admin_url('?page=content&p=' . urlencode($key)) ?>"
        style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid <?= $current_page === $key ? 'var(--primary)' : 'var(--border)' ?>;border-radius:10px;background:<?= $current_page === $key ? 'var(--primary-soft, #EFF6FF)' : 'white' ?>;text-decoration:none;color:inherit;transition:all 0.15s">
-      <div style="font-size:22px;flex-shrink:0"><?= $meta['icon'] ?></div>
+      <div style="flex-shrink:0"><?= icon($meta['icon'], 22) ?></div>
       <div>
         <div style="font-size:13px;font-weight:600;color:<?= $current_page === $key ? 'var(--primary)' : 'var(--text)' ?>"><?= htmlspecialchars($meta['label']) ?></div>
         <div style="font-size:11px;color:var(--text-muted)"><?= ucfirst($key) ?></div>
@@ -150,7 +150,7 @@ $csrf = generate_csrf();
   <div class="card">
     <div class="card-header">
       <div>
-        <div class="card-title"><?= $pages_meta[$current_page]['icon'] ?> Edit Konten: <?= htmlspecialchars($pages_meta[$current_page]['label']) ?></div>
+        <div class="card-title"><?= icon($pages_meta[$current_page]['icon'], 18) ?> Edit Konten: <?= htmlspecialchars($pages_meta[$current_page]['label']) ?></div>
         <div class="card-subtitle"><?= count($blocks) ?> elemen tersedia untuk diedit</div>
       </div>
     </div>

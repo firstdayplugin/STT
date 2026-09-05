@@ -436,7 +436,7 @@ $breadcrumbs = [['label'=>'Produk','url'=>admin_url('?page=produk')]];
               div.className = 'form-check mb-8';
               div.setAttribute('data-kat-id', k.id);
               if (k.parent_id) div.style.paddingLeft = '22px';
-              const prefix = k.parent_id ? '' : '';
+              const prefix = k.parent_id ? '— ' : '';
               const weight = k.parent_id ? 'color:var(--text-muted)' : 'font-weight:600';
               div.innerHTML = '<input type="checkbox" name="kategori[]" id="pkat-'+k.id+'" value="'+k.id+'" checked>' +
                               '<label class="form-check-label" for="pkat-'+k.id+'" style="'+weight+'">'+prefix+escapeHtml(k.nama)+'</label>';

@@ -265,7 +265,7 @@ $csrf = generate_csrf();
               <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($t['jabatan'] ?? '') ?><?= !empty($t['perusahaan']) ? ' • '.htmlspecialchars($t['perusahaan']) : '' ?></div>
             </td>
             <td style="max-width:400px"><?= excerpt(htmlspecialchars($t['isi']), 100) ?></td>
-            <td><?= str_repeat('', (int)$t['rating']) ?></td>
+            <td><span class="rating-stars"><?= str_repeat(icon('star', 14), max(0, min(5, (int)$t['rating']))) ?></span></td>
             <td><?= $t['is_active'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-gray">Nonaktif</span>' ?></td>
             <td>
               <div class="table-actions">

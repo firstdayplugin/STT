@@ -173,7 +173,7 @@ $active_theme = get_active_theme();
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_logo ? '' : '' ?></span>
+        <span style="font-size:18px"><?= $has_logo ? icon('success', 18) : icon('warning', 18) ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">Logo Website</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_logo ? 'Logo sudah diupload' : 'Belum ada logo (text default digunakan)' ?></div>
@@ -181,7 +181,7 @@ $active_theme = get_active_theme();
         <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_wa ? '' : '' ?></span>
+        <span style="font-size:18px"><?= $has_wa ? icon('success', 18) : icon('warning', 18) ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">WhatsApp</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_wa ? 'Nomor sudah terdaftar' : 'Belum ada nomor WhatsApp' ?></div>
@@ -189,7 +189,7 @@ $active_theme = get_active_theme();
         <a href="<?= admin_url('?page=pengaturan') ?>" class="btn btn-ghost btn-sm"><?= icon('arrow-right', 16) ?></a>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $has_hero ? '' : '' ?></span>
+        <span style="font-size:18px"><?= $has_hero ? icon('success', 18) : icon('warning', 18) ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">Hero Image</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $has_hero ? 'Gambar hero sudah ada' : 'Belum upload gambar hero' ?></div>
@@ -204,7 +204,7 @@ $active_theme = get_active_theme();
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:18px"><?= $seo_complete === $seo_total ? '' : '' ?></span>
+        <span style="font-size:18px"><?= $seo_complete === $seo_total ? icon('success', 18) : icon('search', 18) ?></span>
         <div style="flex:1">
           <div style="font-weight:600;font-size:13px">SEO Setup</div>
           <div style="font-size:11px;color:var(--text-muted)"><?= $seo_complete ?>/<?= $seo_total ?> halaman sudah di-setup SEO-nya</div>
@@ -228,7 +228,7 @@ $active_theme = get_active_theme();
       <div style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto">
       <?php foreach ($recent_activity as $a): ?>
         <div style="display:flex;gap:10px;padding:8px;border-radius:8px;background:var(--surface-2)">
-          <div style="font-size:18px;flex-shrink:0"><?= match($a['aksi'] ?? '') { 'login' => '', 'logout' => '', 'content_update' => '', 'create' => '', 'update' => '', 'delete' => '', 'activate' => '', default => '' } ?></div>
+          <div style="font-size:18px;flex-shrink:0"><?= match($a['aksi'] ?? '') { 'login' => icon('unlock', 16), 'logout' => icon('lock', 16), 'content_update' => icon('content', 16), 'create' => icon('plus', 16), 'update' => icon('pencil', 16), 'delete' => icon('trash', 16), 'activate' => icon('zap', 16), default => icon('circle', 16) } ?></div>
           <div style="flex:1;font-size:12px">
             <div style="font-weight:500;color:var(--text)"><?= htmlspecialchars($a['keterangan'] ?: ('Aksi: ' . ($a['aksi'] ?? 'unknown'))) ?></div>
             <div style="color:var(--text-muted);font-size:11px;margin-top:2px">

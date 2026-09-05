@@ -238,7 +238,7 @@ $breadcrumbs = [['label'=>'Pengguna','url'=>admin_url('?page=users')]];
                             <input type="hidden" name="tid" value="<?= $u['id'] ?>">
                             <button type="submit" class="btn btn-xs <?= $u['is_active']?'btn-warning':'btn-success' ?>"
                                     title="<?= $u['is_active']?'Nonaktifkan':'Aktifkan' ?>">
-                                <?= $u['is_active'] ? '' : '' ?>
+                                <?= $u['is_active'] ? icon('lock', 15) : icon('unlock', 15) ?>
                             </button>
                         </form>
                         <form method="POST" style="display:inline">

@@ -84,7 +84,7 @@ $step_labels = ['Info Bisnis','Hero Section','WhatsApp','Media Sosial','SEO','Tr
     <?php for ($s = 1; $s <= $total_steps; $s++): ?>
         <div class="wizard-step">
             <div class="step-circle <?= $s < $current_step ? 'done' : ($s === $current_step ? 'active' : '') ?>">
-                <?= $s < $current_step ? '' : $s ?>
+                <?= $s < $current_step ? icon('check', 16) : $s ?>
             </div>
             <?php if ($s < $total_steps): ?>
             <div class="step-line <?= $s < $current_step ? 'done' : '' ?>"></div>

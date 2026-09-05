@@ -26,7 +26,7 @@ $csrf = generate_csrf();
 // Built-in plugin definitions
 $plugin_defs = [
     'marketplace' => [
-        'icon'    => '',
+        'icon'    => 'shopping-bag',
         'version' => '1.0.0',
         'author'  => 'Reklamepedia',
         'desc'    => 'Tambahkan tombol beli ke marketplace (Tokopedia, Shopee, Lazada, dll) di halaman produk.',
@@ -53,7 +53,7 @@ $plugin_defs = [
 <div class="card" style="<?= $plugin['is_active'] ? 'border-color:rgba(232,160,32,0.3)' : '' ?>">
     <div class="card-header">
         <div style="display:flex;align-items:center;gap:12px">
-            <div style="font-size:28px"><?= $def['icon'] ?? '' ?></div>
+            <div style="flex-shrink:0"><?= icon(($def['icon'] ?? '') ?: 'plugin', 26) ?></div>
             <div>
                 <div class="card-title"><?= htmlspecialchars($plugin['nama']) ?></div>
                 <div class="text-xs text-muted">v<?= $def['version'] ?? '1.0' ?> by <?= $def['author'] ?? 'Unknown' ?></div>
