@@ -91,6 +91,24 @@ switch ($page) {
         }
         break;
 
+    case 'solutions':
+        require_once theme_path('templates/pages/solutions.php');
+        break;
+
+    case 'industri':
+        if (!empty($slug)) {
+            $industri_data = $db->fetchOne('SELECT * FROM industri WHERE slug = ? AND is_active = 1', [$slug]);
+            if ($industri_data) {
+                require_once theme_path('templates/pages/industri-detail.php');
+            } else {
+                http_response_code(404);
+                require_once theme_path('templates/pages/404.php');
+            }
+        } else {
+            require_once theme_path('templates/pages/industri.php');
+        }
+        break;
+
     case 'hubungi-kami':
         require_once theme_path('templates/pages/contact.php');
         break;

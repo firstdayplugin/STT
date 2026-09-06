@@ -34,10 +34,10 @@ konteks) → decode base64 → PNG → dibaca visual. Halaman diambil per kebutu
 |---|---|---|---|---|
 | 1 | **Home** | `/` | `home.php` | ✅ **WAJIB = master `design/master/home.html`. JANGAN pakai Home Figma** (ATURAN #1) |
 | 2 | **About Us** | `/tentang-kami` | `about.php` | ✅ ada, konten jauh lebih kaya (lihat model konten) |
-| 3 | **Solutions** (landing) | *(baru)* `/solutions` | — | ⚠️ **GAP** rute |
+| 3 | **Solutions** (landing) | `/solutions` | `solutions.php` | ✅ 4 pilar dari `solusi_pilar` (admin: Pilar Solusi) |
 | 4 | **Service** (6 detail) | `/layanan/[slug]` | `layanan-detail.php` | ✅ ada, perlu tabel tier |
-| 5 | **Industries** (landing) | *(baru)* `/industri` | — | ⚠️ **GAP** modul |
-| 6 | **Industry × pillar** (detail bertab) | *(baru)* | — | ⚠️ **GAP** besar (matriks) |
+| 5 | **Industries** (landing) | `/industri` | `industri.php` | ✅ grid 8 industri (admin: Industries) |
+| 6 | **Industry × pillar** (detail bertab) | `/industri/[slug]` | `industri-detail.php` | ✅ 4 tab pilar, konten per sel (admin: matrix editor) |
 | 7 | **What's New** (blog list) | `/blog` | `blog.php` | ✅ ada, perlu arsip tahun/kategori/search/sidebar |
 | 8 | **Detail News** | `/blog/[slug]` | `blog-detail.php` | ✅ ada |
 | 9 | **Career** (list + filter) | *(baru)* `/career` | — | ⚠️ **GAP** modul (lowongan) |

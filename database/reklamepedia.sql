@@ -426,9 +426,12 @@ INSERT INTO `hero_slides` (`judul`,`subtitle`,`gambar`,`urutan`,`is_active`) VAL
 CREATE TABLE `industri` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(100) NOT NULL,                       -- short label on the card + center eyebrow
+  `slug` varchar(160) DEFAULT NULL,                    -- detail-page slug (/industri/[slug])
   `judul` varchar(255) DEFAULT NULL,                   -- center title (HTML allowed: <b>..</b>)
   `subtitle` varchar(255) DEFAULT NULL,                -- center sub-line
+  `intro` text DEFAULT NULL,                           -- detail-page intro paragraph
   `gambar` varchar(255) DEFAULT NULL,                  -- card image/photo (uploads/); overrides gradient
+  `hero_image` varchar(255) DEFAULT NULL,              -- detail-page hero image
   `warna1` varchar(20) NOT NULL DEFAULT '#0f2a54',     -- gradient start (fallback when no image)
   `warna2` varchar(20) NOT NULL DEFAULT '#357be0',     -- gradient end
   `url` varchar(255) DEFAULT NULL,                     -- link target for the card
@@ -439,15 +442,15 @@ CREATE TABLE `industri` (
 
 -- Default gradient (#1d478c -> #3f80e2) matches the theme's .ind2-card so an unedited
 -- install renders exactly like the master design; admin can recolor per card.
-INSERT INTO `industri` (`label`,`judul`,`subtitle`,`gambar`,`warna1`,`warna2`,`urutan`,`is_active`) VALUES
-('Financial','Financial Services <b>& E-Commerce</b>','Secure digital transactions','','#1d478c','#3f80e2',1,1),
-('Education','<b>Education</b>','E-learning & smart campus','','#1d478c','#3f80e2',2,1),
-('Manufacture','Manufacture <b>& FMCG</b>','Supply chain automation','','#1d478c','#3f80e2',3,1),
-('Healthcare','<b>Healthcare</b>','Secure patient data','','#1d478c','#3f80e2',4,1),
-('Law Enforce','Law <b>Enforcement</b>','Encrypted data systems','','#1d478c','#3f80e2',5,1),
-('Energy','<b>Energy</b>','Smart grid monitoring','','#1d478c','#3f80e2',6,1),
-('Telecom','Telecommunication <b>(ICT)</b>','High-speed cloud network','','#1d478c','#3f80e2',7,1),
-('Cross Industry','Cross <b>Industry</b>','Custom IT solutions','','#1d478c','#3f80e2',8,1);
+INSERT INTO `industri` (`label`,`slug`,`judul`,`subtitle`,`gambar`,`warna1`,`warna2`,`urutan`,`is_active`) VALUES
+('Financial','financial','Financial Services <b>& E-Commerce</b>','Secure digital transactions','','#1d478c','#3f80e2',1,1),
+('Education','education','<b>Education</b>','E-learning & smart campus','','#1d478c','#3f80e2',2,1),
+('Manufacture','manufacture','Manufacture <b>& FMCG</b>','Supply chain automation','','#1d478c','#3f80e2',3,1),
+('Healthcare','healthcare','<b>Healthcare</b>','Secure patient data','','#1d478c','#3f80e2',4,1),
+('Law Enforce','law-enforcement','Law <b>Enforcement</b>','Encrypted data systems','','#1d478c','#3f80e2',5,1),
+('Energy','energy','<b>Energy</b>','Smart grid monitoring','','#1d478c','#3f80e2',6,1),
+('Telecom','telecom','Telecommunication <b>(ICT)</b>','High-speed cloud network','','#1d478c','#3f80e2',7,1),
+('Cross Industry','cross-industry','Cross <b>Industry</b>','Custom IT solutions','','#1d478c','#3f80e2',8,1);
 
 -- ---------- Solutions (cube / prism animation slides) ----------
 CREATE TABLE `solution_slides` (
@@ -474,3 +477,36 @@ INSERT INTO `solution_slides` (`eyebrow`,`judul`,`deskripsi`,`label`,`gambar`,`v
 ('Data','Data & <b>Analytics</b>','Dari data mentah menjadi keputusan cerdas yang terlindungi.','DATA','','','#0c1838','#164079','#4f9bff','["comm","hyu","vee","redhat"]',3,1),
 ('AI','Artificial <b>Intelligence</b>','AI yang berjalan di atas infrastruktur nyata dan andal.','AI','','','#0a1c3a','#12386e','#3f8bff','["microsoft","intel","amd"]',4,1),
 ('AI Platform Application','AI Platform <b>Application</b>','Aplikasi cerdas siap pakai untuk mempercepat bisnis Anda.','APPS','','','#0e1630','#1a4079','#4fb0ff','["infra","microsoft","dell","intel"]',5,1);
+
+-- ---------- Solution pillars (Solutions landing + Industry detail tabs) ----------
+CREATE TABLE `solusi_pilar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(150) NOT NULL,
+  `slug` varchar(160) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,            -- Lucide name OR uploads path
+  `gambar` varchar(255) DEFAULT NULL,          -- optional card/hero image
+  `url` varchar(255) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `solusi_pilar` (`nama`,`slug`,`deskripsi`,`icon`,`urutan`,`is_active`) VALUES
+('Modernize Infrastructure','modernize-infrastructure','Private cloud, migrasi, hingga cloud repatriation — dirancang untuk kebutuhan Anda.','layers',1,1),
+('Data & AI','data-ai','Dari data mentah menjadi keputusan cerdas yang terlindungi, ditenagai AI yang andal.','sparkles',2,1),
+('Cybersecurity','cybersecurity','Perlindungan menyeluruh untuk aset digital dan operasional bisnis Anda.','lock',3,1),
+('Managed Services','managed-services','Operasional TI dikelola penuh oleh tim ahli, 24/7, dengan SLA yang jelas.','settings',4,1);
+
+-- ---------- Industry × Pillar matrix (per-cell content) ----------
+CREATE TABLE `industri_pilar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `industri_id` int(11) NOT NULL,
+  `pilar_id` int(11) NOT NULL,
+  `heading` varchar(255) DEFAULT NULL,
+  `konten` longtext DEFAULT NULL,               -- rich text
+  `fitur` text DEFAULT NULL,                     -- JSON: [{icon,judul,teks} x <=4]
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cell` (`industri_id`,`pilar_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

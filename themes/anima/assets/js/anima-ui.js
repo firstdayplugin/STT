@@ -12,6 +12,18 @@
   }, true);
   // Delegated clicks (was inline onclick).
   document.addEventListener('click', function(e){
+    // Tabs: <button data-tab-btn="X" data-tab-group="G"> toggles [data-tab-panel="X"][data-tab-group="G"].
+    var tab = e.target.closest ? e.target.closest('[data-tab-btn]') : null;
+    if (tab) {
+      var g = tab.getAttribute('data-tab-group'), key = tab.getAttribute('data-tab-btn');
+      document.querySelectorAll('[data-tab-btn][data-tab-group="' + g + '"]').forEach(function(b){
+        b.classList.toggle('on', b === tab);
+      });
+      document.querySelectorAll('[data-tab-panel][data-tab-group="' + g + '"]').forEach(function(p){
+        p.hidden = (p.getAttribute('data-tab-panel') !== key);
+      });
+      return;
+    }
     var el = e.target.closest ? e.target.closest('[data-scrolltop],[data-proposal-submit],[data-contact-submit]') : null;
     if (!el) return;
     if (el.hasAttribute('data-scrolltop')) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
