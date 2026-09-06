@@ -1154,3 +1154,23 @@ header .lang a{color:#6a86ad}
 .menu .submenu a{color:var(--ink,#0f1c34)!important;padding:9px 12px;border-radius:8px;font-size:14px;white-space:nowrap}
 .menu .submenu a::after{display:none}
 .menu .submenu a:hover{background:var(--bg-soft,#f6f9fd);color:var(--blue,#2478E0)!important}
+
+/* §D4 mobile navigation drawer */
+.mnav,.mnav-scrim{display:none}
+.mnav{position:fixed;top:0;right:0;bottom:0;width:min(84vw,340px);z-index:120;background:#fff;
+  box-shadow:-24px 0 60px rgba(10,22,50,.28);transform:translateX(100%);transition:transform .3s ease;
+  display:none;flex-direction:column;padding:18px 18px 28px;overflow-y:auto}
+.mnav-scrim{position:fixed;inset:0;z-index:110;background:rgba(8,18,40,.5);opacity:0;transition:opacity .3s}
+body.nav-open{overflow:hidden}
+body.nav-open .mnav{display:flex;transform:none}
+body.nav-open .mnav-scrim{display:block;opacity:1}
+.mnav-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mnav-head .lang{border-color:#cfe0f5}
+.mnav-head .lang a{color:#6a86ad}
+.mnav-x{background:none;border:none;cursor:pointer;color:var(--ink,#0f1c34);padding:6px}
+.mnav-x svg{width:24px;height:24px}
+.mnav-list{display:flex;flex-direction:column;gap:2px}
+.mnav-list>a{padding:13px 8px;border-bottom:1px solid var(--line);color:var(--ink,#0f1c34);text-decoration:none;font-weight:600;font-size:16px}
+.mnav-list>a.mnav-sub{padding-left:24px;font-weight:500;font-size:14.5px;color:var(--ink-2,#43506b)}
+.mnav-cta{margin-top:16px;justify-content:center;border-bottom:none!important}
+/* Drawer shows only when opened (hamburger only exists on mobile, so desktop never opens it). */

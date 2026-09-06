@@ -138,6 +138,16 @@ if (!function_exists('default_lang')) {
                 'contact_us'         => 'Hubungi Kami',
                 'explore'            => 'Explore',
             ],
+            'Footer' => [
+                'consult_with_us'     => 'Consult With Us',
+                'newsletter_email_ph' => 'Enter your email here',
+                'footer_col_solutions'=> 'Solutions',
+                'footer_col_company'  => 'Company',
+                'footer_col_help'     => 'Help & Support',
+                'all_rights_reserved' => 'All Rights Reserved',
+                'privacy_policy'      => 'Privacy Policy',
+                'compliance_policy'   => 'Compliance Policy',
+            ],
             'Career' => [
                 'search_jobs'        => 'Cari posisi...',
                 'job_role'           => 'Job Role',

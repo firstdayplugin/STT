@@ -505,9 +505,16 @@ Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik ta
   tombol CTA. Label diterjemahkan via `tr_field('menus',id,'nama')`.
 - **Terjemahan label menu** ditambahkan ke halaman admin **Terjemahan** (bagian "Menu Navigasi",
   simpan ke `content_i18n`). Terbukti: nav `/` = "Career", `/en/` = "Careers".
-- **BELUM (D4, sisa i18n):** tab per-bahasa di editor konten halaman (`content` — teks home/about via
-  content_blocks per-lang), editor terjemahan sel matriks `industri_pilar`, wiring + terjemahan
-  **footer** (masih hardcoded), dan drawer menu **mobile** (belum ada). Mesin + pola sudah lengkap.
+**STATUS — Penyelesaian i18n (Langkah D4, sesi ini):**
+- **Editor konten per-bahasa** (`admin/views/content/`): tab bahasa (ID default + EN…). Non-default
+  menampilkan teks default sebagai referensi + input terjemahan → simpan ke content_blocks per-lang.
+- **Drawer menu mobile** (`header.php` + CSS `.mnav` + `anima-ui.js`): hamburger kini buka drawer
+  (dari menu DB, label ter-translate, switcher bahasa, tombol Contact) — sebelumnya kosong. Verified.
+- **Footer di-wire**: sosial dari settings (sembunyi bila kosong), kolom nav real-route (nol link `#`
+  mati) + heading translatable via `t()`, copyright dinamis (tahun + site_name), link Privacy/
+  Compliance ke halaman nyata. `get_footer_columns()` opsional (fallback bawaan bila belum ada menu footer DB).
+- **BELUM (D5, sisa terakhir ~5%):** editor terjemahan **sel matriks** `industri_pilar` di admin
+  (frontend sudah baca via `tr_field`, tinggal UI-nya). Sisanya i18n sudah lengkap & teruji.
 
 ## 18. Bahasa sebagai Produk (N-language readiness & monetisasi)
 

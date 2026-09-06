@@ -63,6 +63,25 @@ $__body_class = trim($anima_body_class ?? '');
       <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
       <a class="btn btn-primary" href="<?= url('hubungi-kami') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
     </div>
-    <button class="hamb"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <button class="hamb" aria-label="Menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </nav>
 </header>
+
+<!-- Mobile navigation drawer (DB menu; toggled by .hamb -> body.nav-open) -->
+<div class="mnav-scrim" data-nav-close></div>
+<aside class="mnav" aria-label="Mobile navigation">
+  <div class="mnav-head">
+    <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
+    <button class="mnav-x" data-nav-close aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <nav class="mnav-list">
+    <?php foreach ($__nav as $mi): if ($__is_contact($mi)) continue;
+      $mkids = $mi['children'] ?? []; ?>
+      <a href="<?= htmlspecialchars($mi['url']) ?>"><?= htmlspecialchars($__mlabel($mi)) ?></a>
+      <?php foreach ($mkids as $ck): ?>
+        <a class="mnav-sub" href="<?= htmlspecialchars($ck['url']) ?>"><?= htmlspecialchars($__mlabel($ck)) ?></a>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
+    <a class="btn btn-primary mnav-cta" href="<?= url('hubungi-kami') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
+  </nav>
+</aside>

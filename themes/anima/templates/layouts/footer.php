@@ -9,56 +9,64 @@
         <path d="M0 0H620L558 92Q548 120 516 120H0Z" fill="#fff"/>
       </svg>
 
+<?php
+        // Footer socials from settings (skip unset/'#'); footer nav from DB (lokasi='footer')
+        // with a sensible built-in fallback so links are never dead.
+        $__soc = ['linkedin' => get_setting('linkedin_url', ''), 'instagram' => get_setting('instagram_url', ''),
+                  'facebook' => get_setting('facebook_url', ''), 'youtube' => get_setting('youtube_url', '')];
+        $__soc_svg = [
+          'linkedin'  => '<path d="M4.98 3.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9z"/>',
+          'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/>',
+          'facebook'  => '<path d="M15 8h-2a2 2 0 00-2 2v10M8 12h6"/>',
+          'youtube'   => '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" class="solid"/>',
+        ];
+        $__foot_cols = function_exists('get_footer_columns') ? get_footer_columns() : [];
+        if (!$__foot_cols) {
+            $__foot_cols = [
+              ['h' => t('footer_col_solutions', 'Solutions'), 'items' => [
+                 ['Modernize Infrastructure', url('solutions')], ['Data & AI', url('solutions')],
+                 ['Cybersecurity', url('solutions')], ['Managed Services', url('solutions')]]],
+              ['h' => t('footer_col_company', 'Company'), 'items' => [
+                 ['Company Overview', url('tentang-kami')], ['Our Industries', url('industri')],
+                 ['News & Events', url('blog')], ['Career', url('career')]]],
+              ['h' => t('footer_col_help', 'Help & Support'), 'items' => [
+                 ['Talk to Support', url('hubungi-kami')], ['Find Us', url('hubungi-kami')],
+                 ['Privacy Policy', url('privacy-policy')], ['Compliance Policy', url('compliance-policy')]]],
+            ];
+        }
+      ?>
       <div class="tel-footer-content">
         <div class="tel-footer-brand">
-          <div class="tel-footer-consult">Consult With Us</div>
-          <div class="tel-footer-newsletter">
-            <input type="email" placeholder="Enter your email here" aria-label="Email">
-            <button aria-label="Subscribe">
+          <div class="tel-footer-consult"><?= htmlspecialchars(t('consult_with_us', 'Consult With Us')) ?></div>
+          <form class="tel-footer-newsletter" method="post" action="#" onsubmit="return false">
+            <input type="email" placeholder="<?= htmlspecialchars(t('newsletter_email_ph', 'Enter your email here')) ?>" aria-label="Email">
+            <button aria-label="Subscribe" data-proposal-submit>
               <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
-          </div>
+          </form>
 
           <div class="tel-footer-socials">
-            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9z"/></svg></a>
-            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg></a>
-            <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M15 8h-2a2 2 0 00-2 2v10M8 12h6"/></svg></a>
-            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" class="solid"/></svg></a>
+            <?php foreach ($__soc as $net => $u): if ($u === '' || $u === '#') continue; ?>
+              <a href="<?= htmlspecialchars($u) ?>" target="_blank" rel="noopener" aria-label="<?= ucfirst($net) ?>"><svg viewBox="0 0 24 24"><?= $__soc_svg[$net] ?></svg></a>
+            <?php endforeach; ?>
           </div>
         </div>
 
         <nav class="tel-footer-links" aria-label="Footer navigation">
+          <?php foreach ($__foot_cols as $col): ?>
           <div class="tel-fcol">
-            <h5>Solutions</h5>
-            <a href="#">Modernize Infrastructure</a>
-            <a href="#">AI</a>
-            <a href="#">Data</a>
-            <a href="#">Cybersecurity</a>
-            <a href="#">Output UI (Apps)</a>
+            <h5><?= htmlspecialchars($col['h']) ?></h5>
+            <?php foreach ($col['items'] as $it): ?>
+              <a href="<?= htmlspecialchars($it[1]) ?>"><?= htmlspecialchars($it[0]) ?></a>
+            <?php endforeach; ?>
           </div>
-
-          <div class="tel-fcol">
-            <h5>Company</h5>
-            <a href="#">Company Overview</a>
-            <a href="#">Grow With Us</a>
-            <a href="#">News &amp; Events</a>
-            <a href="#">Why Partner With Us</a>
-            <a href="#">Career</a>
-          </div>
-
-          <div class="tel-fcol">
-            <h5>Help &amp; Support</h5>
-            <a href="#">AI Assistant</a>
-            <a href="#">Talk to Support</a>
-            <a href="#">Find Us</a>
-            <a href="#">Customer Reviews</a>
-          </div>
+          <?php endforeach; ?>
         </nav>
       </div>
 
       <div class="tel-footer-bottom">
-        <span>© 2026 Sapta Tunas Teknologi &nbsp;|&nbsp; All Rights Reserved</span>
-        <span><a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Compliance Policy</a> &nbsp;|&nbsp; <a href="#">Enterprise Solution Provider</a></span>
+        <span>&copy; <?= date('Y') ?> <?= htmlspecialchars(get_setting('site_name', 'Sapta Tunas Teknologi')) ?> &nbsp;|&nbsp; <?= htmlspecialchars(t('all_rights_reserved', 'All Rights Reserved')) ?></span>
+        <span><a href="<?= url('privacy-policy') ?>"><?= htmlspecialchars(t('privacy_policy', 'Privacy Policy')) ?></a> &nbsp;|&nbsp; <a href="<?= url('compliance-policy') ?>"><?= htmlspecialchars(t('compliance_policy', 'Compliance Policy')) ?></a> &nbsp;|&nbsp; <span><?= htmlspecialchars(get_setting('site_tagline', 'Enterprise Solution Provider')) ?></span></span>
       </div>
     </div>
     <button class="tel-footer-top" type="button" aria-label="Back to top" data-scrolltop>

@@ -40,5 +40,13 @@
     addEventListener('scroll', on, { passive:true }); on();
   }
   var hamb = hd.querySelector('.hamb');
-  if (hamb) hamb.addEventListener('click', function(){ document.body.classList.toggle('nav-open'); });
+  function setNav(open){ document.body.classList.toggle('nav-open', open); if (hamb) hamb.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+  if (hamb) hamb.addEventListener('click', function(){ setNav(!document.body.classList.contains('nav-open')); });
+  // Close the mobile drawer on scrim/X click, on any drawer link, or Esc.
+  document.addEventListener('click', function(e){
+    if (e.target.closest && e.target.closest('[data-nav-close]')) { setNav(false); return; }
+    var link = e.target.closest && e.target.closest('.mnav-list a');
+    if (link) setNav(false);
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') setNav(false); });
 })();

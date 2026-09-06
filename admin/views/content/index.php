@@ -21,18 +21,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
     // Always redirect back to this page, even on error
     $redirect_to = admin_url('?page=content&p=' . urlencode($_POST['page_key'] ?? $current_page));
     
+    $save_lang = $_POST['lang'] ?? (function_exists('default_lang') ? default_lang() : 'id');
+    if (function_exists('available_langs') && !in_array($save_lang, available_langs(), true)) {
+        $save_lang = function_exists('default_lang') ? default_lang() : 'id';
+    }
+    $redirect_to .= '&lang=' . urlencode($save_lang);
+
     if (!verify_csrf($_POST['csrf_token'] ?? '')) {
         set_flash('error', 'Token keamanan tidak valid. Silakan refresh halaman dan coba lagi.');
         redirect($redirect_to);
     }
-    
+
     try {
         $page_key = $_POST['page_key'] ?? 'home';
         $blocks   = $_POST['blocks'] ?? [];
         $saved = 0;
         $created = 0;
-        
-        $def_lang = function_exists('default_lang') ? default_lang() : 'id';
+        $def_lang = $save_lang;
         foreach ($blocks as $key => $val) {
             $val = (string)$val;
             $existing = $db->fetchOne(
@@ -75,23 +80,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
 // NOTE: For home page, hero_* blocks are CENTRALIZED in Pengaturan > Hero (single source of truth)
 // We exclude them here so admin doesn't get confused which one to edit.
 $exclude_hero = ($current_page === 'home');
+$def_lang  = function_exists('default_lang') ? default_lang() : 'id';
+$all_langs = function_exists('available_langs') ? available_langs() : ['id'];
+$edit_lang = $_GET['lang'] ?? $def_lang;
+if (!in_array($edit_lang, $all_langs, true)) $edit_lang = $def_lang;
 try {
-    if ($exclude_hero) {
-        $blocks = $db->fetchAll(
-            "SELECT * FROM content_blocks WHERE page_key = ? AND is_active = 1
-              AND block_key NOT LIKE 'hero_%'
-              ORDER BY urutan ASC, id ASC",
-            [$current_page]
-        );
-    } else {
-        $blocks = $db->fetchAll(
-            "SELECT * FROM content_blocks WHERE page_key = ? AND is_active = 1 ORDER BY urutan ASC, id ASC",
-            [$current_page]
-        );
+    // Canonical field list = default-language blocks (defines which fields exist).
+    $heroFilter = $exclude_hero ? " AND block_key NOT LIKE 'hero_%'" : '';
+    $blocks = $db->fetchAll(
+        "SELECT * FROM content_blocks WHERE page_key = ? AND lang = ? AND is_active = 1$heroFilter ORDER BY urutan ASC, id ASC",
+        [$current_page, $def_lang]
+    );
+    // Overlay the active-language values when translating.
+    $trans = [];
+    if ($edit_lang !== $def_lang) {
+        foreach ($db->fetchAll("SELECT block_key, konten FROM content_blocks WHERE page_key = ? AND lang = ?", [$current_page, $edit_lang]) as $tr) {
+            $trans[$tr['block_key']] = $tr['konten'];
+        }
     }
 } catch (Throwable $e) {
     set_flash('error', 'Database error: ' . $e->getMessage());
-    $blocks = [];
+    $blocks = []; $trans = [];
 }
 $csrf = generate_csrf();
 ?>
@@ -120,6 +129,17 @@ $csrf = generate_csrf();
   </div>
 </div>
 
+<?php if (count($all_langs) > 1): ?>
+<div class="card mb-3" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:12px;color:var(--text-muted);font-weight:600"><?= icon('globe', 15) ?> BAHASA</span>
+  <?php foreach ($all_langs as $L): ?>
+    <a href="<?= admin_url('?page=content&p=' . urlencode($current_page) . '&lang=' . urlencode($L)) ?>"
+       class="btn btn-sm <?= $edit_lang === $L ? 'btn-primary' : 'btn-secondary' ?>"><?= htmlspecialchars(strtoupper($L)) ?><?= $L === $def_lang ? ' (default)' : '' ?></a>
+  <?php endforeach; ?>
+  <?php if ($edit_lang !== $def_lang): ?><span style="font-size:12px;color:var(--text-muted);margin-left:auto"><?= icon('info', 13) ?> Kosongkan field untuk memakai teks <?= htmlspecialchars(strtoupper($def_lang)) ?>.</span><?php endif; ?>
+</div>
+<?php endif; ?>
+
 <?php if ($current_page === 'home'): ?>
 <div class="card" style="background:#FFF7E0;border:1px solid #F0B100;margin-bottom:16px">
   <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
@@ -147,6 +167,7 @@ $csrf = generate_csrf();
   <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
   <input type="hidden" name="save_content" value="1">
   <input type="hidden" name="page_key" value="<?= htmlspecialchars($current_page) ?>">
+  <input type="hidden" name="lang" value="<?= htmlspecialchars($edit_lang) ?>">
   
   <div class="card">
     <div class="card-header">
@@ -156,21 +177,27 @@ $csrf = generate_csrf();
       </div>
     </div>
     
-    <?php foreach ($blocks as $b): 
+    <?php foreach ($blocks as $b):
       $type = $b['block_type'] ?? 'text';
       $label = $b['block_label'] ?? $b['block_key'];
-      $value = $b['konten'] ?? '';
+      $default_val = $b['konten'] ?? '';
+      $translating = ($edit_lang !== $def_lang);
+      $value = $translating ? ($trans[$b['block_key']] ?? '') : $default_val;
       $field_name = 'blocks[' . htmlspecialchars($b['block_key']) . ']';
+      $ph = $translating ? mb_substr(strip_tags($default_val), 0, 120) : '';
     ?>
     <div class="form-group">
       <label style="display:flex;align-items:center;justify-content:space-between">
         <span><?= htmlspecialchars($label) ?></span>
         <code style="font-size:10px;color:var(--text-muted);font-weight:normal"><?= htmlspecialchars($b['block_key']) ?></code>
       </label>
+      <?php if ($translating && $default_val !== ''): ?>
+        <div style="font-size:12px;color:var(--text-muted);background:var(--bg-soft,#f6f9fd);border:1px solid var(--border);border-radius:8px;padding:7px 10px;margin-bottom:6px"><?= htmlspecialchars(strtoupper($def_lang)) ?>: <?= htmlspecialchars(mb_substr(strip_tags($default_val), 0, 200)) ?></div>
+      <?php endif; ?>
       <?php if ($type === 'textarea' || $type === 'html'): ?>
         <textarea name="<?= $field_name ?>" rows="3" class="wysiwyg"><?= htmlspecialchars($value) ?></textarea>
       <?php else: ?>
-        <input type="text" name="<?= $field_name ?>" value="<?= htmlspecialchars($value) ?>">
+        <input type="text" name="<?= $field_name ?>" value="<?= htmlspecialchars($value) ?>"<?= $ph !== '' ? ' placeholder="' . htmlspecialchars($ph) . '"' : '' ?>>
       <?php endif; ?>
     </div>
     <?php endforeach; ?>
