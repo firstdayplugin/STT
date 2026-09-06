@@ -1136,3 +1136,10 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
   }
 }
 
+/* §D language switcher: links styled like the original .lang spans */
+.lang a{padding:6px 10px;color:rgba(255,255,255,.6);text-decoration:none;transition:color .45s}
+header.scrolled .lang a{color:var(--dim)}
+.lang a.on{background:linear-gradient(100deg,#2f7be0,#1b63c7);color:#fff!important}
+.lang a:hover{color:#fff}
+header.scrolled .lang a:hover{color:var(--blue,#2478E0)}
+header .lang a{color:#6a86ad}

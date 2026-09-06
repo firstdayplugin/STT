@@ -34,27 +34,27 @@ include theme_path('templates/layouts/header.php');
 
   <form class="cr-search" method="get" action="<?= url('career') ?>">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Cari posisi...">
+    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="<?= htmlspecialchars(t('search_jobs', 'Cari posisi...')) ?>">
     <?php if ($role !== ''): ?><input type="hidden" name="role" value="<?= htmlspecialchars($role) ?>"><?php endif; ?>
     <?php if ($loc !== ''): ?><input type="hidden" name="lokasi" value="<?= htmlspecialchars($loc) ?>"><?php endif; ?>
-    <button type="submit" class="btn btn-primary">Cari</button>
+    <button type="submit" class="btn btn-primary"><?= htmlspecialchars(t('search', 'Cari')) ?></button>
   </form>
 
   <div class="cr-layout">
     <aside class="cr-side">
       <div class="cr-filter">
-        <h4>Job Role</h4>
+        <h4><?= htmlspecialchars(t('job_role', 'Job Role')) ?></h4>
         <ul>
-          <li><a href="<?= url('career' . ($q !== '' ? '?q=' . urlencode($q) : '')) ?>" class="<?= $role === '' ? 'on' : '' ?>">Semua</a></li>
+          <li><a href="<?= url('career' . ($q !== '' ? '?q=' . urlencode($q) : '')) ?>" class="<?= $role === '' ? 'on' : '' ?>"><?= htmlspecialchars(t('all', 'Semua')) ?></a></li>
           <?php foreach ($roles as $r): $qs = http_build_query(array_filter(['role' => $r['role'], 'q' => $q])); ?>
           <li><a href="<?= url('career?' . $qs) ?>" class="<?= $role === $r['role'] ? 'on' : '' ?>"><?= htmlspecialchars($r['role']) ?> <span>(<?= (int)$r['c'] ?>)</span></a></li>
           <?php endforeach; ?>
         </ul>
       </div>
       <div class="cr-filter">
-        <h4>Location</h4>
+        <h4><?= htmlspecialchars(t('location', 'Location')) ?></h4>
         <ul>
-          <li><a href="<?= url('career' . ($q !== '' ? '?q=' . urlencode($q) : '')) ?>" class="<?= $loc === '' ? 'on' : '' ?>">Semua</a></li>
+          <li><a href="<?= url('career' . ($q !== '' ? '?q=' . urlencode($q) : '')) ?>" class="<?= $loc === '' ? 'on' : '' ?>"><?= htmlspecialchars(t('all', 'Semua')) ?></a></li>
           <?php foreach ($locs as $l): $qs = http_build_query(array_filter(['lokasi' => $l['lokasi'], 'q' => $q])); ?>
           <li><a href="<?= url('career?' . $qs) ?>" class="<?= $loc === $l['lokasi'] ? 'on' : '' ?>"><?= htmlspecialchars($l['lokasi']) ?> <span>(<?= (int)$l['c'] ?>)</span></a></li>
           <?php endforeach; ?>
@@ -81,7 +81,7 @@ include theme_path('templates/layouts/header.php');
         </div>
         <div class="cr-card-foot">
           <?php if (!empty($j['deadline'])): ?><span class="cr-deadline">Sampai <?= htmlspecialchars($fmt($j['deadline'])) ?></span><?php endif; ?>
-          <span class="cr-more">Lihat detail
+          <span class="cr-more"><?= htmlspecialchars(t('view_detail', 'Lihat detail')) ?>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>
       </a>

@@ -15,12 +15,15 @@ $__desc  = $seo['description']  ?? get_setting('site_description', 'Sapta Tunas 
 $__body_class = trim($anima_body_class ?? '');
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= htmlspecialchars(function_exists('current_lang') ? current_lang() : 'id') ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($__title) ?></title>
 <meta name="description" content="<?= htmlspecialchars($__desc) ?>">
+<?php if (function_exists('is_multilang') && is_multilang()): foreach (available_langs() as $__l): ?>
+<link rel="alternate" hreflang="<?= htmlspecialchars($__l) ?>" href="<?= htmlspecialchars(url($GLOBALS['__path'] ?? '', $__l)) ?>">
+<?php endforeach; endif; ?>
 <link rel="stylesheet" href="<?= theme_url('assets/fonts/fonts.css') ?>">
 <link rel="stylesheet" href="<?= theme_url('assets/css/anima.css') ?>">
 <link rel="stylesheet" href="<?= theme_url('assets/css/pages.css') ?>">
@@ -40,7 +43,7 @@ $__body_class = trim($anima_body_class ?? '');
       <a href="#">SatuAI</a>
     </div>
     <div class="nav-right">
-      <div class="lang"><span>ID</span><span class="on">EN</span></div>
+      <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
       <a class="btn btn-primary" href="#contact">Contact Us</a>
     </div>
     <button class="hamb"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>

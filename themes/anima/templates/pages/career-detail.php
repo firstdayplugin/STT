@@ -51,7 +51,7 @@ include theme_path('templates/layouts/header.php');
 <main class="page-body"><div class="page-shell cr-detail">
 
   <a class="bl-back" href="<?= url('career') ?>">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Semua Lowongan</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> <?= htmlspecialchars(t('back_to_jobs', 'Semua Lowongan')) ?></a>
 
   <div class="cr-detail-head">
     <h1><?= htmlspecialchars($job['judul'] ?? '') ?></h1>
@@ -79,7 +79,7 @@ include theme_path('templates/layouts/header.php');
     </div>
 
     <aside class="cr-apply" id="apply">
-      <h2>Lamar Posisi Ini</h2>
+      <h2><?= htmlspecialchars(t('apply_here', 'Lamar Posisi Ini')) ?></h2>
       <?php if ($sent): ?>
         <div class="cr-sent"><?= icon('success', 20) ?> Terima kasih! Lamaran Anda sudah kami terima. Tim kami akan menghubungi jika cocok.</div>
       <?php else: ?>
@@ -94,7 +94,7 @@ include theme_path('templates/layouts/header.php');
           <div class="cr-field"><label>Upload CV * <span class="cr-hint">(PDF/DOC/DOCX, maks 1MB)</span></label><input type="file" name="cv" accept=".pdf,.doc,.docx" required></div>
           <div class="cr-hp" aria-hidden="true"><label>Website</label><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
           <?= turnstile_widget() ?>
-          <button type="submit" class="btn btn-primary cr-submit">Kirim Lamaran
+          <button type="submit" class="btn btn-primary cr-submit"><?= htmlspecialchars(t('submit_application', 'Kirim Lamaran')) ?>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form>
       <?php endif; ?>

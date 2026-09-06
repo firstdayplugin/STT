@@ -24,6 +24,10 @@ if (!function_exists('mb_strtolower')) {
 // Lucide inline-SVG icon library — project rule: NO EMOJI, real icons only.
 require_once __DIR__ . '/icons.php';
 
+// i18n engine (§D) — path-prefix languages, row-based translations. Defines
+// current_lang(), lang_prefix(), t(), tr_field(), language_switcher(), etc.
+require_once __DIR__ . '/i18n.php';
+
 // ============================================
 // STRING HELPERS
 // ============================================
@@ -149,8 +153,11 @@ function parse_rupiah($input): int {
 // URL HELPERS
 // ============================================
 
-function url(string $path = ''): string {
-    return BASE_URL . '/' . ltrim($path, '/');
+function url(string $path = '', ?string $lang = null): string {
+    // Language-aware: prepend the current (or given) language prefix so every
+    // internal link stays in-language automatically (default language = no prefix).
+    $prefix = function_exists('lang_prefix') ? lang_prefix($lang) : '';
+    return BASE_URL . $prefix . '/' . ltrim($path, '/');
 }
 
 /**
@@ -789,17 +796,26 @@ function json_response(array $data, int $code = 200): void {
 // ============================================
 
 function get_content(string $page_key, string $block_key, string $default = ''): string {
-    $cache_key = $page_key . '|' . $block_key;
+    $lang = function_exists('current_lang') ? current_lang() : 'id';
+    $def_lang = function_exists('default_lang') ? default_lang() : 'id';
+    $cache_key = $lang . '|' . $page_key . '|' . $block_key;
     if (isset($GLOBALS['__content_cache'][$cache_key])) {
         return $GLOBALS['__content_cache'][$cache_key];
     }
     try {
         $db = Database::getInstance();
+        // Prefer the current language; fall back to the default-language row, then $default.
         $row = $db->fetchOne(
-            "SELECT konten FROM content_blocks WHERE page_key = ? AND block_key = ? AND is_active = 1",
-            [$page_key, $block_key]
+            "SELECT konten FROM content_blocks WHERE page_key = ? AND block_key = ? AND lang = ? AND is_active = 1",
+            [$page_key, $block_key, $lang]
         );
-        $value = ($row && $row['konten'] !== null && $row['konten'] !== '') 
+        if ((!$row || $row['konten'] === null || $row['konten'] === '') && $lang !== $def_lang) {
+            $row = $db->fetchOne(
+                "SELECT konten FROM content_blocks WHERE page_key = ? AND block_key = ? AND lang = ? AND is_active = 1",
+                [$page_key, $block_key, $def_lang]
+            );
+        }
+        $value = ($row && $row['konten'] !== null && $row['konten'] !== '')
                  ? $row['konten'] : $default;
         $GLOBALS['__content_cache'][$cache_key] = $value;
         return $value;
@@ -808,13 +824,16 @@ function get_content(string $page_key, string $block_key, string $default = ''):
     }
 }
 
-function update_content(string $page_key, string $block_key, string $value, string $label = '', string $type = 'text'): bool {
-    unset($GLOBALS['__content_cache'][$page_key . '|' . $block_key]);
+function update_content(string $page_key, string $block_key, string $value, string $label = '', string $type = 'text', ?string $lang = null): bool {
+    $lang = $lang ?? (function_exists('default_lang') ? default_lang() : 'id');
+    foreach (array_keys($GLOBALS['__content_cache'] ?? []) as $ck) {
+        if (str_ends_with($ck, '|' . $page_key . '|' . $block_key)) unset($GLOBALS['__content_cache'][$ck]);
+    }
     try {
         $db = Database::getInstance();
         $existing = $db->fetchOne(
-            "SELECT id FROM content_blocks WHERE page_key = ? AND block_key = ?",
-            [$page_key, $block_key]
+            "SELECT id FROM content_blocks WHERE page_key = ? AND block_key = ? AND lang = ?",
+            [$page_key, $block_key, $lang]
         );
         if ($existing) {
             $db->execute(
@@ -823,8 +842,8 @@ function update_content(string $page_key, string $block_key, string $value, stri
             );
         } else {
             $db->execute(
-                "INSERT INTO content_blocks (page_key, block_key, block_label, block_type, konten) VALUES (?, ?, ?, ?, ?)",
-                [$page_key, $block_key, $label, $type, $value]
+                "INSERT INTO content_blocks (page_key, block_key, block_label, block_type, konten, lang) VALUES (?, ?, ?, ?, ?, ?)",
+                [$page_key, $block_key, $label, $type, $value, $lang]
             );
         }
         return true;

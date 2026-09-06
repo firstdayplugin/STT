@@ -32,11 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
         $saved = 0;
         $created = 0;
         
+        $def_lang = function_exists('default_lang') ? default_lang() : 'id';
         foreach ($blocks as $key => $val) {
             $val = (string)$val;
             $existing = $db->fetchOne(
-                "SELECT id FROM content_blocks WHERE page_key = ? AND block_key = ?",
-                [$page_key, $key]
+                "SELECT id FROM content_blocks WHERE page_key = ? AND block_key = ? AND lang = ?",
+                [$page_key, $key, $def_lang]
             );
             if ($existing) {
                 $db->execute(
@@ -45,10 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
                 );
                 $saved++;
             } else {
-                // Create new block if doesn't exist
+                // Create new block if doesn't exist (default language)
                 $db->execute(
-                    "INSERT INTO content_blocks (page_key, block_key, konten, is_active) VALUES (?, ?, ?, 1)",
-                    [$page_key, $key, $val]
+                    "INSERT INTO content_blocks (page_key, block_key, konten, lang, is_active) VALUES (?, ?, ?, ?, 1)",
+                    [$page_key, $key, $val, $def_lang]
                 );
                 $created++;
             }

@@ -27,7 +27,17 @@ track_visitor($clean_uri);
 // ROUTER
 // ============================================
 $uri      = trim($clean_uri, '/');
-$segments = explode('/', $uri);
+$segments = $uri === '' ? [] : explode('/', $uri);
+
+// i18n (§D): strip a leading non-default language prefix (/en/...) and set the
+// active language, so the rest of the router is language-agnostic.
+if (!empty($segments) && function_exists('available_langs')
+    && in_array($segments[0], available_langs(), true) && $segments[0] !== default_lang()) {
+    set_current_lang($segments[0]);
+    array_shift($segments);
+}
+if (function_exists('set_current_path')) set_current_path(implode('/', $segments));
+
 $page     = $segments[0] ?? '';
 $slug     = $segments[1] ?? '';
 

@@ -86,17 +86,38 @@ INSERT INTO `menus` (`nama`,`url`,`lokasi`,`urutan`,`is_active`,`is_default`) VA
 ('Career','/career','header',6,1,1),
 ('Contact Us','/hubungi-kami','header',7,1,1);
 
--- ---------- Content blocks (editable text per page) ----------
+-- ---------- Content blocks (editable text per page, per language) ----------
 CREATE TABLE `content_blocks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_key` varchar(80) NOT NULL,
   `block_key` varchar(120) NOT NULL,
+  `lang` varchar(5) NOT NULL DEFAULT 'id',
   `block_label` varchar(200) DEFAULT NULL,
   `block_type` varchar(30) NOT NULL DEFAULT 'text',
   `konten` longtext DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`), UNIQUE KEY `page_block` (`page_key`,`block_key`)
+  PRIMARY KEY (`id`), UNIQUE KEY `page_block_lang` (`page_key`,`block_key`,`lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------- i18n (§D): UI strings + per-row content field translations ----------
+CREATE TABLE `translations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lang` varchar(5) NOT NULL,
+  `grp` varchar(40) NOT NULL DEFAULT 'ui',
+  `k` varchar(190) NOT NULL,
+  `v` text DEFAULT NULL,
+  PRIMARY KEY (`id`), UNIQUE KEY `lang_grp_k` (`lang`,`grp`,`k`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `content_i18n` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tabel` varchar(64) NOT NULL,
+  `row_id` int(11) NOT NULL,
+  `field` varchar(64) NOT NULL,
+  `lang` varchar(5) NOT NULL,
+  `nilai` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`), UNIQUE KEY `cell` (`tabel`,`row_id`,`field`,`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------- Per-page SEO ----------
@@ -558,9 +579,9 @@ INSERT INTO `career` (`judul`,`slug`,`role`,`lokasi`,`tipe`,`jenjang`,`pengalama
 ('Cyber Security Analyst','cyber-security-analyst','Cyber Security & IT Infrastructure','Bandung','Full-time','Bachelor/S1','Experienced',
  'Pantau, deteksi, dan tanggapi ancaman siber untuk klien enterprise.',
  '<ul><li>Monitoring SOC & analisis insiden.</li><li>Threat hunting & incident response.</li><li>Menyusun laporan keamanan berkala.</li></ul>',
- '<ul><li>Pengalaman SOC/blue team.</li><li>Paham SIEM, EDR, dan framework keamanan.</li><li>Sertifikasi (mis. CEH, Security+) nilai plus.</li></ul>','2026-07-15',2,1),
+ '<ul><li>Pengalaman SOC/blue team.</li><li>Paham SIEM, EDR, dan framework keamanan.</li><li>Sertifikasi (mis. CEH, Security+) nilai plus.</li></ul>','2027-02-28',2,1),
 ('Customer Support Specialist','customer-support-specialist','Customer Service & Support','Surabaya','Full-time','Diploma/D3','Fresh Graduate',
  'Jadi garda depan dukungan pelanggan kami dengan layanan yang ramah dan cepat.',
  '<ul><li>Menangani pertanyaan & keluhan pelanggan.</li><li>Eskalasi teknis ke tim terkait.</li><li>Menjaga kepuasan pelanggan.</li></ul>',
- '<ul><li>Komunikasi baik lisan & tulisan.</li><li>Bisa bekerja shift.</li><li>Berpengalaman customer service nilai plus.</li></ul>','2026-06-28',3,1);
+ '<ul><li>Komunikasi baik lisan & tulisan.</li><li>Bisa bekerja shift.</li><li>Berpengalaman customer service nilai plus.</li></ul>',NULL,3,1);
 

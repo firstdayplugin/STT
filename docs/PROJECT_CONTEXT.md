@@ -478,6 +478,23 @@ Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik ta
 - Slug: default **satu slug dipakai kedua bahasa** (dibedakan prefix `/en/`); slug terlokalisasi = opsi lanjutan.
 - (Opsional, nanti) tombol "sarankan terjemahan EN" via API — ditunda (egress/kualitas).
 
+**STATUS — Engine i18n (Langkah D1, SELESAI sesi ini):**
+- `core/helpers/i18n.php`: `current_lang()`, `default_lang()`, `available_langs()`, `is_multilang()`,
+  `lang_prefix()`, `switch_lang_url()`, `t()` (UI string), `tr_field()`/`set_tr_field()` (field DB per baris),
+  `language_switcher()`. Di-`require` dari helpers.php.
+- **`url()` sadar-bahasa**: otomatis prefix `/en/` untuk bahasa non-default → semua link internal tetap
+  in-language tanpa mengubah template. Terbukti (link di `/en/solutions` → `/en/hubungi-kami`).
+- **Router** (`index.php`): kenali & strip prefix bahasa terdepan, set current lang + current path.
+- **Header**: `<html lang>` dinamis + `hreflang` alternate + **switcher ID/EN** nyata (link path-aware).
+- **Penyimpanan baris**: `content_blocks.lang` (teks halaman per-bahasa, `get_content()`/`update_content()`
+  sadar-bahasa + fallback ke default), tabel `translations` (UI, grp=ui) + `content_i18n`
+  (field DB generik per baris). Tambah bahasa = tambah baris, **tanpa migrasi skema**.
+- **Terbukti**: `/career` vs `/en/career` (chrome via `t()`: "Cari posisi"→"Search positions"),
+  `/solutions` vs `/en/solutions` (teks via content_blocks: "Siap memodernisasi…"→"Ready to modernize…").
+- **BELUM (D2):** UI admin terjemahan (tab per-bahasa di editor konten + field EN per modul via
+  `content_i18n`), editor daftar UI-string, terjemahkan sisa chrome hardcoded (nav master, footer),
+  wiring nav master ke menu DB. Fondasi/mesin sudah siap — sisanya mengisi konten + UI admin.
+
 ## 18. Bahasa sebagai Produk (N-language readiness & monetisasi)
 
 Tujuan pemilik: bahasa jadi **fitur yang diuangkan** — mis. jual paket **Mandarin** terpisah dengan
