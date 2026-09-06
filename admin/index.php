@@ -228,7 +228,7 @@ $id      = (int)($_GET['id'] ?? 0);
 // Role-based access
 $role_access = [
     'superadmin'    => ['*'],
-    'admin'         => ['dashboard','blog','produk','layanan','gallery','pages','menu','pengaturan','seo','ads','plugin','users','content','testimonial','faq','klien-logo','wizard','template','flex-blocks','grid-icon','solusi','industri','solusi-pilar'],
+    'admin'         => ['dashboard','blog','produk','layanan','gallery','pages','menu','pengaturan','seo','ads','plugin','users','content','testimonial','faq','klien-logo','wizard','template','flex-blocks','grid-icon','solusi','industri','solusi-pilar','career','career-lamaran'],
     'penulis'       => ['dashboard','blog'],
     'admin_produk'  => ['dashboard','produk','gallery'],
     'tim_ads'       => ['dashboard','ads','seo'],
@@ -252,7 +252,7 @@ if ($request === 'logout') {
 }
 
 // Valid pages
-$valid_pages = ['dashboard','blog','produk','layanan','gallery','pages','menu','pengaturan','plugin','ads','seo','users','wizard','content','testimonial','faq','klien-logo','template','flex-blocks','grid-icon','blog-kategori','produk-kategori','solusi','industri','solusi-pilar'];
+$valid_pages = ['dashboard','blog','produk','layanan','gallery','pages','menu','pengaturan','plugin','ads','seo','users','wizard','content','testimonial','faq','klien-logo','template','flex-blocks','grid-icon','blog-kategori','produk-kategori','solusi','industri','solusi-pilar','career','career-lamaran'];
 if (!in_array($request, $valid_pages)) {
     $request = 'dashboard';
 }
@@ -278,6 +278,8 @@ $page_titles = [
     'solusi'       => 'Solutions (Cube)',
     'solusi-pilar' => 'Pilar Solusi',
     'industri'     => 'Industries (Orbit)',
+    'career'       => 'Career / Lowongan',
+    'career-lamaran' => 'Lamaran Masuk',
     'faq'          => 'FAQ',
     'klien-logo'   => 'Logo Klien',
     'pages'        => 'Halaman Custom',

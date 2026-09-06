@@ -40,8 +40,8 @@ konteks) → decode base64 → PNG → dibaca visual. Halaman diambil per kebutu
 | 6 | **Industry × pillar** (detail bertab) | `/industri/[slug]` | `industri-detail.php` | ✅ 4 tab pilar, konten per sel (admin: matrix editor) |
 | 7 | **What's New** (blog list) | `/blog` | `blog.php` | ✅ ada, perlu arsip tahun/kategori/search/sidebar |
 | 8 | **Detail News** | `/blog/[slug]` | `blog-detail.php` | ✅ ada |
-| 9 | **Career** (list + filter) | *(baru)* `/career` | — | ⚠️ **GAP** modul (lowongan) |
-| 10 | **Detail Career** + form lamaran | *(baru)* `/career/[slug]` | — | ⚠️ **GAP** + submissions (upload CV) |
+| 9 | **Career** (list + filter) | `/career` | `career.php` | ✅ modul lowongan + filter Role/Location + search |
+| 10 | **Detail Career** + form lamaran | `/career/[slug]` | `career-detail.php` | ✅ detail + form (CV upload aman, Turnstile, honeypot) → job_applications |
 | 11 | **Contact Us** | `/hubungi-kami` | `contact.php` | ✅ ada, perlu info kontak + map |
 | 12 | **Privacy Policy** | `/privacy-policy` | `custom.php` (pages) | ✅ via custom page |
 | 13 | **Compliance Policy** | `/compliance-policy` | `custom.php` (pages) | ✅ via custom page |

@@ -303,6 +303,85 @@ function upload_video(array $file, string $folder = 'solutions', int $maxBytes =
     return false;
 }
 
+// Secure document upload (CV, etc.) — PDF/DOC/DOCX only, MIME-validated,
+// stored with a random non-executable name. Returns "folder/file" or false.
+function upload_document(array $file, string $folder = 'cv', int $maxBytes = 1048576) {
+    if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) return false;
+    if ($file['size'] <= 0 || $file['size'] > $maxBytes) return false;
+
+    $allowed = [
+        'pdf'  => ['application/pdf'],
+        'doc'  => ['application/msword'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip'],
+    ];
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!isset($allowed[$ext])) return false;
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    if (!in_array($mime, $allowed[$ext], true)) return false;
+
+    $dir = UPLOADS_PATH . '/' . $folder;
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+    // Random, non-guessable, non-executable filename.
+    $filename = bin2hex(random_bytes(16)) . '.' . $ext;
+    $target = $dir . '/' . $filename;
+    if (move_uploaded_file($file['tmp_name'], $target)) {
+        @chmod($target, 0644);
+        return $folder . '/' . $filename;
+    }
+    return false;
+}
+
+// ============================================
+// CLOUDFLARE TURNSTILE (anti-spam for public forms)
+// ============================================
+
+/** True when Turnstile is configured (both keys present in settings). */
+function turnstile_enabled(): bool {
+    return get_setting('turnstile_site_key', '') !== '' && get_setting('turnstile_secret', '') !== '';
+}
+
+/** Widget markup (empty when not configured, so forms degrade gracefully). */
+function turnstile_widget(): string {
+    if (!turnstile_enabled()) return '';
+    $site = htmlspecialchars(get_setting('turnstile_site_key', ''), ENT_QUOTES);
+    return '<div class="cf-turnstile" data-sitekey="' . $site . '"></div>';
+}
+
+/** The Turnstile script tag (add once per page that renders a widget). */
+function turnstile_script(): string {
+    if (!turnstile_enabled()) return '';
+    return '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+}
+
+/**
+ * Verify a Turnstile token server-side. Returns true when not configured
+ * (so the site still works before keys are set) or when verification passes.
+ */
+function turnstile_verify(?string $token, ?string $ip = null): bool {
+    if (!turnstile_enabled()) return true;
+    if (empty($token)) return false;
+    $secret = get_setting('turnstile_secret', '');
+    $post = http_build_query(['secret' => $secret, 'response' => $token, 'remoteip' => $ip ?? ($_SERVER['REMOTE_ADDR'] ?? '')]);
+    $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    $result = null;
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $post, CURLOPT_TIMEOUT => 8]);
+        $result = curl_exec($ch);
+        curl_close($ch);
+    } else {
+        $ctx = stream_context_create(['http' => ['method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'content' => $post, 'timeout' => 8]]);
+        $result = @file_get_contents($url, false, $ctx);
+    }
+    if ($result === false || $result === null) return false;
+    $data = json_decode($result, true);
+    return !empty($data['success']);
+}
+
 // ============================================
 // AUTH HELPERS
 // ============================================

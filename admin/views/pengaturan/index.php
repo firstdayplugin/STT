@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'hero'    => ['hero_mode','hero_judul','hero_subtitle','hero_cta_text','hero_cta_url','hero_overlay'],
         'homepage'=> ['faq_limit_home','faq_limit_detail','homepage_blog_enabled','homepage_blog_count','homepage_blog_type','homepage_blog_label','homepage_blog_title','homepage_blog_desc'],
         'kontak'  => ['wa_number','wa_text','wa_panel_title','wa_business_hours','office_lat','office_lng','site_maps_embed','wa_greeting_enabled','wa_greeting_title','wa_greeting_text','wa_greeting_delay','wa_greeting_once_per_session'],
-        'ads'     => ['gads_conversion_enabled','gads_conversion_id','gads_conversion_label'],
+        'ads'     => ['gads_conversion_enabled','gads_conversion_id','gads_conversion_label','turnstile_site_key','turnstile_secret'],
         'sosial'  => ['sosial_instagram','sosial_facebook','sosial_tiktok','sosial_youtube','sosial_twitter','sosial_linkedin'],
         'seo_settings' => ['meta_title_default','meta_desc_default','meta_keywords','og_image','google_verification','robots_default'],
         'tampilan'=> ['accent_color','dark_color','cream_color','font_heading','font_body','footer_text','custom_css'],
@@ -940,6 +940,24 @@ document.addEventListener('DOMContentLoaded', () => {
       <div style="margin-top:10px;font-size:13px"><strong>Test:</strong> Buka website Anda di incognito mode, klik tombol WhatsApp. Cek di Google Ads <?= icon('arrow-right', 16) ?> Conversions setelah ~3 jam.</div>
     </div>
     
+    <div class="card" style="margin-top:20px">
+      <div class="card-header"><div>
+        <div class="card-title"><?= icon('lock', 16) ?> Cloudflare Turnstile (Anti-Spam Form)</div>
+        <div class="card-subtitle">Melindungi form lamaran Career & kontak dari bot. Kosongkan untuk menonaktifkan.</div>
+      </div></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label>Site Key</label>
+            <input type="text" name="turnstile_site_key" class="form-control no-wysiwyg" value="<?= s('turnstile_site_key') ?>" placeholder="0x4AAAAAAA...">
+          </div>
+          <div class="form-group"><label>Secret Key</label>
+            <input type="text" name="turnstile_secret" class="form-control no-wysiwyg" value="<?= s('turnstile_secret') ?>" placeholder="0x4AAAAAAA...">
+          </div>
+        </div>
+        <div class="form-hint"><?= icon('info', 13) ?> Dapatkan key gratis di dashboard Cloudflare <?= icon('arrow-right', 14) ?> Turnstile <?= icon('arrow-right', 14) ?> Add site. Verifikasi dilakukan server-side.</div>
+      </div>
+    </div>
+
     <div style="display:flex;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border);margin-top:16px">
       <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan</button>
     </div>

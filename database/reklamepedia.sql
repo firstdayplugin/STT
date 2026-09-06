@@ -510,3 +510,57 @@ CREATE TABLE `industri_pilar` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cell` (`industri_id`,`pilar_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- ---------- Career / Jobs + applications ----------
+CREATE TABLE `career` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `judul` varchar(200) NOT NULL,
+  `slug` varchar(220) NOT NULL,
+  `role` varchar(120) DEFAULT NULL,             -- job role / department (filter)
+  `lokasi` varchar(120) DEFAULT NULL,           -- location (filter)
+  `tipe` varchar(60) DEFAULT 'Full-time',       -- Full-time / Contract / Internship / Remote
+  `jenjang` varchar(120) DEFAULT NULL,          -- education level (e.g. Bachelor/S1)
+  `pengalaman` varchar(120) DEFAULT NULL,       -- e.g. Experienced / Fresh Graduate
+  `gaji` varchar(120) DEFAULT NULL,             -- optional salary range
+  `deskripsi` text DEFAULT NULL,                -- short intro
+  `responsibilities` longtext DEFAULT NULL,     -- rich
+  `requirements` longtext DEFAULT NULL,         -- rich
+  `deadline` date DEFAULT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `job_applications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `career_id` int(11) DEFAULT NULL,
+  `posisi` varchar(200) DEFAULT NULL,           -- snapshot of the job title at apply time
+  `nama` varchar(150) NOT NULL,
+  `email` varchar(190) NOT NULL,
+  `telepon` varchar(60) DEFAULT NULL,
+  `subject` varchar(200) DEFAULT NULL,
+  `cover_letter` text DEFAULT NULL,
+  `cv_file` varchar(255) DEFAULT NULL,
+  `linkedin` varchar(255) DEFAULT NULL,
+  `status` enum('baru','review','interview','ditolak','diterima') NOT NULL DEFAULT 'baru',
+  `ip` varchar(64) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`), KEY `career_id` (`career_id`), KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `career` (`judul`,`slug`,`role`,`lokasi`,`tipe`,`jenjang`,`pengalaman`,`deskripsi`,`responsibilities`,`requirements`,`deadline`,`urutan`,`is_active`) VALUES
+('Backend Engineer (PHP)','backend-engineer-php','Software Engineering & Developer','Jakarta','Full-time','Bachelor/S1','Experienced',
+ 'Bangun dan pelihara layanan backend yang andal untuk platform enterprise kami.',
+ '<ul><li>Merancang & mengembangkan API dan layanan backend.</li><li>Menjaga performa, keamanan, dan skalabilitas.</li><li>Berkolaborasi dengan tim produk & infrastruktur.</li></ul>',
+ '<ul><li>Menguasai PHP & MySQL, minimal 3 tahun.</li><li>Paham REST API, Git, dan pola keamanan web.</li><li>Nilai plus: Docker, CI/CD.</li></ul>','2026-08-30',1,1),
+('Cyber Security Analyst','cyber-security-analyst','Cyber Security & IT Infrastructure','Bandung','Full-time','Bachelor/S1','Experienced',
+ 'Pantau, deteksi, dan tanggapi ancaman siber untuk klien enterprise.',
+ '<ul><li>Monitoring SOC & analisis insiden.</li><li>Threat hunting & incident response.</li><li>Menyusun laporan keamanan berkala.</li></ul>',
+ '<ul><li>Pengalaman SOC/blue team.</li><li>Paham SIEM, EDR, dan framework keamanan.</li><li>Sertifikasi (mis. CEH, Security+) nilai plus.</li></ul>','2026-07-15',2,1),
+('Customer Support Specialist','customer-support-specialist','Customer Service & Support','Surabaya','Full-time','Diploma/D3','Fresh Graduate',
+ 'Jadi garda depan dukungan pelanggan kami dengan layanan yang ramah dan cepat.',
+ '<ul><li>Menangani pertanyaan & keluhan pelanggan.</li><li>Eskalasi teknis ke tim terkait.</li><li>Menjaga kepuasan pelanggan.</li></ul>',
+ '<ul><li>Komunikasi baik lisan & tulisan.</li><li>Bisa bekerja shift.</li><li>Berpengalaman customer service nilai plus.</li></ul>','2026-06-28',3,1);
+

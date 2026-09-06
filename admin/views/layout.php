@@ -38,6 +38,12 @@ $nav_sections = [
         ['page'=>'flex-blocks','label'=>'Content Block', 'icon'=>'block'],
         ['page'=>'grid-icon', 'label'=>'Grid Icon Box',  'icon'=>'grid'],
         ['page'=>'pages',     'label'=>'Halaman Custom', 'icon'=>'page'],
+        ['page'=>'career',    'label'=>'Career',         'icon'=>'briefcase',
+            'children'=>[
+                ['url'=>admin_url('?page=career'),                'label'=>'Semua Lowongan', 'match'=>fn($p,$a)=>$p==='career' && !in_array($a,['create'])],
+                ['url'=>admin_url('?page=career&action=create'),  'label'=>'Tambah Lowongan', 'match'=>fn($p,$a)=>$p==='career' && $a==='create'],
+                ['url'=>admin_url('?page=career-lamaran'),        'label'=>'Lamaran Masuk', 'match'=>fn($p,$a)=>$p==='career-lamaran'],
+            ]],
         ['page'=>'menu',      'label'=>'Menu Navigasi',  'icon'=>'menu'],
     ],
     'Marketing' => [

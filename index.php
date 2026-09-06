@@ -109,6 +109,20 @@ switch ($page) {
         }
         break;
 
+    case 'career':
+        if (!empty($slug)) {
+            $career_data = $db->fetchOne('SELECT * FROM career WHERE slug = ? AND is_active = 1', [$slug]);
+            if ($career_data) {
+                require_once theme_path('templates/pages/career-detail.php');
+            } else {
+                http_response_code(404);
+                require_once theme_path('templates/pages/404.php');
+            }
+        } else {
+            require_once theme_path('templates/pages/career.php');
+        }
+        break;
+
     case 'hubungi-kami':
         require_once theme_path('templates/pages/contact.php');
         break;
