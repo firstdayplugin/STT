@@ -83,7 +83,12 @@ if (($_GET['ajax'] ?? '') !== '') {
         }
         
         if ($ajax === 'upload_editor_image' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Note: TinyMCE doesn't send CSRF token by default; admin auth gate above is the protection.
+            // CSRF: TinyMCE's custom upload handler (see layout.php) sends the session token.
+            if (!verify_csrf($_POST['csrf_token'] ?? '')) {
+                http_response_code(403);
+                echo json_encode(['error' => ['message' => 'Token keamanan tidak valid. Refresh halaman.']]);
+                exit;
+            }
             if (!isset($_FILES['file'])) {
                 http_response_code(400);
                 echo json_encode(['error' => ['message' => 'No file uploaded']]);

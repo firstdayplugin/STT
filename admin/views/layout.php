@@ -228,13 +228,35 @@ document.querySelectorAll('.alert-success').forEach(alert => {
 <script>
 (function(){
   var UP = '<?= admin_url('?ajax=upload_editor_image') ?>';
+  var CSRF = '<?= generate_csrf() ?>';
+  // Custom upload handler so the CSRF token travels with the image POST (the default
+  // images_upload_url uploader can't add body fields). Server verifies it (admin/index.php).
+  function uploadHandler(blobInfo, progress) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+      xhr.open('POST', UP);
+      if (xhr.upload) xhr.upload.onprogress = function (e) { if (e.total) progress(e.loaded / e.total * 100); };
+      xhr.onload = function () {
+        if (xhr.status < 200 || xhr.status >= 300) { reject({ message: 'HTTP ' + xhr.status, remove: true }); return; }
+        var json; try { json = JSON.parse(xhr.responseText); } catch (e) { reject('Respons tidak valid'); return; }
+        if (!json || typeof json.location !== 'string') { reject('Respons tidak valid'); return; }
+        resolve(json.location);
+      };
+      xhr.onerror = function () { reject('Upload gagal'); };
+      var fd = new FormData();
+      fd.append('file', blobInfo.blob(), blobInfo.filename());
+      fd.append('csrf_token', CSRF);
+      xhr.send(fd);
+    });
+  }
   var common = {
     base_url: '<?= admin_url('assets/vendor/tinymce') ?>',
     suffix: '.min',
     skin: 'oxide', content_css: 'default',
     branding: false, promotion: false,
     relative_urls: false, remove_script_host: false, convert_urls: true,
-    images_upload_url: UP, images_upload_credentials: true,
+    images_upload_handler: uploadHandler,
     automatic_uploads: true, file_picker_types: 'image',
     content_style: 'body{font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.7;padding:12px}img{max-width:100%;height:auto}'
   };
