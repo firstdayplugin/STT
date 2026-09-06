@@ -22,9 +22,12 @@ $feat_icon = function ($ic) {
 };
 
 $grp = 'ipk';
+$iid = (int)($ind['id'] ?? 0);
+$ind_label = tr_field('industri', $iid, 'label', $ind['label'] ?? '');
+$ind_intro = tr_field('industri', $iid, 'intro', $ind['intro'] ?? '');
 $hero_img = !empty($ind['hero_image']) ? uploads_url($ind['hero_image']) : (!empty($ind['gambar']) ? uploads_url($ind['gambar']) : '');
-$seo = ['title' => ($ind['label'] ?? 'Industry') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
-        'description' => mb_substr(strip_tags($ind['intro'] ?? ''), 0, 160)];
+$seo = ['title' => ($ind_label ?: 'Industry') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
+        'description' => mb_substr(strip_tags($ind_intro), 0, 160)];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 ?>
@@ -37,22 +40,26 @@ include theme_path('templates/layouts/header.php');
     <?php if ($hero_img !== ''): ?><img class="idt-hero-bg" src="<?= htmlspecialchars($hero_img) ?>" alt="" data-fallback="remove"><span class="idt-hero-ov"></span><?php endif; ?>
     <div class="idt-hero-in">
       <div class="eyebrow">Industry</div>
-      <h1><?= htmlspecialchars($ind['label'] ?? '') ?></h1>
-      <?php if (!empty($ind['intro'])): ?><p><?= htmlspecialchars($ind['intro']) ?></p><?php endif; ?>
+      <h1><?= htmlspecialchars($ind_label) ?></h1>
+      <?php if ($ind_intro !== ''): ?><p><?= htmlspecialchars($ind_intro) ?></p><?php endif; ?>
     </div>
   </div>
 
   <?php if ($pillars): ?>
   <div class="idt-tabs" role="tablist">
     <?php foreach ($pillars as $i => $p): ?>
-      <button type="button" class="idt-tab<?= $i === 0 ? ' on' : '' ?>" data-tab-btn="<?= (int)$p['id'] ?>" data-tab-group="<?= $grp ?>"><?= htmlspecialchars($p['nama']) ?></button>
+      <button type="button" class="idt-tab<?= $i === 0 ? ' on' : '' ?>" data-tab-btn="<?= (int)$p['id'] ?>" data-tab-group="<?= $grp ?>"><?= htmlspecialchars(tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama'])) ?></button>
     <?php endforeach; ?>
   </div>
 
   <?php foreach ($pillars as $i => $p):
     $cell = $cells[(int)$p['id']] ?? null;
-    $heading = $cell['heading'] ?? $p['nama'];
-    $konten  = $cell['konten'] ?? ('<p>' . htmlspecialchars($p['deskripsi'] ?? '') . '</p>');
+    $pilar_nama = tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama']);
+    $pilar_desk = tr_field('solusi_pilar', (int)$p['id'], 'deskripsi', $p['deskripsi'] ?? '');
+    $heading = ($cell && $cell['heading'] !== null && $cell['heading'] !== '')
+             ? tr_field('industri_pilar', (int)$cell['id'], 'heading', $cell['heading']) : $pilar_nama;
+    $konten  = ($cell && $cell['konten'] !== null && $cell['konten'] !== '')
+             ? tr_field('industri_pilar', (int)$cell['id'], 'konten', $cell['konten']) : ('<p>' . htmlspecialchars($pilar_desk) . '</p>');
     $fitur = [];
     if (!empty($cell['fitur'])) { $d = json_decode($cell['fitur'], true); if (is_array($d)) $fitur = $d; }
   ?>
@@ -77,7 +84,7 @@ include theme_path('templates/layouts/header.php');
   <?php endif; ?>
 
   <div class="sol-cta">
-    <h2>Solusi untuk industri <?= htmlspecialchars($ind['label'] ?? '') ?>?</h2>
+    <h2>Solusi untuk industri <?= htmlspecialchars($ind_label) ?>?</h2>
     <p>Tim kami siap membantu merancang solusi yang tepat untuk kebutuhan Anda.</p>
     <a class="btn btn-primary" href="<?= url('hubungi-kami') ?>">Hubungi Kami
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>

@@ -43,8 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_form'] ?? '') === 'apply'
 }
 $sent = isset($_GET['sent']);
 $fmt = fn($d) => $d ? date('M j, Y', strtotime($d)) : '';
-$seo = ['title' => ($job['judul'] ?? 'Career') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
-        'description' => $job['meta_description'] ?? mb_substr(strip_tags($job['deskripsi'] ?? ''), 0, 160)];
+// Language-aware field values (fall back to the base/default-language value).
+$jid = (int)($job['id'] ?? 0);
+$T = fn($f) => tr_field('career', $jid, $f, $job[$f] ?? '');
+$j_judul = $T('judul'); $j_desk = $T('deskripsi'); $j_resp = $T('responsibilities'); $j_req = $T('requirements');
+$seo = ['title' => ($j_judul ?: 'Career') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
+        'description' => $job['meta_description'] ?? mb_substr(strip_tags($j_desk), 0, 160)];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 ?>
@@ -54,7 +58,7 @@ include theme_path('templates/layouts/header.php');
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> <?= htmlspecialchars(t('back_to_jobs', 'Semua Lowongan')) ?></a>
 
   <div class="cr-detail-head">
-    <h1><?= htmlspecialchars($job['judul'] ?? '') ?></h1>
+    <h1><?= htmlspecialchars($j_judul) ?></h1>
     <div class="cr-meta">
       <?php if (!empty($job['role'])): ?><span class="cr-chip"><?= htmlspecialchars($job['role']) ?></span><?php endif; ?>
       <?php if (!empty($job['lokasi'])): ?><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg> <?= htmlspecialchars($job['lokasi']) ?></span><?php endif; ?>
@@ -67,14 +71,14 @@ include theme_path('templates/layouts/header.php');
 
   <div class="cr-detail-body">
     <div class="cr-content">
-      <?php if (!empty($job['deskripsi'])): ?><p class="cr-lead"><?= htmlspecialchars($job['deskripsi']) ?></p><?php endif; ?>
-      <?php if (!empty($job['responsibilities'])): ?>
-        <h2>Responsibilities</h2>
-        <div class="page-prose"><?= $job['responsibilities'] ?></div>
+      <?php if ($j_desk !== ''): ?><p class="cr-lead"><?= htmlspecialchars($j_desk) ?></p><?php endif; ?>
+      <?php if ($j_resp !== ''): ?>
+        <h2><?= htmlspecialchars(t('responsibilities', 'Responsibilities')) ?></h2>
+        <div class="page-prose"><?= $j_resp ?></div>
       <?php endif; ?>
-      <?php if (!empty($job['requirements'])): ?>
-        <h2>Requirements</h2>
-        <div class="page-prose"><?= $job['requirements'] ?></div>
+      <?php if ($j_req !== ''): ?>
+        <h2><?= htmlspecialchars(t('requirements', 'Requirements')) ?></h2>
+        <div class="page-prose"><?= $j_req ?></div>
       <?php endif; ?>
     </div>
 

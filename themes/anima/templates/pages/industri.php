@@ -31,8 +31,9 @@ include theme_path('templates/layouts/header.php');
       <?php if ($img !== ''): ?><img class="ind-card-bg" src="<?= htmlspecialchars($img) ?>" alt="" data-fallback="remove" loading="lazy"><?php endif; ?>
       <span class="ind-card-ov"></span>
       <span class="ind-card-body">
-        <span class="ind-card-label"><?= htmlspecialchars($r['label']) ?></span>
-        <?php if (!empty($r['subtitle'])): ?><span class="ind-card-sub"><?= htmlspecialchars($r['subtitle']) ?></span><?php endif; ?>
+        <span class="ind-card-label"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
+        <?php $rsub = tr_field('industri', (int)$r['id'], 'subtitle', $r['subtitle'] ?? ''); ?>
+        <?php if ($rsub !== ''): ?><span class="ind-card-sub"><?= htmlspecialchars($rsub) ?></span><?php endif; ?>
         <span class="ind-card-more">Explore
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </span>

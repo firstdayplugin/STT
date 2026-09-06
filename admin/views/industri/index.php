@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "INSERT INTO industri (label,slug,judul,subtitle,intro,gambar,hero_image,warna1,warna2,url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             [$data['label'],$data['slug'],$data['judul'],$data['subtitle'],$data['intro'],$gambar,$hero,$data['warna1'],$data['warna2'],$data['url'],$data['urutan'],$data['is_active']]
         );
+        save_i18n_fields('industri', (int)$db->lastInsertId(), $_POST);
         log_activity('create', 'Tambah industri: ' . $data['label']);
         set_flash('success', 'Kartu industri "' . $data['label'] . '" ditambahkan.');
     } elseif ($act === 'update' && $id > 0) {
@@ -101,6 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($set_hero)   { $set .= ",hero_image=?"; $params[] = $hero; }
         $params[] = $id;
         $db->execute("UPDATE industri SET $set WHERE id=?", $params);
+        save_i18n_fields('industri', $id, $_POST);
         log_activity('update', 'Update industri: ' . $data['label']);
         set_flash('success', 'Kartu industri diperbarui.');
     }
@@ -227,6 +229,13 @@ $csrf = generate_csrf();
           <input type="checkbox" name="is_active" <?= ($edit_item['is_active'] ?? 1) ? 'checked' : '' ?>> Tampilkan di website
         </label>
       </div>
+
+      <?php if ($action === 'edit') echo i18n_fields_editor('industri', (int)$edit_item['id'], [
+        'label'    => 'Label Kartu',
+        'judul'    => 'Judul Tengah',
+        'subtitle' => 'Sub-teks Tengah',
+        'intro'    => ['label' => 'Intro (halaman detail)', 'type' => 'textarea'],
+      ]); ?>
 
       <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
         <a href="<?= admin_url('?page=industri') ?>" class="btn btn-secondary">Batal</a>

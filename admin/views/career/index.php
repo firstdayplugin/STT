@@ -38,11 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($act === 'create') {
         $ph = implode(',', array_fill(0, count($cols), '?'));
         $db->execute("INSERT INTO career (" . implode(',', $cols) . ") VALUES ($ph)", array_values($data));
+        $new_id = (int) $db->lastInsertId();
+        save_i18n_fields('career', $new_id, $_POST);
         log_activity('create', 'Tambah lowongan: ' . $judul);
         set_flash('success', 'Lowongan ditambahkan.');
     } elseif ($act === 'update' && $id > 0) {
         $set = implode(',', array_map(fn($c) => "$c=?", $cols));
         $db->execute("UPDATE career SET $set WHERE id=?", [...array_values($data), $id]);
+        save_i18n_fields('career', $id, $_POST);
         log_activity('update', 'Update lowongan: ' . $judul);
         set_flash('success', 'Lowongan diperbarui.');
     }
@@ -119,6 +122,18 @@ $fmt = fn($d) => $d ? date('d M Y', strtotime($d)) : '—';
       </div>
       <div class="form-group"><label class="checkbox-label">
         <input type="checkbox" name="is_active" <?= ($edit['is_active'] ?? 1) ? 'checked' : '' ?>> Aktif (tampil di website)</label></div>
+
+      <?php if ($action === 'edit'): ?>
+      <?= i18n_fields_editor('career', (int)$edit['id'], [
+        'judul'            => 'Judul Posisi',
+        'deskripsi'        => ['label' => 'Deskripsi Singkat', 'type' => 'textarea'],
+        'responsibilities' => ['label' => 'Responsibilities', 'type' => 'wysiwyg'],
+        'requirements'     => ['label' => 'Requirements', 'type' => 'wysiwyg'],
+      ]) ?>
+      <?php else: ?>
+        <?php if (function_exists('is_multilang') && is_multilang()): ?><div class="form-hint" style="margin-top:12px"><?= icon('info', 13) ?> Simpan dulu, lalu terjemahan per bahasa muncul di sini saat edit.</div><?php endif; ?>
+      <?php endif; ?>
+
       <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
         <a href="<?= admin_url('?page=career') ?>" class="btn btn-secondary">Batal</a>
         <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>

@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "INSERT INTO solusi_pilar (nama,slug,deskripsi,icon,gambar,url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?)",
             [$data['nama'],$data['slug'],$data['deskripsi'],$data['icon'],$gambar,$data['url'],$data['urutan'],$data['is_active']]
         );
+        save_i18n_fields('solusi_pilar', (int)$db->lastInsertId(), $_POST);
         log_activity('create', 'Tambah pilar: ' . $nama);
         set_flash('success', 'Pilar ditambahkan.');
     } elseif ($act === 'update' && $id > 0) {
@@ -61,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($set_gambar) { $set .= ",gambar=?"; $params[] = $gambar; }
         $params[] = $id;
         $db->execute("UPDATE solusi_pilar SET $set WHERE id=?", $params);
+        save_i18n_fields('solusi_pilar', $id, $_POST);
         log_activity('update', 'Update pilar: ' . $nama);
         set_flash('success', 'Pilar diperbarui.');
     }
@@ -122,6 +124,10 @@ $csrf = generate_csrf();
       </div>
       <div class="form-group"><label class="checkbox-label">
         <input type="checkbox" name="is_active" <?= ($edit_item['is_active'] ?? 1) ? 'checked' : '' ?>> Tampilkan</label></div>
+      <?php if ($action === 'edit') echo i18n_fields_editor('solusi_pilar', (int)$edit_item['id'], [
+        'nama'      => 'Nama Pilar',
+        'deskripsi' => ['label' => 'Deskripsi', 'type' => 'textarea'],
+      ]); ?>
       <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--border)">
         <a href="<?= admin_url('?page=solusi-pilar') ?>" class="btn btn-secondary">Batal</a>
         <button type="submit" class="btn btn-primary"><?= icon('save', 16) ?> Simpan</button>

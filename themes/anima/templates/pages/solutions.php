@@ -34,8 +34,8 @@ include theme_path('templates/layouts/header.php');
     <?php foreach ($pillars as $p): $href = trim((string)($p['url'] ?? '')); ?>
     <a class="sol-card" href="<?= htmlspecialchars($href !== '' ? (preg_match('#^https?:#', $href) ? $href : url(ltrim($href, '/'))) : '#') ?>">
       <div class="sol-ic"><?= $pill_icon($p) ?></div>
-      <h3><?= htmlspecialchars($p['nama']) ?></h3>
-      <p><?= htmlspecialchars($p['deskripsi'] ?? '') ?></p>
+      <h3><?= htmlspecialchars(tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama'])) ?></h3>
+      <p><?= htmlspecialchars(tr_field('solusi_pilar', (int)$p['id'], 'deskripsi', $p['deskripsi'] ?? '')) ?></p>
       <span class="sol-more"><?= htmlspecialchars(get_content('solutions', 'card_cta', 'Selengkapnya')) ?>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>

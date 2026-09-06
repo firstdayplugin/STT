@@ -55,6 +55,7 @@ $nav_sections = [
         ['page'=>'template',  'label'=>'Template',    'icon'=>'template'],
         ['page'=>'plugin',    'label'=>'Plugin',      'icon'=>'plugin'],
         ['page'=>'users',     'label'=>'Pengguna',    'icon'=>'users'],
+        ['page'=>'terjemahan','label'=>'Terjemahan',  'icon'=>'globe'],
     ],
 ];
 

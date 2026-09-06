@@ -70,6 +70,7 @@ if (!function_exists('default_lang')) {
      */
     function t(string $key, string $default = '', ?string $lang = null): string {
         $lang = $lang ?? current_lang();
+        if ($default === '') { $default = ui_string_defaults()[$key] ?? ''; }
         if ($lang === default_lang()) return $default !== '' ? $default : $key;
         static $cache = [];
         if (!isset($cache[$lang])) {
@@ -119,6 +120,93 @@ if (!function_exists('default_lang')) {
             if ($existing) $db->execute("UPDATE content_i18n SET nilai=? WHERE id=?", [$value, $existing['id']]);
             else $db->execute("INSERT INTO content_i18n (tabel,row_id,field,lang,nilai) VALUES (?,?,?,?,?)", [$table, $id, $field, $lang, $value]);
         } catch (\Throwable $e) { /* ignore */ }
+    }
+
+    /**
+     * Registry of translatable UI strings: [group => [key => default-language text]].
+     * The Translations admin lists these; t('key') falls back here when no default is passed.
+     * Add a row here whenever you wrap a new string with t().
+     */
+    function ui_strings(): array {
+        return [
+            'Umum' => [
+                'all'                => 'Semua',
+                'search'             => 'Cari',
+                'view_detail'        => 'Lihat detail',
+                'read_more'          => 'Selengkapnya',
+                'learn_more'         => 'Pelajari lebih lanjut',
+                'contact_us'         => 'Hubungi Kami',
+                'explore'            => 'Explore',
+            ],
+            'Career' => [
+                'search_jobs'        => 'Cari posisi...',
+                'job_role'           => 'Job Role',
+                'location'           => 'Location',
+                'back_to_jobs'       => 'Semua Lowongan',
+                'apply_here'         => 'Lamar Posisi Ini',
+                'submit_application' => 'Kirim Lamaran',
+                'responsibilities'   => 'Responsibilities',
+                'requirements'       => 'Requirements',
+                'application_sent'   => 'Terima kasih! Lamaran Anda sudah kami terima. Tim kami akan menghubungi jika cocok.',
+            ],
+        ];
+    }
+
+    /** Flat map of every registry key => default text (used by t() fallback + admin). */
+    function ui_string_defaults(): array {
+        static $flat = null;
+        if ($flat === null) { $flat = []; foreach (ui_strings() as $grp) { $flat += $grp; } }
+        return $flat;
+    }
+
+    /**
+     * Reusable admin editor for per-row field translations (content_i18n).
+     * $spec: ['field' => 'Label']  or  ['field' => ['label'=>..,'type'=>'text|textarea|wysiwyg']].
+     * Renders one section per non-default language with inputs named i18n[<lang>][<field>],
+     * prefilled from stored translations. Drop it inside the module's edit <form>, then call
+     * save_i18n_fields($table,$id,$_POST) in that form's POST handler.
+     */
+    function i18n_fields_editor(string $table, int $id, array $spec): string {
+        if ($id <= 0 || !is_multilang()) return '';
+        $def = default_lang();
+        $others = array_values(array_filter(available_langs(), fn($l) => $l !== $def));
+        if (!$others) return '';
+        $out = '<div class="card" style="margin-top:16px"><div class="card-header"><div class="card-title">'
+             . icon('globe', 15) . ' Terjemahan (opsional)</div><div class="card-subtitle">Kosongkan untuk memakai teks '
+             . htmlspecialchars(strtoupper($def)) . '.</div></div><div class="card-body">';
+        foreach ($others as $l) {
+            $out .= '<div style="font-weight:700;font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:4px 0 10px">'
+                  . htmlspecialchars(strtoupper($l)) . ' — ' . htmlspecialchars(lang_label($l)) . '</div>';
+            foreach ($spec as $field => $conf) {
+                $label = is_array($conf) ? ($conf['label'] ?? $field) : $conf;
+                $type  = is_array($conf) ? ($conf['type'] ?? 'text') : 'text';
+                $val   = tr_field($table, $id, (string) $field, '', $l);
+                $name  = 'i18n[' . htmlspecialchars($l) . '][' . htmlspecialchars((string) $field) . ']';
+                $out  .= '<div class="form-group"><label style="font-size:12px">' . htmlspecialchars($label) . '</label>';
+                if ($type === 'textarea') {
+                    $out .= '<textarea name="' . $name . '" class="no-wysiwyg" rows="2">' . htmlspecialchars($val) . '</textarea>';
+                } elseif ($type === 'wysiwyg') {
+                    $out .= '<textarea name="' . $name . '" class="wysiwyg" rows="4">' . htmlspecialchars($val) . '</textarea>';
+                } else {
+                    $out .= '<input type="text" name="' . $name . '" value="' . htmlspecialchars($val) . '">';
+                }
+                $out .= '</div>';
+            }
+        }
+        return $out . '</div></div>';
+    }
+
+    /** Persist the i18n[<lang>][<field>] inputs rendered by i18n_fields_editor(). */
+    function save_i18n_fields(string $table, int $id, array $post): void {
+        if ($id <= 0) return;
+        $i18n = $post['i18n'] ?? [];
+        if (!is_array($i18n)) return;
+        foreach ($i18n as $lang => $fields) {
+            if (!in_array($lang, available_langs(), true) || $lang === default_lang() || !is_array($fields)) continue;
+            foreach ($fields as $field => $value) {
+                set_tr_field($table, $id, (string) $field, (string) $lang, (string) $value);
+            }
+        }
     }
 
     /** Render the language switcher (empty when only one language). */

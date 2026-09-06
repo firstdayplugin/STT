@@ -491,9 +491,18 @@ Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik ta
   (field DB generik per baris). Tambah bahasa = tambah baris, **tanpa migrasi skema**.
 - **Terbukti**: `/career` vs `/en/career` (chrome via `t()`: "Cari posisi"→"Search positions"),
   `/solutions` vs `/en/solutions` (teks via content_blocks: "Siap memodernisasi…"→"Ready to modernize…").
-- **BELUM (D2):** UI admin terjemahan (tab per-bahasa di editor konten + field EN per modul via
-  `content_i18n`), editor daftar UI-string, terjemahkan sisa chrome hardcoded (nav master, footer),
-  wiring nav master ke menu DB. Fondasi/mesin sudah siap — sisanya mengisi konten + UI admin.
+**STATUS — Admin terjemahan (Langkah D2, SELESAI sesi ini):**
+- **Registry UI-string** `ui_strings()` (i18n.php) + `t()` fallback ke registry. Halaman admin
+  **Terjemahan** (`admin/views/terjemahan/`) = editor daftar UI-string per bahasa (ID readonly +
+  input EN, grup). Terdaftar di router + sidebar (Sistem).
+- **Field DB per baris (reusable)**: `i18n_fields_editor($tabel,$id,$spec)` + `save_i18n_fields()`
+  (i18n.php) → simpan ke `content_i18n`. Dipasang di admin **Career** (judul/deskripsi/
+  responsibilities/requirements), **Pilar Solusi** (nama/deskripsi), **Industries** (label/judul/
+  subtitle/intro). Frontend tampil via `tr_field()` (fallback ke default). Terbukti E2E untuk ketiga modul.
+- **BELUM (D3, sisa i18n):** tab per-bahasa di editor konten halaman (`content` — teks home/about via
+  content_blocks per-lang), editor terjemahan sel matriks `industri_pilar`, terjemahkan sisa chrome
+  hardcoded (nav master "About Us/…", footer), dan **wiring nav master ke menu DB** (saat ini nav
+  hardcoded link `#`). Mesin + pola sudah lengkap; sisanya mekanis.
 
 ## 18. Bahasa sebagai Produk (N-language readiness & monetisasi)
 
