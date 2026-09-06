@@ -1143,3 +1143,14 @@ header.scrolled .lang a{color:var(--dim)}
 .lang a:hover{color:#fff}
 header.scrolled .lang a:hover{color:var(--blue,#2478E0)}
 header .lang a{color:#6a86ad}
+/* §D3 header dropdown (DB-driven nav with children) */
+.menu .has-sub{position:relative;display:inline-flex;align-items:center}
+.menu .has-sub>a{display:inline-flex;align-items:center;gap:5px}
+.menu .submenu{position:absolute;top:100%;left:0;min-width:210px;padding:8px;margin-top:10px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px rgba(14,42,78,.16);
+  display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateY(6px);
+  transition:opacity .18s,transform .18s,visibility .18s;z-index:60}
+.menu .has-sub:hover .submenu{opacity:1;visibility:visible;transform:none}
+.menu .submenu a{color:var(--ink,#0f1c34)!important;padding:9px 12px;border-radius:8px;font-size:14px;white-space:nowrap}
+.menu .submenu a::after{display:none}
+.menu .submenu a:hover{background:var(--bg-soft,#f6f9fd);color:var(--blue,#2478E0)!important}

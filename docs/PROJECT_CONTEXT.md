@@ -499,10 +499,15 @@ Prinsip: **opsional + fallback + dua tingkat** agar tidak menyusahkan pemilik ta
   (i18n.php) → simpan ke `content_i18n`. Dipasang di admin **Career** (judul/deskripsi/
   responsibilities/requirements), **Pilar Solusi** (nama/deskripsi), **Industries** (label/judul/
   subtitle/intro). Frontend tampil via `tr_field()` (fallback ke default). Terbukti E2E untuk ketiga modul.
-- **BELUM (D3, sisa i18n):** tab per-bahasa di editor konten halaman (`content` — teks home/about via
-  content_blocks per-lang), editor terjemahan sel matriks `industri_pilar`, terjemahkan sisa chrome
-  hardcoded (nav master "About Us/…", footer), dan **wiring nav master ke menu DB** (saat ini nav
-  hardcoded link `#`). Mesin + pola sudah lengkap; sisanya mekanis.
+**STATUS — Nav DB + terjemahan menu (Langkah D3, SELESAI sesi ini):**
+- **Header nav master → dari menu DB** (`get_menu_tree()`), bukan lagi hardcoded link `#`. URL
+  lang-aware (otomatis `/en/`), dukung dropdown (`.has-sub`/`.submenu` + CSS), item kontak jadi
+  tombol CTA. Label diterjemahkan via `tr_field('menus',id,'nama')`.
+- **Terjemahan label menu** ditambahkan ke halaman admin **Terjemahan** (bagian "Menu Navigasi",
+  simpan ke `content_i18n`). Terbukti: nav `/` = "Career", `/en/` = "Careers".
+- **BELUM (D4, sisa i18n):** tab per-bahasa di editor konten halaman (`content` — teks home/about via
+  content_blocks per-lang), editor terjemahan sel matriks `industri_pilar`, wiring + terjemahan
+  **footer** (masih hardcoded), dan drawer menu **mobile** (belum ada). Mesin + pola sudah lengkap.
 
 ## 18. Bahasa sebagai Produk (N-language readiness & monetisasi)
 
