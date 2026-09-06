@@ -1,0 +1,22 @@
+{
+  "name": "Reklamenesia",
+  "slug": "reklamenesia",
+  "version": "1.5.1",
+  "description": "Tema reklame & signage hasil konversi pixel-faithful dari situs Framer reklamenesia.framer.website. Brand merah (#C21F1F) + near-black, font Instrument Sans/Inter, ticker marquee, scroll reveal, dan kartu layanan image-tile.",
+  "author": "Custom build for Reklamenesia",
+  "tags": ["advertising", "signage", "reklame", "framer", "red", "dark"],
+  "screenshot": "screenshot.png",
+  "supports": {
+    "settings_accent_color": true,
+    "settings_logo": true,
+    "settings_logo_dark": true,
+    "hero_settings": true,
+    "flex_blocks": true,
+    "grid_icon_box": true
+  },
+  "requires": {
+    "cms": "Reklamepedia CMS >= 1.0.0",
+    "php": ">=8.0",
+    "browser": "Evergreen (Chrome/Edge/Safari/Firefox terbaru)"
+  }
+}
