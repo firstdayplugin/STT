@@ -1,0 +1,35 @@
+# ============================================================
+# Reklamepedia CMS — Apache front-controller + baseline hardening
+# Routes every request that is NOT a real file/dir to index.php so
+# pretty URLs (/tentang-kami, /solutions, /career/…) work.
+# ============================================================
+
+DirectoryIndex index.php
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Works at domain root or in a subfolder; index.php computes its own BASE_URL.
+  # Real files and directories (assets, uploads, /admin, themes) are served as-is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Everything else -> front controller.
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# Do not expose the schema dump, docs, VCS, or config to the web.
+<FilesMatch "\.(sql|md|log|json|lock|dist|ini)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^\.(env|git)">
+  Require all denied
+</FilesMatch>
+
+# Baseline security headers (help audit score; CSP is added in a later pass).
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-XSS-Protection "0"
+</IfModule>
