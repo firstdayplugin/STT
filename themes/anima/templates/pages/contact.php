@@ -154,7 +154,7 @@ $socials  = [
         <?php if (trim((string)$maps) !== ''): ?>
           <?= $maps /* trusted embed HTML from settings */ ?>
         <?php else: ?>
-          <div class="ct-map-ph">Peta lokasi akan tampil di sini (atur embed Google Maps di Pengaturan).</div>
+          <div class="ct-map-ph"><?= ac('contact', 'map_placeholder') ?></div>
         <?php endif; ?>
       </div>
     </section>

@@ -25,4 +25,5 @@ return [
   'l_email'      => ['label'=>'Label email',       'type'=>'text','group'=>'Info','default'=>'Email'],
   'l_proemail'   => ['label'=>'Label email support','type'=>'text','group'=>'Info','default'=>'ProSupport 7x24 Hours Email'],
   'social_title' => ['label'=>'Judul sosial media','type'=>'text','group'=>'Info','default'=>'Social Media'],
+  'map_placeholder' => ['label'=>'Teks placeholder peta','type'=>'text','group'=>'Info','default'=>'Peta lokasi akan tampil di sini (atur embed Google Maps di Pengaturan).'],
 ];
