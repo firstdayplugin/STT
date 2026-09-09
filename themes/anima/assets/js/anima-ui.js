@@ -24,11 +24,33 @@
       });
       return;
     }
-    var el = e.target.closest ? e.target.closest('[data-scrolltop],[data-proposal-submit],[data-contact-submit]') : null;
+    var el = e.target.closest ? e.target.closest('[data-scrolltop]') : null;
     if (!el) return;
     if (el.hasAttribute('data-scrolltop')) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
-    else if (el.hasAttribute('data-proposal-submit')) { e.preventDefault(); /* TODO: POST Request Proposal to CMS endpoint */ }
-    else if (el.hasAttribute('data-contact-submit')) { e.preventDefault(); /* TODO: POST Contact form to CMS endpoint */ }
+  });
+})();
+
+/* Footer newsletter subscribe — POST to /api/subscribe via fetch, stay on page. */
+(function(){
+  document.addEventListener('submit', function(e){
+    var f = e.target;
+    if (!f || !f.matches || !f.matches('form[data-newsletter]')) return;
+    e.preventDefault();
+    var msg = f.parentElement ? f.parentElement.querySelector('[data-newsletter-msg]') : null;
+    var input = f.querySelector('input[type=email]');
+    var body = new URLSearchParams(new FormData(f));
+    fetch(f.getAttribute('action'), { method:'POST', headers:{'X-Requested-With':'fetch'}, body: body })
+      .then(function(r){ return r.json().catch(function(){ return {status:'error'}; }); })
+      .then(function(d){
+        var ok = d && d.status === 'ok';
+        if (msg) {
+          msg.hidden = false;
+          msg.className = 'tel-footer-nl-msg ' + (ok ? 'ok' : 'err');
+          msg.textContent = ok ? 'Terima kasih! Anda sudah berlangganan.' : (d && d.message ? d.message : 'Gagal berlangganan. Coba lagi.');
+        }
+        if (ok && input) input.value = '';
+      })
+      .catch(function(){ if (msg){ msg.hidden=false; msg.className='tel-footer-nl-msg err'; msg.textContent='Gagal berlangganan. Coba lagi.'; } });
   });
 })();
 

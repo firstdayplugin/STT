@@ -571,11 +571,28 @@ CREATE TABLE `job_applications` (
   PRIMARY KEY (`id`), KEY `career_id` (`career_id`), KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Inbound messages: contact form, request-proposal, and newsletter subscriptions.
+CREATE TABLE `pesan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tipe` enum('kontak','proposal','newsletter') NOT NULL DEFAULT 'kontak',
+  `nama` varchar(150) DEFAULT NULL,
+  `email` varchar(190) DEFAULT NULL,
+  `telepon` varchar(60) DEFAULT NULL,
+  `perusahaan` varchar(150) DEFAULT NULL,
+  `subjek` varchar(200) DEFAULT NULL,
+  `pesan` text DEFAULT NULL,
+  `halaman` varchar(190) DEFAULT NULL,           -- page the message was sent from
+  `ip` varchar(64) DEFAULT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`), KEY `tipe` (`tipe`), KEY `is_read` (`is_read`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT INTO `career` (`judul`,`slug`,`role`,`lokasi`,`tipe`,`jenjang`,`pengalaman`,`deskripsi`,`responsibilities`,`requirements`,`deadline`,`urutan`,`is_active`) VALUES
 ('Backend Engineer (PHP)','backend-engineer-php','Software Engineering & Developer','Jakarta','Full-time','Bachelor/S1','Experienced',
  'Bangun dan pelihara layanan backend yang andal untuk platform enterprise kami.',
  '<ul><li>Merancang & mengembangkan API dan layanan backend.</li><li>Menjaga performa, keamanan, dan skalabilitas.</li><li>Berkolaborasi dengan tim produk & infrastruktur.</li></ul>',
- '<ul><li>Menguasai PHP & MySQL, minimal 3 tahun.</li><li>Paham REST API, Git, dan pola keamanan web.</li><li>Nilai plus: Docker, CI/CD.</li></ul>','2026-08-30',1,1),
+ '<ul><li>Menguasai PHP & MySQL, minimal 3 tahun.</li><li>Paham REST API, Git, dan pola keamanan web.</li><li>Nilai plus: Docker, CI/CD.</li></ul>','2027-01-31',1,1),
 ('Cyber Security Analyst','cyber-security-analyst','Cyber Security & IT Infrastructure','Bandung','Full-time','Bachelor/S1','Experienced',
  'Pantau, deteksi, dan tanggapi ancaman siber untuk klien enterprise.',
  '<ul><li>Monitoring SOC & analisis insiden.</li><li>Threat hunting & incident response.</li><li>Menyusun laporan keamanan berkala.</li></ul>',

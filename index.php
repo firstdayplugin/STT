@@ -147,6 +147,16 @@ switch ($page) {
 
     case 'api':
         header('Content-Type: application/json');
+        if ($slug === 'subscribe') {
+            $email = trim($_POST['email'] ?? '');
+            $honey = trim($_POST['website'] ?? '');
+            if ($honey !== '') { json_response(['status' => 'ok']); }        // silent drop for bots
+            if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                json_response(['status' => 'error', 'message' => 'Email tidak valid.'], 422);
+            }
+            save_lead('newsletter', ['email' => $email, 'halaman' => $_POST['from'] ?? '']);
+            json_response(['status' => 'ok']);
+        }
         if ($slug === 'wa-click') {
             $contact_id = (int)($_POST['contact_id'] ?? 0);
             if ($contact_id > 0) {

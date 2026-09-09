@@ -7,13 +7,23 @@
 $db = $db ?? (class_exists('Database') ? Database::getInstance() : null);
 $Q = function (string $sql, array $p = []) use ($db) { try { return $db ? $db->fetchAll($sql, $p) : []; } catch (\Throwable $e) { return []; } };
 
-$kat = isset($_GET['kat']) ? trim((string) $_GET['kat']) : '';
-$q   = isset($_GET['q'])   ? trim((string) $_GET['q'])   : '';
+$kat  = isset($_GET['kat'])  ? trim((string) $_GET['kat'])  : '';
+$q    = isset($_GET['q'])    ? trim((string) $_GET['q'])    : '';
+$year = isset($_GET['year']) ? (int) $_GET['year']          : 0;
+
+// Build a query string that preserves the other active filters (so links combine).
+$qs = function (array $override = []) use ($kat, $q, $year) {
+    $p = array_filter(['kat' => $kat, 'q' => $q, 'year' => $year ?: ''], fn($v) => $v !== '' && $v !== 0);
+    $p = array_merge($p, $override);
+    $p = array_filter($p, fn($v) => $v !== '' && $v !== null);
+    return $p ? 'blog?' . http_build_query($p) : 'blog';
+};
 
 $catExpr = "(SELECT bk.nama FROM blog_kategori_rel r JOIN blog_kategori bk ON bk.id=r.kategori_id WHERE r.blog_id=b.id LIMIT 1)";
 $where = "b.status='published'"; $args = [];
 if ($kat !== '') { $where .= " AND EXISTS (SELECT 1 FROM blog_kategori_rel r JOIN blog_kategori bk ON bk.id=r.kategori_id WHERE r.blog_id=b.id AND bk.slug=?)"; $args[] = $kat; }
 if ($q !== '')   { $where .= " AND (b.judul LIKE ? OR b.excerpt LIKE ?)"; $args[] = "%$q%"; $args[] = "%$q%"; }
+if ($year > 0)   { $where .= " AND YEAR(b.created_at) = ?"; $args[] = $year; }
 
 $posts    = $Q("SELECT b.*, $catExpr AS kategori FROM blog b WHERE $where ORDER BY b.created_at DESC", $args);
 $featured = $Q("SELECT b.*, $catExpr AS kategori FROM blog b WHERE b.status='published' ORDER BY b.created_at DESC LIMIT 1");
@@ -51,12 +61,14 @@ include theme_path('templates/layouts/header.php');
   <form class="bl-search" method="get" action="<?= url('blog') ?>">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Search by keywords">
+    <?php if ($kat !== ''): ?><input type="hidden" name="kat" value="<?= htmlspecialchars($kat) ?>"><?php endif; ?>
+    <?php if ($year > 0): ?><input type="hidden" name="year" value="<?= $year ?>"><?php endif; ?>
   </form>
 
   <div class="bl-tabs">
-    <a class="bl-tab<?= $kat === '' ? ' on' : '' ?>" href="<?= url('blog') ?>">All</a>
+    <a class="bl-tab<?= $kat === '' ? ' on' : '' ?>" href="<?= url($qs(['kat' => null])) ?>">All</a>
     <?php foreach ($cats as $c): ?>
-      <a class="bl-tab<?= $kat === $c['slug'] ? ' on' : '' ?>" href="<?= url('blog?kat=' . urlencode($c['slug'])) ?>"><?= htmlspecialchars($c['nama']) ?></a>
+      <a class="bl-tab<?= $kat === $c['slug'] ? ' on' : '' ?>" href="<?= url($qs(['kat' => $c['slug']])) ?>"><?= htmlspecialchars($c['nama']) ?></a>
     <?php endforeach; ?>
   </div>
 
@@ -97,8 +109,9 @@ include theme_path('templates/layouts/header.php');
       <div class="bl-side-box">
         <h4>Publishing Year</h4>
         <ul class="bl-years">
-          <?php foreach ($years as $y): ?>
-          <li><a href="<?= url('blog') ?>"><span><?= (int) $y['y'] ?></span> <span class="n">(<?= (int) $y['c'] ?>)</span></a></li>
+          <?php if ($year > 0): ?><li><a href="<?= url($qs(['year' => null])) ?>" class="on">Semua tahun</a></li><?php endif; ?>
+          <?php foreach ($years as $y): $yy = (int) $y['y']; ?>
+          <li><a href="<?= url($qs(['year' => $yy])) ?>"<?= $year === $yy ? ' class="on"' : '' ?>><span><?= $yy ?></span> <span class="n">(<?= (int) $y['c'] ?>)</span></a></li>
           <?php endforeach; ?>
         </ul>
       </div>

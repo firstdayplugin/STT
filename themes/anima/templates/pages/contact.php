@@ -6,6 +6,29 @@
  */
 if (!isset($db) && class_exists('Database')) { $db = Database::getInstance(); }
 
+// --- Contact form submit (PRG): honeypot + Turnstile anti-spam, then save to `pesan`. ---
+$ct_err = '';
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') === 'contact') {
+    $nama  = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $msg   = trim($_POST['message'] ?? '');
+    $honey = trim($_POST['website'] ?? ''); // honeypot — must stay empty
+    if ($honey !== '') {
+        redirect(url('hubungi-kami') . '?sent=1');                // silent drop for bots
+    } elseif ($nama === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $ct_err = 'Nama dan email yang valid wajib diisi.';
+    } elseif ($msg === '') {
+        $ct_err = 'Pesan tidak boleh kosong.';
+    } elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? null)) {
+        $ct_err = 'Verifikasi anti-spam gagal. Silakan coba lagi.';
+    } else {
+        save_lead('kontak', ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
+                             'pesan' => $msg, 'halaman' => 'hubungi-kami']);
+        redirect(url('hubungi-kami') . '?sent=1');
+    }
+}
+$ct_sent = isset($_GET['sent']);
+
 $seo = [
   'title'       => get_setting('site_title_contact', 'Contact Us — ' . get_setting('site_name', 'Sapta Tunas Teknologi')),
   'description' => get_setting('site_description_contact', 'Hubungi Sapta Tunas Teknologi. Konsultasikan kebutuhan solusi IT, cloud, cybersecurity, dan data & AI Anda.'),
@@ -42,7 +65,14 @@ $socials  = [
         <div class="ct-form">
           <h2><?= ac('contact', 'form_title', true) ?></h2>
           <p><?= ac('contact', 'form_sub') ?></p>
+          <?php if ($ct_sent): ?>
+            <div class="ct-alert ok"><?= htmlspecialchars(ac('contact', 'form_success', true) ?: 'Terima kasih! Pesan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.') ?></div>
+          <?php elseif ($ct_err !== ''): ?>
+            <div class="ct-alert err"><?= htmlspecialchars($ct_err) ?></div>
+          <?php endif; ?>
           <form method="post" action="<?= htmlspecialchars(url('hubungi-kami')) ?>" novalidate>
+            <input type="hidden" name="_form" value="contact">
+            <div class="ct-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
             <div class="ct-field">
               <label for="ct-name"><?= ac('contact', 'f_name') ?></label>
               <input id="ct-name" name="name" type="text" placeholder="<?= ac('contact', 'f_name_ph') ?>">
@@ -59,7 +89,8 @@ $socials  = [
               <label for="ct-msg"><?= ac('contact', 'f_msg') ?></label>
               <textarea id="ct-msg" name="message" placeholder="<?= ac('contact', 'f_msg_ph') ?>"></textarea>
             </div>
-            <button class="btn btn-primary ct-submit" type="submit" data-contact-submit>
+            <?php if (turnstile_enabled()): ?><div class="ct-field"><?= turnstile_widget() ?></div><?php endif; ?>
+            <button class="btn btn-primary ct-submit" type="submit">
               <?= ac('contact', 'f_submit') ?>
               <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
@@ -129,4 +160,5 @@ $socials  = [
     </section>
   </div>
 </main>
+<?= turnstile_script() ?>
 <?php include theme_path('templates/layouts/footer.php'); ?>

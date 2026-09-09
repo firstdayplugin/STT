@@ -29,6 +29,10 @@
 .ct-form h2{font-size:clamp(24px,2.4vw,32px);color:var(--ink)}
 .ct-form h2 .blue{color:var(--blue)}
 .ct-form>p{margin:12px 0 24px;color:var(--ink-2);line-height:1.7;font-size:15px}
+.ct-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.ct-alert{padding:13px 16px;border-radius:12px;font-size:14px;line-height:1.55;margin-bottom:20px}
+.ct-alert.ok{background:#e7f6ec;border:1px solid #b6e3c4;color:#186a3b}
+.ct-alert.err{background:#fdecec;border:1px solid #f4c2c2;color:#a12622}
 .ct-field{margin-bottom:16px}
 .ct-field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:7px}
 .ct-field input,.ct-field textarea{width:100%;font:inherit;font-size:14.5px;color:var(--ink);background:#fff;

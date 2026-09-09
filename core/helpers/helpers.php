@@ -389,6 +389,38 @@ function turnstile_verify(?string $token, ?string $ip = null): bool {
     return !empty($data['success']);
 }
 
+/**
+ * Persist an inbound lead/message into `pesan`. Used by the contact form,
+ * the home "Request Proposal" form, and the footer newsletter subscribe.
+ * $type is one of: kontak | proposal | newsletter. Never throws (swallows DB
+ * errors so a visitor never sees an exception); returns true on insert.
+ */
+function save_lead(string $type, array $fields): bool {
+    $type = in_array($type, ['kontak', 'proposal', 'newsletter'], true) ? $type : 'kontak';
+    $clip = fn($v, $n) => mb_substr(trim((string)($v ?? '')), 0, $n);
+    try {
+        $db = Database::getInstance();
+        $db->execute(
+            "INSERT INTO pesan (tipe,nama,email,telepon,perusahaan,subjek,pesan,halaman,ip)
+             VALUES (?,?,?,?,?,?,?,?,?)",
+            [
+                $type,
+                $clip($fields['nama'] ?? '', 150),
+                $clip($fields['email'] ?? '', 190),
+                $clip($fields['telepon'] ?? '', 60),
+                $clip($fields['perusahaan'] ?? '', 150),
+                $clip($fields['subjek'] ?? '', 200),
+                trim((string)($fields['pesan'] ?? '')),
+                $clip($fields['halaman'] ?? ($_SERVER['REQUEST_URI'] ?? ''), 190),
+                $clip($_SERVER['REMOTE_ADDR'] ?? '', 64),
+            ]
+        );
+        return true;
+    } catch (\Throwable $e) {
+        return false;
+    }
+}
+
 // ============================================
 // AUTH HELPERS
 // ============================================

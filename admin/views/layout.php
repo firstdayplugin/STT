@@ -11,6 +11,7 @@ $doc_url   = get_setting('docs_url', '#');
 $nav_sections = [
     'Utama' => [
         ['page'=>'dashboard', 'label'=>'Dashboard', 'icon'=>'dashboard'],
+        ['page'=>'pesan',     'label'=>'Pesan Masuk', 'icon'=>'mail'],
         ['page'=>'wizard',    'label'=>'Setup Wizard', 'icon'=>'rocket'],
     ],
     'Konten' => [

@@ -38,12 +38,14 @@
       <div class="tel-footer-content">
         <div class="tel-footer-brand">
           <div class="tel-footer-consult"><?= htmlspecialchars(t('consult_with_us', 'Consult With Us')) ?></div>
-          <form class="tel-footer-newsletter" method="post" action="#" onsubmit="return false">
-            <input type="email" placeholder="<?= htmlspecialchars(t('newsletter_email_ph', 'Enter your email here')) ?>" aria-label="Email">
-            <button aria-label="Subscribe" data-proposal-submit>
+          <form class="tel-footer-newsletter" method="post" action="<?= htmlspecialchars(url('api/subscribe')) ?>" data-newsletter>
+            <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+            <input type="email" name="email" required placeholder="<?= htmlspecialchars(t('newsletter_email_ph', 'Enter your email here')) ?>" aria-label="Email">
+            <button type="submit" aria-label="Subscribe">
               <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
           </form>
+          <div class="tel-footer-nl-msg" data-newsletter-msg hidden></div>
 
           <div class="tel-footer-socials">
             <?php foreach ($__soc as $net => $u): if ($u === '' || $u === '#') continue; ?>
