@@ -41,9 +41,9 @@ include theme_path('templates/layouts/header.php');
 <main class="page-body"><div class="page-shell">
 
   <div class="page-hero">
-    <div class="eyebrow">What's New</div>
-    <h1>What's New</h1>
-    <p>Your main source to stay up-to-date with the latest trends, innovations and updates in various fields.</p>
+    <div class="eyebrow"><?= ac('blog', 'hero_eyebrow') ?></div>
+    <h1><?= ac('blog', 'hero_title') ?></h1>
+    <p><?= ac('blog', 'hero_sub') ?></p>
   </div>
 
   <?php if ($featured): ?>
@@ -60,13 +60,13 @@ include theme_path('templates/layouts/header.php');
 
   <form class="bl-search" method="get" action="<?= url('blog') ?>">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="Search by keywords">
+    <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="<?= ac('blog','search_ph') ?>">
     <?php if ($kat !== ''): ?><input type="hidden" name="kat" value="<?= htmlspecialchars($kat) ?>"><?php endif; ?>
     <?php if ($year > 0): ?><input type="hidden" name="year" value="<?= $year ?>"><?php endif; ?>
   </form>
 
   <div class="bl-tabs">
-    <a class="bl-tab<?= $kat === '' ? ' on' : '' ?>" href="<?= url($qs(['kat' => null])) ?>">All</a>
+    <a class="bl-tab<?= $kat === '' ? ' on' : '' ?>" href="<?= url($qs(['kat' => null])) ?>"><?= ac('blog','all_label') ?></a>
     <?php foreach ($cats as $c): ?>
       <a class="bl-tab<?= $kat === $c['slug'] ? ' on' : '' ?>" href="<?= url($qs(['kat' => $c['slug']])) ?>"><?= htmlspecialchars($c['nama']) ?></a>
     <?php endforeach; ?>
@@ -75,7 +75,7 @@ include theme_path('templates/layouts/header.php');
   <div class="bl-layout">
     <div class="bl-grid">
       <?php if (!$posts): ?>
-        <p class="bl-empty">Belum ada artikel.</p>
+        <p class="bl-empty"><?= ac('blog','empty_text') ?></p>
       <?php endif; ?>
       <?php foreach ($posts as $p): ?>
       <article class="bl-card">
@@ -98,7 +98,7 @@ include theme_path('templates/layouts/header.php');
 
     <aside class="bl-side">
       <div class="bl-side-box">
-        <h4>New Information</h4>
+        <h4><?= ac('blog','recent_title') ?></h4>
         <ul class="bl-recent">
           <?php foreach ($recent as $r): ?>
           <li><a href="<?= url('blog/' . $r['slug']) ?>"><?= htmlspecialchars($r['judul']) ?></a>
@@ -107,7 +107,7 @@ include theme_path('templates/layouts/header.php');
         </ul>
       </div>
       <div class="bl-side-box">
-        <h4>Publishing Year</h4>
+        <h4><?= ac('blog','years_title') ?></h4>
         <ul class="bl-years">
           <?php if ($year > 0): ?><li><a href="<?= url($qs(['year' => null])) ?>" class="on">Semua tahun</a></li><?php endif; ?>
           <?php foreach ($years as $y): $yy = (int) $y['y']; ?>

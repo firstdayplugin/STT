@@ -16,6 +16,7 @@ $nav_sections = [
     ],
     'Konten' => [
         ['page'=>'content',   'label'=>'Konten Halaman', 'icon'=>'content', 'highlight'=>true],
+        ['page'=>'about',     'label'=>'Tentang Kami',   'icon'=>'users'],
         ['page'=>'blog',      'label'=>'Blog / Artikel', 'icon'=>'blog',
             'children'=>[
                 ['url'=>admin_url('?page=blog'),                          'label'=>'Semua Artikel', 'match'=>fn($p,$a)=>$p==='blog' && !in_array($a,['create','kategori'])],

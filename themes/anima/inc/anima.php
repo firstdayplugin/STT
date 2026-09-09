@@ -33,3 +33,19 @@ if (!function_exists('ac')) {
 if (!function_exists('hc')) {
     function hc(string $key, bool $raw = false): string { return ac('home', $key, $raw); }
 }
+
+if (!function_exists('aimg')) {
+    /**
+     * Editable image URL for a page/key. Returns the admin-uploaded image
+     * (get_content stores "folder/file" under uploads/) resolved to a URL, or
+     * $fallback when nothing is set. Registry type for the key should be 'image'.
+     */
+    function aimg(string $page, string $key, string $fallback = ''): string {
+        $stored = function_exists('get_content') ? get_content($page, $key, '') : '';
+        if ($stored !== '') {
+            // Absolute URLs are stored/used as-is; relative paths resolve under uploads/.
+            return preg_match('#^https?://#i', $stored) ? $stored : uploads_url($stored);
+        }
+        return $fallback;
+    }
+}

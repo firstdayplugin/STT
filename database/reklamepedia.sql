@@ -9,8 +9,10 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+07:00";
 SET NAMES utf8mb4;
 
-CREATE DATABASE IF NOT EXISTS `reklamepedia` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `reklamepedia`;
+-- NOTE: Portable import. No CREATE DATABASE / USE here, so this file imports into
+-- whatever database you select (e.g. shared hosting like u12345_stt). In phpMyAdmin:
+-- select the target DB first, then Import. On a machine where you can create DBs,
+-- run:  CREATE DATABASE mydb; USE mydb;  before sourcing this file.
 
 -- ---------- Settings ----------
 CREATE TABLE `settings` (
@@ -570,6 +572,55 @@ CREATE TABLE `job_applications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`), KEY `career_id` (`career_id`), KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- About Us repeaters (Mission bullets, ICARE values, Milestones, Awards, Quality
+-- standards, Certifications) — all editable from the "Tentang Kami" admin module.
+CREATE TABLE `about_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seksi` enum('mission','value','milestone','award','quality','cert') NOT NULL,
+  `kode` varchar(20) DEFAULT NULL,       -- e.g. ICARE letter (I/C/A/R/E)
+  `judul` varchar(200) DEFAULT NULL,     -- value name / award org / ISO code / vendor / milestone label
+  `teks` text DEFAULT NULL,              -- mission bullet / value desc / award title
+  `tahun` varchar(20) DEFAULT NULL,      -- milestone year
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`), KEY `seksi` (`seksi`), KEY `urutan` (`urutan`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `about_items` (`seksi`,`kode`,`judul`,`teks`,`tahun`,`urutan`) VALUES
+('mission',NULL,NULL,'Build a wide and constructive relationship with client for the mutual long-term business achievement.',NULL,1),
+('mission',NULL,NULL,'Endless learning to ensure the high quality of people performance through time.',NULL,2),
+('mission',NULL,NULL,'Nurture the high commitment of honesty, integrity, and professional ethics to achieve the highest value to stakeholder.',NULL,3),
+('mission',NULL,NULL,'Ensure excellent and reliable support to clients.',NULL,4),
+('mission',NULL,NULL,'Always making innovations to provide our clients with the best latest technologies.',NULL,5),
+('mission',NULL,NULL,'Responsible and maintain our core values to ensure customer success.',NULL,6),
+('value','I','INTEGRITY','Employ high ethical standards, demonstrating honesty and fairness.',NULL,1),
+('value','C','COLLABORATE','Coming together is a beginning, keeping together is progress, working together is success.',NULL,2),
+('value','A','ACCOUNTABILITY','Responsibility for our decision and actions.',NULL,3),
+('value','R','RESPONSIVE','Swift attitude to ensure the best service response and service level to our business partner.',NULL,4),
+('value','E','EXCELLENCE','Striving for the best in every aspect of the business solution.',NULL,5),
+('milestone',NULL,NULL,NULL,'2015',1),
+('milestone',NULL,NULL,NULL,'2017',2),
+('milestone',NULL,NULL,NULL,'2023',3),
+('milestone',NULL,NULL,NULL,'2025',4),
+('milestone',NULL,'now',NULL,'Present',5),
+('award',NULL,'Dana Indonesia','Best Performing Vendor 2022',NULL,1),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2023',NULL,2),
+('award',NULL,'PT Saka Farma Laboratories','Excellent Vendor Award 2024',NULL,3),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2024',NULL,4),
+('award',NULL,'PT Pratha Widyahusada Tbk','Vendor Excellence Award 2024',NULL,5),
+('award',NULL,'PT Kalbe Morinaga Indonesia','Excellent Vendor Performance Award 2025',NULL,6),
+('quality',NULL,'ISO 9001',NULL,NULL,1),
+('quality',NULL,'ISO 14001',NULL,NULL,2),
+('quality',NULL,'ISO 45001',NULL,NULL,3),
+('quality',NULL,'ISO 37001',NULL,NULL,4),
+('quality',NULL,'ISO 27001',NULL,NULL,5),
+('cert',NULL,'Dell Technologies',NULL,NULL,1),
+('cert',NULL,'VMware',NULL,NULL,2),
+('cert',NULL,'Microsoft',NULL,NULL,3),
+('cert',NULL,'Nutanix',NULL,NULL,4),
+('cert',NULL,'Red Hat',NULL,NULL,5),
+('cert',NULL,'Veeam',NULL,NULL,6);
 
 -- Inbound messages: contact form, request-proposal, and newsletter subscriptions.
 CREATE TABLE `pesan` (

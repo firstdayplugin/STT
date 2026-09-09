@@ -1,106 +1,126 @@
 <?php
-// Konten Halaman - Edit semua text per element per halaman
+/**
+ * Konten Halaman — registry-driven editor.
+ * Editable fields come from the theme content registry (themes/<theme>/registry/<page>.php),
+ * so every string the templates read via ac()/hc()/aimg() is editable here — pre-filled with
+ * the stored value or the registry default. Saving upserts rows into `content_blocks` keyed by
+ * the same page_key/lang the frontend reads. Supports text, html (WYSIWYG) and image fields.
+ */
 $db = Database::getInstance();
 
+// Pages that have a content registry (label + icon for the picker). page_key MUST match
+// what the templates pass to ac()/hc() (home, about, contact).
 $pages_meta = [
-    'home'    => ['label' => 'Halaman Home / Beranda',   'icon' => 'home'],
-    'about'   => ['label' => 'Halaman Tentang Kami',     'icon' => 'users'],
-    'layanan' => ['label' => 'Halaman Layanan (List)',   'icon' => 'palette'],
-    'gallery' => ['label' => 'Halaman Galeri',           'icon' => 'image'],
-    'blog'    => ['label' => 'Halaman Blog',             'icon' => 'blog'],
-    'produk'  => ['label' => 'Halaman Produk',           'icon' => 'product'],
-    'kontak'  => ['label' => 'Halaman Kontak',           'icon' => 'phone'],
-    'global'  => ['label' => 'Global (Footer CTA, dll)', 'icon' => 'globe'],
+    'home'    => ['label' => 'Halaman Home / Beranda', 'icon' => 'home'],
+    'about'   => ['label' => 'Halaman Tentang Kami',   'icon' => 'users'],
+    'blog'    => ['label' => "Halaman What's New",     'icon' => 'blog'],
+    'contact' => ['label' => 'Halaman Kontak',         'icon' => 'phone'],
 ];
+
+$theme_registry = function (string $page): array {
+    $safe = preg_replace('/[^a-z0-9_-]/', '', $page);
+    $f = theme_path('registry/' . $safe . '.php');
+    if (!is_file($f)) return [];
+    $r = include $f;
+    return is_array($r) ? $r : [];
+};
 
 $current_page = $_GET['p'] ?? 'home';
 if (!isset($pages_meta[$current_page])) $current_page = 'home';
 
-// Handle save - BULLETPROOF
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
-    // Always redirect back to this page, even on error
-    $redirect_to = admin_url('?page=content&p=' . urlencode($_POST['page_key'] ?? $current_page));
-    
-    $save_lang = $_POST['lang'] ?? (function_exists('default_lang') ? default_lang() : 'id');
-    if (function_exists('available_langs') && !in_array($save_lang, available_langs(), true)) {
-        $save_lang = function_exists('default_lang') ? default_lang() : 'id';
-    }
-    $redirect_to .= '&lang=' . urlencode($save_lang);
+$def_lang  = function_exists('default_lang') ? default_lang() : 'id';
+$all_langs = function_exists('available_langs') ? available_langs() : ['id'];
 
+// ---- Save ----
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_content'])) {
+    $page_key = $_POST['page_key'] ?? $current_page;
+    if (!isset($pages_meta[$page_key])) $page_key = 'home';
+    $save_lang = $_POST['lang'] ?? $def_lang;
+    if (!in_array($save_lang, $all_langs, true)) $save_lang = $def_lang;
+
+    $redirect_to = admin_url('?page=content&p=' . urlencode($page_key) . '&lang=' . urlencode($save_lang));
     if (!verify_csrf($_POST['csrf_token'] ?? '')) {
-        set_flash('error', 'Token keamanan tidak valid. Silakan refresh halaman dan coba lagi.');
+        set_flash('error', 'Token keamanan tidak valid. Refresh lalu coba lagi.');
         redirect($redirect_to);
     }
 
+    $reg = $theme_registry($page_key);
+    $saved = 0;
+
+    // upsert helper (per page_key/block_key/lang)
+    $put = function (string $key, string $val, string $label, string $type) use ($db, $page_key, $save_lang, &$saved) {
+        $existing = $db->fetchOne("SELECT id FROM content_blocks WHERE page_key=? AND block_key=? AND lang=?", [$page_key, $key, $save_lang]);
+        if ($existing) {
+            $db->execute("UPDATE content_blocks SET konten=?, block_label=?, block_type=? WHERE id=?", [$val, $label, $type, $existing['id']]);
+        } else {
+            $db->execute("INSERT INTO content_blocks (page_key, block_key, lang, block_label, block_type, konten, is_active) VALUES (?,?,?,?,?,?,1)", [$page_key, $key, $save_lang, $label, $type, $val]);
+        }
+        $saved++;
+    };
+
     try {
-        $page_key = $_POST['page_key'] ?? 'home';
-        $blocks   = $_POST['blocks'] ?? [];
-        $saved = 0;
-        $created = 0;
-        $def_lang = $save_lang;
-        foreach ($blocks as $key => $val) {
-            $val = (string)$val;
-            $existing = $db->fetchOne(
-                "SELECT id FROM content_blocks WHERE page_key = ? AND block_key = ? AND lang = ?",
-                [$page_key, $key, $def_lang]
-            );
-            if ($existing) {
-                $db->execute(
-                    "UPDATE content_blocks SET konten = ? WHERE id = ?",
-                    [$val, $existing['id']]
-                );
-                $saved++;
-            } else {
-                // Create new block if doesn't exist (default language)
-                $db->execute(
-                    "INSERT INTO content_blocks (page_key, block_key, konten, lang, is_active) VALUES (?, ?, ?, ?, 1)",
-                    [$page_key, $key, $val, $def_lang]
-                );
-                $created++;
+        // Text / HTML fields.
+        foreach (($_POST['blocks'] ?? []) as $key => $val) {
+            if (!isset($reg[$key])) continue;                       // only known registry keys
+            $type = $reg[$key]['type'] ?? 'text';
+            if ($type === 'image') continue;                        // images handled below
+            $put((string)$key, (string)$val, (string)($reg[$key]['label'] ?? $key), $type);
+        }
+
+        // Image fields (default language only — one image shared across languages).
+        if ($save_lang === $def_lang) {
+            foreach ($reg as $key => $conf) {
+                if (($conf['type'] ?? '') !== 'image') continue;
+                $label = (string)($conf['label'] ?? $key);
+                // Remove?
+                if (!empty($_POST['img_clear'][$key])) { $put((string)$key, '', $label, 'image'); continue; }
+                // New upload?
+                if (!empty($_FILES['img']['name'][$key])) {
+                    $file = [
+                        'name'     => $_FILES['img']['name'][$key],
+                        'type'     => $_FILES['img']['type'][$key],
+                        'tmp_name' => $_FILES['img']['tmp_name'][$key],
+                        'error'    => $_FILES['img']['error'][$key],
+                        'size'     => $_FILES['img']['size'][$key],
+                    ];
+                    $stored = upload_image($file, 'content/' . $page_key);
+                    if ($stored) { $put((string)$key, $stored, $label, 'image'); }
+                    else { set_flash('error', 'Sebagian gambar gagal diunggah (pastikan JPG/PNG/WEBP dan ukuran wajar).'); }
+                }
+                // Manual URL entry (optional) — only when no file uploaded.
+                elseif (isset($_POST['img_url'][$key]) && trim($_POST['img_url'][$key]) !== '') {
+                    $put((string)$key, trim($_POST['img_url'][$key]), $label, 'image');
+                }
             }
         }
-        
-        // Invalidate any in-memory cache
+
         unset($GLOBALS['__content_cache']);
-        
-        log_activity('content_update', "Update $saved blok, buat $created blok baru di halaman: " . ($pages_meta[$page_key]['label'] ?? $page_key));
-        
-        $msg = "Berhasil menyimpan! ";
-        if ($saved > 0) $msg .= "$saved blok diupdate. ";
-        if ($created > 0) $msg .= "$created blok baru dibuat.";
-        set_flash('success', $msg);
+        log_activity('content_update', "Update $saved field konten di halaman: " . ($pages_meta[$page_key]['label'] ?? $page_key) . " ($save_lang)");
+        set_flash('success', "Tersimpan. $saved field diperbarui.");
     } catch (Throwable $e) {
         set_flash('error', 'Gagal menyimpan: ' . $e->getMessage());
     }
-    
     redirect($redirect_to);
 }
 
-// Load blocks for current page
-// NOTE: For home page, hero_* blocks are CENTRALIZED in Pengaturan > Hero (single source of truth)
-// We exclude them here so admin doesn't get confused which one to edit.
-$exclude_hero = ($current_page === 'home');
-$def_lang  = function_exists('default_lang') ? default_lang() : 'id';
-$all_langs = function_exists('available_langs') ? available_langs() : ['id'];
+// ---- Load ----
 $edit_lang = $_GET['lang'] ?? $def_lang;
 if (!in_array($edit_lang, $all_langs, true)) $edit_lang = $def_lang;
+$translating = ($edit_lang !== $def_lang);
+
+$reg = $theme_registry($current_page);
+// Stored values for edit language + default language (for the "default" hint / image source).
+$valEdit = []; $valDef = [];
 try {
-    // Canonical field list = default-language blocks (defines which fields exist).
-    $heroFilter = $exclude_hero ? " AND block_key NOT LIKE 'hero_%'" : '';
-    $blocks = $db->fetchAll(
-        "SELECT * FROM content_blocks WHERE page_key = ? AND lang = ? AND is_active = 1$heroFilter ORDER BY urutan ASC, id ASC",
-        [$current_page, $def_lang]
-    );
-    // Overlay the active-language values when translating.
-    $trans = [];
-    if ($edit_lang !== $def_lang) {
-        foreach ($db->fetchAll("SELECT block_key, konten FROM content_blocks WHERE page_key = ? AND lang = ?", [$current_page, $edit_lang]) as $tr) {
-            $trans[$tr['block_key']] = $tr['konten'];
-        }
-    }
-} catch (Throwable $e) {
-    set_flash('error', 'Database error: ' . $e->getMessage());
-    $blocks = []; $trans = [];
+    foreach ($db->fetchAll("SELECT block_key, konten FROM content_blocks WHERE page_key=? AND lang=?", [$current_page, $edit_lang]) as $r) $valEdit[$r['block_key']] = $r['konten'];
+    if ($translating) foreach ($db->fetchAll("SELECT block_key, konten FROM content_blocks WHERE page_key=? AND lang=?", [$current_page, $def_lang]) as $r) $valDef[$r['block_key']] = $r['konten'];
+} catch (Throwable $e) { /* table issue → registry defaults still render */ }
+
+// Group registry fields by 'group'.
+$groups = [];
+foreach ($reg as $key => $conf) {
+    $g = $conf['group'] ?? 'Umum';
+    $groups[$g][$key] = $conf;
 }
 $csrf = generate_csrf();
 ?>
@@ -108,22 +128,20 @@ $csrf = generate_csrf();
 <div class="page-header">
   <div>
     <h1><?= icon('content', 16) ?> Konten Halaman</h1>
-    <div class="page-header-sub">Edit semua text di website. Pilih halaman lalu edit per elemen.</div>
+    <div class="page-header-sub">Semua teks &amp; gambar tiap halaman — semuanya bisa diedit di sini.</div>
   </div>
 </div>
 
 <!-- Page selector -->
 <div class="card mb-3">
   <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:12px">Pilih Halaman:</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
-    <?php foreach ($pages_meta as $key => $meta): ?>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+    <?php foreach ($pages_meta as $key => $meta): $on = $current_page === $key; ?>
     <a href="<?= admin_url('?page=content&p=' . urlencode($key)) ?>"
-       style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid <?= $current_page === $key ? 'var(--primary)' : 'var(--border)' ?>;border-radius:10px;background:<?= $current_page === $key ? 'var(--primary-soft, #EFF6FF)' : 'white' ?>;text-decoration:none;color:inherit;transition:all 0.15s">
+       style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid <?= $on ? 'var(--primary)' : 'var(--border)' ?>;border-radius:10px;background:<?= $on ? 'var(--primary-soft,#EFF6FF)' : 'white' ?>;text-decoration:none;color:inherit">
       <div style="flex-shrink:0"><?= icon($meta['icon'], 22) ?></div>
-      <div>
-        <div style="font-size:13px;font-weight:600;color:<?= $current_page === $key ? 'var(--primary)' : 'var(--text)' ?>"><?= htmlspecialchars($meta['label']) ?></div>
-        <div style="font-size:11px;color:var(--text-muted)"><?= ucfirst($key) ?></div>
-      </div>
+      <div><div style="font-size:13px;font-weight:600;color:<?= $on ? 'var(--primary)' : 'var(--text)' ?>"><?= htmlspecialchars($meta['label']) ?></div>
+        <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($key) ?></div></div>
     </a>
     <?php endforeach; ?>
   </div>
@@ -136,91 +154,98 @@ $csrf = generate_csrf();
     <a href="<?= admin_url('?page=content&p=' . urlencode($current_page) . '&lang=' . urlencode($L)) ?>"
        class="btn btn-sm <?= $edit_lang === $L ? 'btn-primary' : 'btn-secondary' ?>"><?= htmlspecialchars(strtoupper($L)) ?><?= $L === $def_lang ? ' (default)' : '' ?></a>
   <?php endforeach; ?>
-  <?php if ($edit_lang !== $def_lang): ?><span style="font-size:12px;color:var(--text-muted);margin-left:auto"><?= icon('info', 13) ?> Kosongkan field untuk memakai teks <?= htmlspecialchars(strtoupper($def_lang)) ?>.</span><?php endif; ?>
+  <?php if ($translating): ?><span style="font-size:12px;color:var(--text-muted);margin-left:auto"><?= icon('info', 13) ?> Kosongkan field untuk memakai teks <?= htmlspecialchars(strtoupper($def_lang)) ?>. Gambar hanya diedit di bahasa default.</span><?php endif; ?>
 </div>
 <?php endif; ?>
 
 <?php if ($current_page === 'home'): ?>
 <div class="card" style="background:#FFF7E0;border:1px solid #F0B100;margin-bottom:16px">
   <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
-    <div style="font-size:22px;flex-shrink:0"><?= icon('lightbulb', 16) ?></div>
+    <div style="flex-shrink:0"><?= icon('lightbulb', 16) ?></div>
     <div style="font-size:13px;color:#7C5A00;line-height:1.6">
-      <strong>Pengaturan HERO homepage (judul, subtitle, gambar, slideshow, CTA) sekarang dipusatkan di:</strong>
-      <a href="<?= admin_url('?page=pengaturan&tab=hero') ?>" style="color:#7C5A00;text-decoration:underline;font-weight:700">Pengaturan <?= icon('arrow-right', 16) ?> <?= icon('film', 16) ?> Hero/Slide</a>.<br>
-      Konten di halaman ini hanya untuk section <em>selain</em> hero (About, Performance, Services, FAQ, dll).
+      <strong>Hero homepage (judul, subtitle, gambar slider, CTA)</strong> diatur di
+      <a href="<?= admin_url('?page=pengaturan&tab=hero') ?>" style="color:#7C5A00;text-decoration:underline;font-weight:700">Pengaturan → Hero/Slide</a>.
+      Animasi Cube &amp; Orbit diatur di menu <strong>Solutions (Cube)</strong> &amp; <strong>Industries (Orbit)</strong>.
     </div>
   </div>
 </div>
 <?php endif; ?>
 
-<?php if (empty($blocks)): ?>
-  <div class="card">
-    <div class="empty-state">
-      <div class="empty-state-icon"><?= icon('content', 16) ?></div>
-      <div class="empty-title">Belum ada blok konten untuk halaman ini</div>
-      <div class="empty-text">Halaman akan menggunakan teks default. Buka halaman ini di website untuk lihat versi default.</div>
-    </div>
-  </div>
+<?php if (empty($reg)): ?>
+  <div class="card"><div class="empty-state"><div class="empty-state-icon"><?= icon('content', 40) ?></div>
+    <div class="empty-title">Registry konten untuk halaman ini belum tersedia.</div></div></div>
 <?php else: ?>
 
-<form method="POST" id="content-form">
+<form method="POST" id="content-form" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
   <input type="hidden" name="save_content" value="1">
   <input type="hidden" name="page_key" value="<?= htmlspecialchars($current_page) ?>">
   <input type="hidden" name="lang" value="<?= htmlspecialchars($edit_lang) ?>">
-  
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title"><?= icon($pages_meta[$current_page]['icon'], 18) ?> Edit Konten: <?= htmlspecialchars($pages_meta[$current_page]['label']) ?></div>
-        <div class="card-subtitle"><?= count($blocks) ?> elemen tersedia untuk diedit</div>
+
+  <?php foreach ($groups as $gname => $fields): ?>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><div class="card-title"><?= htmlspecialchars($gname) ?></div></div>
+    <div class="card-body">
+      <?php foreach ($fields as $key => $conf):
+        $type   = $conf['type'] ?? 'text';
+        $label  = $conf['label'] ?? $key;
+        $default= (string)($conf['default'] ?? '');
+        $stored = $valEdit[$key] ?? '';
+        // Effective value shown in the field.
+        $value  = $stored !== '' ? $stored : ($translating ? '' : $default);
+      ?>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;justify-content:space-between">
+          <span><?= htmlspecialchars($label) ?></span>
+          <code style="font-size:10px;color:var(--text-muted);font-weight:normal"><?= htmlspecialchars($key) ?></code>
+        </label>
+
+        <?php if ($type === 'image'): ?>
+          <?php
+            $imgStored = $valEdit[$key] ?? '';
+            $imgUrl = $imgStored !== '' ? (preg_match('#^https?://#i', $imgStored) ? $imgStored : uploads_url($imgStored)) : '';
+          ?>
+          <?php if ($translating): ?>
+            <div style="font-size:12px;color:var(--text-muted)"><?= icon('info', 13) ?> Gambar dikelola di bahasa default (<?= htmlspecialchars(strtoupper($def_lang)) ?>).</div>
+          <?php else: ?>
+            <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+              <div style="width:120px;height:80px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#f3f6fb;display:grid;place-items:center;flex-shrink:0">
+                <?php if ($imgUrl): ?><img src="<?= htmlspecialchars($imgUrl) ?>" alt="" style="width:100%;height:100%;object-fit:cover"><?php else: ?><span style="font-size:11px;color:var(--text-muted)">kosong</span><?php endif; ?>
+              </div>
+              <div style="flex:1;min-width:220px">
+                <input type="file" name="img[<?= htmlspecialchars($key) ?>]" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+                <input type="text" name="img_url[<?= htmlspecialchars($key) ?>]" placeholder="atau tempel URL gambar (opsional)" style="margin-top:6px">
+                <?php if ($imgUrl): ?>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);margin-top:6px;font-weight:normal">
+                  <input type="checkbox" name="img_clear[<?= htmlspecialchars($key) ?>]" value="1" style="width:auto"> Hapus gambar ini
+                </label>
+                <?php endif; ?>
+              </div>
+            </div>
+          <?php endif; ?>
+
+        <?php elseif ($type === 'html'): ?>
+          <?php if ($translating && ($valDef[$key] ?? $default) !== ''): ?>
+            <div style="font-size:12px;color:var(--text-muted);background:var(--bg-soft,#f6f9fd);border:1px solid var(--border);border-radius:8px;padding:7px 10px;margin-bottom:6px"><?= htmlspecialchars(strtoupper($def_lang)) ?>: <?= htmlspecialchars(mb_substr(strip_tags($valDef[$key] ?? $default), 0, 180)) ?></div>
+          <?php endif; ?>
+          <textarea name="blocks[<?= htmlspecialchars($key) ?>]" rows="3" class="wysiwyg"><?= htmlspecialchars($value) ?></textarea>
+
+        <?php else: ?>
+          <?php if ($translating && ($valDef[$key] ?? $default) !== ''): ?>
+            <div style="font-size:12px;color:var(--text-muted);background:var(--bg-soft,#f6f9fd);border:1px solid var(--border);border-radius:8px;padding:7px 10px;margin-bottom:6px"><?= htmlspecialchars(strtoupper($def_lang)) ?>: <?= htmlspecialchars(mb_substr(strip_tags($valDef[$key] ?? $default), 0, 180)) ?></div>
+          <?php endif; ?>
+          <input type="text" name="blocks[<?= htmlspecialchars($key) ?>]" value="<?= htmlspecialchars($value) ?>"<?= $translating ? ' placeholder="' . htmlspecialchars(mb_substr(strip_tags($valDef[$key] ?? $default), 0, 120)) . '"' : '' ?>>
+        <?php endif; ?>
       </div>
+      <?php endforeach; ?>
     </div>
-    
-    <?php foreach ($blocks as $b):
-      $type = $b['block_type'] ?? 'text';
-      $label = $b['block_label'] ?? $b['block_key'];
-      $default_val = $b['konten'] ?? '';
-      $translating = ($edit_lang !== $def_lang);
-      $value = $translating ? ($trans[$b['block_key']] ?? '') : $default_val;
-      $field_name = 'blocks[' . htmlspecialchars($b['block_key']) . ']';
-      $ph = $translating ? mb_substr(strip_tags($default_val), 0, 120) : '';
-    ?>
-    <div class="form-group">
-      <label style="display:flex;align-items:center;justify-content:space-between">
-        <span><?= htmlspecialchars($label) ?></span>
-        <code style="font-size:10px;color:var(--text-muted);font-weight:normal"><?= htmlspecialchars($b['block_key']) ?></code>
-      </label>
-      <?php if ($translating && $default_val !== ''): ?>
-        <div style="font-size:12px;color:var(--text-muted);background:var(--bg-soft,#f6f9fd);border:1px solid var(--border);border-radius:8px;padding:7px 10px;margin-bottom:6px"><?= htmlspecialchars(strtoupper($def_lang)) ?>: <?= htmlspecialchars(mb_substr(strip_tags($default_val), 0, 200)) ?></div>
-      <?php endif; ?>
-      <?php if ($type === 'textarea' || $type === 'html'): ?>
-        <textarea name="<?= $field_name ?>" rows="3" class="wysiwyg"><?= htmlspecialchars($value) ?></textarea>
-      <?php else: ?>
-        <input type="text" name="<?= $field_name ?>" value="<?= htmlspecialchars($value) ?>"<?= $ph !== '' ? ' placeholder="' . htmlspecialchars($ph) . '"' : '' ?>>
-      <?php endif; ?>
-    </div>
-    <?php endforeach; ?>
   </div>
-  
-  <!-- Sticky save bar -->
+  <?php endforeach; ?>
+
   <div style="position:sticky;bottom:0;background:white;padding:16px;border-top:2px solid var(--border);margin:16px -16px -16px;display:flex;justify-content:space-between;align-items:center;z-index:10;box-shadow:0 -4px 12px rgba(0,0,0,0.04)">
-    <div style="font-size:13px;color:var(--text-muted)">
-      <?= icon('save', 16) ?> <?= count($blocks) ?> field siap disimpan
-    </div>
+    <div style="font-size:13px;color:var(--text-muted)"><?= icon('save', 16) ?> <?= count($reg) ?> field<?= $translating ? ' · bahasa ' . htmlspecialchars(strtoupper($edit_lang)) : '' ?></div>
     <button type="submit" class="btn btn-primary btn-lg"><?= icon('save', 16) ?> Simpan Perubahan</button>
   </div>
 </form>
-
-<script>
-// Show loading state on submit
-document.getElementById('content-form')?.addEventListener('submit', function() {
-  const btn = this.querySelector('button[type=submit]');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = 'Menyimpan...';
-  }
-});
-</script>
 
 <?php endif; ?>

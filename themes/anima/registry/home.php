@@ -56,6 +56,7 @@ return [
   // ---- News (section chrome; cards bind to blog later) ----
   'news_heading'        => ['label'=>'News — judul',         'type'=>'text', 'group'=>'News', 'default'=>'News'],
   'news_intro'          => ['label'=>'News — intro',         'type'=>'text', 'group'=>'News', 'default'=>'Explore the latest news, updates, and innovations driving the future of enterprise tech.'],
+  'news_empty'          => ['label'=>'News — teks saat kosong','type'=>'text','group'=>'News', 'default'=>'Belum ada artikel. Tambahkan lewat menu Blog / Artikel.'],
 
   // ---- Why Us ----
   'why_eyebrow'         => ['label'=>'Why — eyebrow',        'type'=>'text', 'group'=>'Why Us', 'default'=>'Why Sapta Tunas'],
@@ -69,11 +70,22 @@ return [
   'why3_sub'  => ['label'=>'Why 3 — sub',  'type'=>'text','group'=>'Why Us','default'=>'SatuAI siap membantu kapan pun kamu butuh'],
   'why4_title'=> ['label'=>'Why 4 — judul','type'=>'text','group'=>'Why Us','default'=>'Customer Satisfaction'],
   'why4_sub'  => ['label'=>'Why 4 — sub',  'type'=>'text','group'=>'Why Us','default'=>'Success-first, komitmen penuh di tiap proyek'],
+  'why1_img'  => ['label'=>'Why 1 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
+  'why2_img'  => ['label'=>'Why 2 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
+  'why3_img'  => ['label'=>'Why 3 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
+  'why4_img'  => ['label'=>'Why 4 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
 
   // ---- Testimonials (section chrome; cards bind to testimonial module later) ----
   'testi_eyebrow'       => ['label'=>'Testimoni — eyebrow',  'type'=>'text', 'group'=>'Testimonials', 'default'=>'Customer Testimonials'],
   'testi_title'         => ['label'=>'Testimoni — judul',    'type'=>'html', 'group'=>'Testimonials', 'default'=>'What They Say <span class="b">About Us?</span>'],
   'testi_intro'         => ['label'=>'Testimoni — intro',    'type'=>'text', 'group'=>'Testimonials', 'default'=>'Cerita nyata dari klien lintas industri. Klik untuk melihat testimoni lengkap — video maupun tulisan.'],
+  'testi_empty'         => ['label'=>'Testimoni — teks saat kosong','type'=>'text','group'=>'Testimonials','default'=>'Testimoni akan tampil di sini. Tambahkan lewat menu Testimoni.'],
+
+  // ---- Portfolio images (scroll-driven) ----
+  'pf_img1' => ['label'=>'Portfolio — gambar 1','type'=>'image','group'=>'Portfolio','default'=>''],
+  'pf_img2' => ['label'=>'Portfolio — gambar 2','type'=>'image','group'=>'Portfolio','default'=>''],
+  'pf_img3' => ['label'=>'Portfolio — gambar 3','type'=>'image','group'=>'Portfolio','default'=>''],
+  'pf_img4' => ['label'=>'Portfolio — gambar 4','type'=>'image','group'=>'Portfolio','default'=>''],
 
   // ---- Contact (Request Proposal) ----
   'contact_eyebrow'     => ['label'=>'Kontak — eyebrow',     'type'=>'text', 'group'=>'Contact', 'default'=>"Let's Collaborate"],

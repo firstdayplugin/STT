@@ -144,7 +144,9 @@ include theme_path('templates/layouts/header.php');
   <div class="tfi-pin">
     <div class="tfi-stage" id="tfiStage">
       <div class="tfi-media" id="tfiMedia">
-        <div class="tfi-img on" data-i="0" style="background-image:url(https://images.pexels.com/photos/586104/pexels-photo-586104.jpeg?auto=compress&cs=tinysrgb&w=1400)"></div><div class="tfi-img" data-i="1" style="background-image:url(https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=1400)"></div><div class="tfi-img" data-i="2" style="background-image:url(https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=1400)"></div><div class="tfi-img" data-i="3" style="background-image:url(https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=1400)"></div>
+        <?php for ($i = 1; $i <= 4; $i++): $pfi = aimg('home', "pf_img{$i}", ''); ?>
+        <div class="tfi-img<?= $i === 1 ? ' on' : '' ?>" data-i="<?= $i - 1 ?>"<?= $pfi !== '' ? ' style="background-image:url(' . htmlspecialchars($pfi) . ')"' : '' ?>></div>
+        <?php endfor; ?>
         <div class="tfi-media-ov"></div>
       </div>
       <div class="tfi-panel" id="tfiPanel">
@@ -241,50 +243,7 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
           </div>
         </article>
         <?php endforeach; else: ?>
-        <article class="ncard">
-          <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/36169769/pexels-photo-36169769.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
-            <div class="ncard-ribbon"><span class="date">July 9, 2026</span><span class="cat">Awards</span></div>
-          </div>
-          <div class="ncard-body">
-            <h3>Mengatasi Kompleksitas Jaringan Enterprise Lewat Pendekatan Otomatisasi Cisco AgenticOps</h3>
-            <p>Paradoks baru dunia TI: sisi positif dan tantangan di balik kehadiran AI. Perkembangan teknologi kecerdasan buatan telah membawa industri…</p>
-            <a class="read" href="#">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </article>
-        <article class="ncard">
-          <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
-            <div class="ncard-ribbon"><span class="date">February 9, 2026</span><span class="cat">Articles & News</span></div>
-          </div>
-          <div class="ncard-body">
-            <h3>Membangun Infrastruktur Cloud yang Resilient untuk Skala Enterprise</h3>
-            <p>Strategi arsitektur cloud modern yang menjaga uptime, keamanan, dan efisiensi biaya di tengah pertumbuhan bisnis yang pesat…</p>
-            <a class="read" href="#">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </article>
-        <article class="ncard">
-          <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/32324512/pexels-photo-32324512.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
-            <div class="ncard-ribbon"><span class="date">January 22, 2026</span><span class="cat">Insight</span></div>
-          </div>
-          <div class="ncard-body">
-            <h3>Peran Generative AI dalam Transformasi Layanan Kesehatan</h3>
-            <p>Bagaimana AI membantu diagnosa lebih cepat dan akurat, serta mengubah pengalaman pasien di rumah sakit pintar masa kini…</p>
-            <a class="read" href="#">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </article>
-        <article class="ncard">
-          <div class="ncard-img">
-            <img src="https://images.pexels.com/photos/17489158/pexels-photo-17489158.jpeg?auto=compress&cs=tinysrgb&w=1000" data-fallback="bg" alt="" loading="lazy" decoding="async">
-            <div class="ncard-ribbon"><span class="date">December 3, 2025</span><span class="cat">Security</span></div>
-          </div>
-          <div class="ncard-body">
-            <h3>Kerangka Cybersecurity Menyeluruh untuk Bisnis Digital</h3>
-            <p>Pendekatan zero-trust dan managed SOC untuk melindungi aset digital serta menjaga kontinuitas operasional perusahaan…</p>
-            <a class="read" href="#">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </article>
+        <div class="news-empty"><?= hc('news_empty') ?></div>
         <?php endif; ?>
       </div>
     </div>
@@ -300,37 +259,18 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
   </div>
   <div class="whyloop">
     <div class="whyloop-track" id="whyTrack">
+        <?php
+          $why_items = [];
+          for ($i = 1; $i <= 4; $i++) {
+            $why_items[] = ['n'=>$i, 't'=>hc("why{$i}_title"), 's'=>hc("why{$i}_sub"), 'img'=>aimg('home', "why{$i}_img", '')];
+          }
+          // Rendered twice for the seamless marquee loop.
+          foreach (array_merge($why_items, $why_items) as $w): ?>
         <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t"><?= hc('why1_title') ?></div><div class="wl-s"><?= hc('why1_sub') ?></div></div>
+          <div class="wl-img"><?php if ($w['img'] !== ''): ?><img src="<?= htmlspecialchars($w['img']) ?>" data-fallback="remove" alt="" loading="lazy" decoding="async"><?php endif; ?></div>
+          <div class="wl-body"><span class="wl-num"><?= (int)$w['n'] ?></span><div class="wl-t"><?= $w['t'] ?></div><div class="wl-s"><?= $w['s'] ?></div></div>
         </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t"><?= hc('why2_title') ?></div><div class="wl-s"><?= hc('why2_sub') ?></div></div>
-        </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t"><?= hc('why3_title') ?></div><div class="wl-s"><?= hc('why3_sub') ?></div></div>
-        </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t"><?= hc('why4_title') ?></div><div class="wl-s"><?= hc('why4_sub') ?></div></div>
-        </div><div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489163/pexels-photo-17489163.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">1</span><div class="wl-t"><?= hc('why1_title') ?></div><div class="wl-s"><?= hc('why1_sub') ?></div></div>
-        </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/17489150/pexels-photo-17489150.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">2</span><div class="wl-t"><?= hc('why2_title') ?></div><div class="wl-s"><?= hc('why2_sub') ?></div></div>
-        </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/37730211/pexels-photo-37730211.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">3</span><div class="wl-t"><?= hc('why3_title') ?></div><div class="wl-s"><?= hc('why3_sub') ?></div></div>
-        </div>
-        <div class="wl-card">
-          <div class="wl-img"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=900" data-fallback="remove" alt="" loading="lazy" decoding="async"></div>
-          <div class="wl-body"><span class="wl-num">4</span><div class="wl-t"><?= hc('why4_title') ?></div><div class="wl-s"><?= hc('why4_sub') ?></div></div>
-        </div>
+        <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -358,60 +298,7 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
         <span class="watch"><?= $tv ? 'Watch story' : 'Read story' ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <?php endforeach; else: ?>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
-        <p class="quote">&ldquo;Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
-          <div><div class="pname">Yonathan Moniaga</div><div class="prole">Chief Information Officer, Erha Clinic Indonesia</div></div>
-        </div>
-        <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
-        <p class="quote">&ldquo;Migrasi sistem transaksi kami berjalan mulus dan aman. Tim STT memahami kebutuhan compliance industri finansial dengan baik.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
-          <div><div class="pname">IT Director</div><div class="prole">Financial Services</div></div>
-        </div>
-        <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
-        <p class="quote">&ldquo;Otomatisasi supply chain dari STT memangkas waktu proses secara signifikan. Partner yang benar-benar paham operasional pabrik.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
-          <div><div class="pname">Head of Operations</div><div class="prole">Manufacture &amp; FMCG</div></div>
-        </div>
-        <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
-        <p class="quote">&ldquo;Platform kami kini scalable menghadapi lonjakan traffic. Arsitektur yang dirancang STT terbukti andal saat peak season.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
-          <div><div class="pname">Chief Technology Officer</div><div class="prole">E-Commerce Platform</div></div>
-        </div>
-        <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge video"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video</span>
-        <p class="quote">&ldquo;Implementasi cloud, data, dan AI berjalan sesuai roadmap. Eksekusi rapi dan komunikasi transparan sepanjang proyek.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/10376257/pexels-photo-10376257.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></div>
-          <div><div class="pname">VP Technology</div><div class="prole">Enterprise IT</div></div>
-        </div>
-        <span class="watch">Watch story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="tcard" href="#testimonial-detail">
-        <span class="tbadge text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text</span>
-        <p class="quote">&ldquo;Dukungan managed IT 24/7 membuat operasional rumah sakit kami jauh lebih tenang. Highly recommended.&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><img src="https://images.pexels.com/photos/36714208/pexels-photo-36714208.jpeg?auto=compress&cs=tinysrgb&w=300" data-fallback="remove" alt=""></div>
-          <div><div class="pname">IT Manager</div><div class="prole">Healthcare Group</div></div>
-        </div>
-        <span class="watch">Read story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
+      <div class="tst-empty"><?= hc('testi_empty') ?></div>
       <?php endif; ?>
     </div>
   </div>

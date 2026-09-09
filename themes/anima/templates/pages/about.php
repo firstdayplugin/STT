@@ -13,32 +13,19 @@ $seo = [
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 
-$mission = [
-  'Build a wide and constructive relationship with client for the mutual long-term business achievement.',
-  'Endless learning to ensure the high quality of people performance through time.',
-  'Nurture the high commitment of honesty, integrity, and professional ethics to achieve the highest value to stakeholder.',
-  'Ensure excellent and reliable support to clients.',
-  'Always making innovations to provide our clients with the best latest technologies.',
-  'Responsible and maintain our core values to ensure customer success.',
-];
-$values = [
-  ['I', 'INTEGRITY',      'Employ high ethical standards, demonstrating honesty and fairness.'],
-  ['C', 'COLLABORATE',    'Coming together is a beginning, keeping together is progress, working together is success.'],
-  ['A', 'ACCOUNTABILITY', 'Responsibility for our decision and actions.'],
-  ['R', 'RESPONSIVE',     'Swift attitude to ensure the best service response and service level to our business partner.'],
-  ['E', 'EXCELLENCE',     'Striving for the best in every aspect of the business solution.'],
-];
-$milestones = ['2015', '2017', '2023', '2025', 'Present'];
-$awards = [
-  ['Dana Indonesia', 'Best Performing Vendor 2022'],
-  ['PT Bintang Toedjoe', 'Best Platinum Vendor Award 2023'],
-  ['PT Saka Farma Laboratories', 'Excellent Vendor Award 2024'],
-  ['PT Bintang Toedjoe', 'Best Platinum Vendor Award 2024'],
-  ['PT Pratha Widyahusada Tbk', 'Vendor Excellence Award 2024'],
-  ['PT Kalbe Morinaga Indonesia', 'Excellent Vendor Performance Award 2025'],
-];
-$quality = [ ['ISO 9001', 'ISO 14001', 'ISO 45001'], ['ISO 37001'], ['ISO 27001'] ];
-$certs = ['Dell Technologies', 'VMware', 'Microsoft', 'Nutanix', 'Red Hat', 'Veeam'];
+// Repeaters are editable from the "Tentang Kami" admin module (about_items table).
+// Read grouped by section; language-aware via tr_field (falls back to base text).
+$about_q = function (string $seksi) use ($db) {
+    try { return $db ? $db->fetchAll("SELECT * FROM about_items WHERE seksi=? AND is_active=1 ORDER BY urutan, id", [$seksi]) : []; }
+    catch (\Throwable $e) { return []; }
+};
+$mission    = $about_q('mission');
+$values     = $about_q('value');
+$milestones = $about_q('milestone');
+$awards     = $about_q('award');
+$quality    = $about_q('quality');
+$certs      = $about_q('cert');
+$atr = fn($row, $field) => tr_field('about_items', (int)($row['id'] ?? 0), $field, $row[$field] ?? '');
 
 $trophy = '<svg viewBox="0 0 24 24"><path d="M6 4h12v3a6 6 0 01-12 0V4z"/><path d="M6 5H3v2a3 3 0 003 3M18 5h3v2a3 3 0 01-3 3M9 20h6M12 13v7"/></svg>';
 $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
@@ -63,7 +50,7 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
         <h2><?= ac('about', 'mission_title') ?></h2>
         <ul class="ab-mlist">
           <?php foreach ($mission as $m): ?>
-            <li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars($m) ?></span></li>
+            <li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars($atr($m, 'teks')) ?></span></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -77,9 +64,9 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
       <div class="ab-values-grid">
         <?php foreach ($values as $v): ?>
           <div class="ab-val">
-            <div class="badge"><?= htmlspecialchars($v[0]) ?></div>
-            <h3><?= htmlspecialchars($v[1]) ?></h3>
-            <p><?= htmlspecialchars($v[2]) ?></p>
+            <div class="badge"><?= htmlspecialchars($v['kode'] ?? '') ?></div>
+            <h3><?= htmlspecialchars($atr($v, 'judul')) ?></h3>
+            <p><?= htmlspecialchars($atr($v, 'teks')) ?></p>
           </div>
         <?php endforeach; ?>
       </div>
@@ -97,8 +84,8 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
         </div>
       </div>
       <div class="ab-timeline">
-        <?php foreach ($milestones as $yr): $now = ($yr === 'Present'); ?>
-          <div class="ab-tnode<?= $now ? ' now' : '' ?>"><span class="dot"></span><div class="yr"><?= htmlspecialchars($yr) ?></div></div>
+        <?php foreach ($milestones as $ms): $now = (($ms['kode'] ?? '') === 'now'); ?>
+          <div class="ab-tnode<?= $now ? ' now' : '' ?>"><span class="dot"></span><div class="yr"><?= htmlspecialchars($ms['tahun'] ?? '') ?></div></div>
         <?php endforeach; ?>
       </div>
     </section>
@@ -113,8 +100,8 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
         <?php foreach ($awards as $a): ?>
           <div class="ab-award">
             <div class="ph"><?= $trophy ?></div>
-            <div class="org"><?= htmlspecialchars($a[0]) ?></div>
-            <div class="ttl"><?= htmlspecialchars($a[1]) ?></div>
+            <div class="org"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
+            <div class="ttl"><?= htmlspecialchars($atr($a, 'teks')) ?></div>
           </div>
         <?php endforeach; ?>
       </div>
@@ -127,10 +114,8 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
         <p><?= ac('about', 'quality_intro') ?></p>
       </div>
       <div class="ab-row">
-        <?php foreach ($quality as $group): ?>
-          <div class="ab-iso">
-            <?php foreach ($group as $iso): ?><span class="b"><?= htmlspecialchars($iso) ?></span><?php endforeach; ?>
-          </div>
+        <?php foreach ($quality as $iso): ?>
+          <div class="ab-iso"><span class="b"><?= htmlspecialchars($iso['judul'] ?? '') ?></span></div>
         <?php endforeach; ?>
       </div>
     </section>
@@ -143,7 +128,7 @@ $check  = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
       </div>
       <div class="ab-row">
         <?php foreach ($certs as $c): ?>
-          <div class="ab-iso"><span class="b"><?= htmlspecialchars($c) ?></span></div>
+          <div class="ab-iso"><span class="b"><?= htmlspecialchars($c['judul'] ?? '') ?></span></div>
         <?php endforeach; ?>
       </div>
     </section>
