@@ -29,7 +29,7 @@ $nav_sections = [
                 ['url'=>admin_url('?page=produk&action=create'),          'label'=>'Tambah Produk', 'match'=>fn($p,$a)=>$p==='produk' && $a==='create'],
                 ['url'=>admin_url('?page=produk-kategori'),               'label'=>'Kategori', 'match'=>fn($p,$a)=>$p==='produk-kategori'],
             ]],
-        ['page'=>'layanan',   'label'=>'Layanan',        'icon'=>'service'],
+        ['page'=>'services',  'label'=>'Services',       'icon'=>'service'],
         ['page'=>'solusi',    'label'=>'Solutions (Cube)',    'icon'=>'box'],
         ['page'=>'solusi-pilar','label'=>'Pilar Solusi',      'icon'=>'layers'],
         ['page'=>'industri',  'label'=>'Industries (Orbit)',  'icon'=>'compass'],

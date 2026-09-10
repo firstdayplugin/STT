@@ -82,8 +82,8 @@ CREATE TABLE `menus` (
 INSERT INTO `menus` (`nama`,`url`,`lokasi`,`urutan`,`is_active`,`is_default`) VALUES
 ('About Us','/tentang-kami','header',1,1,1),
 ('Solutions','/solutions','header',2,1,1),
-('Service','#','header',3,1,1),
-('Industry','#','header',4,1,1),
+('Services','/services','header',3,1,1),
+('Industry','/industri','header',4,1,1),
 ('What''s New','/blog','header',5,1,1),
 ('Career','/career','header',6,1,1),
 ('Contact Us','/hubungi-kami','header',7,1,1);
@@ -653,3 +653,240 @@ INSERT INTO `career` (`judul`,`slug`,`role`,`lokasi`,`tipe`,`jenjang`,`pengalama
  '<ul><li>Menangani pertanyaan & keluhan pelanggan.</li><li>Eskalasi teknis ke tim terkait.</li><li>Menjaga kepuasan pelanggan.</li></ul>',
  '<ul><li>Komunikasi baik lisan & tulisan.</li><li>Bisa bekerja shift.</li><li>Berpengalaman customer service nilai plus.</li></ul>',NULL,3,1);
 
+
+-- ============================================================
+-- SERVICES MODULE
+-- ============================================================
+-- ============================================================
+-- SERVICES MODULE (5-page hierarchy per client content handoff)
+--   service_pages       : the pages (landing / capability / package)
+--   service_pillars     : landing pillars + supporting capabilities
+--   service_areas       : capability-page areas (Consult/Deploy/Manage, ...)
+--   service_area_items  : capability list items under an area
+--   service_tiers       : package tiers (Gold/Platinum/Diamond)
+--   service_matrix      : package comparison rows (grouped, per-tier values)
+-- All editable from the "Services" admin module. Content seeded verbatim.
+-- ============================================================
+
+CREATE TABLE `service_pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `slug` varchar(120) NOT NULL,
+  `judul` varchar(200) NOT NULL,
+  `tipe` enum('landing','capability','package') NOT NULL DEFAULT 'capability',
+  `eyebrow` varchar(60) DEFAULT NULL,
+  `headline` varchar(300) DEFAULT NULL,
+  `tagline` varchar(300) DEFAULT NULL,
+  `body` text DEFAULT NULL,
+  `cta_label` varchar(120) DEFAULT NULL,
+  `cta_target` varchar(190) DEFAULT NULL,        -- a service slug or absolute URL
+  `extra1` text DEFAULT NULL,                     -- landing: supporting statement
+  `extra2` varchar(300) DEFAULT NULL,             -- landing: lifecycle line
+  `extra3` varchar(300) DEFAULT NULL,             -- landing: closing message
+  `hero_image` varchar(255) DEFAULT NULL,
+  `visual_note` text DEFAULT NULL,
+  `data_ai_title` varchar(200) DEFAULT NULL,      -- capability: "Data & AI pada ..." heading
+  `data_ai_body` text DEFAULT NULL,               -- capability: Data & AI bullets (one per line)
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`), UNIQUE KEY `slug` (`slug`), KEY `tipe` (`tipe`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `service_pillars` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `kategori` enum('pillar','supporting') NOT NULL DEFAULT 'pillar',
+  `badge` varchar(60) DEFAULT NULL,
+  `judul` varchar(200) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `tags` varchar(300) DEFAULT NULL,               -- comma list (Consulting,Deployment,Managed)
+  `link_slug` varchar(120) DEFAULT NULL,          -- target service page slug
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `page_id` (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `service_areas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `kode` varchar(10) DEFAULT NULL,                -- 01 / 02 / 03
+  `nama` varchar(60) DEFAULT NULL,                -- CONSULT / DEPLOY / MANAGE
+  `judul` varchar(200) NOT NULL,                  -- Consulting Services
+  `deskripsi` text DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL,
+  `visual_note` varchar(300) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `page_id` (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `service_area_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `area_id` int(11) NOT NULL,
+  `teks` varchar(300) NOT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `area_id` (`area_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `service_tiers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `nama` varchar(60) NOT NULL,                    -- GOLD / PLATINUM / DIAMOND
+  `judul` varchar(200) DEFAULT NULL,              -- Essential Infrastructure Support
+  `deskripsi` text DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `page_id` (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `service_matrix` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `grup` varchar(160) DEFAULT NULL,               -- optional matrix group heading
+  `baris` varchar(200) NOT NULL,                  -- row label
+  `v_gold` varchar(120) DEFAULT NULL,
+  `v_platinum` varchar(120) DEFAULT NULL,
+  `v_diamond` varchar(120) DEFAULT NULL,
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`), KEY `page_id` (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---- Services content seed (verbatim from client handoff) ----
+
+INSERT INTO `service_pages`
+ (`slug`,`judul`,`tipe`,`eyebrow`,`headline`,`tagline`,`body`,`cta_label`,`cta_target`,`extra1`,`extra2`,`extra3`,`visual_note`,`data_ai_title`,`data_ai_body`,`urutan`) VALUES
+('services','Services','landing','Enterprise Solution Provider',
+ 'Satu Partner untuk Seluruh Siklus Teknologi Enterprise',NULL,
+ 'STT sebagai Enterprise Solution Provider hadir sebagai partner teknologi end-to-end, bukan sekadar penyedia solusi IT. STT membantu organisasi mulai dari memahami kebutuhan bisnis, merancang solusi, melakukan implementasi dan integrasi teknologi, mengelola operasional, melindungi environment, hingga melakukan optimasi secara berkelanjutan.',
+ 'Konsultasikan Kebutuhan Anda','hubungi-kami',
+ 'Bukan sekadar menjual produk, tetapi mendampingi customer dalam seluruh siklus teknologi enterprise.',
+ 'Rencanakan → Bangun → Kelola → Lindungi → Optimalkan','One Partner. End-to-End Capability.',
+ NULL,NULL,NULL,1),
+
+('services/infrastructure-services','Infrastructure Services','capability',NULL,
+ 'Infrastructure Services','Bangun. Modernisasi. Kelola.',
+ 'STT membantu organisasi memahami kondisi existing, merancang architecture, melakukan implementasi dan integrasi teknologi, hingga menjaga environment tetap sehat dan optimal melalui Managed Infrastructure Services.',
+ 'Lihat Managed Infrastructure Service Packages','services/managed-infrastructure-packages',
+ NULL,NULL,NULL,
+ 'Gunakan foto/visual yang langsung menunjukkan aktivitas layanan — technical workshop, server deployment/racking, dan NOC managed operations.',
+ 'Data & AI pada Infrastructure Services',
+ 'Data Platform & Analytics Infrastructure untuk mendukung data-intensive workload dan analytics platform.\nAI Infrastructure untuk compute/GPU, storage, network, serta platform readiness bagi AI workload.\nAI Applications & Industry Use Cases sebagai layer business value di atas infrastructure yang dibangun.',2),
+
+('services/managed-infrastructure-packages','Managed Infrastructure Service Packages','package',NULL,
+ 'Managed Infrastructure Service Packages','Dukungan Infrastruktur Sesuai Tingkat Kritikalitas Bisnis.',
+ 'STT menyediakan pilihan Managed Infrastructure Services berdasarkan tingkat kritikalitas environment, kebutuhan operational support, maintenance frequency, onsite support, dan coverage yang dibutuhkan.',
+ 'Diskusikan Kebutuhan SLA','hubungi-kami',
+ NULL,NULL,NULL,NULL,NULL,NULL,3),
+
+('services/cybersecurity-services','Cybersecurity Services','capability',NULL,
+ 'Cybersecurity Services','Identifikasi Risiko. Perkuat Pertahanan. Tingkatkan Resiliensi.',
+ 'STT membantu organisasi mengidentifikasi security weaknesses, memperkuat governance dan compliance, serta menyediakan managed cybersecurity capability untuk menghadapi ancaman yang terus berkembang.',
+ 'Explore SOC as a Service','services/soc-as-a-service',
+ NULL,NULL,NULL,
+ 'Gunakan foto SOC milik STT sebagai visual utama agar halaman lebih autentik dan menunjukkan kapabilitas internal STT.',
+ 'Data & AI pada Cybersecurity Services',
+ 'Security Analytics & Data Integration untuk meningkatkan visibility dan analisis security events.\nAI-enabled Security Use Cases untuk detection, analytics, dan operational use cases sesuai kebutuhan customer.\nIntegrasi dengan platform Data & AI bila dibutuhkan sebagai bagian dari solution architecture.',4),
+
+('services/soc-as-a-service','SOC as a Service','package',NULL,
+ 'SOC as a Service','Pantau. Deteksi. Investigasi. Respons.',
+ 'STT SOC as a Service membantu organisasi meningkatkan security visibility, mempercepat detection dan investigation, serta meningkatkan kesiapan dalam merespons cyber incident.',
+ 'Diskusikan Kebutuhan SOC','hubungi-kami',
+ NULL,'Monitor → Detect → Investigate → Respond → Improve',NULL,NULL,NULL,NULL,5);
+
+-- Landing pillars + supporting
+INSERT INTO `service_pillars` (`page_id`,`kategori`,`badge`,`judul`,`deskripsi`,`tags`,`link_slug`,`urutan`) VALUES
+((SELECT id FROM service_pages WHERE slug='services'),'pillar','BUILD & RUN','Infrastructure Services',
+ 'Membangun, memodernisasi, dan mengelola fondasi teknologi enterprise yang resilient, scalable, dan siap mendukung workload bisnis kritikal.',
+ 'Consulting,Deployment,Managed Infrastructure','services/infrastructure-services',1),
+((SELECT id FROM service_pages WHERE slug='services'),'pillar','PROTECT & RESPOND','Cybersecurity Services',
+ 'Membantu organisasi mengidentifikasi risiko, memperkuat security posture, memenuhi kebutuhan compliance, serta meningkatkan cyber resilience.',
+ 'Assess,Govern,Protect','services/cybersecurity-services',2),
+((SELECT id FROM service_pages WHERE slug='services'),'supporting','DATA','Data Platform & Analytics',
+ 'Foundation untuk data platform, analytics workload, dan integrasi data.',NULL,NULL,3),
+((SELECT id FROM service_pages WHERE slug='services'),'supporting','AI INFRASTRUCTURE','AI Infrastructure',
+ 'Compute/GPU, storage, network, dan platform readiness untuk AI workload.',NULL,NULL,4),
+((SELECT id FROM service_pages WHERE slug='services'),'supporting','AI APPLICATIONS','AI Applications & Industry Use Cases',
+ 'Intelligent applications dan industry-specific use cases yang mendukung business value.',NULL,NULL,5);
+
+-- ===== Infrastructure Services — areas + items =====
+SET @pg := (SELECT id FROM service_pages WHERE slug='services/infrastructure-services');
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'01','CONSULT','Consulting Services','technical workshop / sticky-note session',1);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Blueprint Solution & Reference Architecture',1),(@a,'Infrastructure Readiness Assessment',2),
+(@a,'Capacity Planning',3),(@a,'Virtualization & Cloud Consulting',4),
+(@a,'Data Center & Disaster Recovery',5),(@a,'Data Protection Consulting',6),
+(@a,'Server & Storage Consulting',7),(@a,'Modernization Roadmap',8);
+
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'02','DEPLOY','Enterprise Deployment Services','engineer racking / deploying server infrastructure',2);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Rack & Stack',1),(@a,'Server, Storage & Network',2),(@a,'Virtualization Platform',3),
+(@a,'Hyperconverged Infrastructure',4),(@a,'Cloud Infrastructure',5),(@a,'Microservices Platform',6),
+(@a,'Backup & Data Protection',7),(@a,'Data Platform',8),(@a,'AI Infrastructure',9),
+(@a,'Migration & Upgrade',10),(@a,'Data Center Relocation',11),(@a,'Multi-vendor Integration',12);
+
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'03','MANAGE','Managed Infrastructure Services','NOC monitoring / managed operations',3);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Infrastructure Monitoring',1),(@a,'Preventive Maintenance',2),(@a,'Corrective Maintenance',3),
+(@a,'Firmware & Software Lifecycle Support',4),(@a,'Patching',5),(@a,'L1 Technical Support',6),
+(@a,'Vendor / Principal Escalation',7),(@a,'Health Review',8),(@a,'Service Reporting',9),
+(@a,'Move, Add & Change Support',10);
+
+-- ===== Cybersecurity Services — areas + items =====
+SET @pg := (SELECT id FROM service_pages WHERE slug='services/cybersecurity-services');
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'01','ASSESS','Cybersecurity Assessment & Testing',NULL,1);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Vulnerability Assessment & Penetration Testing (VAPT)',1),(@a,'Red Teaming Security Testing',2),
+(@a,'Compromise Assessment',3),(@a,'Security Posture Assessment',4),(@a,'IoT / ICS Assessment',5),
+(@a,'ATM / ITM Assessment',6),(@a,'Configuration & Policy Assessment',7);
+
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'02','GOVERN','Security Risk & Compliance',NULL,2);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Forensic Readiness',1),(@a,'ISMS ISO 27001 Consulting',2),(@a,'OJK Regulatory Compliance',3),
+(@a,'Bank Indonesia Regulatory Compliance',4),(@a,'Personal Data Protection / PDP Compliance',5);
+
+INSERT INTO service_areas (page_id,kode,nama,judul,visual_note,urutan) VALUES (@pg,'03','PROTECT','Managed Cybersecurity',NULL,3);
+SET @a := LAST_INSERT_ID();
+INSERT INTO service_area_items (area_id,teks,urutan) VALUES
+(@a,'Managed SIEM & Incident Response',1),(@a,'Managed Detection & Response',2),(@a,'NDR / EDR / XDR / SOAR',3),
+(@a,'Managed Threat Intelligence',4),(@a,'Managed ICS / OT Security',5),(@a,'Cyber Patrol',6),(@a,'SOC as a Service',7);
+
+-- ===== Managed Infrastructure Packages — tiers + matrix =====
+SET @pg := (SELECT id FROM service_pages WHERE slug='services/managed-infrastructure-packages');
+INSERT INTO service_tiers (page_id,nama,judul,deskripsi,urutan) VALUES
+(@pg,'GOLD','Essential Infrastructure Support','Untuk environment yang membutuhkan fundamental operational support dan scheduled maintenance.',1),
+(@pg,'PLATINUM','Enhanced Operational Support','Untuk infrastructure yang lebih kritikal dan membutuhkan maintenance serta support lebih intensif.',2),
+(@pg,'DIAMOND','Comprehensive Managed Infrastructure','Untuk mission-critical environment dengan operational coverage paling lengkap.',3);
+INSERT INTO service_matrix (page_id,grup,baris,v_gold,v_platinum,v_diamond,urutan) VALUES
+(@pg,'Service Coverage','Helpdesk Service SLA','24 x 7','24 x 7','24 x 7',1),
+(@pg,'Service Coverage','Response Time','Max. 1 Hour','Max. 1 Hour','Max. 1 Hour',2),
+(@pg,'Service Coverage','Preventive Maintenance','2x / year','4x / year','Monthly',3),
+(@pg,'Service Coverage','Hardware Firmware Upgrade & Software Patching','Yes','Yes','Yes',4),
+(@pg,'Service Coverage','Preventive Maintenance Report','2x / year','4x / year','Monthly',5),
+(@pg,'Service Coverage','Corrective Maintenance','6 Tickets','12 Tickets','Unlimited',6),
+(@pg,'Service Coverage','Onsite Part Replacement (with Principal Engineer)','Yes','Yes','Yes',7),
+(@pg,'Service Coverage','Move, Add & Change Management','2 Tickets','6 Tickets','Unlimited',8),
+(@pg,'Service Coverage','On-call Support Engineer','Yes','Yes','Yes',9),
+(@pg,'Service Coverage','Onsite Standby Engineer (Office Hour)','No','No','1 Engineer',10),
+(@pg,'Service Coverage','Maintenance Review','-','Yearly','2x / year',11),
+(@pg,'Service Coverage','Minimum Period','1 Year','1 Year','1 Year',12);
+
+-- ===== SOC as a Service — tiers + matrix (two groups) =====
+SET @pg := (SELECT id FROM service_pages WHERE slug='services/soc-as-a-service');
+INSERT INTO service_tiers (page_id,nama,judul,deskripsi,urutan) VALUES
+(@pg,'GOLD','Essential SOC Monitoring','Untuk organisasi yang membutuhkan fundamental security monitoring dan visibility terhadap security events.',1),
+(@pg,'PLATINUM','Managed Detection & Investigation','Untuk organisasi yang membutuhkan 24x7 monitoring, faster response, dan co-managed incident handling.',2),
+(@pg,'DIAMOND','Comprehensive Cyber Defense','Untuk mission-critical organization yang membutuhkan 24x7 security operations dan advanced incident readiness.',3);
+INSERT INTO service_matrix (page_id,grup,baris,v_gold,v_platinum,v_diamond,urutan) VALUES
+(@pg,'Security Monitoring & Incident Response','Security Monitoring SLA','8 x 5','24 x 7','24 x 7',1),
+(@pg,'Security Monitoring & Incident Response','Log Monitoring Coverage','Up to 75 Assets / Source Log','Up to 150 Assets / Source Log','Up to 300 Assets / Source Log',2),
+(@pg,'Security Monitoring & Incident Response','Response Time (MTTA)','1 Hour','30 Min','15 Min',3),
+(@pg,'Security Monitoring & Incident Response','Incident Handling','No','Co-Managed','Fully Managed',4),
+(@pg,'Security Monitoring & Incident Response','Retention Logs','90 Days','90 Days','90 Days',5),
+(@pg,'Security Monitoring & Incident Response','Security Reporting','Quarterly','Monthly','Monthly & Quarterly',6),
+(@pg,'Security Monitoring & Incident Response','Threat Hunting','No','No','Yes',7),
+(@pg,'Security Monitoring & Incident Response','Infosec Advisory','No','Yes','Yes',8),
+(@pg,'Advanced Services','Vulnerability Assessment','No','Yes','Yes',9),
+(@pg,'Advanced Services','Digital Forensic Capabilities','No','Yes','Yes',10),
+(@pg,'Advanced Services','Penetration Testing','No','No','Yes',11),
+(@pg,'Advanced Services','Cyber Drill / Tabletop Exercise','No','No','Yes',12);

@@ -60,3 +60,30 @@ DELETE FROM `content_blocks` WHERE `lang`='en' AND `page_key`='contact' AND `blo
 INSERT INTO `content_blocks` (`page_key`,`block_key`,`lang`,`block_label`,`block_type`,`konten`,`is_active`) VALUES
 ('contact','hero_sub','en','Sub judul','text','Have a question or an IT solution need? Our team is ready to help.',1),
 ('contact','map_placeholder','en','Teks placeholder peta','text','The location map will appear here (set the Google Maps embed in Settings).',1);
+
+-- ---------- Services pages (EN) — page-level copy that is Indonesian by default ----------
+-- Deeper items (pillars/tiers/matrix/area) are English technical terms or translated in admin.
+DELETE ci FROM content_i18n ci JOIN service_pages sp ON sp.id=ci.row_id
+  WHERE ci.tabel='service_pages' AND ci.lang='en';
+INSERT INTO content_i18n (tabel,row_id,field,lang,nilai) VALUES
+('service_pages',(SELECT id FROM service_pages WHERE slug='services'),'headline','en','One Partner for the Entire Enterprise Technology Lifecycle'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services'),'body','en','As an Enterprise Solution Provider, STT is an end-to-end technology partner — not merely an IT solution vendor. STT supports organizations from understanding business needs, designing solutions, implementing and integrating technology, managing operations, and protecting the environment, to continuous optimization.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services'),'extra1','en','Not just selling products, but accompanying customers throughout the entire enterprise technology lifecycle.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services'),'extra2','en','Plan → Build → Manage → Protect → Optimize'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services'),'cta_label','en','Consult Your Needs'),
+
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/infrastructure-services'),'tagline','en','Build. Modernize. Manage.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/infrastructure-services'),'body','en','STT helps organizations understand the existing environment, design the architecture, implement and integrate technology, and keep the environment healthy and optimal through Managed Infrastructure Services.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/infrastructure-services'),'data_ai_body','en','Data Platform & Analytics Infrastructure to support data-intensive workloads and analytics platforms.\nAI Infrastructure for compute/GPU, storage, network, and platform readiness for AI workloads.\nAI Applications & Industry Use Cases as the business-value layer on top of the infrastructure built.'),
+
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/managed-infrastructure-packages'),'tagline','en','Infrastructure Support Matched to Business Criticality.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/managed-infrastructure-packages'),'body','en','STT offers Managed Infrastructure Services options based on environment criticality, operational support needs, maintenance frequency, onsite support, and required coverage.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/managed-infrastructure-packages'),'cta_label','en','Discuss Your SLA Needs'),
+
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/cybersecurity-services'),'tagline','en','Identify Risk. Strengthen Defense. Increase Resilience.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/cybersecurity-services'),'body','en','STT helps organizations identify security weaknesses, strengthen governance and compliance, and provides managed cybersecurity capability to face continuously evolving threats.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/cybersecurity-services'),'data_ai_body','en','Security Analytics & Data Integration to improve visibility and analysis of security events.\nAI-enabled Security Use Cases for detection, analytics, and operational use cases per customer needs.\nIntegration with the Data & AI platform when required as part of the solution architecture.'),
+
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/soc-as-a-service'),'tagline','en','Monitor. Detect. Investigate. Respond.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/soc-as-a-service'),'body','en','STT SOC as a Service helps organizations improve security visibility, accelerate detection and investigation, and increase readiness to respond to cyber incidents.'),
+('service_pages',(SELECT id FROM service_pages WHERE slug='services/soc-as-a-service'),'cta_label','en','Discuss Your SOC Needs');

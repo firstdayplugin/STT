@@ -52,17 +52,23 @@ switch ($page) {
         break;
 
     case 'layanan':
+        // Legacy services module retired — permanently redirect to the new /services hierarchy.
+        http_response_code(301);
+        redirect(url('services'));
+        break;
+
+    case 'services':
         if (!empty($slug)) {
-            $layanan_data = $db->fetchOne('SELECT * FROM layanan WHERE slug = ? AND is_active = 1', [$slug]);
-            if ($layanan_data) {
-                $subs = $db->fetchAll('SELECT * FROM layanan_sub WHERE layanan_id = ? ORDER BY urutan', [$layanan_data['id']]);
-                require_once theme_path('templates/pages/layanan-detail.php');
+            $service_page = $db->fetchOne('SELECT * FROM service_pages WHERE slug = ? AND is_active = 1', ['services/' . $slug]);
+            if ($service_page) {
+                require_once theme_path('templates/pages/services-detail.php');
             } else {
                 http_response_code(404);
                 require_once theme_path('templates/pages/404.php');
             }
         } else {
-            require_once theme_path('templates/pages/layanan.php');
+            $service_page = $db->fetchOne("SELECT * FROM service_pages WHERE slug = 'services' AND is_active = 1");
+            require_once theme_path('templates/pages/services.php');
         }
         break;
 
