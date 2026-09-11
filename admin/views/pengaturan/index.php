@@ -120,6 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sup = upload_image($sfdata,'slides');
                 if ($sup) $sdata['gambar'] = $sup;
             }
+            // Upload slide video (optional, MP4/WebM) — shows as a video hero slide.
+            if (!empty($_FILES['slide_video']['name'][$si]) && function_exists('upload_video')) {
+                $svdata = ['name'=>$_FILES['slide_video']['name'][$si],'type'=>$_FILES['slide_video']['type'][$si],
+                           'tmp_name'=>$_FILES['slide_video']['tmp_name'][$si],'error'=>$_FILES['slide_video']['error'][$si],
+                           'size'=>$_FILES['slide_video']['size'][$si]];
+                $svup = upload_video($svdata,'slides');
+                if ($svup) $sdata['video_url'] = $svup;
+            }
+            // Remove video if requested.
+            if (!empty($_POST['slide_video_clear'][$si])) $sdata['video_url'] = null;
             if ($sid) {
                 $set = implode(',',array_map(fn($k)=>"$k=?",array_keys($sdata)));
                 $db->execute("UPDATE hero_slides SET $set WHERE id=?", [...array_values($sdata),$sid]);
@@ -357,6 +367,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 <div class="form-group mb-8"><label>Gambar</label>
                     <?php if($slide['gambar']): ?><img src="<?= uploads_url($slide['gambar']) ?>" style="height:50px;margin-bottom:8px;border-radius:6px"><br><?php endif; ?>
                     <input type="file" name="slide_gambar[<?= $si ?>]" class="form-control" accept="image/*"></div>
+                <div class="form-group mb-8"><label>Video (opsional — MP4/WebM, maks 15MB)</label>
+                    <?php if(!empty($slide['video_url'])): ?>
+                        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Video terpasang: <?= htmlspecialchars(basename($slide['video_url'])) ?>
+                          <label style="display:inline-flex;align-items:center;gap:5px;margin-left:8px"><input type="checkbox" name="slide_video_clear[<?= $si ?>]" value="1" style="width:auto"> hapus</label></div>
+                    <?php endif; ?>
+                    <input type="file" name="slide_video[<?= $si ?>]" class="form-control" accept="video/mp4,video/webm">
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Jika video diisi, slide memakai video (menggantikan gambar). Kosongkan untuk tetap pakai gambar.</div></div>
                 <button type="button" onclick="this.closest('.slide-item').remove()" class="btn btn-xs btn-danger">× Hapus</button>
             </div>
             <?php endforeach; ?>

@@ -37,9 +37,17 @@ $db = $db ?? (class_exists('Database') ? Database::getInstance() : null);
 $Q  = function (string $sql, array $p = []) use ($db) { try { return $db ? $db->fetchAll($sql, $p) : []; } catch (\Throwable $e) { return []; } };
 $home_news = $Q("SELECT b.*, (SELECT bk.nama FROM blog_kategori_rel r JOIN blog_kategori bk ON bk.id=r.kategori_id WHERE r.blog_id=b.id LIMIT 1) AS kategori FROM blog b WHERE b.status='published' ORDER BY b.created_at DESC LIMIT 6");
 $home_testi = $Q("SELECT * FROM testimonial WHERE is_active=1 ORDER BY urutan, id LIMIT 8");
-$hero_rows  = $Q("SELECT judul, subtitle, gambar FROM hero_slides WHERE is_active=1 ORDER BY urutan, id");
+$hero_rows  = $Q("SELECT * FROM hero_slides WHERE is_active=1 ORDER BY urutan, id");
 $hero_json  = [];
-foreach ($hero_rows as $hs) { $hero_json[] = ['bg' => !empty($hs['gambar']) ? uploads_url($hs['gambar']) : '', 'h' => (string)($hs['judul'] ?? ''), 'sub' => (string)($hs['subtitle'] ?? '')]; }
+foreach ($hero_rows as $hs) {
+    $vid = trim((string)($hs['video_url'] ?? ''));
+    $hero_json[] = [
+        'bg'    => !empty($hs['gambar']) ? uploads_url($hs['gambar']) : '',
+        'video' => $vid !== '' ? (preg_match('#^https?:#', $vid) ? $vid : uploads_url($vid)) : '',
+        'h'     => (string)($hs['judul'] ?? ''),
+        'sub'   => (string)($hs['subtitle'] ?? ''),
+    ];
+}
 $h0 = $hero_json[0] ?? ['bg' => '', 'h' => 'Growing The Global', 'sub' => 'Technology Industry'];
 
 // §14.2 — data-driven animations. Cube (Solutions prism) & orbit (Our Industries)

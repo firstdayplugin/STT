@@ -307,9 +307,24 @@ requestAnimationFrame(frame);
   var i=0,N=S.length,timer,busy=false;
   S.forEach(function(s,k){var d=document.createElement('i');if(k===0)d.className='on';d.onclick=function(){go(k,k>i?'next':'prev');};dotsEl.appendChild(d);});
   var dots=[].slice.call(dotsEl.children);
-  function setImage(el,url){el.style.backgroundImage='url('+url+')';}
-  function paintTeaser(){setImage(nextBg,S[(i+1)%N].bg);}
-  setImage(curBg,S[i].bg);paintTeaser();
+  // Render a slide's media into a .tk-bg element — a <video> when the slide has a
+  // video, otherwise a background image. Video is muted/looped/inline for autoplay.
+  function setMedia(el,s){
+    var v=el.querySelector('video');
+    if(s&&s.video){
+      el.style.backgroundImage='none';
+      if(!v){v=document.createElement('video');v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;
+        v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('preload','auto');
+        v.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0c1b2e';
+        el.insertBefore(v,el.firstChild);}
+      if(v.getAttribute('data-src')!==s.video){v.setAttribute('data-src',s.video);v.src=s.video;var p=v.play&&v.play();if(p&&p.catch)p.catch(function(){});}
+    }else{
+      if(v)v.parentNode.removeChild(v);
+      el.style.backgroundImage=(s&&s.bg)?("url('"+String(s.bg).replace(/'/g,"%27")+"')"):'none';
+    }
+  }
+  function paintTeaser(){setMedia(nextBg,S[(i+1)%N]);}
+  setMedia(curBg,S[i]);paintTeaser();
   function go(n,dir){if(busy||n===i)return;busy=true;dir=dir||((n-i+N)%N<=N/2?'next':'prev');
     var outX=dir==='next'?-5:5, inX=dir==='next'?5:-5;
     curBg.style.transition='opacity .48s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1)';
@@ -318,7 +333,7 @@ requestAnimationFrame(frame);
     nextBg.style.opacity='0.42';nextBg.style.transform='translateX('+(-outX)+'%) scale(1.012)';
     h1.style.opacity='0';
     setTimeout(function(){
-      i=n;setImage(curBg,S[i].bg);setImage(nextBg,S[(i+1)%N].bg);h1.textContent=S[i].h;sub.textContent=S[i].sub;
+      i=n;setMedia(curBg,S[i]);setMedia(nextBg,S[(i+1)%N]);h1.textContent=S[i].h;sub.textContent=S[i].sub;
       curBg.style.transition='none';nextBg.style.transition='none';curBg.style.transform='translateX('+inX+'%) scale(1.012)';nextBg.style.transform='translateX('+(-inX)+'%) scale(1.012)';
       void curBg.offsetWidth;
       curBg.style.transition='opacity .72s cubic-bezier(.16,1,.3,1),transform .82s cubic-bezier(.16,1,.3,1)';nextBg.style.transition='opacity .72s cubic-bezier(.16,1,.3,1),transform .82s cubic-bezier(.16,1,.3,1)';

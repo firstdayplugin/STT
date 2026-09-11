@@ -1181,3 +1181,30 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .mnav-list>a.mnav-sub{padding-left:24px;font-weight:500;font-size:14.5px;color:var(--ink-2,#43506b)}
 .mnav-cta{margin-top:16px;justify-content:center;border-bottom:none!important}
 /* Drawer shows only when opened (hamburger only exists on mobile, so desktop never opens it). */
+
+/* ============================================================
+   HERO REVISION (client request) — design unchanged except:
+   #2 full-bleed stage, #3 contain media, #4 minimalist arrows.
+   Appended last so it overrides the earlier layered hero rules.
+   ============================================================ */
+/* #2 Full-width: the slide stage spans edge-to-edge; only the text row below stays boxed. */
+.v3hero-in{max-width:100%;padding:0}
+.tk-below{max-width:1385px;margin-left:auto;margin-right:auto;padding:0 26px;box-sizing:border-box}
+.tk-h1{left:clamp(26px,4vw,60px)}
+.tk-foot{left:clamp(26px,4vw,60px)}
+
+/* #3 Contain: show the whole photo/video (no hard crop); fill spare space with brand navy. */
+.tk-cur .tk-bg,.tk-next .tk-bg{background-size:contain;background-repeat:no-repeat;background-position:center;background-color:#0c1b2e}
+.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:contain;background:#0c1b2e}
+
+/* #4 Minimalist arrows: no circle / ring / shadow — small, subtle, bottom-right.
+   The white junction "bay" (.tk-tab) existed only to frame the old round arrows,
+   so it's removed; the clean diagonal gutter between the panels remains. */
+.tk-tab{display:none!important}
+.tk-navpod{left:auto;right:26px;bottom:20px;gap:2px}
+.np-btn{width:30px;height:30px;border-radius:0;background:none;box-shadow:none}
+.np-btn::before,.np-btn::after{display:none!important}
+.np-btn svg{width:22px;height:22px;stroke:#fff;stroke-width:2;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.np-btn:hover{transform:none}
+.np-btn:hover svg{stroke:#cfe0f5;transform:none}
+.np-btn#tkPrev:hover svg{transform:none}

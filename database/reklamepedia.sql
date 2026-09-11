@@ -321,6 +321,7 @@ CREATE TABLE `klien_logo` (
 CREATE TABLE `hero_slides` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `judul` varchar(255) DEFAULT NULL, `subtitle` text DEFAULT NULL, `gambar` varchar(255) DEFAULT NULL,
+  `video_url` varchar(255) DEFAULT NULL,          -- optional MP4/WebM for a video hero slide
   `cta_text` varchar(100) DEFAULT NULL, `cta_url` varchar(255) DEFAULT NULL,
   `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
