@@ -711,7 +711,7 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
    only at the logo notch (the SVG cut top-left). */
 .tel-footer-shell{position:relative;overflow:hidden;min-height:405px;background:#171e2b;border-radius:0;padding:92px clamp(20px,5vw,72px) 0;
 }
-.tel-footer-notch{position:absolute;left:0;top:0;width:min(38%, 470px);height:96px;display:block;z-index:1;
+.tel-footer-notch{position:absolute;left:0;top:0;width:min(34%, 430px);height:86px;display:block;z-index:1;
   pointer-events:none;
 }
 .tel-footer-content{
