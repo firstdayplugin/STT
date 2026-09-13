@@ -434,8 +434,10 @@ requestAnimationFrame(frame);
   function clip(){
     var st=document.querySelector(".tk-stage");if(!st)return;var W=st.clientWidth,H=st.clientHeight;
     var cur=document.getElementById("tkCur"),nxt=document.getElementById("tkNext"),tab=document.getElementById("tkTab"),pod=document.querySelector(".tk-navpod");
-    if(cur)cur.style.clipPath="path('"+rpath([[0,0],[W*stX,0],[W*sbX,H],[0,H]],[26,42,30,26])+"')";
-    if(nxt)nxt.style.clipPath="path('"+rpath([[W*(stX+g),0],[W,0],[W,H],[W*(sbX+g),H]],[70,26,26,30])+"')";
+    // Full-bleed: screen-edge corners are SHARP (radius 0); only the diagonal-break
+    // corners keep their radius. cur = [TL, diag-top, diag-bottom, BL]; nxt = [diag-top, TR, BR, diag-bottom].
+    if(cur)cur.style.clipPath="path('"+rpath([[0,0],[W*stX,0],[W*sbX,H],[0,H]],[0,42,30,0])+"')";
+    if(nxt)nxt.style.clipPath="path('"+rpath([[W*(stX+g),0],[W,0],[W,H],[W*(sbX+g),H]],[70,0,0,30])+"')";
     if(tab){
       function cL(y){return lerp(stX,sbX,y/H)*W;}     // left edge (cur diagonal)
       function tR(y){return lerp(stX+g,sbX+g,y/H)*W;}  // seam right (teaser diagonal)
