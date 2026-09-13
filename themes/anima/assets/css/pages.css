@@ -473,3 +473,96 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
   .sv-matrix-table{display:none}
   .sv-matrix-cards{display:grid}
 }
+
+/* ============================================================
+   ABOUT US — full Figma layout (image-left intro, ICARE icons,
+   milestone cross-fade slider, awards/quality/cert sliders).
+   Appended last so it overrides the earlier .ab-* rules.
+   ============================================================ */
+.ab-ph{font-size:12px;color:var(--dim);font-weight:600}
+.ab-head-left{text-align:left;margin-left:0}
+
+/* Vision & Mission — image LEFT, text RIGHT */
+.ab-vm{display:grid;grid-template-columns:0.92fr 1.08fr;gap:36px;align-items:stretch}
+.ab-vm-media{display:flex;flex-direction:column;gap:20px}
+.ab-vm-img{position:relative;flex:1;min-height:150px;border-radius:calc(var(--radius) + 6px);overflow:hidden;
+  background:linear-gradient(135deg,#e7f0ff,#f4f8ff);border:1px solid var(--line);display:grid;place-items:center}
+.ab-vm-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-vm-img1{clip-path:polygon(0 0,100% 0,100% 88%,0 100%)}
+.ab-vm-img2{clip-path:polygon(0 6%,100% 0,100% 100%,0 100%)}
+.ab-vm-text{display:flex;flex-direction:column;gap:20px}
+.ab-vm-text .ab-vcard,.ab-vm-text .ab-mcard{margin:0}
+
+/* Values (ICARE) — image/icon badge */
+.ab-val-badge{width:96px;height:96px;margin:0 auto 16px;border-radius:20px;display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(150deg,var(--blue),var(--blue-600));box-shadow:0 12px 26px rgba(36,120,224,.28)}
+.ab-val-badge img{width:100%;height:100%;object-fit:contain;background:transparent}
+.ab-val-badge span{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:40px;color:#fff}
+.ab-val h3{font-size:15px;color:var(--ink);margin-bottom:8px;letter-spacing:.02em}
+.ab-val p{font-size:12.5px;color:var(--dim);line-height:1.6}
+
+/* Milestone slider */
+.ab-mile-sec{padding-bottom:20px}
+.ab-mile-top{display:grid;grid-template-columns:1fr 1.08fr;gap:44px;align-items:center;min-height:360px}
+.ab-mile-text{transition:opacity .28s ease,transform .28s ease}
+.ab-mile-text h3{font-size:clamp(20px,2.2vw,28px);color:var(--blue);margin-bottom:14px}
+.ab-mile-text p{color:var(--ink-2);line-height:1.9;font-size:15.5px}
+.ab-mile-media{transition:opacity .28s ease,transform .28s ease}
+.ab-mile-text.swap{opacity:0;transform:translateY(14px)}
+.ab-mile-media.swap{opacity:0;transform:translateX(26px) scale(.985)}
+.ab-mile-frame{border-radius:calc(var(--radius) + 10px);overflow:hidden;aspect-ratio:16/11;
+  background:radial-gradient(120% 120% at 30% 20%,#e6f0ff,#f5f9ff);border:1px solid var(--line);
+  box-shadow:0 26px 60px rgba(20,60,140,.12);clip-path:polygon(0 0,100% 0,100% 82%,88% 100%,0 100%)}
+.ab-mile-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-mile-media.empty .ab-mile-frame{display:grid;place-items:center}
+.ab-mile-media.empty .ab-mile-frame img{display:none}
+.ab-mile-media.empty .ab-mile-frame::after{content:"Gambar milestone";color:var(--dim);font-size:13px}
+.ab-mile-timeline{display:flex;align-items:center;gap:14px;margin-top:40px}
+.ab-mile-track{flex:1;display:flex;align-items:center;gap:0;overflow-x:auto;scroll-behavior:smooth;padding:6px 4px;scrollbar-width:none}
+.ab-mile-track::-webkit-scrollbar{display:none}
+.ab-mile-node{position:relative;flex:1;min-width:110px;background:none;border:0;cursor:pointer;padding:18px 4px 0;text-align:center}
+.ab-mile-node::before{content:"";position:absolute;top:5px;left:0;right:0;height:2px;background:var(--line)}
+.ab-mile-node .dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:#cfe0f5;border:2px solid #fff;box-shadow:0 0 0 2px var(--line);transition:.2s}
+.ab-mile-node .yr{display:inline-block;margin-top:8px;font-weight:700;font-size:14px;color:var(--dim);border:1.5px solid var(--line);border-radius:22px;padding:6px 16px;transition:.2s}
+.ab-mile-node.on .dot{background:var(--blue);box-shadow:0 0 0 4px var(--blue-050)}
+.ab-mile-node.on .yr{color:var(--blue);border-color:var(--blue)}
+.ab-mile-node.now .yr{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ab-mile-arrow{flex:none;width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--blue);
+  display:grid;place-items:center;cursor:pointer;transition:.2s}
+.ab-mile-arrow:hover{border-color:var(--blue);background:var(--blue-050)}
+.ab-mile-arrow svg{width:20px;height:20px}
+
+/* Awards / Cert year-brand sliders + cards */
+.ab-slider-head{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:26px}
+.ab-slider-year{font-size:clamp(22px,2.4vw,30px);font-weight:800;color:var(--blue);min-width:120px;text-align:center;letter-spacing:.02em}
+.ab-slider-page.yr-in .ab-card{animation:abFade .45s ease both}
+@keyframes abFade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ab-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.ab-cards-award{grid-template-columns:repeat(6,1fr)}
+.ab-cards-cert{grid-template-columns:repeat(6,1fr)}
+.ab-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:0 10px 26px rgba(14,42,78,.05)}
+.ab-card-img{aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:#f3f7fd;display:grid;place-items:center;margin-bottom:10px}
+.ab-card-img img{width:100%;height:100%;object-fit:contain;display:block}
+.ab-card .org{font-size:12px;color:var(--dim)}
+.ab-card .ttl{font-size:13px;font-weight:700;color:var(--ink);line-height:1.4;margin-top:2px}
+.ab-card .cap{font-size:12.5px;font-weight:600;color:var(--blue)}
+
+/* Quality carousel */
+.ab-carousel{display:flex;align-items:center;gap:14px}
+.ab-carousel-track{flex:1;display:flex;gap:16px;overflow-x:auto;scroll-behavior:smooth;padding:6px 2px;scrollbar-width:none}
+.ab-carousel-track::-webkit-scrollbar{display:none}
+.ab-carousel .ab-card{flex:0 0 240px}
+.ab-quality .ab-card-img,.ab-cert .ab-card-img{aspect-ratio:16/10}
+
+@media(max-width:900px){
+  .ab-vm{grid-template-columns:1fr}
+  .ab-mile-top{grid-template-columns:1fr;gap:24px;min-height:0}
+  .ab-mile-media{order:-1}
+  .ab-values-grid{grid-template-columns:repeat(2,1fr)}
+  .ab-cards,.ab-cards-award,.ab-cards-cert{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){ .ab-values-grid{grid-template-columns:1fr} .ab-cards{grid-template-columns:1fr} }
+
+/* Override leftover old About rules that clash with the new milestone structure */
+.ab-mile{display:block !important;grid-template-columns:none !important;align-items:initial !important}
+.ab-mile-media{height:auto !important;background:none !important;border:0 !important;display:block !important;opacity:1 !important;color:inherit !important}

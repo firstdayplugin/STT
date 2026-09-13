@@ -581,8 +581,11 @@ CREATE TABLE `about_items` (
   `seksi` enum('mission','value','milestone','award','quality','cert') NOT NULL,
   `kode` varchar(20) DEFAULT NULL,       -- e.g. ICARE letter (I/C/A/R/E)
   `judul` varchar(200) DEFAULT NULL,     -- value name / award org / ISO code / vendor / milestone label
-  `teks` text DEFAULT NULL,              -- mission bullet / value desc / award title
-  `tahun` varchar(20) DEFAULT NULL,      -- milestone year
+  `teks` text DEFAULT NULL,              -- mission bullet / value desc / award title / milestone paragraph
+  `gambar` varchar(255) DEFAULT NULL,    -- uploaded image: ICARE letter, milestone image, award/quality/cert logo
+  `grup` varchar(60) DEFAULT NULL,       -- grouping for sliders (e.g. cert brand "DELL")
+  `galeri` text DEFAULT NULL,            -- optional extra images (JSON array of paths) e.g. milestone thumbnails
+  `tahun` varchar(20) DEFAULT NULL,      -- milestone / award year
   `urutan` int(11) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`), KEY `seksi` (`seksi`), KEY `urutan` (`urutan`)
@@ -600,17 +603,17 @@ INSERT INTO `about_items` (`seksi`,`kode`,`judul`,`teks`,`tahun`,`urutan`) VALUE
 ('value','A','ACCOUNTABILITY','Responsibility for our decision and actions.',NULL,3),
 ('value','R','RESPONSIVE','Swift attitude to ensure the best service response and service level to our business partner.',NULL,4),
 ('value','E','EXCELLENCE','Striving for the best in every aspect of the business solution.',NULL,5),
-('milestone',NULL,NULL,NULL,'2015',1),
-('milestone',NULL,NULL,NULL,'2017',2),
-('milestone',NULL,NULL,NULL,'2023',3),
-('milestone',NULL,NULL,NULL,'2025',4),
-('milestone',NULL,'now',NULL,'Present',5),
-('award',NULL,'Dana Indonesia','Best Performing Vendor 2022',NULL,1),
-('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2023',NULL,2),
-('award',NULL,'PT Saka Farma Laboratories','Excellent Vendor Award 2024',NULL,3),
-('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2024',NULL,4),
-('award',NULL,'PT Pratha Widyahusada Tbk','Vendor Excellence Award 2024',NULL,5),
-('award',NULL,'PT Kalbe Morinaga Indonesia','Excellent Vendor Performance Award 2025',NULL,6),
+('milestone',NULL,'Awal Perjalanan','Sapta Tunas Teknologi didirikan pada 2015 dengan komitmen menghadirkan Business Technology Solutions & Services untuk enterprise di Indonesia.','2015',1),
+('milestone',NULL,'Ekspansi Kapabilitas','Memperluas kapabilitas infrastruktur, cloud, dan data center seiring bertambahnya kepercayaan klien enterprise di berbagai industri.','2017',2),
+('milestone',NULL,'Kemitraan Strategis','Menjalin kemitraan strategis dengan para principal teknologi kelas dunia, termasuk pencapaian status Dell Technologies Titanium Partner.','2023',3),
+('milestone',NULL,'Cybersecurity & AI','Memperkuat lini Cybersecurity, Data Management, dan solusi AI untuk mendukung transformasi digital pelanggan secara menyeluruh.','2025',4),
+('milestone','now','Hari Ini','Dengan tim engineer bersertifikasi, STT terus mendampingi ratusan klien enterprise dalam perjalanan transformasi digital menuju pertumbuhan bisnis berkelanjutan.','Present',5),
+('award',NULL,'Dana Indonesia','Best Performing Vendor 2022','2022',1),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2023','2023',2),
+('award',NULL,'PT Saka Farma Laboratories','Excellent Vendor Award 2024','2024',3),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2024','2024',4),
+('award',NULL,'PT Pratha Widyahusada Tbk','Vendor Excellence Award 2024','2024',5),
+('award',NULL,'PT Kalbe Morinaga Indonesia','Excellent Vendor Performance Award 2025','2025',6),
 ('quality',NULL,'ISO 9001',NULL,NULL,1),
 ('quality',NULL,'ISO 14001',NULL,NULL,2),
 ('quality',NULL,'ISO 45001',NULL,NULL,3),

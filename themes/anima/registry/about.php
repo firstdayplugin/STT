@@ -9,6 +9,8 @@ return [
   'intro_title'    => ['label'=>'Judul',          'type'=>'text','group'=>'Intro','default'=>'Enterprise Solution Provider'],
   'intro_body'     => ['label'=>'Paragraf intro', 'type'=>'html','group'=>'Intro','default'=>'Welcome to Sapta Tunas Teknologi which is established in 2015 with high passion and commitment for providing Business Technology Solutions and services in Indonesia. Sapta Tunas Teknologi is Enterprise Solution Provider, we focus solely on embracing our client\'s hardware, networking, application and technology needs. Helping organizations across all industry to achieve their business goals and objectives by lowering the cost and maximizing the performance of their information technology systems.'],
 
+  'vision_img1'    => ['label'=>'Gambar kiri — atas', 'type'=>'image','group'=>'Vision & Mission','default'=>''],
+  'vision_img2'    => ['label'=>'Gambar kiri — bawah','type'=>'image','group'=>'Vision & Mission','default'=>''],
   'vision_title'   => ['label'=>'Vision — judul', 'type'=>'text','group'=>'Vision & Mission','default'=>'Our Vision'],
   'vision_body'    => ['label'=>'Vision — isi',   'type'=>'text','group'=>'Vision & Mission','default'=>'To become a profound and innovative leading IT Solution Provider with excellent and professional support to meet clients\' needs.'],
   'mission_title'  => ['label'=>'Mission — judul','type'=>'text','group'=>'Vision & Mission','default'=>'Our Mission'],
