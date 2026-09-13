@@ -25,8 +25,8 @@ $__body_class = trim($anima_body_class ?? '');
 <link rel="alternate" hreflang="<?= htmlspecialchars($__l) ?>" href="<?= htmlspecialchars(url($GLOBALS['__path'] ?? '', $__l)) ?>">
 <?php endforeach; endif; ?>
 <link rel="stylesheet" href="<?= theme_url('assets/fonts/fonts.css') ?>">
-<link rel="stylesheet" href="<?= theme_url('assets/css/anima.css') ?>">
-<link rel="stylesheet" href="<?= theme_url('assets/css/pages.css') ?>">
+<link rel="stylesheet" href="<?= theme_asset('assets/css/anima.css') ?>">
+<link rel="stylesheet" href="<?= theme_asset('assets/css/pages.css') ?>">
 <?php if (!empty($GLOBALS['__preview_reveal'])) echo '<link rel="stylesheet" href="/preview/preview.css">'; ?>
 </head>
 <body<?= $__body_class ? ' class="' . htmlspecialchars($__body_class) . '"' : '' ?>>

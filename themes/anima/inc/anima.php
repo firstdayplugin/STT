@@ -34,6 +34,17 @@ if (!function_exists('hc')) {
     function hc(string $key, bool $raw = false): string { return ac('home', $key, $raw); }
 }
 
+if (!function_exists('theme_asset')) {
+    /**
+     * Theme asset URL with an automatic cache-busting version (?v=<filemtime>),
+     * so re-uploaded CSS/JS is always fetched fresh instead of a stale cached copy.
+     */
+    function theme_asset(string $rel): string {
+        $v = @filemtime(theme_path($rel));
+        return theme_url($rel) . ($v ? '?v=' . $v : '');
+    }
+}
+
 if (!function_exists('aimg')) {
     /**
      * Editable image URL for a page/key. Returns the admin-uploaded image
