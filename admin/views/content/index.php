@@ -11,10 +11,11 @@ $db = Database::getInstance();
 // Pages that have a content registry (label + icon for the picker). page_key MUST match
 // what the templates pass to ac()/hc() (home, about, contact).
 $pages_meta = [
-    'home'    => ['label' => 'Halaman Home / Beranda', 'icon' => 'home'],
-    'about'   => ['label' => 'Halaman Tentang Kami',   'icon' => 'users'],
-    'blog'    => ['label' => "Halaman What's New",     'icon' => 'blog'],
-    'contact' => ['label' => 'Halaman Kontak',         'icon' => 'phone'],
+    'home'      => ['label' => 'Halaman Home / Beranda', 'icon' => 'home'],
+    'about'     => ['label' => 'Halaman Tentang Kami',   'icon' => 'users'],
+    'solutions' => ['label' => 'Halaman Solutions',      'icon' => 'layers'],
+    'blog'      => ['label' => "Halaman What's New",     'icon' => 'blog'],
+    'contact'   => ['label' => 'Halaman Kontak',         'icon' => 'phone'],
 ];
 
 $theme_registry = function (string $page): array {

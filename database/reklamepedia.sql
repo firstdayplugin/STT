@@ -502,6 +502,48 @@ INSERT INTO `solution_slides` (`eyebrow`,`judul`,`deskripsi`,`label`,`gambar`,`v
 ('AI','Artificial <b>Intelligence</b>','AI yang berjalan di atas infrastruktur nyata dan andal.','AI','','','#0a1c3a','#12386e','#3f8bff','["microsoft","intel","amd"]',4,1),
 ('AI Platform Application','AI Platform <b>Application</b>','Aplikasi cerdas siap pakai untuk mempercepat bisnis Anda.','APPS','','','#0e1630','#1a4079','#4fb0ff','["infra","microsoft","dell","intel"]',5,1);
 
+-- ---------- Solutions LANDING PAGE sections (/solutions — Figma "Our Solutions") ----------
+-- One row per solution block: alternating image/text, illustration, partner logo strip,
+-- optional secondary CTA (e.g. SatuAI). All fields CMS-editable; EN via content_i18n.
+CREATE TABLE `solutions_section` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) NOT NULL,                 -- heading; <b>...</b> renders blue
+  `solusi` text DEFAULT NULL,                    -- "Solution:" paragraph
+  `teks_warna` varchar(20) NOT NULL DEFAULT '',  -- '' = default, 'red' = red solution text (Figma AI Platform)
+  `gambar` varchar(255) DEFAULT NULL,            -- illustration image (uploads/)
+  `partner_img` varchar(255) DEFAULT NULL,       -- partner-logo strip image (uploads/)
+  `url` varchar(255) DEFAULT NULL,               -- "See More" link
+  `cta_label` varchar(80) DEFAULT NULL,          -- optional secondary button label (e.g. SatuAI)
+  `cta_url` varchar(255) DEFAULT NULL,           -- optional secondary button link
+  `urutan` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `solutions_section` (`judul`,`solusi`,`teks_warna`,`gambar`,`partner_img`,`url`,`cta_label`,`cta_url`,`urutan`,`is_active`) VALUES
+('Modernize <b>Infrastructure</b>','Enterprise Data Centre Infrastructure, Edge Data Center Infrastructure, Data Center Managed Services, Private Cloud, Enterprise Private Cloud and Hybrid Cloud Solutions.','','solutions/illus-infra.png','solutions/partners-infra.png','#','','',1,1),
+('<b>CyberSecurity</b>','Data Protection, Cyber Resiliency, Network Security, Endpoint Security, Security Operation Center, Vulnerability Assessment.','','solutions/illus-cyber.png','solutions/partners-cyber.png','#','','',2,1),
+('<b>Data</b>','Big Data Solution, Data Analytics, IoT and Real-time Data Streaming Analytics.','','solutions/illus-data.png','solutions/partners-data.png','#','','',3,1),
+('<b>AI</b>','Image and Video Analytics using AI and Large Language Model using Generative AI.','','solutions/illus-ai.png','solutions/partners-ai.png','#','SatuAI','#',4,1),
+('AI Platform <b>Application</b>','Data Protection, Cyber Resiliency, Network Security, Endpoint Security, Security Operation Center, Vulnerability Assessment.','red','solutions/illus-platform.png','solutions/partners-platform.png','#','','',5,1);
+
+-- Solutions landing intro + Coming Soon banner (content_blocks; ID + EN) --------------
+INSERT INTO `content_blocks` (`page_key`,`block_key`,`lang`,`block_label`,`block_type`,`konten`,`is_active`) VALUES
+('solutions','title','id','Judul','text','Our Solutions',1),
+('solutions','lead','id','Intro','html','Kami memahami setiap industri punya tantangan dan kebutuhan yang unik. Karena itu STT menghadirkan solusi yang beragam sekaligus disesuaikan dengan kebutuhan klien. Didukung kemitraan strategis serta tim sales, presales, dan teknis bersertifikasi, kami siap membantu Anda menemukan solusi terbaik untuk kebutuhan perusahaan Anda.',1),
+('solutions','banner_img','id','Banner Coming Soon','image','solutions/coming-soon-banner.png',1),
+('solutions','banner_url','id','Banner — link','text','#',1),
+('solutions','label_solution','id','Label "Solution:"','text','Solution:',1),
+('solutions','label_partner','id','Label "Partner:"','text','Partner:',1),
+('solutions','card_cta','id','Teks tombol kartu','text','See More',1),
+('solutions','title','en','Judul','text','Our Solutions',1),
+('solutions','lead','en','Intro','html','We understand that every industry has its own unique challenges and needs. That''s why STT provides solutions that are not only diverse but also tailored to client needs. Supported by our partnerships, our certified sales, presales, and technical team, we can assist you to find the best solution that fit into your company requirement.',1),
+('solutions','banner_img','en','Banner Coming Soon','image','solutions/coming-soon-banner.png',1),
+('solutions','banner_url','en','Banner — link','text','#',1),
+('solutions','label_solution','en','Label "Solution:"','text','Solution:',1),
+('solutions','label_partner','en','Label "Partner:"','text','Partner:',1),
+('solutions','card_cta','en','Teks tombol kartu','text','See More',1);
+
 -- ---------- Solution pillars (Solutions landing + Industry detail tabs) ----------
 CREATE TABLE `solusi_pilar` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

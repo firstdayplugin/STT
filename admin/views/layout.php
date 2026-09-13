@@ -32,6 +32,7 @@ $nav_sections = [
         ['page'=>'services',  'label'=>'Services',       'icon'=>'service'],
         ['page'=>'solusi',    'label'=>'Solutions (Cube)',    'icon'=>'box'],
         ['page'=>'solusi-pilar','label'=>'Pilar Solusi',      'icon'=>'layers'],
+        ['page'=>'solutions-page','label'=>'Solutions (Page)','icon'=>'layers'],
         ['page'=>'industri',  'label'=>'Industries (Orbit)',  'icon'=>'compass'],
         ['page'=>'gallery',   'label'=>'Galeri',         'icon'=>'gallery'],
         ['page'=>'testimonial','label'=>'Testimoni',     'icon'=>'testimonial'],

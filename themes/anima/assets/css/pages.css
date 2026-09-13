@@ -243,23 +243,56 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 /* ============================================================
    Solutions landing + Industries landing + Industry detail (§B)
    ============================================================ */
-/* --- Solutions landing --- */
-.sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin:30px 0 10px}
-.sol-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:30px 28px;
-  background:#fff;border:1px solid var(--line);border-radius:calc(var(--radius) + 6px);
-  box-shadow:0 20px 50px rgba(14,42,78,.07);text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s}
-.sol-card:hover{transform:translateY(-4px);box-shadow:0 34px 70px rgba(14,42,78,.14);border-color:var(--blue)}
-.sol-ic{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--blue),var(--blue-600));color:#fff}
-.sol-card h3{font-size:20px;color:var(--blue-ink);margin:0}
-.sol-card p{color:var(--ink-2);line-height:1.65;margin:0;font-size:14px}
-.sol-more{margin-top:auto;display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-weight:600;font-size:13px}
-.sol-more svg{width:16px;height:16px}
-.sol-cta{text-align:center;margin:44px 0 60px;padding:44px 24px;border-radius:calc(var(--radius) + 8px);
-  background:linear-gradient(135deg,var(--navy,#0f2a54),var(--blue-600));color:#fff}
-.sol-cta h2{font-size:clamp(22px,2.6vw,32px);margin:0 0 8px}
-.sol-cta p{opacity:.85;margin:0 0 20px}
-.sol-cta .btn svg{width:18px;height:18px}
+/* --- Solutions landing (Figma "Our Solutions") --- */
+.sol-page{padding:0 0 66px}
+.sol-wrap{max-width:1300px;margin:0 auto;padding:0 24px}
+.sol-head{text-align:center;padding:52px 8px 4px}
+.sol-head h1{font-size:clamp(30px,3.6vw,48px);color:var(--blue);font-weight:800;margin:0}
+.sol-head p{max-width:84ch;margin:20px auto 0;color:var(--ink-2);line-height:1.7;font-size:15.5px}
+
+/* Coming Soon banner — full-width rounded image */
+.sol-banner{display:block;margin:34px 0 8px;border-radius:22px;overflow:hidden;
+  box-shadow:0 24px 60px rgba(14,42,78,.10);line-height:0}
+.sol-banner img{width:100%;height:auto;display:block}
+
+/* Divider between blocks */
+.sol-div{height:1px;background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent);
+  margin:6px 0}
+
+/* Alternating block */
+.sol-row{display:grid;grid-template-columns:0.92fr 1.08fr;gap:56px;align-items:center;padding:44px 0}
+.sol-row.rev .sol-media{order:2}
+.sol-row.rev .sol-text{order:1}
+
+.sol-media{position:relative}
+.sol-illus-img{width:100%;height:auto;display:block;border-radius:18px}
+.sol-more{position:absolute;left:0;bottom:18px;display:inline-flex;align-items:center;gap:12px;
+  padding:13px 34px 13px 26px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;
+  text-decoration:none;border-radius:8px 0 0 8px;
+  clip-path:polygon(0 0, 84% 0, 100% 50%, 84% 100%, 0 100%);
+  box-shadow:0 12px 24px rgba(36,120,224,.32);transition:background .2s}
+.sol-more:hover{background:var(--blue-600)}
+.sol-more svg{width:19px;height:19px}
+
+.sol-text h2{font-size:clamp(26px,3vw,38px);color:var(--blue-ink);font-weight:800;margin:0 0 18px;line-height:1.15}
+.sol-text h2 b{color:var(--blue);font-weight:800}
+.sol-label{font-size:19px;font-weight:800;color:var(--blue-ink);margin:18px 0 8px}
+.sol-desc{color:var(--ink-2);line-height:1.65;font-size:15.5px;max-width:52ch;margin:0}
+.sol-desc.red{color:#e5342b}
+.sol-partners{display:flex;align-items:center}
+.sol-partners img{width:100%;height:auto;display:block;object-fit:contain;border-radius:14px}
+.sol-cta-btn{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;
+  padding:16px 24px;border-radius:12px;background:var(--blue-050,#e8f1fe);color:var(--blue);
+  font-weight:800;font-size:16px;text-decoration:none;transition:background .2s}
+.sol-cta-btn:hover{background:#dbe9fd}
+.sol-cta-btn svg{width:19px;height:19px}
+
+@media(max-width:900px){
+  .sol-row{grid-template-columns:1fr;gap:26px;padding:32px 0}
+  .sol-row.rev .sol-media{order:1}
+  .sol-row.rev .sol-text{order:2}
+  .sol-desc{max-width:none}
+}
 
 /* --- Industries landing --- */
 .ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:30px 0 60px}
@@ -302,7 +335,7 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 .idt-feat p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.55}
 
 @media(max-width:860px){
-  .sol-grid,.idt-feats{grid-template-columns:1fr}
+  .idt-feats{grid-template-columns:1fr}
   .ind-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:520px){ .ind-grid{grid-template-columns:1fr} }

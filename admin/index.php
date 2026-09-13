@@ -277,6 +277,7 @@ $page_titles = [
     'testimonial'  => 'Testimoni',
     'solusi'       => 'Solutions (Cube)',
     'solusi-pilar' => 'Pilar Solusi',
+    'solutions-page' => 'Solutions (Page)',
     'industri'     => 'Industries (Orbit)',
     'career'       => 'Career / Lowongan',
     'career-lamaran' => 'Lamaran Masuk',
