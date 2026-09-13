@@ -6,7 +6,7 @@
 
     <div class="tel-footer-shell">
       <svg class="tel-footer-notch" viewBox="0 0 620 120" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 0 H598 Q620 0 610 34 L558 92 Q548 120 516 120 H0 Z" fill="#fff"/>
+        <path d="M0 0H620L558 92Q548 120 516 120H0Z" fill="#fff"/>
       </svg>
 
 <?php
