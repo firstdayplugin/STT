@@ -47,8 +47,12 @@ switch ($page) {
         require_once theme_path('templates/pages/home.php');
         break;
 
-    case 'tentang-kami':
+    case 'about-us':
         require_once theme_path('templates/pages/about.php');
+        break;
+
+    case 'tentang-kami': // legacy slug → new
+        redirect(url('about-us'));
         break;
 
     case 'layanan':
@@ -139,8 +143,12 @@ switch ($page) {
         }
         break;
 
-    case 'hubungi-kami':
+    case 'contact-us':
         require_once theme_path('templates/pages/contact.php');
+        break;
+
+    case 'hubungi-kami': // legacy slug → new
+        redirect(url('contact-us'));
         break;
 
     case 'sitemap.xml':

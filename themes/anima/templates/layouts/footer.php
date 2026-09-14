@@ -27,10 +27,10 @@
                  ['Modernize Infrastructure', url('solutions')], ['Data & AI', url('solutions')],
                  ['Cybersecurity', url('solutions')], ['Managed Services', url('solutions')]]],
               ['h' => t('footer_col_company', 'Company'), 'items' => [
-                 ['Company Overview', url('tentang-kami')], ['Our Industries', url('industri')],
+                 ['Company Overview', url('about-us')], ['Our Industries', url('industri')],
                  ['News & Events', url('blog')], ['Career', url('career')]]],
               ['h' => t('footer_col_help', 'Help & Support'), 'items' => [
-                 ['Talk to Support', url('hubungi-kami')], ['Find Us', url('hubungi-kami')],
+                 ['Talk to Support', url('contact-us')], ['Find Us', url('contact-us')],
                  ['Privacy Policy', url('privacy-policy')], ['Compliance Policy', url('compliance-policy')]]],
             ];
         }

@@ -9,12 +9,12 @@ $today = date('Y-m-d');
 
 $urls = [
     ['loc' => $base . '/',              'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => $base . '/tentang-kami',  'priority' => '0.8', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/about-us',  'priority' => '0.8', 'changefreq' => 'monthly'],
     ['loc' => $base . '/layanan',       'priority' => '0.9', 'changefreq' => 'weekly'],
     ['loc' => $base . '/gallery',       'priority' => '0.7', 'changefreq' => 'weekly'],
     ['loc' => $base . '/blog',          'priority' => '0.8', 'changefreq' => 'daily'],
     ['loc' => $base . '/produk',        'priority' => '0.8', 'changefreq' => 'weekly'],
-    ['loc' => $base . '/hubungi-kami',  'priority' => '0.7', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/contact-us',  'priority' => '0.7', 'changefreq' => 'monthly'],
 ];
 
 // Layanan

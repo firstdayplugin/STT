@@ -46,12 +46,12 @@ $csrf = generate_csrf();
           <summary><strong><?= icon('page', 16) ?> Halaman</strong></summary>
           <div class="menu-picker-list">
             <label class="menu-picker-item"><input type="checkbox" data-label="Beranda" data-url="/"> Beranda</label>
-            <label class="menu-picker-item"><input type="checkbox" data-label="Tentang Kami" data-url="/tentang-kami"> Tentang Kami</label>
+            <label class="menu-picker-item"><input type="checkbox" data-label="Tentang Kami" data-url="/about-us"> Tentang Kami</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Layanan" data-url="/layanan"> Layanan</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Galeri" data-url="/gallery"> Galeri</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Blog" data-url="/blog"> Blog</label>
             <label class="menu-picker-item"><input type="checkbox" data-label="Produk" data-url="/produk"> Produk</label>
-            <label class="menu-picker-item"><input type="checkbox" data-label="Hubungi Kami" data-url="/hubungi-kami"> Hubungi Kami</label>
+            <label class="menu-picker-item"><input type="checkbox" data-label="Hubungi Kami" data-url="/contact-us"> Hubungi Kami</label>
             <?php foreach ($pages_ref as $p): ?>
             <label class="menu-picker-item">
               <input type="checkbox" data-label="<?= htmlspecialchars($p['judul']) ?>" data-url="/<?= htmlspecialchars($p['slug']) ?>">

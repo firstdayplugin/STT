@@ -38,7 +38,7 @@ $__body_class = trim($anima_body_class ?? '');
       $__nav = function_exists('get_menu_tree') ? get_menu_tree() : [];
       $__mlabel = fn($m) => function_exists('tr_field') ? tr_field('menus', (int)$m['id'], 'nama', $m['nama'] ?? '') : ($m['nama'] ?? '');
       // The contact item is surfaced as the CTA button instead of a menu link.
-      $__is_contact = fn($m) => in_array($m['url_raw'] ?? '', ['/hubungi-kami', 'hubungi-kami'], true);
+      $__is_contact = fn($m) => in_array($m['url_raw'] ?? '', ['/hubungi-kami','hubungi-kami','/contact-us','contact-us'], true);
     ?>
     <div class="menu">
       <?php foreach ($__nav as $mi): if ($__is_contact($mi)) continue;
@@ -61,7 +61,7 @@ $__body_class = trim($anima_body_class ?? '');
     </div>
     <div class="nav-right">
       <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
-      <a class="btn btn-primary" href="<?= url('hubungi-kami') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
+      <a class="btn btn-primary" href="<?= url('contact-us') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
     </div>
     <button class="hamb" aria-label="Menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </nav>
@@ -82,6 +82,6 @@ $__body_class = trim($anima_body_class ?? '');
         <a class="mnav-sub" href="<?= htmlspecialchars($ck['url']) ?>"><?= htmlspecialchars($__mlabel($ck)) ?></a>
       <?php endforeach; ?>
     <?php endforeach; ?>
-    <a class="btn btn-primary mnav-cta" href="<?= url('hubungi-kami') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
+    <a class="btn btn-primary mnav-cta" href="<?= url('contact-us') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
   </nav>
 </aside>

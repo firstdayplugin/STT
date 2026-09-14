@@ -332,7 +332,7 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                 <div class="form-group"><label>Teks CTA Button</label>
                     <input type="text" name="hero_cta_text" class="form-control" value="<?= s('hero_cta_text','Hubungi Kami') ?>"></div>
                 <div class="form-group mb-0"><label>URL CTA Button</label>
-                    <input type="text" name="hero_cta_url" class="form-control" value="<?= s('hero_cta_url','/hubungi-kami') ?>"></div>
+                    <input type="text" name="hero_cta_url" class="form-control" value="<?= s('hero_cta_url','/contact-us') ?>"></div>
 
                 <div class="form-group" style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border)">
                     <label>Overlay Gelap Hero <span id="hero-overlay-val" style="float:right;font-weight:600;color:var(--accent)"><?= (int)((float)get_setting('hero_overlay','0.5') * 100) ?>%</span></label>

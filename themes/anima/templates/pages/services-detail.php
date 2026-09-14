@@ -55,7 +55,7 @@ include theme_path('templates/layouts/header.php');
     <h1><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
     <p class="lead"><?= htmlspecialchars($T('body')) ?></p>
     <?php if (!empty($p['cta_label'])): ?>
-      <a class="btn btn-primary sv-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'hubungi-kami')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
+      <a class="btn btn-primary sv-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
     <?php endif; ?>
   </section>
 
@@ -146,7 +146,7 @@ include theme_path('templates/layouts/header.php');
 
   <?php if (!empty($p['cta_label'])): ?>
   <section class="sv-ctaband">
-    <a class="btn btn-primary" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'hubungi-kami')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
+    <a class="btn btn-primary" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
   </section>
   <?php endif; ?>
 

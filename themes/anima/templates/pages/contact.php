@@ -1,6 +1,6 @@
 <?php
 /**
- * Anima theme — Contact page (route: /hubungi-kami). Built from the Figma "Contact Us" design.
+ * Anima theme — Contact page (route: /contact-us). Built from the Figma "Contact Us" design.
  * Labels/copy are editable via ac('contact', key); contact values come from get_setting() (white-label).
  * Shares layouts/header.php (nav solid via page-inner) and layouts/footer.php with all pages.
  */
@@ -14,7 +14,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') ===
     $msg   = trim($_POST['message'] ?? '');
     $honey = trim($_POST['website'] ?? ''); // honeypot — must stay empty
     if ($honey !== '') {
-        redirect(url('hubungi-kami') . '?sent=1');                // silent drop for bots
+        redirect(url('contact-us') . '?sent=1');                // silent drop for bots
     } elseif ($nama === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $ct_err = 'Nama dan email yang valid wajib diisi.';
     } elseif ($msg === '') {
@@ -23,8 +23,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') ===
         $ct_err = 'Verifikasi anti-spam gagal. Silakan coba lagi.';
     } else {
         save_lead('kontak', ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
-                             'pesan' => $msg, 'halaman' => 'hubungi-kami']);
-        redirect(url('hubungi-kami') . '?sent=1');
+                             'pesan' => $msg, 'halaman' => 'contact-us']);
+        redirect(url('contact-us') . '?sent=1');
     }
 }
 $ct_sent = isset($_GET['sent']);
@@ -70,7 +70,7 @@ $socials  = [
           <?php elseif ($ct_err !== ''): ?>
             <div class="ct-alert err"><?= htmlspecialchars($ct_err) ?></div>
           <?php endif; ?>
-          <form method="post" action="<?= htmlspecialchars(url('hubungi-kami')) ?>" novalidate>
+          <form method="post" action="<?= htmlspecialchars(url('contact-us')) ?>" novalidate>
             <input type="hidden" name="_form" value="contact">
             <div class="ct-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
             <div class="ct-field">
@@ -109,31 +109,31 @@ $socials  = [
             <?php endif; ?>
             <?php if ($phone): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_phone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$phone)) ?>"><?= htmlspecialchars($phone) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($prophone): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 1.5.5 2.7 1.3 3.8L12 20l5.7-7.2A6.6 6.6 0 0019 9a7 7 0 00-7-7z"/><path d="M9 9a3 3 0 106 0 3 3 0 00-6 0z"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_prophone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$prophone)) ?>"><?= htmlspecialchars($prophone) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($wa_num): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M20 4A11 11 0 003 19l-1 3 3-1A11 11 0 1020 4z"/><path d="M8.5 8.5c.5 3 3 5.5 6 6l1.5-1.5-2-1-1 1a6 6 0 01-3-3l1-1-1-2z"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_wa') ?></div><div class="val"><a href="https://wa.me/<?= htmlspecialchars($wa_num) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($wa_disp) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($email): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_email') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($email) ?>"><?= htmlspecialchars($email) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($proemail): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_proemail') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($proemail) ?>"><?= htmlspecialchars($proemail) ?></a></div></div>
             </li>
             <?php endif; ?>
@@ -151,8 +151,12 @@ $socials  = [
       </div>
 
       <div class="ct-map">
-        <?php if (trim((string)$maps) !== ''): ?>
-          <?= $maps /* trusted embed HTML from settings */ ?>
+        <?php $m = trim((string)$maps); if ($m !== ''): ?>
+          <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?>
+            <?= $m /* full embed HTML from settings */ ?>
+          <?php else: ?>
+            <iframe src="<?= htmlspecialchars($m) ?>" width="100%" height="420" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi kantor"></iframe>
+          <?php endif; ?>
         <?php else: ?>
           <div class="ct-map-ph"><?= ac('contact', 'map_placeholder') ?></div>
         <?php endif; ?>

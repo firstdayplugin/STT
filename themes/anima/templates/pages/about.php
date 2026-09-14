@@ -1,6 +1,6 @@
 <?php
 /**
- * Anima theme — About Us (route: /tentang-kami). Full Figma layout, fully CMS-driven.
+ * Anima theme — About Us (route: /about-us). Full Figma layout, fully CMS-driven.
  * Singular copy + vision images: ac()/aimg('about', key) (Konten Halaman → Tentang Kami).
  * Repeaters (mission, ICARE values, milestones, awards, quality, certs) come from `about_items`
  * (admin "Tentang Kami"), each language-aware via tr_field and image-capable.

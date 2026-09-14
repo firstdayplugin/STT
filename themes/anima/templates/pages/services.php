@@ -33,7 +33,7 @@ include theme_path('templates/layouts/header.php');
     <p class="lead"><?= htmlspecialchars($T('body')) ?></p>
     <?php if (trim((string)$T('extra1')) !== ''): ?><p class="sv-support"><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
     <?php if (!empty($p['cta_label'])): ?>
-      <a class="btn btn-primary sv-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'hubungi-kami')) ?>"><?= htmlspecialchars($T('cta_label')) ?>
+      <a class="btn btn-primary sv-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <?php endif; ?>
   </section>

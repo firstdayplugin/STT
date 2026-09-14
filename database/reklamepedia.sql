@@ -35,7 +35,7 @@ INSERT INTO `settings` (`setting_key`,`setting_value`,`setting_group`) VALUES
 ('site_phone','+62 21-5028 1717','general'),
 ('site_phone_prosupport','021-2410 1568','general'),
 ('site_address','Komplek Perkantoran Agung Sedayu Blok H No.28-30, Jl. Arteri Mangga Dua Raya, Jakarta Pusat, DKI Jakarta, Indonesia 10730','general'),
-('site_maps_embed','','general'),
+('site_maps_embed','https://www.google.com/maps?q=Sapta+Tunas+Teknologi+PT,+Blok+H+No.28-30,+Jl.+Arteri+Mangga+Dua+Raya,+Jakarta+Pusat+10730&z=16&output=embed','general'),
 ('wa_number','6282110001087','whatsapp'),
 ('wa_display','+62 821-1000-1087','whatsapp'),
 ('wa_text','Halo, saya ingin konsultasi solusi IT.','whatsapp'),
@@ -80,13 +80,13 @@ CREATE TABLE `menus` (
   PRIMARY KEY (`id`), KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO `menus` (`nama`,`url`,`lokasi`,`urutan`,`is_active`,`is_default`) VALUES
-('About Us','/tentang-kami','header',1,1,1),
+('About Us','/about-us','header',1,1,1),
 ('Solutions','/solutions','header',2,1,1),
 ('Services','/services','header',3,1,1),
 ('Industry','/industri','header',4,1,1),
 ('What''s New','/blog','header',5,1,1),
 ('Career','/career','header',6,1,1),
-('Contact Us','/hubungi-kami','header',7,1,1);
+('Contact Us','/contact-us','header',7,1,1);
 
 -- ---------- Content blocks (editable text per page, per language) ----------
 CREATE TABLE `content_blocks` (
