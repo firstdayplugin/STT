@@ -73,6 +73,14 @@
   addEventListener('keydown', function(e){ if (e.key === 'Escape') setNav(false); });
 })();
 
+/* Blog "Publishing Year" dropdown — navigate on change (CSP-safe, no inline handler). */
+(function(){
+  document.addEventListener('change', function(e){
+    var s = e.target;
+    if (s && s.tagName === 'SELECT' && s.hasAttribute('data-nav') && s.value) { window.location.href = s.value; }
+  });
+})();
+
 /* ================= ABOUT US sliders ================= */
 /* Milestone — timeline drives a cross-fade of the text + image block above it. */
 (function(){
