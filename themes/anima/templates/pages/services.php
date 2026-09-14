@@ -31,7 +31,7 @@ include theme_path('templates/layouts/header.php');
 ?>
 <main class="page-body sv2"><div class="sv2-wrap">
 
-  <header class="sv2-hero">
+  <div class="sv2-hero">
     <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="sv2-eyebrow"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
     <h1><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? 'Services')) ?></h1>
     <?php if (trim((string)$T('body')) !== ''): ?><p class="sv2-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
@@ -39,7 +39,7 @@ include theme_path('templates/layouts/header.php');
     <?php if (!empty($p['cta_label'])): ?>
       <a class="btn btn-primary sv2-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
     <?php endif; ?>
-  </header>
+  </div>
 
   <?php if ($pillars): ?>
   <section class="sv2-pillars reveal">
