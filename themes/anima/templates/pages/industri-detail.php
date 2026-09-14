@@ -65,7 +65,7 @@ include theme_path('templates/layouts/header.php');
       <section class="idt2-panel" data-tab-panel="<?= (int)$p['id'] ?>" data-tab-group="<?= $grp ?>"<?= $i === 0 ? '' : ' hidden' ?>>
         <div class="idt2-card">
           <h2><?= htmlspecialchars($heading) ?></h2>
-          <div class="page-prose idt2-prose"><?= $konten ?></div>
+          <div class="idt2-prose"><?= $konten ?></div>
         </div>
         <?php if ($fitur): ?>
         <div class="idt2-feats-card">
