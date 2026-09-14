@@ -87,10 +87,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($up) { $hero = $up; $set_hero = true; } else set_flash('error', 'Upload hero gagal.');
     } elseif (!empty($_POST['hapus_hero'])) { $hero = null; $set_hero = true; }
 
+    // Landing-card icon: uploaded image OR a Lucide name (image wins). "hapus_icon" clears.
+    $icon = null; $set_icon = false; $icon_name = trim($_POST['icon'] ?? '');
+    if (!empty($_FILES['icon_file']['name'])) {
+        $up = upload_image($_FILES['icon_file'], 'industri/icon');
+        if ($up) { $icon = $up; $set_icon = true; } else set_flash('error', 'Upload ikon gagal.');
+    } elseif (!empty($_POST['hapus_icon'])) { $icon = ''; $set_icon = true; }
+    elseif ($icon_name !== '') { $icon = $icon_name; $set_icon = true; }
+
     if ($act === 'create') {
         $db->execute(
-            "INSERT INTO industri (label,slug,judul,subtitle,intro,gambar,hero_image,warna1,warna2,url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-            [$data['label'],$data['slug'],$data['judul'],$data['subtitle'],$data['intro'],$gambar,$hero,$data['warna1'],$data['warna2'],$data['url'],$data['urutan'],$data['is_active']]
+            "INSERT INTO industri (label,slug,judul,subtitle,intro,gambar,icon,hero_image,warna1,warna2,url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [$data['label'],$data['slug'],$data['judul'],$data['subtitle'],$data['intro'],$gambar,$icon,$hero,$data['warna1'],$data['warna2'],$data['url'],$data['urutan'],$data['is_active']]
         );
         save_i18n_fields('industri', (int)$db->lastInsertId(), $_POST);
         log_activity('create', 'Tambah industri: ' . $data['label']);
@@ -99,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $set = "label=?,slug=?,judul=?,subtitle=?,intro=?,warna1=?,warna2=?,url=?,urutan=?,is_active=?";
         $params = [$data['label'],$data['slug'],$data['judul'],$data['subtitle'],$data['intro'],$data['warna1'],$data['warna2'],$data['url'],$data['urutan'],$data['is_active']];
         if ($set_gambar) { $set .= ",gambar=?"; $params[] = $gambar; }
+        if ($set_icon)   { $set .= ",icon=?"; $params[] = $icon; }
         if ($set_hero)   { $set .= ",hero_image=?"; $params[] = $hero; }
         $params[] = $id;
         $db->execute("UPDATE industri SET $set WHERE id=?", $params);
@@ -190,7 +199,20 @@ $csrf = generate_csrf();
 
       <div class="form-row">
         <div class="form-group">
-          <label>Foto Kartu (opsional)</label>
+          <label>Ikon Kartu (halaman Industries)</label>
+          <?php $__isimg = !empty($edit_item['icon']) && preg_match('#[/.]#', (string)$edit_item['icon']); ?>
+          <?php if ($__isimg): ?>
+            <div class="img-upload-row" style="margin-bottom:8px">
+              <div class="img-preview" style="width:56px;height:56px;background:#eef5fd"><img src="<?= uploads_url($edit_item['icon']) ?>" alt="" style="object-fit:contain"></div>
+              <label class="checkbox-label" style="font-size:12px"><input type="checkbox" name="hapus_icon" value="1"> Hapus ikon</label>
+            </div>
+          <?php endif; ?>
+          <input type="file" name="icon_file" accept="image/*">
+          <input type="text" name="icon" style="margin-top:6px" value="<?= htmlspecialchars($__isimg ? '' : ($edit_item['icon'] ?? '')) ?>" placeholder="atau nama ikon Lucide, mis. shield">
+          <div class="form-hint">Upload gambar ikon (PNG transparan), atau isi nama ikon Lucide. Gambar menang.</div>
+        </div>
+        <div class="form-group">
+          <label>Foto Kartu (untuk orbit di Home — opsional)</label>
           <?php if (!empty($edit_item['gambar'])): ?>
             <div class="img-upload-row" style="margin-bottom:8px">
               <div class="img-preview" style="width:80px;height:52px"><img src="<?= uploads_url($edit_item['gambar']) ?>" alt=""></div>
@@ -198,7 +220,7 @@ $csrf = generate_csrf();
             </div>
           <?php endif; ?>
           <input type="file" name="gambar" accept="image/*">
-          <div class="form-hint">Kalau diisi, foto menggantikan gradient sebagai wajah kartu. JPG/PNG/WebP, max 5MB.</div>
+          <div class="form-hint">Dipakai kartu orbit di Home. JPG/PNG/WebP, max 5MB.</div>
         </div>
         <div class="form-group">
           <label>Link (opsional)</label>

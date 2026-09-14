@@ -32,10 +32,10 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
 <main class="page-body sol-page">
   <div class="sol-wrap">
 
-    <header class="sol-head">
+    <div class="sol-head">
       <h1><?= htmlspecialchars($c('title', 'Our Solutions')) ?></h1>
       <p><?= $c('lead', '') ?></p>
-    </header>
+    </div>
 
     <?php if ($banner_img): ?>
     <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>

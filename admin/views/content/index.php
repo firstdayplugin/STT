@@ -14,6 +14,7 @@ $pages_meta = [
     'home'      => ['label' => 'Halaman Home / Beranda', 'icon' => 'home'],
     'about'     => ['label' => 'Halaman Tentang Kami',   'icon' => 'users'],
     'solutions' => ['label' => 'Halaman Solutions',      'icon' => 'layers'],
+    'industri'  => ['label' => 'Halaman Industries',     'icon' => 'compass'],
     'blog'      => ['label' => "Halaman What's New",     'icon' => 'blog'],
     'contact'   => ['label' => 'Halaman Kontak',         'icon' => 'phone'],
 ];

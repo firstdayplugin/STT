@@ -1,48 +1,69 @@
 <?php
 /**
- * Anima — Industries landing (route: /industri). Grid of industries from `industri`.
- * Each card links to /industri/[slug] (the Industry × Pillar detail).
+ * Anima — Industries landing (route: /industri). Figma "Our Industries".
+ * Header + shared Coming Soon banner + a grid of industry icon-cards from `industri`.
+ * Icons/labels/order are CMS-editable (Admin → Industries). A lone last card spans full width.
  */
 $db = $db ?? (class_exists('Database') ? Database::getInstance() : null);
 $Q  = function (string $sql, array $p = []) use ($db) { try { return $db ? $db->fetchAll($sql, $p) : []; } catch (\Throwable $e) { return []; } };
 $rows = $Q("SELECT * FROM industri WHERE is_active=1 ORDER BY urutan, id");
 
-$seo = ['title' => get_content('industri', 'seo_title', 'Industries') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
-        'description' => get_content('industri', 'seo_desc', 'Solusi teknologi lintas industri dari Sapta Tunas Teknologi.')];
+$c   = fn(string $k, string $d = '') => get_content('industri', $k, $d);
+$imgu = function (string $path): string {
+    $path = trim($path);
+    if ($path === '') return '';
+    return preg_match('#^(https?:|/|data:)#', $path) ? $path : uploads_url($path);
+};
+$card_icon = function ($ic) {
+    $ic = trim((string)$ic);
+    if ($ic === '') return icon('layers', 64);
+    if (str_contains($ic, '/') || str_contains($ic, '.')) {
+        return '<img src="' . htmlspecialchars(uploads_url($ic)) . '" alt="" data-fallback="remove">';
+    }
+    return icon($ic, 64);
+};
+
+$seo = ['title' => $c('title', 'Our Industries') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
+        'description' => strip_tags($c('lead', 'Solusi teknologi lintas industri dari Sapta Tunas Teknologi.'))];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
+
+$banner_img = $imgu($c('banner_img', 'solutions/coming-soon-banner.png'));
+$banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url = '#';
+$n = count($rows);
 ?>
-<main class="page-body"><div class="page-shell">
+<main class="page-body indpg-page">
+  <div class="indpg-wrap">
 
-  <div class="page-hero">
-    <div class="eyebrow"><?= htmlspecialchars(get_content('industri', 'eyebrow', 'Industries We Serve')) ?></div>
-    <h1><?= htmlspecialchars(get_content('industri', 'title', 'Our Industries')) ?></h1>
-    <p><?= htmlspecialchars(get_content('industri', 'lead', 'Kami memahami tantangan unik tiap industri dan menghadirkan solusi teknologi yang tepat sasaran.')) ?></p>
-  </div>
+    <div class="indpg-head">
+      <h1><?= htmlspecialchars($c('title', 'Our Industries')) ?></h1>
+      <p><?= $c('lead', '') ?></p>
+    </div>
 
-  <?php if ($rows): ?>
-  <div class="ind-grid">
-    <?php foreach ($rows as $r):
-      $slug = trim((string)($r['slug'] ?? ''));
-      $href = $slug !== '' ? url('industri/' . $slug) : '#';
-      $img  = !empty($r['gambar']) ? uploads_url($r['gambar']) : '';
-    ?>
-    <a class="ind-card" href="<?= htmlspecialchars($href) ?>"<?= $img === '' ? ' style="background:linear-gradient(135deg,' . htmlspecialchars($r['warna1']) . ',' . htmlspecialchars($r['warna2']) . ')"' : '' ?>>
-      <?php if ($img !== ''): ?><img class="ind-card-bg" src="<?= htmlspecialchars($img) ?>" alt="" data-fallback="remove" loading="lazy"><?php endif; ?>
-      <span class="ind-card-ov"></span>
-      <span class="ind-card-body">
-        <span class="ind-card-label"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
-        <?php $rsub = tr_field('industri', (int)$r['id'], 'subtitle', $r['subtitle'] ?? ''); ?>
-        <?php if ($rsub !== ''): ?><span class="ind-card-sub"><?= htmlspecialchars($rsub) ?></span><?php endif; ?>
-        <span class="ind-card-more">Explore
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </span>
+    <?php if ($banner_img): ?>
+    <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>
+      <img src="<?= htmlspecialchars($banner_img) ?>" alt="" data-fallback="remove">
     </a>
-    <?php endforeach; ?>
-  </div>
-  <?php else: ?>
-    <p class="bl-empty">Belum ada industri.</p>
-  <?php endif; ?>
+    <?php endif; ?>
 
-</div></main>
+    <?php if ($rows): ?>
+    <div class="indl-grid">
+      <?php foreach ($rows as $i => $r):
+        $slug = trim((string)($r['slug'] ?? ''));
+        $href = $slug !== '' ? url('industri/' . $slug) : '#';
+        // A lone card on the final row spans the full width (Figma: Cross Industry).
+        $wide = ($i === $n - 1 && ($n % 3) === 1) ? ' wide' : '';
+      ?>
+      <a class="indl-card<?= $wide ?>" href="<?= htmlspecialchars($href) ?>">
+        <span class="indl-ic"><?= $card_icon($r['icon'] ?? '') ?></span>
+        <span class="indl-name"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
+      </a>
+      <?php endforeach; ?>
+    </div>
+    <?php else: ?>
+      <p class="bl-empty">Belum ada industri.</p>
+    <?php endif; ?>
+
+  </div>
+</main>
 <?php include theme_path('templates/layouts/footer.php'); ?>
