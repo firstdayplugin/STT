@@ -308,7 +308,7 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 .sol-illus-img{width:100%;height:auto;display:block;border-radius:18px}
 .sol-more{position:absolute;left:0;bottom:18px;display:inline-flex;align-items:center;gap:12px;
   padding:13px 34px 13px 26px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;
-  text-decoration:none;border-radius:8px 0 0 8px;
+  text-decoration:none;border:0;cursor:pointer;font-family:inherit;border-radius:8px 0 0 8px;
   clip-path:polygon(0 0, 84% 0, 100% 50%, 84% 100%, 0 100%);
   box-shadow:0 12px 24px rgba(36,120,224,.32);transition:background .2s}
 .sol-more:hover{background:var(--blue-600)}
@@ -332,6 +332,41 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
   .sol-row.rev .sol-media{order:1}
   .sol-row.rev .sol-text{order:2}
   .sol-desc{max-width:none}
+}
+
+/* --- Solutions "See More" popup (smooth animated modal) --- */
+body.sol-modal-open{overflow:hidden}
+.sol-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .32s ease,visibility .32s ease}
+.sol-modal.open{opacity:1;visibility:visible}
+.sol-modal-scrim{position:absolute;inset:0;background:rgba(8,20,40,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.sol-modal-panel{position:relative;width:min(720px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;
+  box-shadow:0 44px 110px rgba(8,20,40,.45);padding:40px 42px 34px;
+  transform:translateY(22px) scale(.965);opacity:0;transition:transform .4s cubic-bezier(.2,.85,.25,1),opacity .4s ease}
+.sol-modal.open .sol-modal-panel{transform:none;opacity:1}
+.sol-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:0;border-radius:50%;background:#f1f5fb;
+  color:var(--ink-2);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.sol-modal-x:hover{background:#e6edf7;color:var(--ink)}
+.sol-modal-x svg{width:20px;height:20px}
+.sol-modal-eye{font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.sol-modal-head h2{font-size:clamp(23px,2.6vw,30px);color:var(--blue-ink);font-weight:800;margin:0 0 20px;line-height:1.15}
+.sol-modal-head h2 b{color:var(--blue)}
+.sol-modal-body .sm-tag{font-size:16.5px;font-weight:800;color:var(--blue-ink);margin:0 0 14px;line-height:1.4}
+.sol-modal-body p{color:var(--ink-2);line-height:1.75;margin:0 0 13px;font-size:15px}
+.sol-modal-body h4{font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin:24px 0 13px}
+.sol-modal-body ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:9px 24px}
+.sol-modal-body li{position:relative;padding-left:22px;color:var(--ink);font-size:14px;line-height:1.5}
+.sol-modal-body li::before{content:"";position:absolute;left:0;top:6px;width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,var(--blue),#5aa0ff)}
+.sol-modal-foot{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.sol-modal-cta{display:inline-flex;align-items:center;gap:10px;background:var(--blue-ink);color:#fff;font-weight:600;
+  padding:13px 26px;border-radius:10px;text-decoration:none}
+.sol-modal-cta:hover{background:#0a2140}
+.sol-modal-cta svg{width:18px;height:18px}
+@media(prefers-reduced-motion:reduce){.sol-modal,.sol-modal-panel{transition:none}}
+@media(max-width:600px){
+  .sol-modal{padding:14px}
+  .sol-modal-panel{padding:30px 22px 26px}
+  .sol-modal-body ul{grid-template-columns:1fr}
 }
 
 /* --- Industries landing (Figma "Our Industries") --- */

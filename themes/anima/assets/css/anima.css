@@ -1200,6 +1200,10 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .mnav-list>a{padding:13px 8px;border-bottom:1px solid var(--line);color:var(--ink,#0f1c34);text-decoration:none;font-weight:600;font-size:16px}
 .mnav-list>a.mnav-sub{padding-left:24px;font-weight:500;font-size:14.5px;color:var(--ink-2,#43506b)}
 .mnav-cta{margin-top:16px;justify-content:center;border-bottom:none!important}
+/* CTA in the mobile drawer must stay a solid button with white text
+   (the generic .mnav-list>a rule was tinting it dark). */
+.mnav-list>a.mnav-cta{background:var(--blue-ink);color:#fff;font-weight:600;border-radius:12px;padding:14px 18px}
+.mnav-list>a.mnav-cta:hover{background:#0a2140;color:#fff}
 /* Drawer shows only when opened (hamburger only exists on mobile, so desktop never opens it). */
 
 /* ============================================================

@@ -93,6 +93,35 @@
   });
 })();
 
+/* Solutions "See More" — smooth animated popup (CSP-safe, delegated). */
+(function(){
+  var lastTrigger = null;
+  function openModal(m, trigger){
+    if (!m) return;
+    lastTrigger = trigger || null;
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('sol-modal-open');
+    var panel = m.querySelector('.sol-modal-panel');
+    if (panel) { panel.scrollTop = 0; var x = m.querySelector('.sol-modal-x'); if (x) x.focus(); }
+  }
+  function closeModal(m){
+    if (!m) return;
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('sol-modal-open');
+    if (lastTrigger && lastTrigger.focus) { lastTrigger.focus(); lastTrigger = null; }
+  }
+  document.addEventListener('click', function(e){
+    var opener = e.target.closest ? e.target.closest('[data-sol-open]') : null;
+    if (opener) { e.preventDefault(); openModal(document.getElementById('solm-' + opener.getAttribute('data-sol-open')), opener); return; }
+    if (e.target.closest && e.target.closest('[data-sol-close]')) { closeModal(e.target.closest('.sol-modal')); }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') { var m = document.querySelector('.sol-modal.open'); if (m) closeModal(m); }
+  });
+})();
+
 /* ================= ABOUT US sliders ================= */
 /* Milestone — timeline drives a cross-fade of the text + image block above it. */
 (function(){

@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [
         'judul'      => $judul,
         'solusi'     => trim($_POST['solusi'] ?? ''),
+        'detail'     => trim($_POST['detail'] ?? ''),
         'teks_warna' => (($_POST['teks_warna'] ?? '') === 'red') ? 'red' : '',
         'url'        => trim($_POST['url'] ?? ''),
         'cta_label'  => trim($_POST['cta_label'] ?? ''),
@@ -55,15 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($act === 'create') {
         $db->execute(
-            "INSERT INTO solutions_section (judul,solusi,teks_warna,gambar,partner_img,url,cta_label,cta_url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?,?,?)",
-            [$data['judul'],$data['solusi'],$data['teks_warna'],$gambar,$partner,$data['url'],$data['cta_label'],$data['cta_url'],$data['urutan'],$data['is_active']]
+            "INSERT INTO solutions_section (judul,solusi,detail,teks_warna,gambar,partner_img,url,cta_label,cta_url,urutan,is_active) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            [$data['judul'],$data['solusi'],$data['detail'],$data['teks_warna'],$gambar,$partner,$data['url'],$data['cta_label'],$data['cta_url'],$data['urutan'],$data['is_active']]
         );
         save_i18n_fields('solutions_section', (int)$db->lastInsertId(), $_POST);
         log_activity('create', 'Tambah solution section: ' . strip_tags($judul));
         set_flash('success', 'Section ditambahkan.');
     } elseif ($act === 'update' && $id > 0) {
-        $set = "judul=?,solusi=?,teks_warna=?,url=?,cta_label=?,cta_url=?,urutan=?,is_active=?";
-        $params = [$data['judul'],$data['solusi'],$data['teks_warna'],$data['url'],$data['cta_label'],$data['cta_url'],$data['urutan'],$data['is_active']];
+        $set = "judul=?,solusi=?,detail=?,teks_warna=?,url=?,cta_label=?,cta_url=?,urutan=?,is_active=?";
+        $params = [$data['judul'],$data['solusi'],$data['detail'],$data['teks_warna'],$data['url'],$data['cta_label'],$data['cta_url'],$data['urutan'],$data['is_active']];
         if ($set_gambar)  { $set .= ",gambar=?";      $params[] = $gambar; }
         if ($set_partner) { $set .= ",partner_img=?"; $params[] = $partner; }
         $params[] = $id;
@@ -104,6 +105,9 @@ $csrf = generate_csrf();
         <div class="form-hint">Bungkus bagian yang ingin berwarna biru dengan <code>&lt;b&gt;...&lt;/b&gt;</code>.</div></div>
       <div class="form-group"><label>Solution (teks paragraf)</label>
         <textarea name="solusi" rows="3" class="no-wysiwyg"><?= htmlspecialchars($edit_item['solusi'] ?? '') ?></textarea></div>
+      <div class="form-group"><label>Detail Popup "See More"</label>
+        <textarea name="detail" rows="10" class="wysiwyg"><?= htmlspecialchars($edit_item['detail'] ?? '') ?></textarea>
+        <div class="form-hint">Isi popup yang muncul saat tombol <strong>See More</strong> diklik (tagline, penjelasan, daftar kapabilitas). Boleh dikosongkan &mdash; kalau kosong, tombol See More jadi link biasa ke URL section.</div></div>
       <div class="form-row">
         <div class="form-group"><label>Warna teks Solution</label>
           <select name="teks_warna">

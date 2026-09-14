@@ -47,6 +47,8 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
         $sid    = (int)$s['id'];
         $judul  = tr_field('solutions_section', $sid, 'judul', $s['judul']);
         $solusi = tr_field('solutions_section', $sid, 'solusi', $s['solusi'] ?? '');
+        $detail = tr_field('solutions_section', $sid, 'detail', $s['detail'] ?? '');
+        $has_detail = trim(strip_tags($detail)) !== '';
         $illus  = $img((string)($s['gambar'] ?? ''));
         $ptn    = $img((string)($s['partner_img'] ?? ''));
         $href   = trim((string)($s['url'] ?? '')); if ($href === '') $href = '#';
@@ -61,7 +63,11 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
 
       <div class="sol-media">
         <?php if ($illus): ?><img class="sol-illus-img" src="<?= htmlspecialchars($illus) ?>" alt="<?= htmlspecialchars(strip_tags($judul)) ?>" data-fallback="bg"><?php endif; ?>
-        <a class="sol-more" href="<?= htmlspecialchars($href_r) ?>"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></a>
+        <?php if ($has_detail): ?>
+          <button type="button" class="sol-more" data-sol-open="<?= $sid ?>" aria-haspopup="dialog"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></button>
+        <?php else: ?>
+          <a class="sol-more" href="<?= htmlspecialchars($href_r) ?>"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></a>
+        <?php endif; ?>
       </div>
 
       <div class="sol-text">
@@ -83,6 +89,25 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
       </div>
 
     </section>
+
+    <?php if ($has_detail): ?>
+    <div class="sol-modal" id="solm-<?= $sid ?>" aria-hidden="true">
+      <div class="sol-modal-scrim" data-sol-close></div>
+      <div class="sol-modal-panel" role="dialog" aria-modal="true" aria-labelledby="solm-<?= $sid ?>-t">
+        <button type="button" class="sol-modal-x" data-sol-close aria-label="<?= htmlspecialchars(t('close', 'Tutup')) ?>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="sol-modal-head">
+          <div class="sol-modal-eye"><?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?></div>
+          <h2 id="solm-<?= $sid ?>-t"><?= $judul ?></h2>
+        </div>
+        <div class="sol-modal-body"><?= $detail ?></div>
+        <div class="sol-modal-foot">
+          <a class="btn btn-primary sol-modal-cta" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
     <?php endforeach; ?>
 
     <?php if (empty($sections)): ?>
