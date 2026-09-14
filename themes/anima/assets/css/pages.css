@@ -516,6 +516,86 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 .sv-closing{margin-top:34px;text-align:center}
 .sv-closing p{font-size:clamp(20px,2.6vw,30px);font-weight:800;color:var(--ink);letter-spacing:-.01em}
 
+/* ---------- Services LANDING v2 (site-consistent, animated) ---------- */
+.sv2{padding:0 0 70px}
+.sv2-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.sv2-hero{text-align:center;max-width:900px;margin:0 auto;padding:52px 8px 6px}
+.sv2-eyebrow{color:var(--blue);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12.5px;margin-bottom:12px}
+.sv2-hero h1{font-size:clamp(30px,3.6vw,48px);line-height:1.15;color:var(--blue);font-weight:800;margin:0}
+.sv2-lead{margin:20px auto 0;max-width:74ch;color:var(--ink-2);line-height:1.75;font-size:15.5px}
+.sv2-quote{margin:18px auto 0;max-width:64ch;color:var(--blue-ink);font-style:italic;font-size:15px;
+  border-left:3px solid var(--blue);padding-left:16px;text-align:left}
+.sv2-cta{margin-top:26px;font-size:15px;padding:14px 26px}
+.sv2-cta svg{width:18px;height:18px}
+
+/* Reveal-on-scroll — progressive enhancement: only hides when JS marks .has-io,
+   so content is always visible if JS is disabled/fails. */
+.has-io .reveal>*{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.has-io .reveal.in>*{opacity:1;transform:none}
+.reveal.in>*:nth-child(2){transition-delay:.08s}
+.reveal.in>*:nth-child(3){transition-delay:.16s}
+.reveal.in>*:nth-child(4){transition-delay:.24s}
+.reveal.in>*:nth-child(5){transition-delay:.32s}
+.reveal.in>*:nth-child(6){transition-delay:.40s}
+.reveal.in>*:nth-child(7){transition-delay:.48s}
+.reveal.in>*:nth-child(8){transition-delay:.56s}
+.reveal.in>*:nth-child(9){transition-delay:.64s}
+
+.sv2-pillars{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:44px 0 0}
+.sv2-pcard{position:relative;display:block;background:#fff;border:1px solid #dbe7f5;border-radius:22px;padding:40px 36px 34px;
+  text-decoration:none;overflow:hidden;box-shadow:0 16px 40px rgba(14,42,78,.06);transition:transform .25s,box-shadow .25s,border-color .25s}
+.sv2-pcard::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),#5aa0ff)}
+.sv2-pcard:not(.nolink):hover{transform:translateY(-6px);box-shadow:0 34px 70px rgba(36,120,224,.18);border-color:var(--blue)}
+.sv2-picon{display:grid;place-items:center;width:64px;height:64px;border-radius:18px;margin-bottom:18px;
+  background:linear-gradient(150deg,var(--blue),var(--blue-600));color:#fff;box-shadow:0 12px 26px rgba(36,120,224,.3)}
+.sv2-picon svg{width:30px;height:30px;stroke:#fff;stroke-width:1.9;fill:none}
+.sv2-badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--blue);background:var(--blue-050,#e8f1fe);padding:5px 12px;border-radius:999px;margin-bottom:12px}
+.sv2-pcard h2{font-size:clamp(21px,2.2vw,26px);color:var(--blue-ink);font-weight:800;margin:0 0 12px}
+.sv2-pcard p{color:var(--ink-2);line-height:1.7;font-size:15px;margin:0}
+.sv2-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.sv2-chips span{font-size:12.5px;font-weight:600;color:var(--blue-ink);background:var(--bg-soft,#f2f7fd);border:1px solid #e0ebf8;padding:6px 13px;border-radius:999px}
+.sv2-more{display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:var(--blue);font-weight:700;font-size:14.5px}
+.sv2-more svg{width:18px;height:18px}
+
+.sv2-sec{margin-top:56px}
+.sv2-head{text-align:center;margin-bottom:30px}
+.sv2-head h2{font-size:clamp(24px,2.8vw,34px);color:var(--blue-ink);font-weight:800;margin:0}
+.sv2-support{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.sv2-scard{background:#fff;border:1px solid #dbe7f5;border-radius:18px;padding:30px 26px;box-shadow:0 12px 30px rgba(14,42,78,.05);
+  transition:transform .25s,box-shadow .25s}
+.sv2-scard:hover{transform:translateY(-4px);box-shadow:0 22px 46px rgba(36,120,224,.14)}
+.sv2-sicon{display:grid;place-items:center;width:50px;height:50px;border-radius:14px;margin-bottom:16px;
+  background:var(--blue-050,#e8f1fe);color:var(--blue)}
+.sv2-sicon svg{width:24px;height:24px;stroke:var(--blue);stroke-width:1.9;fill:none}
+.sv2-stag{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.sv2-scard h3{font-size:18px;color:var(--blue-ink);font-weight:800;margin:0 0 8px}
+.sv2-scard p{color:var(--ink-2);line-height:1.65;font-size:14px;margin:0}
+
+.sv2-flow{display:flex;align-items:flex-start;justify-content:center;gap:0;flex-wrap:wrap}
+.sv2-step{flex:0 0 auto;width:150px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.sv2-step-ic{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:#fff;border:2px solid #d0e2f6;color:var(--blue);position:relative}
+.sv2-step-ic svg{width:30px;height:30px;stroke:var(--blue);stroke-width:1.7;fill:none}
+.sv2-step-n{position:absolute;top:-6px;right:calc(50% - 46px);width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:13px;font-weight:800;display:grid;place-items:center;box-shadow:0 6px 14px rgba(36,120,224,.35)}
+.sv2-step-l{margin-top:14px;font-weight:700;color:var(--blue-ink);font-size:14.5px;max-width:130px}
+.sv2-flow-line{flex:1;min-width:24px;height:2px;background:linear-gradient(90deg,#cfe0f5,#9cc4f0);margin-top:36px}
+
+.sv2-closing{margin-top:60px;text-align:center;background:linear-gradient(135deg,var(--blue-ink,#0f2a54),var(--blue-600));
+  color:#fff;border-radius:24px;padding:54px 30px;box-shadow:0 26px 60px rgba(14,42,78,.18)}
+.sv2-closing h2{font-size:clamp(22px,2.8vw,34px);font-weight:800;color:#fff;margin:0 0 22px}
+.sv2-closing-btn{background:#fff;color:var(--blue);font-weight:700;padding:14px 30px;border-radius:12px;display:inline-flex;align-items:center;gap:10px}
+.sv2-closing-btn:hover{background:#eaf1fb}
+.sv2-closing-btn svg{width:18px;height:18px}
+
+@media(max-width:900px){
+  .sv2-pillars{grid-template-columns:1fr}
+  .sv2-support{grid-template-columns:1fr}
+  .sv2-flow{gap:18px}
+  .sv2-flow-line{display:none}
+  .sv2-step{width:46%}
+}
+
 /* detail: back link + areas */
 .sv-detail .bl-back{margin-bottom:18px}
 .sv-area{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:28px;align-items:center;margin-top:34px}

@@ -73,6 +73,18 @@
   addEventListener('keydown', function(e){ if (e.key === 'Escape') setNav(false); });
 })();
 
+/* Reveal-on-scroll for elements marked .reveal (adds .in when they enter the viewport). */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window)) return; // no-JS/old browsers: content stays visible
+  document.documentElement.classList.add('has-io'); // enables the hidden→reveal transition
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function(e){ io.observe(e); });
+})();
+
 /* Blog "Publishing Year" dropdown — navigate on change (CSP-safe, no inline handler). */
 (function(){
   document.addEventListener('change', function(e){
