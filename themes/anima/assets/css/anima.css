@@ -462,8 +462,8 @@ header.scrolled .hamb .ic{stroke:var(--ink)}
 .orbit-box{background:radial-gradient(120% 95% at 50% 46%,#0d2440,#0a1a2e 55%,#060d18 82%)!important}
 
 /* ---- Statement (scale-style word reveal) ---- */
-.statement{position:relative;height:200vh;background:linear-gradient(180deg,#fff,#f4f8fd 50%,#fff)}
-.stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.statement{position:relative;height:150vh;background:linear-gradient(180deg,#fff,#f4f8fd 50%,#fff)}
+.stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;overflow:hidden}
 .statement .wrap{max-width:1040px}
 .stmt{font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(26px,3.5vw,48px);font-weight:600;line-height:1.42;text-align:center;letter-spacing:-.015em}
 .stmt .w{color:rgba(20,32,46,.13);transition:color .35s ease}
