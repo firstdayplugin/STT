@@ -716,40 +716,43 @@ CREATE TABLE `about_items` (
   PRIMARY KEY (`id`), KEY `seksi` (`seksi`), KEY `urutan` (`urutan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `about_items` (`seksi`,`kode`,`judul`,`teks`,`tahun`,`urutan`) VALUES
-('mission',NULL,NULL,'Build a wide and constructive relationship with client for the mutual long-term business achievement.',NULL,1),
-('mission',NULL,NULL,'Endless learning to ensure the high quality of people performance through time.',NULL,2),
-('mission',NULL,NULL,'Nurture the high commitment of honesty, integrity, and professional ethics to achieve the highest value to stakeholder.',NULL,3),
-('mission',NULL,NULL,'Ensure excellent and reliable support to clients.',NULL,4),
-('mission',NULL,NULL,'Always making innovations to provide our clients with the best latest technologies.',NULL,5),
-('mission',NULL,NULL,'Responsible and maintain our core values to ensure customer success.',NULL,6),
-('value','I','INTEGRITY','Employ high ethical standards, demonstrating honesty and fairness.',NULL,1),
-('value','C','COLLABORATE','Coming together is a beginning, keeping together is progress, working together is success.',NULL,2),
-('value','A','ACCOUNTABILITY','Responsibility for our decision and actions.',NULL,3),
-('value','R','RESPONSIVE','Swift attitude to ensure the best service response and service level to our business partner.',NULL,4),
-('value','E','EXCELLENCE','Striving for the best in every aspect of the business solution.',NULL,5),
-('milestone',NULL,'Awal Perjalanan','Sapta Tunas Teknologi didirikan pada 2015 dengan komitmen menghadirkan Business Technology Solutions & Services untuk enterprise di Indonesia.','2015',1),
-('milestone',NULL,'Ekspansi Kapabilitas','Memperluas kapabilitas infrastruktur, cloud, dan data center seiring bertambahnya kepercayaan klien enterprise di berbagai industri.','2017',2),
-('milestone',NULL,'Kemitraan Strategis','Menjalin kemitraan strategis dengan para principal teknologi kelas dunia, termasuk pencapaian status Dell Technologies Titanium Partner.','2023',3),
-('milestone',NULL,'Cybersecurity & AI','Memperkuat lini Cybersecurity, Data Management, dan solusi AI untuk mendukung transformasi digital pelanggan secara menyeluruh.','2025',4),
-('milestone','now','Hari Ini','Dengan tim engineer bersertifikasi, STT terus mendampingi ratusan klien enterprise dalam perjalanan transformasi digital menuju pertumbuhan bisnis berkelanjutan.','Present',5),
-('award',NULL,'Dana Indonesia','Best Performing Vendor 2022','2022',1),
-('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2023','2023',2),
-('award',NULL,'PT Saka Farma Laboratories','Excellent Vendor Award 2024','2024',3),
-('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2024','2024',4),
-('award',NULL,'PT Pratha Widyahusada Tbk','Vendor Excellence Award 2024','2024',5),
-('award',NULL,'PT Kalbe Morinaga Indonesia','Excellent Vendor Performance Award 2025','2025',6),
-('quality',NULL,'ISO 9001',NULL,NULL,1),
-('quality',NULL,'ISO 14001',NULL,NULL,2),
-('quality',NULL,'ISO 45001',NULL,NULL,3),
-('quality',NULL,'ISO 37001',NULL,NULL,4),
-('quality',NULL,'ISO 27001',NULL,NULL,5),
-('cert',NULL,'Dell Technologies',NULL,NULL,1),
-('cert',NULL,'VMware',NULL,NULL,2),
-('cert',NULL,'Microsoft',NULL,NULL,3),
-('cert',NULL,'Nutanix',NULL,NULL,4),
-('cert',NULL,'Red Hat',NULL,NULL,5),
-('cert',NULL,'Veeam',NULL,NULL,6);
+INSERT INTO `about_items` (`seksi`,`kode`,`judul`,`teks`,`gambar`,`grup`,`tahun`,`urutan`) VALUES
+('mission',NULL,NULL,'Build a wide and constructive relationship with client for the mutual long-term business achievement.',NULL,NULL,NULL,1),
+('mission',NULL,NULL,'Endless learning to ensure the high quality of people performance through time.',NULL,NULL,NULL,2),
+('mission',NULL,NULL,'Nurture the high commitment of honesty, integrity, and professional ethics to achieve the highest value to stakeholder.',NULL,NULL,NULL,3),
+('mission',NULL,NULL,'Ensure excellent and reliable support to clients.',NULL,NULL,NULL,4),
+('mission',NULL,NULL,'Always making innovations to provide our clients with the best latest technologies.',NULL,NULL,NULL,5),
+('mission',NULL,NULL,'Responsible and maintain our core values to ensure customer success.',NULL,NULL,NULL,6),
+('value','I','INTEGRITY','Employ high ethical standards, demonstrating honesty and fairness.',NULL,NULL,NULL,1),
+('value','C','COLLABORATE','Coming together is a beginning, keeping together is progress, working together is success.',NULL,NULL,NULL,2),
+('value','A','ACCOUNTABILITY','Responsibility for our decision and actions.',NULL,NULL,NULL,3),
+('value','R','RESPONSIVE','Swift attitude to ensure the best service response and service level to our business partner.',NULL,NULL,NULL,4),
+('value','E','EXCELLENCE','Striving for the best in every aspect of the business solution.',NULL,NULL,NULL,5),
+('milestone',NULL,'Awal Perjalanan','Sapta Tunas Teknologi didirikan pada 2015 dengan komitmen menghadirkan Business Technology Solutions & Services untuk enterprise di Indonesia.','about/milestone.png',NULL,'2015',1),
+('milestone',NULL,'Ekspansi Kapabilitas','Memperluas kapabilitas infrastruktur, cloud, dan data center seiring bertambahnya kepercayaan klien enterprise di berbagai industri.','about/milestone.png',NULL,'2017',2),
+('milestone',NULL,'Kemitraan Strategis','Menjalin kemitraan strategis dengan para principal teknologi kelas dunia, termasuk pencapaian status Dell Technologies Titanium Partner.','about/milestone.png',NULL,'2023',3),
+('milestone',NULL,'Cybersecurity & AI','Memperkuat lini Cybersecurity, Data Management, dan solusi AI untuk mendukung transformasi digital pelanggan secara menyeluruh.','about/milestone.png',NULL,'2025',4),
+('milestone','now','Hari Ini','Dengan tim engineer bersertifikasi, STT terus mendampingi ratusan klien enterprise dalam perjalanan transformasi digital menuju pertumbuhan bisnis berkelanjutan.','about/milestone.png',NULL,'Present',5),
+('award',NULL,'Dana Indonesia','Best Performing Vendor 2022','about/award-1.png',NULL,'2022',1),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2023','about/award-2.png',NULL,'2023',2),
+('award',NULL,'PT Saka Farma Laboratories','Excellent Vendor Award 2024','about/award-3.png',NULL,'2024',3),
+('award',NULL,'PT Bintang Toedjoe','Best Platinum Vendor Award 2024','about/award-4.png',NULL,'2024',4),
+('award',NULL,'PT Pratha Widyahusada Tbk','Vendor Excellence Award 2024','about/award-5.png',NULL,'2024',5),
+('award',NULL,'PT Kalbe Morinaga Indonesia','Excellent Vendor Performance Award 2025','about/award-6.png',NULL,'2025',6),
+('quality',NULL,'ISO 9001 • ISO 14001 • ISO 45001',NULL,'about/quality-1.png',NULL,NULL,1),
+('quality',NULL,'ISO 37001',NULL,'about/quality-2.png',NULL,NULL,2),
+('quality',NULL,'ISO 27001',NULL,'about/quality-3.png',NULL,NULL,3),
+('cert',NULL,'PowerStore Deploy','Proven Professional · 2023','about/cert-1.png','DELL',NULL,1),
+('cert',NULL,'PowerScale Deploy','Proven Professional · 2023','about/cert-2.png','DELL',NULL,2),
+('cert',NULL,'ECS Deploy','Proven Professional · 2023','about/cert-3.png','DELL',NULL,3),
+('cert',NULL,'PowerProtect Data Domain Deploy','Proven Professional · 2023','about/cert-4.png','DELL',NULL,4),
+('cert',NULL,'PowerProtect Cyber Recovery','Proven Professional · 2023','about/cert-5.png','DELL',NULL,5),
+('cert',NULL,'PowerProtect Data Manager Deploy','Proven Professional · 2023','about/cert-6.png','DELL',NULL,6);
+
+-- About Us — vision illustrations (image content blocks, default language)
+INSERT INTO `content_blocks` (`page_key`,`block_key`,`lang`,`block_label`,`block_type`,`konten`,`is_active`) VALUES
+('about','vision_img1','id','Gambar kiri — atas','image','about/vision-1.png',1),
+('about','vision_img2','id','Gambar kiri — bawah','image','about/vision-2.png',1);
 
 -- Inbound messages: contact form, request-proposal, and newsletter subscriptions.
 CREATE TABLE `pesan` (
