@@ -1,8 +1,9 @@
 <?php
 /**
- * Anima — Career detail + application form (route: /career/[slug]).
- * index.php passes $career_data. Handles the application POST (PRG): validates,
- * Turnstile + honeypot anti-spam, secure CV upload, inserts into job_applications.
+ * Anima — Career detail + application (route: /career/[slug]). Figma "Job Application".
+ * index.php passes $career_data. Layout: filter sidebar + job card (responsibilities /
+ * requirements) + "Form Application" card. Handles the PRG application POST (validate,
+ * Turnstile + honeypot, secure CV upload ≤1MB, insert into job_applications).
  */
 $db = $db ?? (class_exists('Database') ? Database::getInstance() : null);
 $job = $career_data ?? [];
@@ -14,10 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_form'] ?? '') === 'apply'
     $telepon = trim($_POST['telepon'] ?? '');
     $subject = trim($_POST['subject'] ?? '');
     $cover   = trim($_POST['cover_letter'] ?? '');
-    $honey   = trim($_POST['website'] ?? ''); // honeypot (must stay empty)
-
+    $honey   = trim($_POST['website'] ?? '');
     if ($honey !== '') {
-        // Silent drop for bots.
         redirect(url('career/' . $job['slug'] . '?sent=1'));
     } elseif ($nama === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $err = 'Nama dan email yang valid wajib diisi.';
@@ -36,73 +35,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['_form'] ?? '') === 'apply'
                      VALUES (?,?,?,?,?,?,?,?,?)",
                     [(int)($job['id'] ?? 0), $job['judul'] ?? '', $nama, $email, $telepon, $subject, $cover, $cv, $_SERVER['REMOTE_ADDR'] ?? '']
                 );
-            } catch (\Throwable $e) { /* swallow — never expose DB errors to visitors */ }
+            } catch (\Throwable $e) { /* never expose DB errors */ }
             redirect(url('career/' . $job['slug'] . '?sent=1'));
         }
     }
 }
 $sent = isset($_GET['sent']);
-$fmt = fn($d) => $d ? date('M j, Y', strtotime($d)) : '';
-// Language-aware field values (fall back to the base/default-language value).
-$jid = (int)($job['id'] ?? 0);
-$T = fn($f) => tr_field('career', $jid, $f, $job[$f] ?? '');
-$j_judul = $T('judul'); $j_desk = $T('deskripsi'); $j_resp = $T('responsibilities'); $j_req = $T('requirements');
+$fmt  = fn($d) => $d ? date('M j, Y', strtotime($d)) : '';
+$jid  = (int)($job['id'] ?? 0);
+$T    = fn($f) => tr_field('career', $jid, $f, $job[$f] ?? '');
+$j_judul = $T('judul'); $j_resp = $T('responsibilities'); $j_req = $T('requirements');
+$sub = array_filter([$T('jenjang'), $job['pengalaman'] ?? '']);
 $seo = ['title' => ($j_judul ?: 'Career') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
-        'description' => $job['meta_description'] ?? mb_substr(strip_tags($j_desk), 0, 160)];
+        'description' => mb_substr(strip_tags($T('deskripsi')), 0, 160)];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 ?>
-<main class="page-body"><div class="page-shell cr-detail">
+<main class="page-body"><div class="cr-wrap">
+  <div class="cr-dhead"><h1><?= htmlspecialchars(t('job_application', 'Job Application')) ?></h1></div>
 
-  <a class="bl-back" href="<?= url('career') ?>">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> <?= htmlspecialchars(t('back_to_jobs', 'Semua Lowongan')) ?></a>
+  <div class="cr-layout">
+    <?php include theme_path('templates/pages/_career-filters.php'); ?>
 
-  <div class="cr-detail-head">
-    <h1><?= htmlspecialchars($j_judul) ?></h1>
-    <div class="cr-meta">
-      <?php if (!empty($job['role'])): ?><span class="cr-chip"><?= htmlspecialchars($job['role']) ?></span><?php endif; ?>
-      <?php if (!empty($job['lokasi'])): ?><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg> <?= htmlspecialchars($job['lokasi']) ?></span><?php endif; ?>
-      <?php if (!empty($job['tipe'])): ?><span><?= icon('clock', 15) ?> <?= htmlspecialchars($job['tipe']) ?></span><?php endif; ?>
-      <?php if (!empty($job['jenjang'])): ?><span><?= icon('star', 15) ?> <?= htmlspecialchars($job['jenjang']) ?></span><?php endif; ?>
-      <?php if (!empty($job['pengalaman'])): ?><span><?= icon('briefcase', 15) ?> <?= htmlspecialchars($job['pengalaman']) ?></span><?php endif; ?>
-      <?php if (!empty($job['deadline'])): ?><span class="cr-deadline">Sampai <?= htmlspecialchars($fmt($job['deadline'])) ?></span><?php endif; ?>
+    <div class="cr-dmain">
+      <div class="cr-djob">
+        <div class="cr-djob-top">
+          <div>
+            <h2><?= htmlspecialchars($j_judul) ?></h2>
+            <?php if ($sub): ?><div class="crj-sub"><?= htmlspecialchars(implode('  |  ', $sub)) ?></div><?php endif; ?>
+          </div>
+          <?php if (!empty($job['deadline'])): ?><span class="crj-until"><?= htmlspecialchars(t('until', 'until') . ' ' . $fmt($job['deadline'])) ?></span><?php endif; ?>
+        </div>
+        <hr class="cr-djob-rule">
+        <?php if ($j_resp !== ''): ?>
+          <h3><?= htmlspecialchars(t('responsibilities', 'Responsibilities')) ?></h3>
+          <div class="cr-prose"><?= $j_resp ?></div>
+        <?php endif; ?>
+        <?php if ($j_req !== ''): ?>
+          <h3><?= htmlspecialchars(t('requirements', 'Requirements')) ?></h3>
+          <div class="cr-prose"><?= $j_req ?></div>
+        <?php endif; ?>
+      </div>
+
+      <div class="cr-formcard" id="apply">
+        <h2><?= htmlspecialchars(t('form_application', 'Form Application')) ?></h2>
+        <hr class="cr-djob-rule">
+        <?php if ($sent): ?>
+          <div class="cr-sent"><?= icon('success', 20) ?> <?= htmlspecialchars(t('apply_thanks', 'Terima kasih! Lamaran Anda sudah kami terima. Tim kami akan menghubungi jika cocok.')) ?></div>
+        <?php else: ?>
+          <?php if ($err !== ''): ?><div class="cr-err"><?= icon('warning', 16) ?> <?= htmlspecialchars($err) ?></div><?php endif; ?>
+          <form method="POST" action="<?= url('career/' . $job['slug']) ?>#apply" enctype="multipart/form-data" class="cr-form">
+            <input type="hidden" name="_form" value="apply">
+            <div class="cr-field"><label>Full Name <b>*</b></label><input type="text" name="nama" required placeholder="Enter your Full Name" value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>"></div>
+            <div class="cr-field"><label>Email <b>*</b></label><input type="email" name="email" required placeholder="Enter your email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
+            <div class="cr-field"><label>Phone Number <b>*</b></label><input type="text" name="telepon" placeholder="Enter your phone number" value="<?= htmlspecialchars($_POST['telepon'] ?? '') ?>"></div>
+            <div class="cr-field"><label>Subject (Job You Wanted to Apply) <b>*</b></label><input type="text" name="subject" placeholder="Enter your Subject (Job You Wanted to Apply)" value="<?= htmlspecialchars($_POST['subject'] ?? $j_judul) ?>"></div>
+            <div class="cr-field"><label>Cover Letter <b>*</b></label><textarea name="cover_letter" rows="4" placeholder="Enter your Cover letter"><?= htmlspecialchars($_POST['cover_letter'] ?? '') ?></textarea></div>
+            <div class="cr-field"><label>Upload Your CV (File Max 1 MB) <b>*</b></label><input type="file" name="cv" accept=".pdf,.doc,.docx" required></div>
+            <div class="ct-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+            <?php if (turnstile_enabled()): ?><div class="cr-field"><?= turnstile_widget() ?></div><?php endif; ?>
+            <button type="submit" class="btn btn-primary cr-submit"><?= htmlspecialchars(t('submit', 'Submit')) ?></button>
+          </form>
+        <?php endif; ?>
+      </div>
     </div>
-  </div>
-
-  <div class="cr-detail-body">
-    <div class="cr-content">
-      <?php if ($j_desk !== ''): ?><p class="cr-lead"><?= htmlspecialchars($j_desk) ?></p><?php endif; ?>
-      <?php if ($j_resp !== ''): ?>
-        <h2><?= htmlspecialchars(t('responsibilities', 'Responsibilities')) ?></h2>
-        <div class="page-prose"><?= $j_resp ?></div>
-      <?php endif; ?>
-      <?php if ($j_req !== ''): ?>
-        <h2><?= htmlspecialchars(t('requirements', 'Requirements')) ?></h2>
-        <div class="page-prose"><?= $j_req ?></div>
-      <?php endif; ?>
-    </div>
-
-    <aside class="cr-apply" id="apply">
-      <h2><?= htmlspecialchars(t('apply_here', 'Lamar Posisi Ini')) ?></h2>
-      <?php if ($sent): ?>
-        <div class="cr-sent"><?= icon('success', 20) ?> Terima kasih! Lamaran Anda sudah kami terima. Tim kami akan menghubungi jika cocok.</div>
-      <?php else: ?>
-        <?php if ($err !== ''): ?><div class="cr-err"><?= icon('warning', 16) ?> <?= htmlspecialchars($err) ?></div><?php endif; ?>
-        <form method="POST" action="<?= url('career/' . $job['slug']) ?>#apply" enctype="multipart/form-data" class="cr-form">
-          <input type="hidden" name="_form" value="apply">
-          <div class="cr-field"><label>Nama Lengkap *</label><input type="text" name="nama" required value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>"></div>
-          <div class="cr-field"><label>Email *</label><input type="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
-          <div class="cr-field"><label>Nomor Telepon</label><input type="text" name="telepon" value="<?= htmlspecialchars($_POST['telepon'] ?? '') ?>"></div>
-          <div class="cr-field"><label>Subject</label><input type="text" name="subject" value="<?= htmlspecialchars($_POST['subject'] ?? ($job['judul'] ?? '')) ?>"></div>
-          <div class="cr-field"><label>Cover Letter</label><textarea name="cover_letter" rows="4"><?= htmlspecialchars($_POST['cover_letter'] ?? '') ?></textarea></div>
-          <div class="cr-field"><label>Upload CV * <span class="cr-hint">(PDF/DOC/DOCX, maks 1MB)</span></label><input type="file" name="cv" accept=".pdf,.doc,.docx" required></div>
-          <div class="cr-hp" aria-hidden="true"><label>Website</label><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
-          <?= turnstile_widget() ?>
-          <button type="submit" class="btn btn-primary cr-submit"><?= htmlspecialchars(t('submit_application', 'Kirim Lamaran')) ?>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </form>
-      <?php endif; ?>
-    </aside>
   </div>
 
 </div></main>

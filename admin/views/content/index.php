@@ -16,6 +16,7 @@ $pages_meta = [
     'solutions' => ['label' => 'Halaman Solutions',      'icon' => 'layers'],
     'industri'  => ['label' => 'Halaman Industries',     'icon' => 'compass'],
     'blog'      => ['label' => "Halaman What's New",     'icon' => 'blog'],
+    'career'    => ['label' => 'Halaman Career',         'icon' => 'briefcase'],
     'contact'   => ['label' => 'Halaman Kontak',         'icon' => 'phone'],
 ];
 
