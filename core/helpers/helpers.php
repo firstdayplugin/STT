@@ -421,6 +421,66 @@ function save_lead(string $type, array $fields): bool {
     }
 }
 
+/**
+ * Recipient list for lead notifications. Reads the CMS setting
+ * `lead_notify_emails` (comma/semicolon/newline separated, multiple allowed),
+ * falling back to `site_email`. Returns validated, de-duplicated addresses.
+ */
+function lead_recipients(): array {
+    $raw = trim((string) get_setting('lead_notify_emails', ''));
+    if ($raw === '') $raw = (string) get_setting('site_email', '');
+    $out = [];
+    foreach (preg_split('/[,;\n\r]+/', $raw) as $e) {
+        $e = trim($e);
+        if ($e !== '' && filter_var($e, FILTER_VALIDATE_EMAIL)) $out[] = $e;
+    }
+    return array_values(array_unique($out));
+}
+
+/**
+ * Email a lead to the configured recipient(s). Non-fatal: never breaks a form
+ * submit if mail is unavailable. Recipients are managed in the CMS
+ * (Pengaturan → Kontak & WA → "Email penerima lead").
+ */
+function notify_lead(string $type, array $fields): bool {
+    $to = lead_recipients();
+    if (!$to) return false;
+    $site = (string) get_setting('site_name', 'Website');
+    $labels = [
+        'nama' => 'Nama', 'email' => 'Email', 'telepon' => 'No. Telp / WhatsApp',
+        'perusahaan' => 'Perusahaan', 'subjek' => 'Subjek', 'pesan' => 'Pesan', 'halaman' => 'Halaman',
+    ];
+    $lines = ['Ada lead baru (' . $type . ') dari website ' . $site . ':', ''];
+    foreach ($labels as $k => $lbl) {
+        $v = trim((string) ($fields[$k] ?? ''));
+        if ($v !== '') $lines[] = $lbl . ': ' . $v;
+    }
+    $lines[] = '';
+    $lines[] = 'IP: ' . ($_SERVER['REMOTE_ADDR'] ?? '-');
+    $lines[] = 'Waktu: ' . date('Y-m-d H:i:s');
+    $body = implode("\n", $lines);
+
+    $host    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $from    = (string) get_setting('site_email', '');
+    if (!filter_var($from, FILTER_VALIDATE_EMAIL)) $from = 'no-reply@' . preg_replace('/^www\./', '', $host);
+    $replyTo = (!empty($fields['email']) && filter_var($fields['email'], FILTER_VALIDATE_EMAIL)) ? $fields['email'] : $from;
+    $name    = trim((string) ($fields['nama'] ?? ''));
+    $subject = '[' . $site . '] Lead baru: ' . ucfirst($type) . ($name !== '' ? ' — ' . $name : '');
+
+    $headers = [
+        'From: ' . mb_encode_mimeheader($site) . ' <' . $from . '>',
+        'Reply-To: ' . $replyTo,
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+        'X-Mailer: PHP/' . phpversion(),
+    ];
+    try {
+        return @mail(implode(', ', $to), mb_encode_mimeheader($subject, 'UTF-8'), $body, implode("\r\n", $headers));
+    } catch (\Throwable $e) {
+        return false;
+    }
+}
+
 // ============================================
 // AUTH HELPERS
 // ============================================

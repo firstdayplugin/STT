@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'general' => ['site_name','site_tagline','site_description','site_email','site_phone','site_address','site_maps_embed'],
         'hero'    => ['hero_mode','hero_judul','hero_subtitle','hero_cta_text','hero_cta_url','hero_overlay'],
         'homepage'=> ['faq_limit_home','faq_limit_detail','homepage_blog_enabled','homepage_blog_count','homepage_blog_type','homepage_blog_label','homepage_blog_title','homepage_blog_desc'],
-        'kontak'  => ['wa_number','wa_text','wa_panel_title','wa_business_hours','office_lat','office_lng','site_maps_embed','wa_greeting_enabled','wa_greeting_title','wa_greeting_text','wa_greeting_delay','wa_greeting_once_per_session'],
+        'kontak'  => ['lead_notify_emails','wa_number','wa_text','wa_panel_title','wa_business_hours','office_lat','office_lng','site_maps_embed','wa_greeting_enabled','wa_greeting_title','wa_greeting_text','wa_greeting_delay','wa_greeting_once_per_session'],
         'ads'     => ['gads_conversion_enabled','gads_conversion_id','gads_conversion_label','turnstile_site_key','turnstile_secret'],
         'sosial'  => ['sosial_instagram','sosial_facebook','sosial_tiktok','sosial_youtube','sosial_twitter','sosial_linkedin'],
         'seo_settings' => ['meta_title_default','meta_desc_default','meta_keywords','og_image','google_verification','robots_default'],
@@ -460,6 +460,19 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
 <form method="POST" class="tab-content <?= $tab==='kontak'?'active':'' ?>" id="tab-kontak">
     <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
     <input type="hidden" name="_action" value="kontak">
+    <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><div>
+            <div class="card-title"><?= icon('message', 16) ?> Notifikasi Lead (Email)</div>
+            <div class="card-subtitle">Ke mana email pemberitahuan dikirim saat ada pengisian form (Request Proposal &amp; Contact Us)</div>
+        </div></div>
+        <div class="card-body">
+            <div class="form-group mb-0"><label>Email Penerima Lead</label>
+                <input type="text" name="lead_notify_emails" class="form-control" value="<?= s('lead_notify_emails') ?>"
+                       placeholder="marketing@saptatunas.com, sales@saptatunas.com">
+                <div class="form-help">Boleh lebih dari satu email, pisahkan dengan koma. Jika dikosongkan, memakai Email di tab <strong>Umum</strong>.</div>
+            </div>
+        </div>
+    </div>
     <div class="grid-2" style="align-items:start;gap:20px">
         <div class="card">
             <div class="card-header"><div class="card-title">Pengaturan WhatsApp</div></div>

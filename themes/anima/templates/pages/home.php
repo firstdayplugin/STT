@@ -15,18 +15,23 @@ $anima_load_home_js = true;
 // --- Request Proposal submit (PRG): honeypot + Turnstile, then save to `pesan`. ---
 $rp_err = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') === 'proposal') {
+    $nama  = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $msg   = trim($_POST['message'] ?? '');
     $honey = trim($_POST['website'] ?? '');
     if ($honey !== '') {
         redirect(url('') . '?sent=proposal#contact');            // silent drop for bots
+    } elseif ($nama === '') {
+        $rp_err = 'Nama wajib diisi.';
     } elseif ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $rp_err = 'Masukkan alamat email yang valid.';
     } elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? null)) {
         $rp_err = 'Verifikasi anti-spam gagal. Silakan coba lagi.';
     } else {
-        save_lead('proposal', ['email' => $email, 'telepon' => $_POST['phone'] ?? '',
-                               'pesan' => $msg, 'halaman' => 'home']);
+        $lead = ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
+                 'pesan' => $msg, 'halaman' => 'home'];
+        save_lead('proposal', $lead);
+        notify_lead('proposal', $lead);
         redirect(url('') . '?sent=proposal#contact');
     }
 }
@@ -327,16 +332,19 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
       <form method="post" action="<?= htmlspecialchars(url('') . '#contact') ?>" novalidate>
         <input type="hidden" name="_form" value="proposal">
         <div class="form-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <div class="field full"><label for="nm">Name</label>
+          <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div></div>
         <div class="form-grid">
           <div class="field"><label for="em">Email</label>
             <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-            <input id="em" name="email" type="email" placeholder="you@company.com"></div></div>
+            <input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div></div>
           <div class="field"><label for="ph">No. Telp / WhatsApp</label>
             <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
-            <input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx"></div></div>
+            <input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div></div>
         </div>
         <div class="field full"><label for="ms">Message</label>
-          <textarea id="ms" name="message" placeholder="What can we help you with?"></textarea></div>
+          <textarea id="ms" name="message" placeholder="What can we help you with?"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
         <?php if (turnstile_enabled()): ?><div class="field full"><?= turnstile_widget() ?></div><?php endif; ?>
         <button class="form-submit" type="submit">Submit <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </form>

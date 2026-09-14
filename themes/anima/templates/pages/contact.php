@@ -22,8 +22,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') ===
     } elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? null)) {
         $ct_err = 'Verifikasi anti-spam gagal. Silakan coba lagi.';
     } else {
-        save_lead('kontak', ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
-                             'pesan' => $msg, 'halaman' => 'contact-us']);
+        $lead = ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
+                 'pesan' => $msg, 'halaman' => 'contact-us'];
+        save_lead('kontak', $lead);
+        notify_lead('kontak', $lead);
         redirect(url('contact-us') . '?sent=1');
     }
 }

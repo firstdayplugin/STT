@@ -32,6 +32,7 @@ INSERT INTO `settings` (`setting_key`,`setting_value`,`setting_group`) VALUES
 ('site_logo','','general'),('site_favicon','','general'),
 ('site_email','marketing@saptatunas.com','general'),
 ('site_email_prosupport','prosupport@saptatunas.com','general'),
+('lead_notify_emails','marketing@saptatunas.com','kontak'),
 ('site_phone','+62 21-5028 1717','general'),
 ('site_phone_prosupport','021-2410 1568','general'),
 ('site_address','Komplek Perkantoran Agung Sedayu Blok H No.28-30, Jl. Arteri Mangga Dua Raya, Jakarta Pusat, DKI Jakarta, Indonesia 10730','general'),
