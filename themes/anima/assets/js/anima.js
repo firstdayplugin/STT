@@ -399,6 +399,7 @@ requestAnimationFrame(frame);
 ;
 (function(){
   var wrap=document.getElementById('ind2cards'); if(!wrap)return;
+  if(window.matchMedia&&window.matchMedia('(max-width:900px)').matches)return; /* mobile: CSS static grid */
   var cards=[].slice.call(wrap.children), N=cards.length, base=0, hover=-1, TILT=0.34;
   // §14.2 — CMS media per card: data-img paints a photo, data-c1/data-c2 override the gradient.
   // Set via JS style props (CSP-safe; no inline style attributes).
