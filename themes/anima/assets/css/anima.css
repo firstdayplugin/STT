@@ -1222,7 +1222,7 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
    Overrides the earlier blue "v3" header so the menu reads premium/corporate:
    near-black text, regular weight, larger size, quiet dark hover underline.
    ========================================================================= */
-.nav .menu{margin-left:50px;gap:34px;font-size:15px;font-weight:400;letter-spacing:.005em}
+.nav .menu{margin-left:26px;gap:22px;font-size:13px;font-weight:400;letter-spacing:0}
 .menu,header .menu,header.scrolled .menu,.page-inner .menu{color:#20242b!important}
 .menu a,header .menu a,header.scrolled .menu a,.page-inner .menu a{color:#20242b!important;font-weight:400}
 .menu a:hover,header .menu a:hover,header.scrolled .menu a:hover,.page-inner .menu a:hover{color:#000!important}
