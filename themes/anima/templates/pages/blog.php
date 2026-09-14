@@ -66,7 +66,7 @@ include theme_path('templates/layouts/header.php');
     <div class="bl-featured-body">
       <span class="bl-date"><?= htmlspecialchars($fmt($featured['created_at'])) ?></span>
       <h2><?= htmlspecialchars($featured['judul']) ?></h2>
-      <p><?= htmlspecialchars($featured['excerpt'] ?? '') ?></p>
+      <p><?= htmlspecialchars(strip_tags($featured['excerpt'] ?? '')) ?></p>
       <span class="btn btn-primary bl-featured-btn">Read More
         <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div>
@@ -104,7 +104,7 @@ include theme_path('templates/layouts/header.php');
         </a>
         <div class="bl-card-body">
           <h3><a href="<?= url('blog/' . $p['slug']) ?>"><?= htmlspecialchars($p['judul']) ?></a></h3>
-          <p><?= htmlspecialchars($p['excerpt'] ?? '') ?></p>
+          <p><?= htmlspecialchars(strip_tags($p['excerpt'] ?? '')) ?></p>
           <a class="bl-read" href="<?= url('blog/' . $p['slug']) ?>">Read More
             <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>

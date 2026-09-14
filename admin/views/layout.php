@@ -291,6 +291,9 @@ document.querySelectorAll('.alert-success').forEach(alert => {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initWysiwyg);
   else initWysiwyg();
+  // Safety net: always flush editor content back into its <textarea> before ANY form submits,
+  // so rich-text content is never lost (guards fast clicks / custom submit buttons).
+  document.addEventListener('submit', function(){ if (window.tinymce && window.tinymce.triggerSave) window.tinymce.triggerSave(); }, true);
 })();
 </script>
 </body>

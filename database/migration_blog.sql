@@ -22,3 +22,8 @@ UPDATE `blog_kategori` SET urutan=1 WHERE slug='awards';
 UPDATE `blog_kategori` SET urutan=2 WHERE slug='event';
 UPDATE `blog_kategori` SET urutan=3 WHERE slug='articles-news';
 UPDATE `blog_kategori` SET urutan=4 WHERE slug='program-promo';
+
+-- Clean HTML tags left in existing excerpts (excerpt is plain text going forward).
+UPDATE `blog` SET `excerpt` = TRIM(
+  REPLACE(REPLACE(REPLACE(REPLACE(`excerpt`,'</p>',' '),'<p>',''),'<br>',' '),'<br/>',' ')
+) WHERE `excerpt` LIKE '%<%';

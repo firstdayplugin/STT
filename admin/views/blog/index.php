@@ -25,7 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $judul   = trim($_POST['judul'] ?? '');
         $slug    = trim($_POST['slug'] ?? '');
         $konten  = $_POST['konten'] ?? '';
-        $excerpt = trim($_POST['excerpt'] ?? '');
+        // Excerpt is plain text: strip any tags, and auto-generate from the content when empty.
+        $excerpt = trim(strip_tags($_POST['excerpt'] ?? ''));
+        if ($excerpt === '') {
+            $excerpt = trim(preg_replace('/\s+/', ' ', strip_tags($konten)));
+            if (function_exists('mb_substr') && mb_strlen($excerpt) > 200) $excerpt = mb_substr($excerpt, 0, 197) . '…';
+        }
         $status  = in_array($_POST['status'] ?? '', ['published','draft']) ? $_POST['status'] : 'draft';
         $kategori_ids = $_POST['kategori'] ?? [];
         $tags_str     = trim($_POST['tags'] ?? '');
@@ -369,8 +374,9 @@ $page_title = $action === 'edit' ? 'Edit Artikel' : 'Tulis Artikel Baru';
                     </div>
                     <div class="form-group mb-0">
                         <label>Ringkasan / Excerpt</label>
-                        <textarea name="excerpt" class="form-control wysiwyg" rows="3"
-                                  placeholder="Ringkasan singkat artikel (opsional)"><?= htmlspecialchars($edit_post['excerpt'] ?? '') ?></textarea>
+                        <textarea name="excerpt" class="form-control no-wysiwyg" rows="3"
+                                  placeholder="Ringkasan singkat artikel (opsional — otomatis dari konten bila kosong)"><?= htmlspecialchars($edit_post['excerpt'] ?? '') ?></textarea>
+                        <div class="form-help">Teks biasa, tanpa format. Dikosongkan? Ringkasan dibuat otomatis dari konten.</div>
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content:space-between">
