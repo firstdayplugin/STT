@@ -295,8 +295,9 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
       <?php if (!empty($home_testi)): foreach ($home_testi as $t):
         $tv = (($t['tipe'] ?? 'text') === 'video');
         $tav = !empty($t['foto']) ? uploads_url($t['foto']) : '';
-        $trole = trim(($t['jabatan'] ?? '') . (!empty($t['perusahaan']) ? ', ' . $t['perusahaan'] : '')); ?>
-      <a class="tcard" href="#testimonial-detail">
+        $trole = trim(($t['jabatan'] ?? '') . (!empty($t['perusahaan']) ? ', ' . $t['perusahaan'] : ''));
+        $thref = url('testimonial/' . (!empty($t['slug']) ? $t['slug'] : $t['id'])); ?>
+      <a class="tcard" href="<?= htmlspecialchars($thref) ?>">
         <span class="tbadge <?= $tv ? 'video' : 'text' ?>"><?php if ($tv): ?><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video<?php else: ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text<?php endif; ?></span>
         <p class="quote">&ldquo;<?= htmlspecialchars($t['isi']) ?>&rdquo;</p>
         <div class="person">

@@ -23,44 +23,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf_token'] ?? '')) {
         set_flash('error', 'Token tidak valid.');
      redirect(admin_url('?page=' . ($_GET['page'] ?? 'dashboard'))); } else {
+        $cols = $db->getColumns('testimonial'); // column-aware: only write columns that exist
+
+        // Full candidate field set; each is included only if the column exists.
         $data = [
             'nama'      => trim($_POST['nama'] ?? ''),
             'jabatan'   => trim($_POST['jabatan'] ?? ''),
             'perusahaan'=> trim($_POST['perusahaan'] ?? ''),
             'isi'       => trim($_POST['isi'] ?? ''),
+            'detail'    => trim($_POST['detail'] ?? ''),
+            'tipe'      => (($_POST['tipe'] ?? 'text') === 'video') ? 'video' : 'text',
+            'video_url' => trim($_POST['video_url'] ?? ''),
             'rating'    => (int)($_POST['rating'] ?? 5),
             'urutan'    => (int)($_POST['urutan'] ?? 0),
             'is_active' => isset($_POST['is_active']) ? 1 : 0,
         ];
-        
+
+        // Slug: use provided, else auto from name (+company). Keep unique.
+        $slug_in = trim($_POST['slug'] ?? '');
+        if ($slug_in === '') $slug_in = trim($data['nama'] . ' ' . $data['perusahaan']);
+        $slug = make_slug($slug_in ?: ('testimoni-' . time()));
+        $exists = $db->fetchOne("SELECT id FROM testimonial WHERE slug=? AND id<>? LIMIT 1", [$slug, $id]);
+        if ($exists) $slug .= '-' . ($id ?: substr((string)time(), -4));
+        $data['slug'] = $slug;
+
         // Handle photo upload
         if (!empty($_FILES['foto']['name'])) {
             $upl_path = upload_image($_FILES['foto'], 'testimonial');
             if ($upl_path) $data['foto'] = $upl_path;
             else set_flash('error', 'Upload foto gagal. Cek ukuran/format file.');
         }
-        
-        // Column-aware: gracefully omit 'perusahaan' if migration hasn't run
-        $has_perusahaan = in_array('perusahaan', $db->getColumns('testimonial'));
-        
+        // Handle video poster upload
+        if (!empty($_FILES['video_poster']['name'])) {
+            $vp = upload_image($_FILES['video_poster'], 'testimonial');
+            if ($vp) $data['video_poster'] = $vp;
+        }
+
+        // Keep only columns that actually exist in the table.
+        $writable = array_intersect_key($data, array_flip($cols));
+
         if ($_POST['action'] === 'create') {
-            if ($has_perusahaan) {
-                $sql = "INSERT INTO testimonial (nama, jabatan, perusahaan, isi, rating, foto, urutan, is_active) VALUES (?,?,?,?,?,?,?,?)";
-                $db->execute($sql, [$data['nama'], $data['jabatan'], $data['perusahaan'], $data['isi'], $data['rating'], $data['foto'] ?? null, $data['urutan'], $data['is_active']]);
-            } else {
-                $sql = "INSERT INTO testimonial (nama, jabatan, isi, rating, foto, urutan, is_active) VALUES (?,?,?,?,?,?,?)";
-                $db->execute($sql, [$data['nama'], $data['jabatan'], $data['isi'], $data['rating'], $data['foto'] ?? null, $data['urutan'], $data['is_active']]);
-            }
+            $keys = array_keys($writable);
+            $ph   = implode(',', array_fill(0, count($keys), '?'));
+            $db->execute("INSERT INTO testimonial (" . implode(',', $keys) . ") VALUES ($ph)", array_values($writable));
             set_flash('success', 'Testimoni berhasil ditambahkan.');
         } elseif ($_POST['action'] === 'update' && $id > 0) {
-            if ($has_perusahaan) {
-                $set = "nama=?, jabatan=?, perusahaan=?, isi=?, rating=?, urutan=?, is_active=?";
-                $params = [$data['nama'], $data['jabatan'], $data['perusahaan'], $data['isi'], $data['rating'], $data['urutan'], $data['is_active']];
-            } else {
-                $set = "nama=?, jabatan=?, isi=?, rating=?, urutan=?, is_active=?";
-                $params = [$data['nama'], $data['jabatan'], $data['isi'], $data['rating'], $data['urutan'], $data['is_active']];
-            }
-            if (isset($data['foto'])) { $set .= ", foto=?"; $params[] = $data['foto']; }
+            // Only overwrite foto/video_poster when a new file was uploaded.
+            if (!isset($data['foto'])) unset($writable['foto']);
+            if (!isset($data['video_poster'])) unset($writable['video_poster']);
+            $set = implode(', ', array_map(fn($k) => "$k=?", array_keys($writable)));
+            $params = array_values($writable);
             $params[] = $id;
             $db->execute("UPDATE testimonial SET $set WHERE id = ?", $params);
             set_flash('success', 'Testimoni berhasil diupdate.');
@@ -191,10 +203,53 @@ $csrf = generate_csrf();
       </div>
       
       <div class="form-group">
-        <label>Isi Testimoni *</label>
-        <textarea name="isi" rows="4" required class="wysiwyg"><?= htmlspecialchars($edit_item['isi'] ?? '') ?></textarea>
+        <label>Kutipan Singkat (tampil di kartu) *</label>
+        <textarea name="isi" rows="3" required class="no-wysiwyg"><?= htmlspecialchars($edit_item['isi'] ?? '') ?></textarea>
+        <div class="form-hint">Kutipan pendek 1-2 kalimat yang muncul di kartu testimoni di halaman Home.</div>
       </div>
-      
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipe Testimoni</label>
+          <?php $cur_tipe = $edit_item['tipe'] ?? 'text'; ?>
+          <select name="tipe" class="form-control" data-testi-type>
+            <option value="text" <?= $cur_tipe==='text'?'selected':'' ?>>Teks (kutipan &amp; cerita)</option>
+            <option value="video" <?= $cur_tipe==='video'?'selected':'' ?>>Video (tampilkan pemutar video)</option>
+          </select>
+          <div class="form-hint">Menentukan tampilan halaman detail: video menampilkan pemutar, teks menampilkan kutipan besar.</div>
+        </div>
+        <div class="form-group">
+          <label>Slug / Permalink</label>
+          <input type="text" name="slug" placeholder="otomatis dari nama bila kosong" value="<?= htmlspecialchars($edit_item['slug'] ?? '') ?>">
+          <div class="form-hint">URL: /testimonial/<em>slug</em></div>
+        </div>
+      </div>
+
+      <div class="testi-video-fields" data-testi-video<?= $cur_tipe==='video'?'':' style="display:none"' ?>>
+        <div class="form-group">
+          <label>URL Video</label>
+          <input type="text" name="video_url" placeholder="https://www.youtube.com/watch?v=... atau Vimeo / file .mp4" value="<?= htmlspecialchars($edit_item['video_url'] ?? '') ?>">
+          <div class="form-hint">Mendukung YouTube, Vimeo, atau tautan file video (.mp4/.webm). Kosongkan untuk sementara — halaman detail otomatis pakai tampilan teks.</div>
+        </div>
+        <div class="form-group">
+          <label>Poster Video (opsional)</label>
+          <?php if (!empty($edit_item['video_poster'])): ?>
+            <div class="img-upload-row" style="margin-bottom:8px">
+              <div class="img-preview"><img src="<?= uploads_url($edit_item['video_poster']) ?>" alt=""></div>
+              <span class="text-muted" style="font-size:12px">Poster saat ini</span>
+            </div>
+          <?php endif; ?>
+          <input type="file" name="video_poster" accept="image/*">
+          <div class="form-hint">Gambar sampul untuk file video lokal (tidak dipakai untuk YouTube/Vimeo).</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cerita Lengkap (halaman detail)</label>
+        <textarea name="detail" rows="6" class="wysiwyg"><?= htmlspecialchars($edit_item['detail'] ?? '') ?></textarea>
+        <div class="form-hint">Cerita/story panjang yang tampil di halaman detail testimoni. Boleh dikosongkan.</div>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Foto Klien</label>
@@ -261,7 +316,9 @@ $csrf = generate_csrf();
               <?php endif; ?>
             </td>
             <td>
-              <div style="font-weight:600"><?= htmlspecialchars($t['nama']) ?></div>
+              <div style="font-weight:600"><?= htmlspecialchars($t['nama']) ?>
+                <?php if (($t['tipe'] ?? 'text') === 'video'): ?><span class="badge badge-info" style="font-size:10px">▶ Video</span><?php else: ?><span class="badge badge-gray" style="font-size:10px">Teks</span><?php endif; ?>
+              </div>
               <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($t['jabatan'] ?? '') ?><?= !empty($t['perusahaan']) ? ' • '.htmlspecialchars($t['perusahaan']) : '' ?></div>
             </td>
             <td style="max-width:400px"><?= excerpt(htmlspecialchars($t['isi']), 100) ?></td>
@@ -285,3 +342,14 @@ $csrf = generate_csrf();
     </div>
   <?php endif; ?>
 <?php endif; ?>
+
+<script>
+// Show/hide the video-specific fields based on the testimonial type select.
+(function(){
+  var sel = document.querySelector('[data-testi-type]');
+  var box = document.querySelector('[data-testi-video]');
+  if (!sel || !box) return;
+  function sync(){ box.style.display = (sel.value === 'video') ? '' : 'none'; }
+  sel.addEventListener('change', sync); sync();
+})();
+</script>

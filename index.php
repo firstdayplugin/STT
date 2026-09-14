@@ -76,6 +76,24 @@ switch ($page) {
         }
         break;
 
+    case 'testimonial':
+    case 'testimoni': // alias
+        if (!empty($slug)) {
+            $testimonial_data = $db->fetchOne(
+                'SELECT * FROM testimonial WHERE (slug = ? OR id = ?) AND is_active = 1 LIMIT 1',
+                [$slug, (int)$slug]
+            );
+            if ($testimonial_data) {
+                require_once theme_path('templates/pages/testimonial-detail.php');
+            } else {
+                http_response_code(404);
+                require_once theme_path('templates/pages/404.php');
+            }
+        } else {
+            redirect(url('') . '#testimonials');
+        }
+        break;
+
     case 'gallery':
         require_once theme_path('templates/pages/gallery.php');
         break;

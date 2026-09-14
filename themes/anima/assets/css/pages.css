@@ -672,6 +672,54 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
   .svd-mcards{display:grid}
 }
 
+/* ===== Testimonial DETAIL (.tsd-*) ===== */
+.tsd{max-width:920px}
+.tsd-eyebrow{text-align:center;color:var(--blue);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:12.5px;margin:20px 0 22px}
+.tsd-video{margin:0 auto}
+.tsd-frame{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:#0c1b2e;
+  box-shadow:0 30px 70px rgba(14,42,78,.22);border:1px solid #dbe7f5}
+.tsd-frame iframe,.tsd-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;object-fit:cover}
+.tsd-pull{position:relative;text-align:center;background:#fff;border:1px solid #dbe7f5;border-radius:24px;
+  padding:56px 44px 46px;box-shadow:0 24px 56px rgba(14,42,78,.08);margin:0 auto;overflow:hidden}
+.tsd-pull::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),#5aa0ff)}
+.tsd-mark{display:block;font-family:Georgia,'Times New Roman',serif;font-size:88px;line-height:.6;color:var(--blue);opacity:.22;margin-bottom:6px}
+.tsd-pull blockquote{margin:0;font-size:clamp(20px,2.6vw,30px);line-height:1.5;font-weight:700;color:var(--blue-ink);letter-spacing:-.01em}
+.tsd-person{display:flex;align-items:center;justify-content:center;gap:16px;margin:30px auto 0;text-align:left}
+.tsd-av{flex:none;width:64px;height:64px;border-radius:50%;overflow:hidden;background:linear-gradient(150deg,var(--blue),#5aa0ff);
+  display:grid;place-items:center;box-shadow:0 10px 24px rgba(36,120,224,.28)}
+.tsd-av img{width:100%;height:100%;object-fit:cover}
+.tsd-av span{color:#fff;font-weight:800;font-size:24px}
+.tsd-name{font-size:18px;font-weight:800;color:var(--blue-ink)}
+.tsd-role{font-size:14px;color:var(--blue);font-weight:600;margin-top:2px}
+.tsd-stars{display:flex;gap:3px;margin-top:6px;color:#f5b301}
+.tsd-stars svg{width:16px;height:16px}
+.tsd-lead{max-width:64ch;margin:34px auto 0;text-align:center;font-size:clamp(18px,2.2vw,24px);line-height:1.55;
+  font-weight:700;color:var(--blue-ink);font-style:italic}
+.tsd-story{max-width:70ch;margin:30px auto 0;color:var(--ink-2);line-height:1.85;font-size:16px}
+.tsd-story p{margin:0 0 16px}
+.tsd-story p:last-child{margin-bottom:0}
+
+/* other stories */
+.tsd-more{margin-top:64px}
+.tsd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tsd-card{display:flex;flex-direction:column;background:#fff;border:1px solid #dbe7f5;border-radius:18px;padding:24px 22px;
+  box-shadow:0 12px 30px rgba(14,42,78,.05);transition:transform .25s,box-shadow .25s,border-color .25s}
+.tsd-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px rgba(36,120,224,.14);border-color:var(--blue)}
+.tsd-badge{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;padding:5px 11px;border-radius:999px;margin-bottom:14px}
+.tsd-badge svg{width:12px;height:12px}
+.tsd-badge.video{background:linear-gradient(135deg,#1f8fae,#22b0a6);color:#fff}
+.tsd-badge.text{background:#eaf3ff;color:var(--blue)}
+.tsd-card p{margin:0;color:var(--ink-2);line-height:1.6;font-size:14.5px;flex:1}
+.tsd-card-p{margin-top:16px;padding-top:14px;border-top:1px solid #eef3f9}
+.tsd-card-n{display:block;font-weight:800;color:var(--blue-ink);font-size:14.5px}
+.tsd-card-r{display:block;color:var(--blue);font-size:12.5px;font-weight:600;margin-top:2px}
+
+@media(max-width:860px){
+  .tsd-grid{grid-template-columns:1fr}
+  .tsd-pull{padding:42px 26px 34px}
+}
+
 /* ============================================================
    ABOUT US — full Figma layout (image-left intro, ICARE icons,
    milestone cross-fade slider, awards/quality/cert sliders).

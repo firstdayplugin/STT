@@ -289,9 +289,12 @@ CREATE TABLE `gallery` (
 -- ---------- Testimonial ----------
 CREATE TABLE `testimonial` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL, `jabatan` varchar(150) DEFAULT NULL, `perusahaan` varchar(150) DEFAULT NULL,
-  `isi` text NOT NULL, `rating` tinyint(1) NOT NULL DEFAULT 5, `foto` varchar(255) DEFAULT NULL,
-  `tipe` enum('text','video') NOT NULL DEFAULT 'text', `video_url` varchar(255) DEFAULT NULL,
+  `nama` varchar(100) NOT NULL, `slug` varchar(160) DEFAULT NULL,
+  `jabatan` varchar(150) DEFAULT NULL, `perusahaan` varchar(150) DEFAULT NULL,
+  `isi` text NOT NULL, `detail` text DEFAULT NULL,
+  `rating` tinyint(1) NOT NULL DEFAULT 5, `foto` varchar(255) DEFAULT NULL,
+  `tipe` enum('text','video') NOT NULL DEFAULT 'text',
+  `video_url` varchar(255) DEFAULT NULL, `video_poster` varchar(255) DEFAULT NULL,
   `urutan` int(11) NOT NULL DEFAULT 0, `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -447,13 +450,13 @@ INSERT INTO `blog_kategori_rel` (`blog_id`,`kategori_id`) VALUES
 (1,3),(2,1),(3,3),(4,1),(5,3),(6,3);
 
 -- ---------- Seed: testimonials (home) ----------
-INSERT INTO `testimonial` (`nama`,`jabatan`,`perusahaan`,`isi`,`rating`,`tipe`,`urutan`,`is_active`) VALUES
-('Yonathan Moniaga','Chief Information Officer','Erha Clinic Indonesia','Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.',5,'video',1,1),
-('IT Director','Financial Services','','Migrasi sistem transaksi kami berjalan mulus dan aman. Tim STT memahami kebutuhan compliance industri finansial dengan baik.',5,'text',2,1),
-('Head of Operations','Manufacture & FMCG','','Otomatisasi supply chain dari STT memangkas waktu proses secara signifikan. Partner yang benar-benar paham operasional pabrik.',5,'video',3,1),
-('Chief Technology Officer','E-Commerce Platform','','Platform kami kini scalable menghadapi lonjakan traffic. Arsitektur yang dirancang STT terbukti andal saat peak season.',5,'text',4,1),
-('VP Technology','Enterprise IT','','Implementasi cloud, data, dan AI berjalan sesuai roadmap. Eksekusi rapi dan komunikasi transparan sepanjang proyek.',5,'video',5,1),
-('IT Manager','Healthcare Group','','Dukungan managed IT 24/7 membuat operasional rumah sakit kami jauh lebih tenang. Highly recommended.',5,'text',6,1);
+INSERT INTO `testimonial` (`nama`,`slug`,`jabatan`,`perusahaan`,`isi`,`detail`,`rating`,`tipe`,`urutan`,`is_active`) VALUES
+('Yonathan Moniaga','yonathan-moniaga-erha-clinic-indonesia','Chief Information Officer','Erha Clinic Indonesia','Kami sangat mengapresiasi STT dalam mendukung managed service IT infrastructure kami. Responsivitas tim dan keterbukaan terhadap masukan menjadikan kolaborasi kami produktif dan positif.','<p>Sebagai penyedia layanan klinik kecantikan dengan jaringan cabang nasional, ketersediaan sistem IT adalah hal yang tidak bisa ditawar. Sapta Tunas Teknologi mendampingi kami mengelola infrastruktur end-to-end, mulai dari monitoring proaktif, preventive maintenance, hingga dukungan teknis yang responsif.</p><p>Yang paling kami hargai adalah keterbukaan tim STT terhadap masukan. Setiap kebutuhan kami didengar, dianalisa, lalu diterjemahkan menjadi solusi yang benar-benar relevan dengan operasional bisnis. Kolaborasi ini membuat tim internal kami bisa fokus pada layanan pasien, bukan memadamkan masalah IT.</p>',5,'video',1,1),
+('IT Director','it-director','Financial Services','','Migrasi sistem transaksi kami berjalan mulus dan aman. Tim STT memahami kebutuhan compliance industri finansial dengan baik.','<p>Migrasi sistem transaksi di industri finansial punya toleransi risiko yang sangat rendah. Kami membutuhkan partner yang tidak hanya paham teknologi, tetapi juga memahami kebutuhan compliance dan keamanan data.</p><p>STT merancang skenario migrasi yang matang, melakukan pengujian menyeluruh, dan mengeksekusi cut-over tanpa mengganggu layanan nasabah. Prosesnya berjalan mulus dan aman, persis sesuai roadmap yang kami sepakati di awal.</p>',5,'text',2,1),
+('Head of Operations','head-of-operations','Manufacture & FMCG','','Otomatisasi supply chain dari STT memangkas waktu proses secara signifikan. Partner yang benar-benar paham operasional pabrik.','<p>Di lini manufaktur, setiap menit downtime berdampak langsung pada output produksi. STT membantu kami mengotomatisasi proses supply chain sehingga alur informasi dari gudang hingga lini produksi menjadi jauh lebih cepat dan akurat.</p><p>Mereka benar-benar memahami konteks operasional pabrik, bukan sekadar memasang teknologi, tetapi menyesuaikannya dengan cara kerja tim di lapangan.</p>',5,'video',3,1),
+('Chief Technology Officer','chief-technology-officer','E-Commerce Platform','','Platform kami kini scalable menghadapi lonjakan traffic. Arsitektur yang dirancang STT terbukti andal saat peak season.','<p>Sebagai platform e-commerce, lonjakan trafik saat campaign besar adalah ujian sesungguhnya. Bersama STT kami membangun arsitektur yang scalable sehingga platform tetap stabil meski beban melonjak berkali-kali lipat.</p><p>Skalabilitas ini memberi kami ketenangan untuk tumbuh tanpa khawatir infrastruktur menjadi penghambat.</p>',5,'text',4,1),
+('VP Technology','vp-technology','Enterprise IT','','Implementasi cloud, data, dan AI berjalan sesuai roadmap. Eksekusi rapi dan komunikasi transparan sepanjang proyek.','<p>Transformasi digital kami mencakup cloud, data, dan AI sekaligus. STT mengawal implementasi ini secara bertahap dengan eksekusi yang rapi dan komunikasi yang transparan di setiap milestone.</p><p>Hasilnya, adopsi teknologi baru berjalan lancar dan tim kami merasa didampingi, bukan ditinggalkan setelah proyek selesai.</p>',5,'video',5,1),
+('IT Manager','it-manager','Healthcare Group','','Dukungan managed IT 24/7 membuat operasional rumah sakit kami jauh lebih tenang. Highly recommended.','<p>Operasional rumah sakit berjalan 24 jam, dan begitu pula kebutuhan dukungan IT-nya. Layanan managed IT 24/7 dari STT membuat kami tenang karena setiap kendala ditangani dengan cepat, kapan pun terjadi.</p><p>Dukungan yang konsisten ini berdampak langsung pada kelancaran pelayanan kepada pasien.</p>',5,'text',6,1);
 
 -- ---------- Seed: hero slides (Home cinematic slider) ----------
 INSERT INTO `hero_slides` (`judul`,`subtitle`,`gambar`,`urutan`,`is_active`) VALUES
