@@ -27,16 +27,16 @@ $seo = ['title' => 'Career — ' . get_setting('site_name', 'Sapta Tunas Teknolo
         'description' => mb_substr(strip_tags($c('lead', $lead_default)), 0, 160)];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
-$team = $imgu($c('team_image', 'career/team.jpg'));
+$team = $imgu($c('team_image', ''));
 ?>
 <main class="page-body"><div class="cr-wrap">
 
-  <header class="cr-head">
+  <div class="cr-head">
     <h1><?= htmlspecialchars($c('title', 'Build the future with Us')) ?><br><span class="blue"><?= htmlspecialchars($c('title2', 'Grow your career at Sapta Tunas Teknologi')) ?></span></h1>
     <p><?= $c('lead', $lead_default) ?></p>
-  </header>
+  </div>
 
-  <?php if ($team): ?><div class="cr-team"><img src="<?= htmlspecialchars($team) ?>" alt="" data-fallback="remove"></div><?php endif; ?>
+  <div class="cr-team phb"><?php if ($team): ?><img src="<?= htmlspecialchars($team) ?>" alt="" data-fallback="remove"><?php endif; ?></div>
 
   <form class="cr-search" method="get" action="<?= url('career') ?>">
     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="<?= htmlspecialchars(t('search_jobs', 'Search by keywords')) ?>">

@@ -1031,3 +1031,17 @@ INSERT INTO service_matrix (page_id,grup,baris,v_gold,v_platinum,v_diamond,uruta
 (@pg,'Advanced Services','Digital Forensic Capabilities','No','Yes','Yes',10),
 (@pg,'Advanced Services','Penetration Testing','No','No','Yes',11),
 (@pg,'Advanced Services','Cyber Drill / Tabletop Exercise','No','No','Yes',12);
+
+-- ============================================================
+-- Clean "blue placeholder" look (see database/migration_placeholders.sql).
+-- Drops the low-res demo photos so the template placeholders show; images
+-- stay CMS-editable. Runs last so it clears the seeded image paths above.
+-- ============================================================
+UPDATE `about_items` SET `gambar`=NULL WHERE `seksi` IN ('milestone','award','quality','cert');
+UPDATE `content_blocks` SET `konten`='' WHERE `page_key`='about' AND `block_key` IN ('vision_img1','vision_img2');
+UPDATE `blog` SET `gambar_utama`=NULL;
+INSERT INTO `about_items` (`seksi`,`judul`,`urutan`,`is_active`) VALUES
+  ('quality','ISO 20000-1',4,1),('quality','ISO 22301',5,1),('quality','ISO 20000',6,1),('quality','PCI DSS',7,1);
+INSERT INTO `about_items` (`seksi`,`judul`,`teks`,`tahun`,`urutan`,`is_active`) VALUES
+  ('award','Client Recognition','Best Technology Partner 2023','2023',7,1),
+  ('award','Vendor Excellence','Outstanding Delivery 2025','2025',8,1);

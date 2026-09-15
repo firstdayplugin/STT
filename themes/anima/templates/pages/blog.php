@@ -62,6 +62,8 @@ include theme_path('templates/layouts/header.php');
   <a class="bl-featured" href="<?= url('blog/' . $featured['slug']) ?>">
     <?php if (!empty($featured['gambar_utama'])): ?>
       <img class="bl-featured-img" src="<?= htmlspecialchars($img($featured['gambar_utama'])) ?>" alt="" data-fallback="remove">
+    <?php else: ?>
+      <span class="bl-featured-img phb" aria-hidden="true"></span>
     <?php endif; ?>
     <div class="bl-featured-body">
       <span class="bl-date"><?= htmlspecialchars($fmt($featured['created_at'])) ?></span>
@@ -95,7 +97,7 @@ include theme_path('templates/layouts/header.php');
       <?php endif; ?>
       <?php foreach ($posts as $p): ?>
       <article class="bl-card">
-        <a class="bl-card-img" href="<?= url('blog/' . $p['slug']) ?>">
+        <a class="bl-card-img phb" href="<?= url('blog/' . $p['slug']) ?>">
           <?php if (!empty($p['gambar_utama'])): ?>
             <img src="<?= htmlspecialchars($img($p['gambar_utama'])) ?>" data-fallback="bg" alt="" loading="lazy">
           <?php endif; ?>

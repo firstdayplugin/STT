@@ -68,8 +68,8 @@ $vimg2 = aimg('about', 'vision_img2', '');
     <!-- Vision + Mission (image LEFT, text RIGHT) -->
     <section class="ab-sec ab-vm">
       <div class="ab-vm-media">
-        <div class="ab-vm-img ab-vm-img1"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 1</span><?php endif; ?></div>
-        <div class="ab-vm-img ab-vm-img2"><?php if ($vimg2): ?><img src="<?= htmlspecialchars($vimg2) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 2</span><?php endif; ?></div>
+        <div class="ab-vm-img ab-vm-img1 phb"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 1</span><?php endif; ?></div>
+        <div class="ab-vm-img ab-vm-img2 phb"><?php if ($vimg2): ?><img src="<?= htmlspecialchars($vimg2) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 2</span><?php endif; ?></div>
       </div>
       <div class="ab-vm-text">
         <div class="ab-vcard">
@@ -112,7 +112,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
             <p data-mile-body></p>
           </div>
           <div class="ab-mile-media">
-            <div class="ab-mile-frame"><img data-mile-img alt="" data-fallback="bg"></div>
+            <div class="ab-mile-frame phb"><img data-mile-img alt="" data-fallback="bg"></div>
           </div>
         </div>
         <div class="ab-mile-timeline">
@@ -145,7 +145,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
           <div class="ab-cards ab-cards-award">
             <?php foreach ($items as $a): $ai = $aimgu($a); ?>
               <div class="ab-card ab-award">
-                <div class="ab-card-img"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
+                <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
                 <div class="org"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
                 <div class="ttl"><?= htmlspecialchars($atr($a, 'teks')) ?></div>
               </div>
@@ -166,7 +166,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
         <div class="ab-carousel-track" data-carousel-track>
           <?php foreach ($quality as $q): $qi = $aimgu($q); ?>
             <div class="ab-card ab-quality">
-              <div class="ab-card-img"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($atr($q, 'judul')) ?: 'Logo' ?></span><?php endif; ?></div>
+              <div class="ab-card-img phb"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($atr($q, 'judul')) ?: 'Logo' ?></span><?php endif; ?></div>
               <?php if (trim((string)$atr($q, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($q, 'judul')) ?></div><?php endif; ?>
             </div>
           <?php endforeach; ?>
@@ -191,7 +191,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
           <div class="ab-cards ab-cards-cert">
             <?php foreach ($items as $c): $ci = $aimgu($c); ?>
               <div class="ab-card ab-cert">
-                <div class="ab-card-img"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
+                <div class="ab-card-img phb"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
                 <?php if (trim((string)$atr($c, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($c, 'judul')) ?></div><?php endif; ?>
               </div>
             <?php endforeach; ?>
