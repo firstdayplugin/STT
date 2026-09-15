@@ -572,7 +572,7 @@ body{background:#fff}
 
 /* ===== grafted from home-v2 (ind2 + why2) ===== */
 /* Industries v2 — orbit oval auto-rotate (light) */
-.ind2{position:relative;height:112vh;min-height:860px;overflow:hidden;
+.ind2{position:relative;height:100vh;min-height:660px;overflow:hidden;
   background:radial-gradient(120% 92% at 50% 42%,#ffffff,#e7eef8 68%,#dde7f5)}
 .ind2-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;pointer-events:none;text-align:center;padding:0 20px}
 .ind2-eye{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#2f7be0;font-weight:600;margin-bottom:14px}
@@ -589,7 +589,7 @@ body{background:#fff}
   background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);background-size:26px 26px;
   -webkit-mask:linear-gradient(120deg,#000,transparent 75%);mask:linear-gradient(120deg,#000,transparent 75%)}
 .ind2-card .ex{position:relative;z-index:2;font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.7);font-weight:600}
-.ind2-card .lbl{position:relative;z-index:2;font-weight:700;font-size:18px;color:#fff}
+.ind2-card .lbl{position:relative;z-index:2;font-weight:700;font-size:19px;color:#fff;line-height:1.2}
 .ind2-card.hover{filter:brightness(1.12);box-shadow:0 40px 80px rgba(30,72,150,.45),0 0 40px rgba(79,155,255,.3)}
 
 /* Orbit on mobile: the floating animation overflows on narrow screens, so lay
