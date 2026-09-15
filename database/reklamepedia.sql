@@ -1045,3 +1045,12 @@ INSERT INTO `about_items` (`seksi`,`judul`,`urutan`,`is_active`) VALUES
 INSERT INTO `about_items` (`seksi`,`judul`,`teks`,`tahun`,`urutan`,`is_active`) VALUES
   ('award','Client Recognition','Best Technology Partner 2023','2023',7,1),
   ('award','Vendor Excellence','Outstanding Delivery 2025','2025',8,1);
+-- Placeholder round 2: clear partner logos + more award filler (see migration_placeholders.sql).
+UPDATE `solutions_section` SET `partner_img`=NULL;
+INSERT INTO `about_items` (`seksi`,`judul`,`teks`,`tahun`,`urutan`,`is_active`) VALUES
+  ('award','Innovation Award','Technology Innovation 2021','2021',9,1),
+  ('award','Rising Partner','Fastest Growing Partner 2021','2021',10,1),
+  ('award','Top Solution Provider','Top Solution Provider 2022','2022',11,1),
+  ('award','Digital Excellence','Digital Excellence 2023','2023',12,1),
+  ('award','Best Enterprise Partner','Best Enterprise Partner 2026','2026',13,1),
+  ('award','Technology Leadership','Technology Leadership 2026','2026',14,1);

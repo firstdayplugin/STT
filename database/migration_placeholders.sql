@@ -37,3 +37,28 @@ INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
 INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
   SELECT 'award','Vendor Excellence','Outstanding Delivery 2025','2025',NULL,8,1 FROM DUAL
   WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Vendor Excellence');
+
+-- ---- Round 2 -------------------------------------------------------------
+-- Solutions: clear partner-logo strips so the clean logo-placeholder shows.
+UPDATE solutions_section SET partner_img = NULL;
+
+-- Awards: fill more placeholder cards across several years so the year
+-- slider is clearly full and navigable (filler content, replace later).
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award' s,'Innovation Award' j,'Technology Innovation 2021' t,'2021' y,NULL g,9 u,1 a) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Innovation Award');
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award','Rising Partner','Fastest Growing Partner 2021','2021',NULL,10,1) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Rising Partner');
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award','Top Solution Provider','Top Solution Provider 2022','2022',NULL,11,1) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Top Solution Provider');
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award','Digital Excellence','Digital Excellence 2023','2023',NULL,12,1) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Digital Excellence');
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award','Best Enterprise Partner','Best Enterprise Partner 2026','2026',NULL,13,1) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Best Enterprise Partner');
+INSERT INTO about_items (seksi,judul,teks,tahun,gambar,urutan,is_active)
+  SELECT * FROM (SELECT 'award','Technology Leadership','Technology Leadership 2026','2026',NULL,14,1) x
+  WHERE NOT EXISTS (SELECT 1 FROM about_items WHERE seksi='award' AND judul='Technology Leadership');

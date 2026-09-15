@@ -76,9 +76,11 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
           <div class="sol-label"><?= htmlspecialchars($lbl_solution) ?></div>
           <p class="sol-desc<?= $red ? ' red' : '' ?>"><?= nl2br(htmlspecialchars($solusi)) ?></p>
         <?php endif; ?>
+        <div class="sol-label"><?= htmlspecialchars($lbl_partner) ?></div>
         <?php if ($ptn): ?>
-          <div class="sol-label"><?= htmlspecialchars($lbl_partner) ?></div>
           <div class="sol-partners"><img src="<?= htmlspecialchars($ptn) ?>" alt="Partners" data-fallback="remove"></div>
+        <?php else: ?>
+          <div class="sol-partners sol-partners-ph" role="img" aria-label="Partner logos placeholder"><?php for ($k = 0; $k < 6; $k++): ?><span class="sol-plogo"></span><?php endfor; ?></div>
         <?php endif; ?>
         <?php if (trim($cta_l) !== ''): ?>
           <a class="sol-cta-btn" href="<?= htmlspecialchars(preg_match('#^https?:#', $cta_u) ? $cta_u : ($cta_u === '#' ? '#' : url(ltrim($cta_u, '/')))) ?>">
