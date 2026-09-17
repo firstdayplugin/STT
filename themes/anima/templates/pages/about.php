@@ -63,7 +63,36 @@ $vimg2 = aimg('about', 'vision_img2', '');
       <div class="eyebrow"><?= ac('about', 'intro_eyebrow') ?></div>
       <h1><?= ac('about', 'intro_title') ?></h1>
       <p class="lead"><?= ac('about', 'intro_body', true) ?></p>
-      <?php $intro_deliver = ac('about', 'intro_deliver', true); if (trim(strip_tags($intro_deliver)) !== ''): ?>
+      <?php
+        // Render the five "delivering" pillars as a clean icon-card grid.
+        // Source stays CMS-editable (about → intro_deliver, a <ul> of <li><strong>Title</strong> — desc</li>).
+        $intro_deliver = ac('about', 'intro_deliver', true);
+        $pillars = [];
+        if (preg_match_all('/<li>\s*<strong>(.*?)<\/strong>\s*[—–\-:]*\s*(.*?)<\/li>/is', $intro_deliver, $mm, PREG_SET_ORDER)) {
+            foreach ($mm as $x) $pillars[] = [
+                trim(html_entity_decode(strip_tags($x[1]), ENT_QUOTES, 'UTF-8')),
+                trim(html_entity_decode(strip_tags($x[2]), ENT_QUOTES, 'UTF-8'))];
+        }
+        $pillar_icon = function (string $t): string {
+            $t = strtolower($t);
+            if (str_contains($t, 'infrastruct')) return '<path d="M5 5h14v5H5zM5 14h14v5H5z"/><path d="M8 7.5h.01M8 16.5h.01"/>';
+            if (str_contains($t, 'cyber') || str_contains($t, 'security')) return '<path d="M12 3l7 3v6c0 4-3 7-7 8-4-1-7-4-7-8V6z"/><path d="M9.5 12l1.8 1.8L15 10"/>';
+            if (str_contains($t, 'data')) return '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>';
+            if (str_contains($t, 'platform') || str_contains($t, 'application')) return '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>';
+            return '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/>'; // AI / default
+        };
+      ?>
+      <?php if ($pillars): ?>
+        <div class="ab-pillars">
+          <?php foreach ($pillars as $p): ?>
+            <div class="ab-pillar">
+              <span class="ab-pillar-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><?= $pillar_icon($p[0]) ?></svg></span>
+              <h3><?= htmlspecialchars($p[0]) ?></h3>
+              <p><?= htmlspecialchars($p[1]) ?></p>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php elseif (trim(strip_tags($intro_deliver)) !== ''): ?>
         <div class="ab-deliver-wrap"><?= $intro_deliver ?></div>
       <?php endif; ?>
     </section>

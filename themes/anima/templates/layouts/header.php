@@ -21,6 +21,18 @@ $__body_class = trim($anima_body_class ?? '');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($__title) ?></title>
 <meta name="description" content="<?= htmlspecialchars($__desc) ?>">
+<?php
+  // Favicon — CMS-editable via the "favicon" setting; falls back to the theme mark.
+  $__fav = trim((string) (function_exists('get_setting') ? get_setting('favicon', '') : ''));
+  $__fav = $__fav !== '' ? (preg_match('#^(https?:|/)#', $__fav) ? $__fav : uploads_url($__fav)) : '';
+  $__fav32  = $__fav !== '' ? $__fav : theme_url('assets/img/favicon-32.png');
+  $__fav16  = $__fav !== '' ? $__fav : theme_url('assets/img/favicon-16.png');
+  $__favap  = $__fav !== '' ? $__fav : theme_url('assets/img/apple-touch-icon.png');
+?>
+<link rel="icon" type="image/png" sizes="32x32" href="<?= htmlspecialchars($__fav32) ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?= htmlspecialchars($__fav16) ?>">
+<link rel="shortcut icon" href="<?= htmlspecialchars($__fav32) ?>">
+<link rel="apple-touch-icon" href="<?= htmlspecialchars($__favap) ?>">
 <?php if (function_exists('is_multilang') && is_multilang()): foreach (available_langs() as $__l): ?>
 <link rel="alternate" hreflang="<?= htmlspecialchars($__l) ?>" href="<?= htmlspecialchars(url($GLOBALS['__path'] ?? '', $__l)) ?>">
 <?php endforeach; endif; ?>
