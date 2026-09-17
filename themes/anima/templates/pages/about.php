@@ -63,6 +63,9 @@ $vimg2 = aimg('about', 'vision_img2', '');
       <div class="eyebrow"><?= ac('about', 'intro_eyebrow') ?></div>
       <h1><?= ac('about', 'intro_title') ?></h1>
       <p class="lead"><?= ac('about', 'intro_body', true) ?></p>
+      <?php $intro_deliver = ac('about', 'intro_deliver', true); if (trim(strip_tags($intro_deliver)) !== ''): ?>
+        <div class="ab-deliver-wrap"><?= $intro_deliver ?></div>
+      <?php endif; ?>
     </section>
 
     <!-- Vision + Mission (image LEFT, text RIGHT) -->
@@ -104,7 +107,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
     <!-- Milestone SLIDER (cross-fade; timeline drives the text+image above) -->
     <?php if ($milestones): ?>
     <section class="ab-sec ab-mile-sec">
-      <div class="ab-head ab-head-left"><h2><?= ac('about', 'milestone_title', true) ?></h2></div>
+      <div class="ab-head ab-head-left"><h2><?= ac('about', 'milestone_title', true) ?></h2><?php $mile_body = ac('about', 'milestone_body', true); if (trim(strip_tags($mile_body)) !== ''): ?><p><?= $mile_body ?></p><?php endif; ?></div>
       <div class="ab-mile" data-milestones="<?= htmlspecialchars(json_encode($mile_json, JSON_UNESCAPED_UNICODE), ENT_QUOTES) ?>">
         <div class="ab-mile-top">
           <div class="ab-mile-text" data-mile-text>

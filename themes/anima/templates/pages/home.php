@@ -15,10 +15,16 @@ $anima_load_home_js = true;
 // --- Request Proposal submit (PRG): honeypot + Turnstile, then save to `pesan`. ---
 $rp_err = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') === 'proposal') {
-    $nama  = trim($_POST['name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $msg   = trim($_POST['message'] ?? '');
-    $honey = trim($_POST['website'] ?? '');
+    $nama     = trim($_POST['name'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $phone    = trim($_POST['phone'] ?? '');
+    $company  = trim($_POST['company'] ?? '');
+    $jobrole  = trim($_POST['job_role'] ?? '');
+    $industry = trim($_POST['industry'] ?? '');
+    $location = trim($_POST['location'] ?? '');
+    $solution = trim($_POST['solution'] ?? '');
+    $msg      = trim($_POST['message'] ?? '');
+    $honey    = trim($_POST['website'] ?? '');
     if ($honey !== '') {
         redirect(url('') . '?sent=proposal#contact');            // silent drop for bots
     } elseif ($nama === '') {
@@ -28,8 +34,18 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['_form'] ?? '') ===
     } elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? null)) {
         $rp_err = 'Verifikasi anti-spam gagal. Silakan coba lagi.';
     } else {
-        $lead = ['nama' => $nama, 'email' => $email, 'telepon' => $_POST['phone'] ?? '',
-                 'pesan' => $msg, 'halaman' => 'home'];
+        // Fold the extra fields into a structured message so nothing is lost
+        // (pesan table stores company in `perusahaan`; the rest go in the body).
+        $detail = [];
+        if ($jobrole  !== '') $detail[] = 'Job Role: '   . $jobrole;
+        if ($industry !== '') $detail[] = 'Industries: ' . $industry;
+        if ($location !== '') $detail[] = 'Locations: '  . $location;
+        if ($solution !== '') $detail[] = 'Solutions: '  . $solution;
+        $pesan_full = $msg;
+        if ($detail) $pesan_full = ($msg !== '' ? $msg . "\n\n" : '') . "— Detail —\n" . implode("\n", $detail);
+        $lead = ['nama' => $nama, 'email' => $email, 'telepon' => $phone, 'perusahaan' => $company,
+                 'subjek' => 'Request Proposal' . ($solution !== '' ? ' — ' . $solution : ''),
+                 'pesan' => $pesan_full, 'halaman' => 'home'];
         save_lead('proposal', $lead);
         notify_lead('proposal', $lead);
         redirect(url('') . '?sent=proposal#contact');
@@ -332,19 +348,43 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
       <form method="post" action="<?= htmlspecialchars(url('') . '#contact') ?>" novalidate>
         <input type="hidden" name="_form" value="proposal">
         <div class="form-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-        <div class="field full"><label for="nm">Name</label>
+        <?php
+          $rp_solutions = ['Modernize Infrastructure', 'Cybersecurity', 'Data Management',
+                           'Artificial Intelligence (AI)', 'AI Platform & Applications', 'Other'];
+        ?>
+        <div class="field full"><label for="nm">Full Name</label>
           <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div></div>
         <div class="form-grid">
           <div class="field"><label for="em">Email</label>
             <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
             <input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div></div>
-          <div class="field"><label for="ph">No. Telp / WhatsApp</label>
+          <div class="field"><label for="ph">Mobile Phone</label>
             <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
             <input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div></div>
+          <div class="field"><label for="co">Company / Organization</label>
+            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>
+            <input id="co" name="company" type="text" placeholder="Your company / organization" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>"></div></div>
+          <div class="field"><label for="jr">Job Role</label>
+            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            <input id="jr" name="job_role" type="text" placeholder="e.g. IT Manager" value="<?= htmlspecialchars($_POST['job_role'] ?? '') ?>"></div></div>
+          <div class="field"><label for="ind">Industries</label>
+            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <input id="ind" name="industry" type="text" placeholder="e.g. Financial Services" value="<?= htmlspecialchars($_POST['industry'] ?? '') ?>"></div></div>
+          <div class="field"><label for="loc">Locations</label>
+            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 0114 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <input id="loc" name="location" type="text" placeholder="e.g. Jakarta, Indonesia" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"></div></div>
         </div>
+        <div class="field full"><label for="sol">Select Solutions</label>
+          <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></svg>
+          <select id="sol" name="solution" class="field-select">
+            <option value="" <?= empty($_POST['solution']) ? 'selected' : '' ?>>Select Solutions</option>
+            <?php foreach ($rp_solutions as $__sol): ?>
+              <option value="<?= htmlspecialchars($__sol) ?>"<?= (($_POST['solution'] ?? '') === $__sol) ? ' selected' : '' ?>><?= htmlspecialchars($__sol) ?></option>
+            <?php endforeach; ?>
+          </select></div></div>
         <div class="field full"><label for="ms">Message</label>
-          <textarea id="ms" name="message" placeholder="What can we help you with?"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
+          <textarea id="ms" name="message" placeholder="Please type your request solution / product here!"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
         <?php if (turnstile_enabled()): ?><div class="field full"><?= turnstile_widget() ?></div><?php endif; ?>
         <button class="form-submit" type="submit">Submit <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </form>
