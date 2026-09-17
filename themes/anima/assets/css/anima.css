@@ -591,6 +591,11 @@ body{background:#fff}
 .ind2-card .ex{position:relative;z-index:2;font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.7);font-weight:600}
 .ind2-card .lbl{position:relative;z-index:2;font-weight:700;font-size:19px;color:#fff;line-height:1.2}
 .ind2-card.hover{filter:brightness(1.12);box-shadow:0 40px 80px rgba(30,72,150,.45),0 0 40px rgba(79,155,255,.3)}
+/* When a sector card carries a photo, lay a brand-navy scrim over it so the
+   white label/eyebrow stay readable on top of any image. */
+.ind2-card.has-img::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(135deg,rgba(10,26,50,.82),rgba(14,42,90,.55) 62%,rgba(20,60,130,.42))}
+.ind2-card.has-img .ex,.ind2-card.has-img .lbl{z-index:2}
 
 /* Orbit on mobile: the floating animation overflows on narrow screens, so lay
    the industry cards out as a clean static grid (heading first). Desktop/PC
@@ -1223,9 +1228,11 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .tk-cur{border-radius:0 !important}
 .tk-next{border-radius:0 !important}
 
-/* #3 Contain: show the whole photo/video (no hard crop); fill spare space with brand navy. */
-.tk-cur .tk-bg,.tk-next .tk-bg{background-size:contain;background-repeat:no-repeat;background-position:center;background-color:#0c1b2e}
-.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:contain;background:#0c1b2e}
+/* #3 Cover: photographic slides fill the whole stage (no letterbox); the brand
+   navy stays only as a fallback behind a transparent/absent image. Video keeps
+   contain so a promo clip is never hard-cropped. */
+.tk-cur .tk-bg,.tk-next .tk-bg{background-size:cover;background-repeat:no-repeat;background-position:center;background-color:#0c1b2e}
+.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:cover;background:#0c1b2e}
 
 /* #4 Minimalist arrows: same location as the old round buttons (at the diagonal
    seam, bottom-centre) — just small, no circle / ring / shadow. Not relocated. */
