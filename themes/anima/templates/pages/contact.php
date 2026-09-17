@@ -144,8 +144,8 @@ $socials  = [
           <div class="ct-social">
             <div class="lbl"><?= ac('contact', 'social_title') ?></div>
             <div class="ct-social-row">
-              <?php foreach ($socials as $s): if (empty($s['url'])) continue; ?>
-                <a href="<?= htmlspecialchars($s['url']) ?>" target="_blank" rel="noopener" aria-label="social"><svg viewBox="0 0 24 24"><?= $s['path'] ?></svg></a>
+              <?php $__any_social = false; foreach ($socials as $s): $su = trim((string)$s['url']); if ($su === '' || $su === '#') continue; $__any_social = true; ?>
+                <a href="<?= htmlspecialchars($su) ?>" target="_blank" rel="noopener" aria-label="social"><svg viewBox="0 0 24 24"><?= $s['path'] ?></svg></a>
               <?php endforeach; ?>
             </div>
           </div>

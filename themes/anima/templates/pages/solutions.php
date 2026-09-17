@@ -37,10 +37,16 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
       <p><?= $c('lead', '') ?></p>
     </div>
 
-    <?php if ($banner_img): ?>
+    <?php if ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
+    <?php if ($banner_has_link): ?>
     <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>
       <img src="<?= htmlspecialchars($banner_img) ?>" alt="<?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?>" data-fallback="remove">
     </a>
+    <?php else: ?>
+    <div class="sol-banner">
+      <img src="<?= htmlspecialchars($banner_img) ?>" alt="<?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?>" data-fallback="remove">
+    </div>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php foreach ($sections as $i => $s):
@@ -59,7 +65,8 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
         $img_left = ($i % 2 === 0); // 1st, 3rd, 5th → illustration on the left (matches Figma)
     ?>
     <?php if ($i > 0): ?><div class="sol-div"></div><?php endif; ?>
-    <section class="sol-row<?= $img_left ? '' : ' rev' ?>">
+    <?php $anchor = make_slug(strip_tags((string)($s['judul'] ?? ''))); ?>
+    <section class="sol-row<?= $img_left ? '' : ' rev' ?>"<?= $anchor !== '' ? ' id="' . htmlspecialchars($anchor) . '"' : '' ?>>
 
       <div class="sol-media">
         <?php if ($illus): ?><img class="sol-illus-img" src="<?= htmlspecialchars($illus) ?>" alt="<?= htmlspecialchars(strip_tags($judul)) ?>" data-fallback="bg"><?php endif; ?>
@@ -82,8 +89,8 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
         <?php else: ?>
           <div class="sol-partners sol-partners-ph" role="img" aria-label="Partner logos placeholder"><?php for ($k = 0; $k < 6; $k++): ?><span class="sol-plogo"></span><?php endfor; ?></div>
         <?php endif; ?>
-        <?php if (trim($cta_l) !== ''): ?>
-          <a class="sol-cta-btn" href="<?= htmlspecialchars(preg_match('#^https?:#', $cta_u) ? $cta_u : ($cta_u === '#' ? '#' : url(ltrim($cta_u, '/')))) ?>">
+        <?php if (trim($cta_l) !== '' && $cta_u !== '#'): ?>
+          <a class="sol-cta-btn" href="<?= htmlspecialchars(preg_match('#^https?:#', $cta_u) ? $cta_u : url(ltrim($cta_u, '/'))) ?>">
             <span><?= htmlspecialchars($cta_l) ?></span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
           </a>

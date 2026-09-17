@@ -300,7 +300,7 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
   margin:6px 0}
 
 /* Alternating block */
-.sol-row{display:grid;grid-template-columns:0.92fr 1.08fr;gap:56px;align-items:center;padding:44px 0}
+.sol-row{display:grid;grid-template-columns:0.92fr 1.08fr;gap:56px;align-items:center;padding:44px 0;scroll-margin-top:96px}
 .sol-row.rev .sol-media{order:2}
 .sol-row.rev .sol-text{order:1}
 

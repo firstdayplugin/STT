@@ -40,10 +40,14 @@ $n = count($rows);
       <p><?= $c('lead', '') ?></p>
     </div>
 
-    <?php if ($banner_img): ?>
+    <?php if ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
+    <?php if ($banner_has_link): ?>
     <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>
       <img src="<?= htmlspecialchars($banner_img) ?>" alt="" data-fallback="remove">
     </a>
+    <?php else: ?>
+    <div class="sol-banner"><img src="<?= htmlspecialchars($banner_img) ?>" alt="" data-fallback="remove"></div>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php if ($rows): ?>

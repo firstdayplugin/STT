@@ -24,8 +24,11 @@
         if (!$__foot_cols) {
             $__foot_cols = [
               ['h' => t('footer_col_solutions', 'Solutions'), 'items' => [
-                 ['Modernize Infrastructure', url('solutions')], ['Data & AI', url('solutions')],
-                 ['Cybersecurity', url('solutions')], ['Managed Services', url('solutions')]]],
+                 ['Modernize Infrastructure', url('solutions') . '#modernize-infrastructure'],
+                 ['Cybersecurity', url('solutions') . '#cybersecurity'],
+                 ['Data Management', url('solutions') . '#data-management'],
+                 ['Artificial Intelligence (AI)', url('solutions') . '#artificial-intelligence-ai'],
+                 ['AI Platform & Applications', url('solutions') . '#ai-platform-applications']]],
               ['h' => t('footer_col_company', 'Company'), 'items' => [
                  ['Company Overview', url('about-us')], ['Our Industries', url('industri')],
                  ['News & Events', url('blog')], ['Career', url('career')]]],
