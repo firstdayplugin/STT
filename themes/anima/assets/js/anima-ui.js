@@ -191,3 +191,19 @@
     if(nx) nx.addEventListener('click',function(){ by(1); });
   });
 })();
+;
+/* About gallery lightbox — click an Award/Quality/Cert image to view it full size. */
+(function(){
+  var imgs=[].slice.call(document.querySelectorAll('.ab-card-img img'));
+  if(!imgs.length) return;
+  var lb=document.createElement('div'); lb.className='ablx'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true');
+  lb.innerHTML='<button class="ablx-x" type="button" aria-label="Tutup"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button><img alt=""><div class="ablx-cap"></div>';
+  document.body.appendChild(lb);
+  var big=lb.querySelector('img'), cap=lb.querySelector('.ablx-cap'), x=lb.querySelector('.ablx-x');
+  function open(src,alt){ big.src=src; big.alt=alt||''; cap.textContent=alt||''; lb.classList.add('on'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('on'); document.body.style.overflow=''; setTimeout(function(){ big.src=''; },200); }
+  imgs.forEach(function(im){ im.addEventListener('click',function(){ open(im.currentSrc||im.src, im.getAttribute('alt')); }); });
+  x.addEventListener('click',close);
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && lb.classList.contains('on')) close(); });
+})();

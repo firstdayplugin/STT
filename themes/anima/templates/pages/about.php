@@ -136,7 +136,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
     <!-- Milestone SLIDER (cross-fade; timeline drives the text+image above) -->
     <?php if ($milestones): ?>
     <section class="ab-sec ab-mile-sec">
-      <div class="ab-head ab-head-left"><h2><?= ac('about', 'milestone_title', true) ?></h2><?php $mile_body = ac('about', 'milestone_body', true); if (trim(strip_tags($mile_body)) !== ''): ?><p><?= $mile_body ?></p><?php endif; ?></div>
+      <div class="ab-head ab-mile-head"><h2><?= ac('about', 'milestone_title', true) ?></h2><?php $mile_body = ac('about', 'milestone_body', true); if (trim(strip_tags($mile_body)) !== ''): ?><p><?= $mile_body ?></p><?php endif; ?></div>
       <div class="ab-mile" data-milestones="<?= htmlspecialchars(json_encode($mile_json, JSON_UNESCAPED_UNICODE), ENT_QUOTES) ?>">
         <div class="ab-mile-top">
           <div class="ab-mile-text" data-mile-text>
@@ -177,7 +177,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
           <div class="ab-cards ab-cards-award">
             <?php foreach ($items as $a): $ai = $aimgu($a); ?>
               <div class="ab-card ab-award">
-                <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
+                <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($atr($a, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
                 <div class="org"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
                 <div class="ttl"><?= htmlspecialchars($atr($a, 'teks')) ?></div>
               </div>
@@ -193,17 +193,13 @@ $vimg2 = aimg('about', 'vision_img2', '');
     <?php if ($quality): ?>
     <section class="ab-sec">
       <div class="ab-head"><h2><?= ac('about', 'quality_title', true) ?></h2><p><?= ac('about', 'quality_intro') ?></p></div>
-      <div class="ab-carousel" data-carousel>
-        <button class="ab-mile-arrow" data-carousel-prev aria-label="Sebelumnya"><?= $arrowL ?></button>
-        <div class="ab-carousel-track" data-carousel-track>
-          <?php foreach ($quality as $q): $qi = $aimgu($q); ?>
-            <div class="ab-card ab-quality">
-              <div class="ab-card-img phb"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($atr($q, 'judul')) ?: 'Logo' ?></span><?php endif; ?></div>
-              <?php if (trim((string)$atr($q, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($q, 'judul')) ?></div><?php endif; ?>
-            </div>
-          <?php endforeach; ?>
-        </div>
-        <button class="ab-mile-arrow" data-carousel-next aria-label="Berikutnya"><?= $arrowRt ?></button>
+      <div class="ab-quality-grid">
+        <?php foreach ($quality as $q): $qi = $aimgu($q); ?>
+          <div class="ab-card ab-quality">
+            <div class="ab-card-img phb"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="<?= htmlspecialchars($atr($q, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($atr($q, 'judul')) ?: 'Logo' ?></span><?php endif; ?></div>
+            <?php if (trim((string)$atr($q, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($q, 'judul')) ?></div><?php endif; ?>
+          </div>
+        <?php endforeach; ?>
       </div>
     </section>
     <?php endif; ?>
@@ -223,7 +219,7 @@ $vimg2 = aimg('about', 'vision_img2', '');
           <div class="ab-cards ab-cards-cert">
             <?php foreach ($items as $c): $ci = $aimgu($c); ?>
               <div class="ab-card ab-cert">
-                <div class="ab-card-img phb"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
+                <div class="ab-card-img phb"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="<?= htmlspecialchars($atr($c, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
                 <?php if (trim((string)$atr($c, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($c, 'judul')) ?></div><?php endif; ?>
               </div>
             <?php endforeach; ?>
