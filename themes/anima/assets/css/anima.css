@@ -1296,3 +1296,70 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
   .prism-logos .lset{gap:20px;flex-wrap:wrap}
   .prism-logos img{height:22px;max-width:84px}
 }
+
+/* =========================================================================
+   Floating widgets — Need Help (bottom-left) + Virtual Assistant (right).
+   Config-driven, keyboard-accessible, no emoji (Lucide-style SVG icons).
+   ========================================================================= */
+.nh-widget,.va-widget{position:fixed;bottom:24px;z-index:940;font-family:inherit}
+.nh-widget{left:24px}
+.va-widget{right:24px}
+.nh-widget svg,.va-widget svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* --- Need Help --- */
+.nh-toggle{display:inline-flex;align-items:center;gap:9px;border:0;cursor:pointer;padding:12px 18px;border-radius:40px;
+  background:linear-gradient(100deg,#2f7be0,#1f8fd0 55%,#37c9bd);color:#fff;font-weight:600;font-size:14px;
+  box-shadow:0 14px 34px rgba(47,123,224,.42);transition:transform .2s,box-shadow .3s}
+.nh-toggle:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(55,201,189,.5)}
+.nh-toggle svg{width:20px;height:20px}
+.nh-toggle .nh-ic-close{display:none}
+.nh-widget.open .nh-toggle .nh-ic-open{display:none}
+.nh-widget.open .nh-toggle .nh-ic-close{display:block}
+.nh-list{position:absolute;left:0;bottom:60px;display:flex;flex-direction:column;gap:10px}
+.nh-item{display:inline-flex;align-items:center;gap:11px;background:#fff;color:#12233b;border:1px solid var(--line);
+  padding:11px 18px 11px 14px;border-radius:40px;font-size:13.5px;font-weight:600;text-decoration:none;white-space:nowrap;
+  box-shadow:0 10px 26px rgba(14,42,78,.16);transition:transform .18s,box-shadow .25s;animation:nhIn .28s cubic-bezier(.16,1,.3,1) both}
+.nh-item:hover{transform:translateX(3px);box-shadow:0 14px 32px rgba(14,42,78,.22)}
+.nh-item svg{width:20px;height:20px;color:#2f7be0}
+.nh-item.nh-wa svg{color:#25D366}
+@keyframes nhIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* --- Virtual Assistant --- */
+.va-toggle{width:60px;height:60px;border:0;border-radius:50%;cursor:pointer;color:#fff;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2f7be0,#37c9bd);box-shadow:0 16px 38px rgba(47,123,224,.5);transition:transform .2s,box-shadow .3s;margin-left:auto}
+.va-toggle:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 20px 48px rgba(55,201,189,.55)}
+.va-toggle svg{width:26px;height:26px}
+.va-toggle .va-ic-close{display:none}
+.va-widget.open .va-toggle .va-ic-open{display:none}
+.va-widget.open .va-toggle .va-ic-close{display:block}
+.va-panel{position:absolute;right:0;bottom:74px;width:340px;max-width:calc(100vw - 40px);background:#fff;border:1px solid var(--line);
+  border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(14,42,78,.28);animation:vaIn .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes vaIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.va-head{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;background:linear-gradient(120deg,#123a6a,#2f7be0);color:#fff}
+.va-ava{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none}
+.va-ava svg{width:22px;height:22px}
+.va-id{flex:1;min-width:0}
+.va-name{font-weight:700;font-size:15px;line-height:1.2}
+.va-status{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#cfe0f5;margin-top:2px}
+.va-status i{width:7px;height:7px;border-radius:50%;background:#37c9bd;box-shadow:0 0 0 3px rgba(55,201,189,.3)}
+.va-x{margin-left:auto;background:none;border:0;color:#fff;cursor:pointer;padding:4px;opacity:.85}
+.va-x:hover{opacity:1}.va-x svg{width:18px;height:18px}
+.va-body{padding:18px 16px}
+.va-msg{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:12px 14px;
+  font-size:13.5px;line-height:1.6;color:#2a3a52}
+.va-quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.va-quick a{text-decoration:none;font-size:12.5px;font-weight:600;color:#1f8fd0;background:#eaf4ff;border:1px solid #cfe0f5;
+  padding:8px 13px;border-radius:30px;transition:background .2s,transform .18s}
+.va-quick a:hover{background:#dcecff;transform:translateY(-1px)}
+.va-input{display:flex;gap:8px;align-items:center;padding:12px;border-top:1px solid var(--line);background:#fbfdff}
+.va-input input{flex:1;border:1px solid var(--line);border-radius:30px;padding:11px 15px;font-size:13.5px;font-family:inherit;color:var(--ink)}
+.va-input input:focus{outline:none;border-color:#4f9bff;box-shadow:0 0 0 3px rgba(79,155,255,.16)}
+.va-input button{flex:none;width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;color:#fff;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2f7be0,#37c9bd)}
+.va-input button svg{width:19px;height:19px}
+@media(max-width:600px){
+  .nh-widget{left:14px;bottom:16px}.va-widget{right:14px;bottom:16px}
+  .nh-toggle span{display:none}.nh-toggle{padding:14px}
+  .va-toggle{width:54px;height:54px}
+  .va-panel{bottom:66px}
+}
+/* Keep the mobile nav drawer clear of the floating widgets. */
+body.nav-open .nh-widget,body.nav-open .va-widget{display:none}

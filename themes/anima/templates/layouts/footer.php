@@ -79,6 +79,7 @@
     </button>
   </div>
 </footer>
+<?php include theme_path('templates/layouts/floating.php'); ?>
 <?php if (!empty($anima_load_home_js)): ?>
 <script src="<?= theme_asset('assets/js/anima.js') ?>"></script>
 <?php endif; ?>
