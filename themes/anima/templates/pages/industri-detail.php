@@ -44,12 +44,15 @@ include theme_path('templates/layouts/header.php');
     <?php endif; ?>
 
     <?php if ($pillars): ?>
-    <div class="idt2-tabs" role="tablist">
+    <!-- Pillars now read top-to-bottom (scroll). The sticky rail is a scroll-spy:
+         it highlights the current pillar and lets you jump — but reading needs no clicks. -->
+    <nav class="idt2-nav" id="idtNav" aria-label="<?= htmlspecialchars($ind_label) ?> — pilar solusi">
       <?php foreach ($pillars as $i => $p): ?>
-        <button type="button" class="idt2-tab<?= $i === 0 ? ' on' : '' ?>" data-tab-btn="<?= (int)$p['id'] ?>" data-tab-group="<?= $grp ?>"><?= htmlspecialchars(tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama'])) ?></button>
+        <button type="button" class="idt2-navlink<?= $i === 0 ? ' on' : '' ?>" data-spy-to="pilar-<?= (int)$p['id'] ?>"><?= htmlspecialchars(tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama'])) ?></button>
       <?php endforeach; ?>
-    </div>
+    </nav>
 
+    <div class="idt2-sections">
     <?php foreach ($pillars as $i => $p):
       $cell = $cells[(int)$p['id']] ?? null;
       $pilar_nama = tr_field('solusi_pilar', (int)$p['id'], 'nama', $p['nama']);
@@ -62,8 +65,9 @@ include theme_path('templates/layouts/header.php');
       if (!empty($cell['fitur'])) { $d = json_decode($cell['fitur'], true); if (is_array($d)) $fitur = $d; }
       $fcols = count($fitur) <= 4 ? max(1, count($fitur)) : 6;
     ?>
-      <section class="idt2-panel" data-tab-panel="<?= (int)$p['id'] ?>" data-tab-group="<?= $grp ?>"<?= $i === 0 ? '' : ' hidden' ?>>
+      <section class="idt2-panel" id="pilar-<?= (int)$p['id'] ?>" data-spy-section="pilar-<?= (int)$p['id'] ?>">
         <div class="idt2-card">
+          <div class="idt2-eyebrow"><span class="idt2-num"><?= sprintf('%02d', $i + 1) ?></span><span class="idt2-kicker"><?= htmlspecialchars($pilar_nama) ?></span></div>
           <h2><?= htmlspecialchars($heading) ?></h2>
           <div class="idt2-prose"><?= $konten ?></div>
         </div>
@@ -81,6 +85,7 @@ include theme_path('templates/layouts/header.php');
         <?php endif; ?>
       </section>
     <?php endforeach; ?>
+    </div>
     <?php endif; ?>
 
   </div>

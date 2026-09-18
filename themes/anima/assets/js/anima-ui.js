@@ -207,3 +207,40 @@
   lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && lb.classList.contains('on')) close(); });
 })();
+;
+/* Industry detail — pillars read by scrolling: sticky scroll-spy rail highlights
+   the current pillar, click smooth-scrolls, and sections fade up on entry. */
+(function(){
+  var nav=document.getElementById('idtNav');
+  var sections=[].slice.call(document.querySelectorAll('.idt2-panel[data-spy-section]'));
+  if(!sections.length) return;
+  // fade-up reveal (mark first so no-JS keeps content visible)
+  sections.forEach(function(s){ s.setAttribute('data-reveal',''); });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('vis'); io.unobserve(en.target); } });},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+    sections.forEach(function(s){ io.observe(s); });
+  } else { sections.forEach(function(s){ s.classList.add('vis'); }); }
+  var links=nav ? [].slice.call(nav.querySelectorAll('[data-spy-to]')) : [];
+  if(nav){
+    nav.addEventListener('click',function(e){
+      var b=e.target.closest && e.target.closest('[data-spy-to]'); if(!b) return;
+      var t=document.getElementById(b.getAttribute('data-spy-to'));
+      if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  }
+  var ticking=false;
+  function spy(){
+    ticking=false;
+    var y=window.scrollY+170, cur=sections[0];
+    sections.forEach(function(s){ if(s.offsetTop<=y) cur=s; });
+    var id=cur.id;
+    links.forEach(function(l){
+      var on=l.getAttribute('data-spy-to')===id; l.classList.toggle('on',on);
+      if(on && nav && nav.scrollWidth>nav.clientWidth){ /* keep active chip in view on mobile */
+        var lx=l.offsetLeft-16; if(Math.abs(nav.scrollLeft-lx)>4) nav.scrollLeft=lx;
+      }
+    });
+  }
+  window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(spy); } },{passive:true});
+  spy();
+})();
