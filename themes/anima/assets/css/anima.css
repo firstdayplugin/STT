@@ -413,10 +413,11 @@ header.scrolled .hamb .ic{stroke:var(--ink)}
 .prism{position:relative;height:620vh;background:linear-gradient(180deg,#fff,#f4f8fd 40%,#fff)}
 .prism .stage{position:sticky;top:0;height:100vh;overflow:hidden}
 .prism canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.prism-overlay{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:7vh;z-index:3}
-.prism-caps{position:relative;height:210px;width:100%;text-align:center;color:var(--ink)}
+.prism-overlay{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4vh;z-index:3}
+.prism-caps{position:relative;height:196px;width:100%;text-align:center;color:var(--ink)}
 .prism-caps .cap{position:absolute;left:0;right:0;opacity:0}
-.prism-caps .eyebrow{font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:#2f7be0;font-weight:700}
+/* Eyebrow removed on purpose: it duplicated the big heading below it. */
+.prism-caps .eyebrow{display:none}
 .prism-caps h2{font-size:clamp(28px,3.6vw,44px);font-weight:800;margin-top:20px;line-height:1.08;color:#0e2244;letter-spacing:-.01em}
 .prism-caps h2 b{color:#1e6fe0}
 .prism-caps p{margin-top:18px;color:#3d4d68;font-size:16px;font-weight:500}
