@@ -263,5 +263,15 @@
       a.innerHTML='Lihat Solusi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       c.appendChild(a);
     });
+    // Make the cube itself clickable → the currently-active slide's solution.
+    var canvas=document.getElementById('prismCanvas');
+    if(canvas && !canvas.__wired){
+      canvas.__wired=true; canvas.style.cursor='pointer';
+      canvas.addEventListener('click',function(){
+        var dots=document.querySelectorAll('#prismDots i'), idx=0;
+        dots.forEach(function(d,k){ if(d.classList.contains('on')) idx=k; });
+        var u=data[idx] && data[idx].url; if(u) window.location.href=u;
+      });
+    }
   })();
 })();

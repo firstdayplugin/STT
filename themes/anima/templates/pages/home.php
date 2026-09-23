@@ -90,6 +90,20 @@ foreach ($orbit_rows as $r) {
     ];
 }
 $slide_rows = $Q("SELECT eyebrow, judul, deskripsi, label, gambar, video_url, warna_dark, warna_mid, warna_accent, logos, url FROM solution_slides WHERE is_active=1 ORDER BY urutan, id");
+// Connect the prism's partner logos to the SAME per-category logos shown on /solutions
+// (solution_logos), keyed by each section's anchor slug. Keeps Home ↔ Solutions in sync.
+$prism_logos_by_anchor = [];
+foreach ($Q("SELECT id, judul FROM solutions_section WHERE is_active=1") as $sc) {
+    $anc = make_slug(strip_tags((string)($sc['judul'] ?? '')));
+    if ($anc === '') continue;
+    $arr = [];
+    foreach ($Q("SELECT gambar FROM solution_logos WHERE solution_id=? AND is_active=1 ORDER BY urutan, id", [(int)$sc['id']]) as $one) {
+        $g = trim((string)($one['gambar'] ?? ''));
+        if ($g === '') continue;
+        $arr[] = preg_match('#^(https?:|/|data:)#', $g) ? $g : uploads_url($g);
+    }
+    if ($arr) $prism_logos_by_anchor[$anc] = $arr;
+}
 $slides_json = [];
 foreach ($slide_rows as $r) {
     $logos = [];
@@ -105,6 +119,12 @@ foreach ($slide_rows as $r) {
                 $logos[] = $lg;
             }
         }
+    }
+    // Prefer the /solutions per-category logos (matched by the slide's url anchor).
+    $__anc = '';
+    if (preg_match('/#(.+)$/', (string)($r['url'] ?? ''), $__m)) $__anc = $__m[1];
+    if ($__anc !== '' && !empty($prism_logos_by_anchor[$__anc])) {
+        $logos = array_slice($prism_logos_by_anchor[$__anc], 0, 6);
     }
     $slides_json[] = [
         'eyebrow' => (string)($r['eyebrow'] ?? ''),

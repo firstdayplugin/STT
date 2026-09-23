@@ -234,8 +234,8 @@ function frame(){
     g.rotation.y=front.rotation.y*0.9;g.rotation.x=front.rotation.x;g.scale.setScalar(1);});
 
   // captions
-  const capA=clamp((p-0.30)/0.05);
-  caps.forEach((c,i)=>{const d=(1-Math.min(1,Math.abs(phase-i)/0.60))*capA;c.style.opacity=clamp(d).toFixed(2);
+  const capA=clamp((p-0.27)/0.03);
+  caps.forEach((c,i)=>{const d=clamp((0.5-Math.abs(phase-i))/0.10)*capA;c.style.opacity=clamp(d).toFixed(2);
     c.style.transform=`translateY(${(1-clamp(d))*14}px)`;});
   const active=Math.round(phase);
   dots.forEach((d,i)=>d.classList.toggle('on',i===active&&capA>0.5));
