@@ -13,6 +13,30 @@ $seo = $seo ?? [];
 $__title = $seo['title']       ?? get_setting('site_title', 'Sapta Tunas Teknologi — Enterprise Solution Provider');
 $__desc  = $seo['description']  ?? get_setting('site_description', 'Sapta Tunas Teknologi — established 2015. Business Technology Solutions & Services di Indonesia: IT & Cloud Infrastructure, Cybersecurity, Data & AI.');
 $__body_class = trim($anima_body_class ?? '');
+
+// Language control: manual EN/ID switcher (CMS) OR Google Translate flags (auto),
+// chosen by the `lang_mode` setting (Admin → Pengaturan → Tampilan).
+$__lang_mode = function_exists('get_setting') ? (get_setting('lang_mode','manual') ?: 'manual') : 'manual';
+$__gt_src    = function_exists('default_lang') ? default_lang() : 'id';
+$__gt_flag = function (string $code): string {
+    if ($code === 'id') return '<svg viewBox="0 0 24 16" preserveAspectRatio="none"><rect width="24" height="8" fill="#e01f28"/><rect y="8" width="24" height="8" fill="#fff"/></svg>';
+    // English → United Kingdom flag (compact; container clips corners)
+    return '<svg viewBox="0 0 24 16" preserveAspectRatio="none"><rect width="24" height="16" fill="#012169"/><path d="M0 0L24 16M24 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0L24 16M24 0L0 16" stroke="#c8102e" stroke-width="1.5"/><rect x="9.5" width="5" height="16" fill="#fff"/><rect y="5.5" width="24" height="5" fill="#fff"/><rect x="10.7" width="2.6" height="16" fill="#c8102e"/><rect y="6.7" width="24" height="2.6" fill="#c8102e"/></svg>';
+};
+$__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
+    if ($__lang_mode === 'gtranslate') {
+        $langs = function_exists('available_langs') ? available_langs() : ['id','en'];
+        $order = array_values(array_unique(array_merge([$__gt_src], array_intersect(['en','id'], $langs))));
+        $h = '<div class="gt-switch" data-gt-switch data-gt-src="' . htmlspecialchars($__gt_src) . '" translate="no">';
+        foreach ($order as $lc) {
+            if (!in_array($lc, ['en','id'], true)) continue;
+            $h .= '<button type="button" class="gt-opt" data-gt="' . htmlspecialchars($lc) . '" aria-label="' . htmlspecialchars(strtoupper($lc)) . '">'
+                . '<span class="gt-flag">' . $__gt_flag($lc) . '</span><span class="gt-code">' . strtoupper($lc) . '</span></button>';
+        }
+        return $h . '</div>';
+    }
+    return (function_exists('is_multilang') && is_multilang()) ? language_switcher('lang') : '';
+};
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars(function_exists('current_lang') ? current_lang() : 'id') ?>">
@@ -72,7 +96,7 @@ $__body_class = trim($anima_body_class ?? '');
       <?php endforeach; ?>
     </div>
     <div class="nav-right">
-      <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
+      <?= $__lang_control() ?>
       <a class="btn btn-primary" href="<?= url('contact-us') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
     </div>
     <button class="hamb" aria-label="Menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -83,7 +107,7 @@ $__body_class = trim($anima_body_class ?? '');
 <div class="mnav-scrim" data-nav-close></div>
 <aside class="mnav" aria-label="Mobile navigation">
   <div class="mnav-head">
-    <?php if (function_exists('is_multilang') && is_multilang()): ?><?= language_switcher('lang') ?><?php endif; ?>
+    <?= $__lang_control() ?>
     <button class="mnav-x" data-nav-close aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </div>
   <nav class="mnav-list">
@@ -97,3 +121,45 @@ $__body_class = trim($anima_body_class ?? '');
     <a class="btn btn-primary mnav-cta" href="<?= url('contact-us') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
   </nav>
 </aside>
+<?php if ($__lang_mode === 'gtranslate'): ?>
+<!-- Google Translate (free) — driven by the custom EN/ID flag switch above. -->
+<div id="google_translate_element" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:0;overflow:hidden"></div>
+<script>
+  window.googleTranslateElementInit = function () {
+    try { new google.translate.TranslateElement({ pageLanguage: '<?= htmlspecialchars($__gt_src) ?>', includedLanguages: 'en,id', autoDisplay: false }, 'google_translate_element'); } catch (e) {}
+  };
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+<script>
+(function(){
+  var SRC = '<?= htmlspecialchars($__gt_src) ?>';
+  function readGoogtrans(){ var m = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/); return m ? decodeURIComponent(m[1]) : ''; }
+  function currentLang(){ var v = readGoogtrans(); var p = v.split('/'); return (p.length === 3 && p[2]) ? p[2] : SRC; }
+  function writeCookie(name, val, del){
+    var host = location.hostname, exp = del ? ';expires=Thu, 01 Jan 1970 00:00:00 GMT' : '';
+    document.cookie = name+'='+val+';path=/'+exp;
+    document.cookie = name+'='+val+';path=/;domain='+host+exp;
+    document.cookie = name+'='+val+';path=/;domain=.'+host+exp;
+  }
+  function setLang(target){
+    if (target === SRC) { writeCookie('googtrans','',true); }
+    else { writeCookie('googtrans','/'+SRC+'/'+target,false); }
+    location.reload();
+  }
+  function paint(){
+    var cur = currentLang();
+    document.querySelectorAll('.gt-switch .gt-opt').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-gt') === cur);
+    });
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.gt-switch .gt-opt'); if(!btn) return;
+    e.preventDefault(); var t = btn.getAttribute('data-gt'); if(t && t !== currentLang()) setLang(t);
+  });
+  if (document.readyState !== 'loading') paint(); else document.addEventListener('DOMContentLoaded', paint);
+  // Keep the Google top banner from pushing the page down.
+  var fix = function(){ if (document.body.style.top) document.body.style.top='0px'; };
+  setInterval(fix, 600);
+})();
+</script>
+<?php endif; ?>

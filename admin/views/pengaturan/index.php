@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'ads'     => ['gads_conversion_enabled','gads_conversion_id','gads_conversion_label','turnstile_site_key','turnstile_secret'],
         'sosial'  => ['sosial_instagram','sosial_facebook','sosial_tiktok','sosial_youtube','sosial_twitter','sosial_linkedin'],
         'seo_settings' => ['meta_title_default','meta_desc_default','meta_keywords','og_image','google_verification','robots_default'],
-        'tampilan'=> ['accent_color','dark_color','cream_color','font_heading','font_body','footer_text','custom_css'],
+        'tampilan'=> ['accent_color','dark_color','cream_color','font_heading','font_body','footer_text','custom_css','lang_mode'],
         'gambar'  => ['docs_url'],
         'docs'    => ['docs_url'],
         'whitelabel' => ['admin_login_title','admin_login_desc'],
@@ -634,6 +634,15 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
                     <label>Teks Footer Copyright</label>
                     <input type="text" name="footer_text" class="form-control" value="<?= s('footer_text') ?>"
                            placeholder="© 2025 Reklamepedia. All rights reserved.">
+                </div>
+                <div class="form-group">
+                    <label>Mode Bahasa (EN/ID)</label>
+                    <?php $__lm = get_setting('lang_mode','manual'); ?>
+                    <select name="lang_mode" class="form-control">
+                        <option value="manual" <?= $__lm==='manual'?'selected':'' ?>>Manual — terjemahan EN/ID dari CMS (kualitas terkontrol)</option>
+                        <option value="gtranslate" <?= $__lm==='gtranslate'?'selected':'' ?>>Otomatis — Google Translate (bendera EN/ID)</option>
+                    </select>
+                    <div class="form-help">Manual: pakai toggle ID/EN &amp; konten terjemahan dari CMS. Otomatis: toggle manual disembunyikan, diganti bendera Google Translate (EN &amp; ID). Ganti kapan saja tanpa kehilangan data manual.</div>
                 </div>
                 <div class="form-group mb-0">
                     <label>Custom CSS Tambahan</label>

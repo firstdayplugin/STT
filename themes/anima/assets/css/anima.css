@@ -1382,3 +1382,15 @@ body.nav-open .nh-widget,body.nav-open .va-widget{display:none}
   text-decoration:none;box-shadow:0 12px 26px rgba(47,123,224,.34);transition:background .2s,transform .2s,box-shadow .2s}
 .prism-cap-link:hover{background:#1b63c7;transform:translateY(-2px);box-shadow:0 16px 32px rgba(47,123,224,.42)}
 .prism-cap-link svg{width:16px;height:16px}
+
+/* ===== Google Translate flag switch (Auto language mode) ===== */
+.gt-switch{display:inline-flex;align-items:center;gap:3px;background:#eef3fb;border:1px solid #e2e9f5;border-radius:22px;padding:3px}
+.gt-switch .gt-opt{display:inline-flex;align-items:center;gap:6px;border:0;background:none;cursor:pointer;padding:5px 10px;border-radius:18px;font-weight:700;font-size:12px;color:#6a86ad;transition:background .2s,color .2s;line-height:1}
+.gt-switch .gt-opt.on{background:#2f7be0;color:#fff;box-shadow:0 4px 12px rgba(47,123,224,.28)}
+.gt-switch .gt-opt:hover:not(.on){color:#2f7be0}
+.gt-switch .gt-flag{width:20px;height:14px;border-radius:3px;overflow:hidden;display:inline-block;box-shadow:0 0 0 1px rgba(0,0,0,.06);flex:none}
+.gt-switch .gt-flag svg{display:block;width:100%;height:100%}
+/* Neutralise the Google Translate top banner / tooltip so it never shifts the page. */
+.goog-te-banner-frame,.goog-te-balloon-frame,#goog-gt-tt,.goog-te-gadget-icon,.goog-tooltip,.goog-tooltip:hover{display:none!important}
+.goog-text-highlight{background:none!important;box-shadow:none!important;color:inherit!important}
+body{top:0!important}
