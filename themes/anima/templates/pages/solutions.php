@@ -83,8 +83,15 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
           <div class="sol-label"><?= htmlspecialchars($lbl_solution) ?></div>
           <p class="sol-desc<?= $red ? ' red' : '' ?>"><?= nl2br(htmlspecialchars($solusi)) ?></p>
         <?php endif; ?>
+        <?php $logos = $Q("SELECT gambar, nama FROM solution_logos WHERE solution_id=? AND is_active=1 ORDER BY urutan, id", [$sid]); ?>
         <div class="sol-label"><?= htmlspecialchars($lbl_partner) ?></div>
-        <?php if ($ptn): ?>
+        <?php if ($logos): ?>
+          <div class="sol-partners sol-partners-grid">
+            <?php foreach ($logos as $lg): $lsrc = $img((string)($lg['gambar'] ?? '')); if ($lsrc === '') continue; ?>
+              <span class="sol-plogo sol-plogo-img"><img src="<?= htmlspecialchars($lsrc) ?>" alt="<?= htmlspecialchars((string)($lg['nama'] ?? 'Partner')) ?>" loading="lazy" data-fallback="remove"></span>
+            <?php endforeach; ?>
+          </div>
+        <?php elseif ($ptn): ?>
           <div class="sol-partners"><img src="<?= htmlspecialchars($ptn) ?>" alt="Partners" data-fallback="remove"></div>
         <?php else: ?>
           <div class="sol-partners sol-partners-ph" role="img" aria-label="Partner logos placeholder"><?php for ($k = 0; $k < 6; $k++): ?><span class="sol-plogo"></span><?php endfor; ?></div>
