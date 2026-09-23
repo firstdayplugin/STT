@@ -1252,17 +1252,23 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .tk-cur .tk-bg,.tk-next .tk-bg{background-size:cover;background-repeat:no-repeat;background-position:center;background-color:#0c1b2e}
 .tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:cover;background:#0c1b2e}
 
-/* #4 Minimalist arrows: same location as the old round buttons (at the diagonal
-   seam, bottom-centre) — just small, no circle / ring / shadow. Not relocated. */
-.tk-tab{display:none!important}
-.tk-navpod{left:60%;right:auto;bottom:26px;gap:10px}
-.np-btn{width:30px;height:30px;border-radius:0;background:none;box-shadow:none}
+/* #4 Restored diagonal-seam design: the JS-clipped white bay (tk-tab) is visible
+   again and the nav arrows sit inside it at the junction. Arrows are chevron-only
+   (no circle / ring / shadow), a touch larger, blue on the white bay. The JS clip
+   already carves the bay so it clears the arrows ("patahan menghindari arrow"). */
+.tk-tab{display:block!important}
+.tk-navpod{right:auto;bottom:26px;gap:0;align-items:center}
+.np-btn{width:46px;height:46px;border-radius:0;background:none;box-shadow:none;display:grid;place-items:center}
 .np-btn::before,.np-btn::after{display:none!important}
-.np-btn svg{width:22px;height:22px;stroke:#fff;stroke-width:2;filter:drop-shadow(0 1px 4px rgba(6,20,45,.5))}
+.np-btn svg{width:26px;height:26px;stroke:#2f7be0;stroke-width:2.6;fill:none;filter:none;transition:transform .2s,stroke .2s}
 .np-btn:hover{transform:none}
-.np-btn:hover svg{stroke:#cfe0f5;transform:none}
-.np-btn#tkPrev:hover svg{transform:none}
-@media(max-width:900px){.tk-navpod{left:auto;right:18px;bottom:16px}}
+.np-btn:hover svg{stroke:#1b63c7}
+.np-btn#tkNextBtn{border-left:1.5px solid #e0e9f6}
+.np-btn#tkNextBtn:hover svg{transform:translateX(2px)}
+.np-btn#tkPrev:hover svg{transform:translateX(-2px)}
+/* Mobile: single full-bleed slide, no bay — arrows overlay the image in white. */
+@media(max-width:900px){.tk-tab{display:none!important}.tk-navpod{left:auto!important;right:18px;bottom:16px;gap:8px}
+  .np-btn svg{stroke:#fff}.np-btn#tkNextBtn{border-left:0}}
 
 /* =========================================================================
    Corporate nav typography — dark, light-weight & elegant (Microsoft-like).
