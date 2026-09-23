@@ -47,9 +47,9 @@ include theme_path('templates/layouts/header.php');
     <?= $has ? '<a class="sv2-pcard" href="' . htmlspecialchars(url($pl['link_slug'])) . '">' : '<div class="sv2-pcard nolink">' ?>
       <span class="sv2-picon"><?= icon($pillar_icons[$i] ?? 'layers', 30) ?></span>
       <?php if (!empty($pl['badge'])): ?><span class="sv2-badge"><?= htmlspecialchars($pl['badge']) ?></span><?php endif; ?>
-      <h2><?= htmlspecialchars($TP($pl, 'judul')) ?></h2>
+      <h2 translate="no" class="notranslate"><?= htmlspecialchars($TP($pl, 'judul')) ?></h2>
       <p><?= htmlspecialchars($TP($pl, 'deskripsi')) ?></p>
-      <?php if ($tags): ?><div class="sv2-chips"><?php foreach ($tags as $t): ?><span><?= htmlspecialchars($t) ?></span><?php endforeach; ?></div><?php endif; ?>
+      <?php if ($tags): ?><div class="sv2-chips" translate="no"><?php foreach ($tags as $t): ?><span><?= htmlspecialchars($t) ?></span><?php endforeach; ?></div><?php endif; ?>
       <?php if ($has): ?><span class="sv2-more"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></span><?php endif; ?>
     <?= $has ? '</a>' : '</div>' ?>
     <?php endforeach; ?>
@@ -64,7 +64,7 @@ include theme_path('templates/layouts/header.php');
       <div class="sv2-scard">
         <span class="sv2-sicon"><?= icon($support_icons[$i] ?? 'box', 24) ?></span>
         <?php if (!empty($s['badge'])): ?><span class="sv2-stag"><?= htmlspecialchars($s['badge']) ?></span><?php endif; ?>
-        <h3><?= htmlspecialchars($TP($s, 'judul')) ?></h3>
+        <h3 translate="no" class="notranslate"><?= htmlspecialchars($TP($s, 'judul')) ?></h3>
         <p><?= htmlspecialchars($TP($s, 'deskripsi')) ?></p>
       </div>
       <?php endforeach; ?>

@@ -190,7 +190,7 @@ for(let i=1;i<=4;i++){const g=new THREE.Group();
 // caption + dots DOM
 const capsEl=document.getElementById('prismCaps'),dotsEl=document.getElementById('prismDots');
 SLIDES.forEach((s,i)=>{const d=document.createElement('div');d.className='cap';
-  d.innerHTML=`<div class="eyebrow">${s.eyebrow}</div><h2>${s.h}</h2><p>${s.p}</p>`;capsEl.appendChild(d);
+  d.innerHTML=`<div class="eyebrow notranslate" translate="no">${s.eyebrow}</div><h2 class="notranslate" translate="no">${s.h}</h2><p>${s.p}</p>`;capsEl.appendChild(d);
   const dot=document.createElement('i');dotsEl.appendChild(dot);});
 const caps=[...document.querySelectorAll('#prismCaps .cap')],dots=[...document.querySelectorAll('#prismDots i')];
 const hint=document.getElementById('prismHint');

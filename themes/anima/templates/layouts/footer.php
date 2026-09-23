@@ -62,7 +62,7 @@
           <div class="tel-fcol">
             <h5><?= htmlspecialchars($col['h']) ?></h5>
             <?php foreach ($col['items'] as $it): ?>
-              <a href="<?= htmlspecialchars($it[1]) ?>"><?= htmlspecialchars($it[0]) ?></a>
+              <a href="<?= htmlspecialchars($it[1]) ?>" translate="no" class="notranslate"><?= htmlspecialchars($it[0]) ?></a>
             <?php endforeach; ?>
           </div>
           <?php endforeach; ?>

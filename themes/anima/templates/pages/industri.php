@@ -60,7 +60,7 @@ $n = count($rows);
       ?>
       <a class="indl-card<?= $wide ?>" href="<?= htmlspecialchars($href) ?>">
         <span class="indl-ic"><?= $card_icon($r['icon'] ?? '') ?></span>
-        <span class="indl-name"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
+        <span class="indl-name notranslate" translate="no"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
       </a>
       <?php endforeach; ?>
     </div>

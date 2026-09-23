@@ -152,7 +152,7 @@ include theme_path('templates/layouts/header.php');
         <div class="tk-bg" id="tkCurBg"></div>
         <div class="tk-ov"></div>
         <div class="tk-copy">
-          <div class="tk-eyebrow" id="tkEye"<?= trim((string)($h0['eye'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['eye'] ?? '')) ?></div>
+          <div class="tk-eyebrow notranslate" translate="no" id="tkEye"<?= trim((string)($h0['eye'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['eye'] ?? '')) ?></div>
           <h1 class="tk-h1" id="tkH1"<?= trim((string)($h0['h'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['h'] ?? '')) ?></h1>
           <p class="tk-desc" id="tkDesc"<?= trim((string)($h0['desc'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['desc'] ?? '')) ?></p>
           <div class="tk-foot">
@@ -257,7 +257,7 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
       <a class="ind2-card" href="<?= htmlspecialchars($c['url'] !== '' ? url(ltrim($c['url'], '/')) : '#') ?>"
          <?php if ($c['img'] !== ''): ?>data-img="<?= htmlspecialchars($c['img']) ?>"<?php endif; ?>
          <?php if ($c['c1'] !== ''): ?>data-c1="<?= htmlspecialchars($c['c1']) ?>" data-c2="<?= htmlspecialchars($c['c2']) ?>"<?php endif; ?>>
-        <span class="ex">EXPLORE →</span><span class="lbl"><?= htmlspecialchars($c['label']) ?></span></a>
+        <span class="ex">EXPLORE →</span><span class="lbl notranslate" translate="no"><?= htmlspecialchars($c['label']) ?></span></a>
     <?php endforeach; ?>
   </div>
   <div class="ind2-center">

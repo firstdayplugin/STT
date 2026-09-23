@@ -78,7 +78,7 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
       </div>
 
       <div class="sol-text">
-        <h2><?= $judul ?></h2>
+        <h2 translate="no" class="notranslate"><?= $judul ?></h2>
         <?php if ($solusi !== ''): ?>
           <div class="sol-label"><?= htmlspecialchars($lbl_solution) ?></div>
           <p class="sol-desc<?= $red ? ' red' : '' ?>"><?= nl2br(htmlspecialchars($solusi)) ?></p>

@@ -86,7 +86,7 @@ $__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
             <a href="<?= htmlspecialchars($mi['url']) ?>"<?= $tgt ?>><?= htmlspecialchars($__mlabel($mi)) ?> <svg class="caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
             <div class="submenu">
               <?php foreach ($kids as $ck): $ctgt = (($ck['target'] ?? '_self') === '_blank') ? ' target="_blank" rel="noopener"' : ''; ?>
-                <a href="<?= htmlspecialchars($ck['url']) ?>"<?= $ctgt ?>><?= htmlspecialchars($__mlabel($ck)) ?></a>
+                <a href="<?= htmlspecialchars($ck['url']) ?>"<?= $ctgt ?> translate="no" class="notranslate"><?= htmlspecialchars($__mlabel($ck)) ?></a>
               <?php endforeach; ?>
             </div>
           </div>
@@ -115,7 +115,7 @@ $__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
       $mkids = $mi['children'] ?? []; ?>
       <a href="<?= htmlspecialchars($mi['url']) ?>"><?= htmlspecialchars($__mlabel($mi)) ?></a>
       <?php foreach ($mkids as $ck): ?>
-        <a class="mnav-sub" href="<?= htmlspecialchars($ck['url']) ?>"><?= htmlspecialchars($__mlabel($ck)) ?></a>
+        <a class="mnav-sub notranslate" translate="no" href="<?= htmlspecialchars($ck['url']) ?>"><?= htmlspecialchars($__mlabel($ck)) ?></a>
       <?php endforeach; ?>
     <?php endforeach; ?>
     <a class="btn btn-primary mnav-cta" href="<?= url('contact-us') ?>"><?= htmlspecialchars(function_exists('t') ? t('contact_us', 'Contact Us') : 'Contact Us') ?></a>
@@ -156,7 +156,35 @@ $__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
     var btn = e.target.closest('.gt-switch .gt-opt'); if(!btn) return;
     e.preventDefault(); var t = btn.getAttribute('data-gt'); if(t && t !== currentLang()) setLang(t);
   });
-  if (document.readyState !== 'loading') paint(); else document.addEventListener('DOMContentLoaded', paint);
+  // Lock brand/product names so Google never translates them (even inside sentences).
+  var TOKENS = ['MeshDefend','SATU.AI','SATU AI','ST Analytics','ST Vision','ST Language','SenseTime',
+    'Nutanix','Commvault','Sangfor','Infraon','Fortinet','Cyble','T-Innoware','Veeam','VMware','Broadcom',
+    'HYCU','Xeratic','Redis','Rafay','Weka','PowerStore','PowerScale','Dell Technologies','Red Hat','Soca',
+    'Sapta Tunas Teknologi'];
+  TOKENS.sort(function(a,b){return b.length-a.length;});
+  var RX = new RegExp('('+TOKENS.map(function(t){return t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|')+')','g');
+  function lockBrands(node){
+    for (var i=node.childNodes.length-1; i>=0; i--){
+      var n=node.childNodes[i];
+      if (n.nodeType===3){
+        var t=n.nodeValue; if(!t) continue; RX.lastIndex=0;
+        if (RX.test(t)){ RX.lastIndex=0; var sp=document.createElement('span');
+          sp.innerHTML=t.replace(RX,'<span class="notranslate" translate="no">$1</span>');
+          n.parentNode.replaceChild(sp,n); }
+      } else if (n.nodeType===1){
+        var tag=n.tagName;
+        if (tag==='SCRIPT'||tag==='STYLE'||tag==='NOSCRIPT'||tag==='TEXTAREA'||tag==='INPUT') continue;
+        if (n.classList && n.classList.contains('notranslate')) continue;
+        if (n.getAttribute && n.getAttribute('translate')==='no') continue;
+        lockBrands(n);
+      }
+    }
+  }
+  function runLock(){ try { lockBrands(document.querySelector('main')||document.body); } catch(e){} }
+  function boot(){ paint(); runLock(); }
+  if (document.readyState !== 'loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
+  // Re-run after JS-injected content (prism captions, orbit, hero) is built.
+  addEventListener('load', runLock); setTimeout(runLock, 700); setTimeout(runLock, 1600);
   // Keep the Google top banner from pushing the page down.
   var fix = function(){ if (document.body.style.top) document.body.style.top='0px'; };
   setInterval(fix, 600);
