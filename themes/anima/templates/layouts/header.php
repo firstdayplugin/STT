@@ -133,17 +133,56 @@ $__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
 <script>
 (function(){
   var SRC = '<?= htmlspecialchars($__gt_src) ?>';
+
+  /* ---- Kill the Google banner + any body/html top offset (runtime, cache-proof) ---- */
+  (function injectKillStyle(){
+    try {
+      var s = document.createElement('style'); s.id = 'gt-kill';
+      s.textContent =
+        '.goog-te-banner-frame,.goog-te-banner-frame.skiptranslate,iframe.goog-te-banner-frame,'+
+        'iframe.skiptranslate,.goog-te-balloon-frame,#goog-gt-tt,.goog-te-gadget-icon,'+
+        '.goog-tooltip,.goog-tooltip:hover,#goog-gt-,.goog-te-spinner-pos{'+
+        'display:none!important;visibility:hidden!important;height:0!important;width:0!important;'+
+        'border:0!important;opacity:0!important;pointer-events:none!important}'+
+        'html,body{top:0!important;position:static!important;min-height:0!important}';
+      (document.head || document.documentElement).appendChild(s);
+    } catch(e){}
+  })();
+  function killBanner(){
+    try {
+      if (document.body && document.body.style.top) document.body.style.top = '0px';
+      if (document.documentElement && document.documentElement.style.top) document.documentElement.style.top = '0px';
+      // Google sometimes injects the banner as an iframe or wrapper; hide/remove it hard.
+      var kill = document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate, .skiptranslate > iframe');
+      for (var i=0;i<kill.length;i++){ try { kill[i].style.display='none'; kill[i].style.height='0'; } catch(e){} }
+    } catch(e){}
+  }
+
   function readGoogtrans(){ var m = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/); return m ? decodeURIComponent(m[1]) : ''; }
   function currentLang(){ var v = readGoogtrans(); var p = v.split('/'); return (p.length === 3 && p[2]) ? p[2] : SRC; }
-  function writeCookie(name, val, del){
-    var host = location.hostname, exp = del ? ';expires=Thu, 01 Jan 1970 00:00:00 GMT' : '';
-    document.cookie = name+'='+val+';path=/'+exp;
-    document.cookie = name+'='+val+';path=/;domain='+host+exp;
-    document.cookie = name+'='+val+';path=/;domain=.'+host+exp;
+  // Every domain scope Google may have written the cookie under, so a clear actually clears it.
+  function domains(){
+    var h = location.hostname, out = ['', h, '.'+h];
+    var parts = h.split('.');
+    for (var i=1; i<parts.length-1; i++){ var d = parts.slice(i).join('.'); out.push(d, '.'+d); }
+    return out;
+  }
+  function setCookie(val){
+    var ds = domains();
+    for (var i=0;i<ds.length;i++){
+      document.cookie = 'googtrans='+val+';path=/'+(ds[i] ? ';domain='+ds[i] : '');
+    }
+  }
+  function clearCookie(){
+    var ds = domains(), exp = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    for (var i=0;i<ds.length;i++){
+      document.cookie = 'googtrans=;path=/'+(ds[i] ? ';domain='+ds[i] : '')+exp;
+      document.cookie = 'googtrans=/'+SRC+'/'+SRC+';path=/'+(ds[i] ? ';domain='+ds[i] : '')+exp;
+    }
   }
   function setLang(target){
-    if (target === SRC) { writeCookie('googtrans','',true); }
-    else { writeCookie('googtrans','/'+SRC+'/'+target,false); }
+    if (target === SRC) { clearCookie(); }         // back to original (English) — wipe every scope
+    else { clearCookie(); setCookie('/'+SRC+'/'+target); }
     location.reload();
   }
   function paint(){
@@ -181,13 +220,18 @@ $__lang_control = function () use ($__lang_mode, $__gt_src, $__gt_flag) {
     }
   }
   function runLock(){ try { lockBrands(document.querySelector('main')||document.body); } catch(e){} }
-  function boot(){ paint(); runLock(); }
+  function boot(){ paint(); runLock(); killBanner(); }
   if (document.readyState !== 'loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
   // Re-run after JS-injected content (prism captions, orbit, hero) is built.
-  addEventListener('load', runLock); setTimeout(runLock, 700); setTimeout(runLock, 1600);
-  // Keep the Google top banner from pushing the page down.
-  var fix = function(){ if (document.body.style.top) document.body.style.top='0px'; };
-  setInterval(fix, 600);
+  addEventListener('load', function(){ runLock(); killBanner(); });
+  setTimeout(runLock, 700); setTimeout(runLock, 1600);
+  // The banner iframe is injected asynchronously by Google — hunt it down and keep the page pinned to top.
+  setInterval(killBanner, 300);
+  // Belt-and-braces: watch the DOM so the banner is hidden the instant Google adds it.
+  try {
+    var mo = new MutationObserver(killBanner);
+    mo.observe(document.documentElement, { childList:true, subtree:true });
+  } catch(e){}
 })();
 </script>
 <?php endif; ?>
