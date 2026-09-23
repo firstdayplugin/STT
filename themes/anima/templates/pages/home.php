@@ -129,8 +129,8 @@ include theme_path('templates/layouts/header.php');
       <div class="tk-cur" id="tkCur">
         <div class="tk-bg" id="tkCurBg"></div>
         <div class="tk-ov"></div>
-        <div class="tk-eyebrow" id="tkEye"><?= htmlspecialchars($h0['sub']) ?></div>
-        <h1 class="tk-h1" id="tkH1"><?= htmlspecialchars($h0['h']) ?></h1>
+        <div class="tk-eyebrow" id="tkEye"<?= trim($h0['sub']) === '' ? ' hidden' : '' ?>><?= htmlspecialchars($h0['sub']) ?></div>
+        <h1 class="tk-h1" id="tkH1"<?= trim($h0['h']) === '' ? ' hidden' : '' ?>><?= htmlspecialchars($h0['h']) ?></h1>
         <div class="tk-foot">
           <a class="tk-btn" href="#contact">Get in Touch <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <div class="tk-dots" id="tkDots"></div>

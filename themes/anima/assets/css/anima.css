@@ -508,6 +508,9 @@ body{background:#fff}
 .tk-ov{position:absolute;inset:0;background:linear-gradient(115deg,rgba(26,86,190,.62),rgba(20,60,150,.4) 55%,rgba(40,110,220,.30))}
 .tk-h1{position:absolute;left:46px;bottom:118px;z-index:3;color:#fff;font-weight:800;line-height:1.02;margin:0;font-size:clamp(30px,3.6vw,52px);max-width:58%;letter-spacing:-.01em;transition:opacity .35s}
 .tk-eyebrow{display:none}
+/* Hero images ship with baked-in text: collapse empty overlay/below headings so no blank gap shows. */
+.tk-h1:empty,.tk-h1[hidden]{display:none}
+.tk-below-l .tk-sub:has(#tkSub:empty),.tk-below-l .tk-sub .blue:empty{display:none}
 .tk-foot{position:absolute;left:46px;bottom:44px;z-index:3;display:flex;align-items:center;gap:26px}
 .tk-btn{background:#2f7be0;color:#fff;padding:13px 24px;border-radius:30px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:9px;box-shadow:0 10px 26px rgba(47,123,224,.32);transition:.2s}
 .tk-btn:hover{background:#1b63c7;transform:translateY(-2px)}
