@@ -995,14 +995,14 @@ body.sol-modal-open{overflow:hidden}
    ============================================================ */
 
 /* ---- Vision & Mission: premium, no diagonal cuts ---- */
-.ab-vm{grid-template-columns:0.95fr 1.05fr;gap:40px;align-items:stretch}
-.ab-vm-media{position:relative;display:grid;grid-template-rows:1.18fr 0.82fr;gap:18px;min-height:480px}
-.ab-vm-media::before{content:"";position:absolute;right:-16px;top:-16px;width:46%;height:42%;z-index:0;border-radius:26px;
-  background:radial-gradient(120% 120% at 100% 0,rgba(47,123,224,.16),rgba(47,123,224,0) 70%)}
-.ab-vm-img{position:relative;z-index:1;border-radius:22px;overflow:hidden;min-height:0;
-  box-shadow:0 26px 54px rgba(20,60,140,.16);border:1px solid rgba(20,60,140,.06)}
+.ab-vm{grid-template-columns:1fr 1fr;gap:32px;align-items:stretch}
+/* Left media matches the right text box exactly: two equal images filling
+   the same height, same width — clean and precise. */
+.ab-vm-media{position:relative;display:grid;grid-template-rows:1fr 1fr;gap:20px;min-height:0}
+.ab-vm-img{position:relative;z-index:1;border-radius:20px;overflow:hidden;min-height:0;
+  box-shadow:0 22px 48px rgba(20,60,140,.15);border:1px solid rgba(20,60,140,.06)}
 .ab-vm-img1{clip-path:none!important}
-.ab-vm-img2{clip-path:none!important;margin:0 24px 0 0}
+.ab-vm-img2{clip-path:none!important;margin:0!important}
 .ab-vm-img>img{width:100%;height:100%;object-fit:cover;display:block}
 .ab-vm-text{display:flex;flex-direction:column;gap:22px;justify-content:center}
 .ab-vm-ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;margin-bottom:16px}
