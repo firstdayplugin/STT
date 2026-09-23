@@ -176,10 +176,11 @@ $vimg2 = aimg('about', 'vision_img2', '');
         <div class="ab-slider-page" data-year-page="<?= htmlspecialchars($yr) ?>"<?= $yr === array_key_first($awardsByYear) ? '' : ' hidden' ?>>
           <div class="ab-cards ab-cards-award">
             <?php foreach ($items as $a): $ai = $aimgu($a); ?>
+              <?php $a_sub = trim((string)$atr($a, 'teks')); ?>
               <div class="ab-card ab-award">
                 <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($atr($a, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
-                <div class="org"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
-                <div class="ttl"><?= htmlspecialchars($atr($a, 'teks')) ?></div>
+                <?php if ($a_sub !== ''): ?><div class="org"><?= htmlspecialchars($a_sub) ?></div><?php endif; ?>
+                <div class="ttl"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
               </div>
             <?php endforeach; ?>
           </div>

@@ -275,3 +275,27 @@
     }
   })();
 })();
+;
+/* About Us — subtle scroll-reveal (fade-up) to complement the Home cubic/orbit.
+   Progressive enhancement: elements are only hidden once JS marks them, so
+   without JS everything stays visible. */
+(function(){
+  var root=document.querySelector('.page-shell.ab'); if(!root) return;
+  if(!('IntersectionObserver' in window)) return;
+  var sel=['.ab-intro','.ab-vm-media','.ab-vm-text .ab-vcard','.ab-vm-text .ab-mcard',
+           '.ab-values-grid .ab-val','.ab-mile-top','.ab-mile-timeline',
+           '.ab-sec > .ab-head','.ab-slider','.ab-quality-grid .ab-card'];
+  var els=[];
+  sel.forEach(function(s){ [].slice.call(root.querySelectorAll(s)).forEach(function(e){ els.push(e); }); });
+  if(!els.length) return;
+  // Stagger siblings that share a parent for a gentle cascade.
+  els.forEach(function(e){
+    e.classList.add('reveal-up');
+    var sibs=[].slice.call(e.parentNode.children).filter(function(c){return c.classList.contains('reveal-up');});
+    var i=sibs.indexOf(e); if(i>0) e.style.transitionDelay=Math.min(i*0.08,0.4)+'s';
+  });
+  var io=new IntersectionObserver(function(ents){
+    ents.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){ io.observe(e); });
+})();
