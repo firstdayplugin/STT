@@ -988,3 +988,59 @@ body.sol-modal-open{overflow:hidden}
   background:rgba(255,255,255,.15);display:grid;place-items:center;transition:background .2s}
 .ablx-x:hover{background:rgba(255,255,255,.28)}
 .ablx-x svg{width:22px;height:22px;stroke:#fff;stroke-width:2;fill:none}
+
+/* ============================================================
+   About Us — redesigned Vision/Mission + clean Award / Cert / Quality
+   (client: remove ugly diagonal crops & blue backgrounds, clean look)
+   ============================================================ */
+
+/* ---- Vision & Mission: premium, no diagonal cuts ---- */
+.ab-vm{grid-template-columns:0.95fr 1.05fr;gap:40px;align-items:stretch}
+.ab-vm-media{position:relative;display:grid;grid-template-rows:1.18fr 0.82fr;gap:18px;min-height:480px}
+.ab-vm-media::before{content:"";position:absolute;right:-16px;top:-16px;width:46%;height:42%;z-index:0;border-radius:26px;
+  background:radial-gradient(120% 120% at 100% 0,rgba(47,123,224,.16),rgba(47,123,224,0) 70%)}
+.ab-vm-img{position:relative;z-index:1;border-radius:22px;overflow:hidden;min-height:0;
+  box-shadow:0 26px 54px rgba(20,60,140,.16);border:1px solid rgba(20,60,140,.06)}
+.ab-vm-img1{clip-path:none!important}
+.ab-vm-img2{clip-path:none!important;margin:0 24px 0 0}
+.ab-vm-img>img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-vm-text{display:flex;flex-direction:column;gap:22px;justify-content:center}
+.ab-vm-ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;margin-bottom:16px}
+.ab-vm-ic svg{width:26px;height:26px}
+.ab-vcard{position:relative;overflow:hidden;background:linear-gradient(145deg,#2f7be0 0%,#1b63c7 60%,#154fa3 100%);
+  color:#fff;border-radius:24px;padding:34px 36px;box-shadow:0 24px 54px rgba(30,90,190,.28)}
+.ab-vcard::after{content:"";position:absolute;right:-40px;bottom:-56px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,0) 70%)}
+.ab-vcard .ab-vm-ic{background:rgba(255,255,255,.16);color:#fff}
+.ab-vcard h2{color:#fff;font-size:clamp(22px,2vw,27px);font-weight:800;margin:0 0 12px}
+.ab-vcard p{color:rgba(255,255,255,.94);line-height:1.75;font-size:15.5px;position:relative;z-index:1;margin:0}
+.ab-mcard{background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px 36px;box-shadow:0 20px 48px rgba(14,42,78,.08)}
+.ab-mcard .ab-vm-ic{background:var(--blue-050,#eaf2fe);color:var(--blue)}
+.ab-mcard h2{font-size:clamp(22px,2vw,27px);font-weight:800;color:var(--ink);margin:0 0 20px}
+.ab-mlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;margin:0;padding:0}
+.ab-mlist li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2);line-height:1.55;font-size:14.5px;font-weight:500}
+.ab-mlist .chk{flex:none;width:24px;height:24px;margin-top:0;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,#2f7be0,#1b63c7);box-shadow:0 4px 10px rgba(47,123,224,.32)}
+.ab-mlist .chk svg{width:13px;height:13px;stroke:#fff;stroke-width:3;fill:none}
+@media(max-width:900px){.ab-vm{grid-template-columns:1fr}.ab-vm-media{min-height:0;grid-template-rows:auto auto}.ab-vm-img{aspect-ratio:16/10}.ab-vm-img2{margin:0}.ab-mlist{grid-template-columns:1fr}}
+
+/* ---- Award / Certification / Quality cards: clean white, full image, no crop ---- */
+.ab-cards-award .ab-card-img,.ab-cards-cert .ab-card-img,.ab-quality .ab-card-img{
+  aspect-ratio:auto!important;height:210px;background:#fff!important;border:1px solid var(--line)!important;border-radius:14px}
+.ab-cards-award .ab-card-img::before,.ab-cards-award .ab-card-img::after,
+.ab-cards-cert .ab-card-img::before,.ab-cards-cert .ab-card-img::after,
+.ab-quality .ab-card-img::before,.ab-quality .ab-card-img::after{content:none!important;display:none!important;background:none!important}
+.ab-cards-award .ab-card-img>img,.ab-cards-cert .ab-card-img>img,.ab-quality .ab-card-img>img{
+  width:100%;height:100%;object-fit:contain!important;padding:14px;box-sizing:border-box}
+.ab-cards-cert .ab-card,.ab-quality .ab-card{background:#fff;border:1px solid var(--line);border-radius:18px;
+  padding:16px;box-shadow:0 10px 26px rgba(14,42,78,.05);transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s ease}
+.ab-cards-cert .ab-card:hover,.ab-quality .ab-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(14,42,78,.12)}
+.ab-cards-cert .cap,.ab-quality .cap{font-size:14px;font-weight:700;color:var(--blue);margin-top:12px}
+.ab-cards-cert .ttl{font-weight:700;color:var(--ink)}
+
+/* Quality: keep a clean 3-up grid with breathing room */
+.ab-quality-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:30px}
+.ab-quality-grid .ab-card{flex:none;max-width:none;width:auto}
+.ab-quality .ab-card-img{height:230px}
+@media(max-width:900px){.ab-quality-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.ab-quality-grid{grid-template-columns:1fr}.ab-cards-award .ab-card-img,.ab-cards-cert .ab-card-img,.ab-quality .ab-card-img{height:190px}}

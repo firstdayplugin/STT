@@ -100,15 +100,17 @@ $vimg2 = aimg('about', 'vision_img2', '');
     <!-- Vision + Mission (image LEFT, text RIGHT) -->
     <section class="ab-sec ab-vm">
       <div class="ab-vm-media">
-        <div class="ab-vm-img ab-vm-img1 phb"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 1</span><?php endif; ?></div>
-        <div class="ab-vm-img ab-vm-img2 phb"><?php if ($vimg2): ?><img src="<?= htmlspecialchars($vimg2) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 2</span><?php endif; ?></div>
+        <div class="ab-vm-img ab-vm-img1<?= $vimg1 ? '' : ' phb' ?>"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 1</span><?php endif; ?></div>
+        <div class="ab-vm-img ab-vm-img2<?= $vimg2 ? '' : ' phb' ?>"><?php if ($vimg2): ?><img src="<?= htmlspecialchars($vimg2) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 2</span><?php endif; ?></div>
       </div>
       <div class="ab-vm-text">
         <div class="ab-vcard">
+          <span class="ab-vm-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span>
           <h2><?= ac('about', 'vision_title') ?></h2>
           <p><?= ac('about', 'vision_body') ?></p>
         </div>
         <div class="ab-mcard">
+          <span class="ab-vm-ic ab-vm-ic-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 3 2 3H5"/></svg></span>
           <h2><?= ac('about', 'mission_title') ?></h2>
           <ul class="ab-mlist">
             <?php foreach ($mission as $m): ?>
