@@ -4,7 +4,7 @@
 -- Managed in Admin > Solutions Page > Edit section > Partner Logos.
 -- ============================================================
 SET NAMES utf8mb4;
-DELETE FROM solution_logos WHERE solution_id IN (1,2,3,4);
+DELETE FROM solution_logos WHERE solution_id IN (1,2,3,4,5);
 INSERT INTO solution_logos (solution_id,gambar,nama,urutan,is_active) VALUES
   (1,'solutions/logos/dell.png','Dell Technologies',1,1),
   (1,'solutions/logos/vmware.png','VMware by Broadcom',2,1),
@@ -22,7 +22,11 @@ INSERT INTO solution_logos (solution_id,gambar,nama,urutan,is_active) VALUES
   (4,'solutions/logos/sensetime.png','SenseTime',2,1),
   (4,'solutions/logos/rafay.png','Rafay',3,1),
   (4,'solutions/logos/soca.png','Soca',4,1),
-  (4,'solutions/logos/meshdefend.svg','Meshdefend',5,1),
+  (4,'solutions/logos/meshdefend.png','Meshdefend',5,1),
+  (5,'solutions/logos/satu-ai.png','SATU AI',1,1),
+  (5,'solutions/logos/sensetime.png','SenseTime',2,1),
+  (5,'solutions/logos/soca.png','Soca',3,1),
+  (5,'solutions/logos/xeratic.png','Xeratic',4,1),
   (3,'solutions/logos/weka.png','WEKA',1,1),
   (3,'solutions/logos/xeratic.png','Xeratic',2,1),
   (2,'solutions/logos/cisco.png','Cisco',1,1),
