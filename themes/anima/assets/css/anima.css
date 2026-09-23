@@ -463,11 +463,14 @@ header.scrolled .hamb .ic{stroke:var(--ink)}
 @media(max-width:600px){.tst-grid{grid-template-columns:1fr}}
 
 
-.prism-logos{position:relative;height:46px;margin-top:34px;width:100%;max-width:780px}
-.prism-logos .lset{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:46px;opacity:0;transition:opacity .55s ease}
+.prism-logos{position:relative;min-height:104px;margin-top:26px;width:100%;max-width:940px}
+.prism-logos .lset{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:12px;opacity:0;transition:opacity .55s ease}
 .prism-logos .lset.on{opacity:1}
-.prism-logos img{height:33px;width:auto;max-width:150px;object-fit:contain;filter:brightness(0);opacity:.42;transition:opacity .25s}
-.prism-logos img:hover{opacity:1}
+/* Same white-chip treatment as /solutions so Home ↔ Solutions logos match exactly. */
+.prism-logos img{box-sizing:border-box;height:48px;width:auto;max-width:150px;object-fit:contain;
+  background:#fff;border:1px solid rgba(20,50,110,.10);border-radius:12px;padding:9px 15px;
+  box-shadow:0 2px 10px rgba(20,50,110,.05);filter:none;opacity:1;transition:transform .2s,box-shadow .2s}
+.prism-logos img:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(20,50,110,.12)}
 
 .orbit-section{position:relative}
 .orbit-box{background:radial-gradient(120% 95% at 50% 46%,#0d2440,#0a1a2e 55%,#060d18 82%)!important}
@@ -1135,14 +1138,7 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
   line-height:1.28;
 }
 
-/* Keep monochrome partner logos — they are an ecosystem signal, not decoration. */
-.prism-logos img{
-  filter:brightness(0);
-  opacity:.40;
-}
-.prism-logos img:hover{
-  opacity:.72;
-}
+/* Partner logos render in full colour inside white chips (matches /solutions). */
 
 /* ---------- Why Us: preserve approved white text fix ---------- */
 #why .wl-card{
@@ -1302,9 +1298,9 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 }
 /* Prism partner logos: fit within narrow screens (were clipped by the stage) */
 @media(max-width:600px){
-  .prism-logos{gap:20px;max-width:100%;padding:0 14px}
-  .prism-logos .lset{gap:20px;flex-wrap:wrap}
-  .prism-logos img{height:22px;max-width:84px}
+  .prism-logos{max-width:100%;padding:0 12px;min-height:150px}
+  .prism-logos .lset{gap:8px}
+  .prism-logos img{height:38px;max-width:104px;padding:6px 10px;border-radius:10px}
 }
 
 /* =========================================================================

@@ -124,7 +124,7 @@ foreach ($slide_rows as $r) {
     $__anc = '';
     if (preg_match('/#(.+)$/', (string)($r['url'] ?? ''), $__m)) $__anc = $__m[1];
     if ($__anc !== '' && !empty($prism_logos_by_anchor[$__anc])) {
-        $logos = array_slice($prism_logos_by_anchor[$__anc], 0, 6);
+        $logos = $prism_logos_by_anchor[$__anc];
     }
     $slides_json[] = [
         'eyebrow' => (string)($r['eyebrow'] ?? ''),

@@ -29,4 +29,4 @@ INSERT INTO solution_logos (solution_id,gambar,nama,urutan,is_active) VALUES
   (2,'solutions/logos/fortinet.png','Fortinet',2,1),
   (2,'solutions/logos/elastic.svg','Elastic',3,1),
   (2,'solutions/logos/cyble.png','Cyble',4,1),
-  (2,'solutions/logos/t-innoware.jpg','T-Innoware',5,1);
+  (2,'solutions/logos/t-innoware.png','T-Innoware',5,1);
