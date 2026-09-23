@@ -65,11 +65,13 @@ foreach ($hero_rows as $hs) {
     $hero_json[] = [
         'bg'    => !empty($hs['gambar']) ? uploads_url($hs['gambar']) : '',
         'video' => $vid !== '' ? (preg_match('#^https?:#', $vid) ? $vid : uploads_url($vid)) : '',
+        'eye'   => (string)($hs['eyebrow'] ?? ''),
         'h'     => (string)($hs['judul'] ?? ''),
+        'desc'  => (string)($hs['deskripsi'] ?? ''),
         'sub'   => (string)($hs['subtitle'] ?? ''),
     ];
 }
-$h0 = $hero_json[0] ?? ['bg' => '', 'h' => 'Growing The Global', 'sub' => 'Technology Industry'];
+$h0 = $hero_json[0] ?? ['bg' => '', 'eye' => '', 'h' => 'Growing The Global', 'desc' => '', 'sub' => 'Technology Industry'];
 
 // §14.2 — data-driven animations. Cube (Solutions prism) & orbit (Our Industries)
 // cards are editable + media-capable; config is injected CSP-safely via data-* attrs
@@ -129,11 +131,14 @@ include theme_path('templates/layouts/header.php');
       <div class="tk-cur" id="tkCur">
         <div class="tk-bg" id="tkCurBg"></div>
         <div class="tk-ov"></div>
-        <div class="tk-eyebrow" id="tkEye"<?= trim($h0['sub']) === '' ? ' hidden' : '' ?>><?= htmlspecialchars($h0['sub']) ?></div>
-        <h1 class="tk-h1" id="tkH1"<?= trim($h0['h']) === '' ? ' hidden' : '' ?>><?= htmlspecialchars($h0['h']) ?></h1>
-        <div class="tk-foot">
-          <a class="tk-btn" href="#contact">Get in Touch <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <div class="tk-dots" id="tkDots"></div>
+        <div class="tk-copy">
+          <div class="tk-eyebrow" id="tkEye"<?= trim((string)($h0['eye'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['eye'] ?? '')) ?></div>
+          <h1 class="tk-h1" id="tkH1"<?= trim((string)($h0['h'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['h'] ?? '')) ?></h1>
+          <p class="tk-desc" id="tkDesc"<?= trim((string)($h0['desc'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['desc'] ?? '')) ?></p>
+          <div class="tk-foot">
+            <a class="tk-btn" href="#contact">Get in Touch <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <div class="tk-dots" id="tkDots"></div>
+          </div>
         </div>
       </div>
       <div class="tk-next" id="tkNext">

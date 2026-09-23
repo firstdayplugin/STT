@@ -106,12 +106,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($a === 'hero') {
         $slide_judul = $_POST['slide_judul'] ?? [];
         $slide_sub   = $_POST['slide_sub'] ?? [];
+        $slide_eyebrow = $_POST['slide_eyebrow'] ?? [];
+        $slide_desc  = $_POST['slide_desc'] ?? [];
         $slide_ids   = $_POST['slide_id'] ?? [];
         // Clear and re-insert
         foreach ($slide_judul as $si => $sj) {
-            if (!trim($sj)) continue;
+            if (!trim($sj) && !trim($slide_eyebrow[$si] ?? '')) continue;
             $sid = (int)($slide_ids[$si] ?? 0);
-            $sdata = ['judul'=>trim($sj),'subtitle'=>trim($slide_sub[$si]??''),'urutan'=>$si,'is_active'=>1];
+            $sdata = ['judul'=>trim($sj),'subtitle'=>trim($slide_sub[$si]??''),
+                      'eyebrow'=>trim($slide_eyebrow[$si]??''),'deskripsi'=>trim($slide_desc[$si]??''),
+                      'urutan'=>$si,'is_active'=>1];
             // Upload slide image
             if (!empty($_FILES['slide_gambar']['name'][$si])) {
                 $sfdata = ['name'=>$_FILES['slide_gambar']['name'][$si],'type'=>$_FILES['slide_gambar']['type'][$si],
@@ -360,10 +364,13 @@ function s($key, $default='') { return htmlspecialchars(get_setting($key, $defau
             <?php foreach ($slides as $si => $slide): ?>
             <div class="slide-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px">
                 <input type="hidden" name="slide_id[]" value="<?= $slide['id'] ?>">
-                <div class="form-group"><label>Judul Slide <?= $si+1 ?></label>
-                    <input type="text" name="slide_judul[]" class="form-control" value="<?= htmlspecialchars($slide['judul']) ?>"></div>
-                <div class="form-group"><label>Sub-judul</label>
-                    <input type="text" name="slide_sub[]" class="form-control" value="<?= htmlspecialchars($slide['subtitle'] ?? '') ?>"></div>
+                <div class="form-group"><label>Eyebrow / Label kecil <?= $si+1 ?></label>
+                    <input type="text" name="slide_eyebrow[]" class="form-control" value="<?= htmlspecialchars($slide['eyebrow'] ?? '') ?>" placeholder="mis. ST ANALYTICS"></div>
+                <div class="form-group"><label>Judul (headline besar)</label>
+                    <input type="text" name="slide_judul[]" class="form-control" value="<?= htmlspecialchars($slide['judul']) ?>" placeholder="mis. Predictive Intelligence"></div>
+                <div class="form-group"><label>Deskripsi (paragraf)</label>
+                    <textarea name="slide_desc[]" class="form-control no-wysiwyg" rows="2" placeholder="Kalimat pendukung di bawah judul"><?= htmlspecialchars($slide['deskripsi'] ?? '') ?></textarea></div>
+                <input type="hidden" name="slide_sub[]" value="<?= htmlspecialchars($slide['subtitle'] ?? '') ?>">
                 <div class="form-group mb-8"><label>Gambar</label>
                     <?php if($slide['gambar']): ?><img src="<?= uploads_url($slide['gambar']) ?>" style="height:50px;margin-bottom:8px;border-radius:6px"><br><?php endif; ?>
                     <input type="file" name="slide_gambar[<?= $si ?>]" class="form-control" accept="image/*"></div>
@@ -718,8 +725,10 @@ function addSlide() {
     div.className = 'slide-item';
     div.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px';
     div.innerHTML = `<input type="hidden" name="slide_id[]" value="">
-        <div class="form-group"><label>Judul Slide ${n}</label><input type="text" name="slide_judul[]" class="form-control"></div>
-        <div class="form-group"><label>Sub-judul</label><input type="text" name="slide_sub[]" class="form-control"></div>
+        <div class="form-group"><label>Eyebrow / Label kecil ${n}</label><input type="text" name="slide_eyebrow[]" class="form-control" placeholder="mis. ST ANALYTICS"></div>
+        <div class="form-group"><label>Judul (headline besar)</label><input type="text" name="slide_judul[]" class="form-control" placeholder="mis. Predictive Intelligence"></div>
+        <div class="form-group"><label>Deskripsi (paragraf)</label><textarea name="slide_desc[]" class="form-control no-wysiwyg" rows="2"></textarea></div>
+        <input type="hidden" name="slide_sub[]" value="">
         <div class="form-group mb-8"><label>Gambar</label><input type="file" name="slide_gambar[${n-1}]" class="form-control" accept="image/*"></div>
         <button type="button" onclick="this.closest('.slide-item').remove()" class="btn btn-xs btn-danger">× Hapus</button>`;
     document.getElementById('slides-list').appendChild(div);
