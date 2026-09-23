@@ -244,3 +244,24 @@
   window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(spy); } },{passive:true});
   spy();
 })();
+;
+/* Prism (Solutions cube) — link each caption to its section on /solutions.
+   Reads the per-slide url from the section's data-slides (CMS-editable). */
+(function(){
+  var sec=document.querySelector('.prism[data-slides]'); if(!sec) return;
+  var data; try{ data=JSON.parse(sec.getAttribute('data-slides')); }catch(e){ return; }
+  if(!Array.isArray(data)||!data.length) return;
+  var tries=0;
+  (function wire(){
+    var caps=document.querySelectorAll('#prismCaps .cap');
+    if(caps.length < data.length){ if(tries++<40){ return void setTimeout(wire,120); } }
+    caps.forEach(function(c,i){
+      var u=data[i] && data[i].url; if(!u || c.querySelector('.prism-cap-link')) return;
+      c.style.cursor='pointer';
+      c.addEventListener('click',function(ev){ if(ev.target.closest('a'))return; window.location.href=u; });
+      var a=document.createElement('a'); a.className='prism-cap-link'; a.href=u;
+      a.innerHTML='Lihat Solusi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+      c.appendChild(a);
+    });
+  })();
+})();

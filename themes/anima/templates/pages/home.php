@@ -115,7 +115,7 @@ foreach ($slide_rows as $r) {
         'mid'     => (string)($r['warna_mid'] ?? '#123a6a'),
         'accent'  => (string)($r['warna_accent'] ?? '#42a0ff'),
         'logos'   => $logos,
-        'url'     => (string)($r['url'] ?? ''),
+        'url'     => (function ($u) { $u = trim((string)$u); if ($u === '' || $u === '#') return ''; return preg_match('#^https?:#', $u) ? $u : url(ltrim($u, '/')); })($r['url'] ?? ''),
     ];
 }
 

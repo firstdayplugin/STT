@@ -1363,3 +1363,9 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 }
 /* Keep the mobile nav drawer clear of the floating widgets. */
 body.nav-open .nh-widget,body.nav-open .va-widget{display:none}
+/* Prism caption -> solution link */
+.prism-cap-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 20px;border-radius:30px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;font-weight:600;font-size:13.5px;
+  text-decoration:none;backdrop-filter:blur(6px);transition:background .2s,transform .2s}
+.prism-cap-link:hover{background:rgba(255,255,255,.26);transform:translateY(-1px)}
+.prism-cap-link svg{width:16px;height:16px}
