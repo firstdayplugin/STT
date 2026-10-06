@@ -1498,8 +1498,8 @@ html,body{top:0!important;position:static!important}
    header width with even spacing, language as plain EN / ID
    (no flag icons).
    ============================================================ */
-.brand-logo,header .brand-logo,header.scrolled .brand-logo{height:56px}
-.nav{gap:24px}
+.brand-logo,header .brand-logo,header.scrolled .brand-logo{height:50px}
+.nav{gap:24px;max-width:none;padding-left:40px;padding-right:40px}
 /* Centre the menu relative to the whole header width (independent of the
    brand/actions widths); brand stays left, actions stay right. */
 .nav .menu{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -1510,9 +1510,11 @@ html,body{top:0!important;position:static!important}
 .gt-switch .gt-flag{display:none!important}
 .gt-switch .gt-opt{gap:0;padding:6px 13px;font-size:12.5px}
 @media(max-width:1200px){
-  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:48px}
+  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:44px}
+  .nav{padding-left:28px;padding-right:28px}
   .nav .menu{gap:22px;font-size:13.5px}
 }
 @media(max-width:960px){
-  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:46px}
+  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:42px}
+  .nav{padding-left:20px;padding-right:20px}
 }
