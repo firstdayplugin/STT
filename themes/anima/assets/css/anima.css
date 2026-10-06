@@ -1537,3 +1537,26 @@ html,body{top:0!important;position:static!important}
 @media(max-width:640px){
   .wrap,.page-shell,.footer-wrap,.hero-inner,.hero-quick .qin{padding-left:20px;padding-right:20px}
 }
+
+
+/* ============================================================
+   FOOTER — align inner content to the same global 40px gutter as
+   the header/content, and let the link columns spread wider so
+   they don't cluster to one side.
+   ============================================================ */
+.tel-footer-shell{padding-left:40px;padding-right:40px}
+.tel-footer-logo{left:40px}
+.tel-footer-top{right:40px}
+.tel-footer-content{grid-template-columns:minmax(300px,1fr) minmax(620px,2fr)}
+@media(max-width:1200px){
+  .tel-footer-shell{padding-left:28px;padding-right:28px}
+  .tel-footer-logo{left:28px}
+  .tel-footer-top{right:28px}
+}
+@media(max-width:1100px){
+  .tel-footer-content{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .tel-footer-shell{padding-left:20px;padding-right:20px}
+  .tel-footer-logo{left:20px}
+}

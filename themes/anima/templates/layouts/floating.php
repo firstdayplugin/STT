@@ -64,7 +64,7 @@ $T = fn($k, $d) => function_exists('t') ? t($k, $d) : $d;
     <div class="va-body">
       <div class="va-msg"><?= htmlspecialchars($T('va_greeting', 'Hi! Selamat datang di Sapta Tunas Teknologi. Ada yang bisa kami bantu?')) ?></div>
       <div class="va-quick">
-        <a href="<?= htmlspecialchars(url('') . '#contact') ?>"><?= htmlspecialchars($T('request_proposal', 'Request Proposal')) ?></a>
+        <a href="<?= htmlspecialchars(url('contact-us') . '#request-proposal') ?>"><?= htmlspecialchars($T('request_proposal', 'Request Proposal')) ?></a>
         <a href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars($T('contact_us', 'Contact Us')) ?></a>
       </div>
     </div>
