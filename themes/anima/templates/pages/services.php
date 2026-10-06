@@ -29,17 +29,28 @@ $seo = ['title' => ($p['judul'] ?? 'Services') . ' — ' . get_setting('site_nam
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 ?>
-<main class="page-body sv2"><div class="sv2-wrap">
+<?php
+// Services hero photo: per-page CMS field (service_pages.hero_image), default = the towers image.
+$sv_hero = !empty($p['hero_image']) ? uploads_url($p['hero_image']) : uploads_url('design3/towers-up.jpg');
+?>
+<main class="page-body sv2">
 
-  <div class="sv2-hero">
-    <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="sv2-eyebrow"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
-    <h1><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? 'Services')) ?></h1>
-    <?php if (trim((string)$T('body')) !== ''): ?><p class="sv2-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
-    <?php if (trim((string)$T('extra1')) !== ''): ?><p class="sv2-quote"><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
-    <?php if (!empty($p['cta_label'])): ?>
-      <a class="btn btn-primary sv2-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
-    <?php endif; ?>
-  </div>
+  <!-- Full-bleed Services hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $sv_hero === '' ? ' idh--plain' : '' ?>"<?= $sv_hero !== '' ? ' style="background-image:url(' . htmlspecialchars($sv_hero) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="svFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy idh-copy--about">
+      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="idh-eyebrow"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
+      <h1 class="idh-title"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? 'Services')) ?></h1>
+      <?php if (trim((string)$T('body')) !== ''): ?><div class="idh-intro"><?= htmlspecialchars($T('body')) ?></div><?php endif; ?>
+      <?php if (trim((string)$T('extra1')) !== ''): ?><p class="idh-tagline"><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
+      <?php if (!empty($p['cta_label'])): ?>
+        <a class="idh-btn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
+      <?php endif; ?>
+    </div>
+  </section>
+
+  <div class="sv2-wrap">
 
   <?php if ($pillars): ?>
   <section class="sv2-pillars reveal">

@@ -11,11 +11,16 @@ $SECTIONS = [
     'mission'   => ['label' => 'Misi (poin per baris)',    'icon' => 'check',     'fields' => ['teks']],
     'value'     => ['label' => 'Nilai — ICARE',            'icon' => 'star',      'fields' => ['kode', 'judul', 'teks'], 'image' => 'Ikon / huruf 3D'],
     'milestone' => ['label' => 'Milestone (slider)',       'icon' => 'compass',   'fields' => ['tahun', 'judul', 'teks', 'now'], 'image' => 'Gambar milestone'],
-    'award'     => ['label' => 'Penghargaan / Awards',     'icon' => 'briefcase', 'fields' => ['tahun', 'judul', 'teks'], 'image' => 'Foto sertifikat'],
+    'award'     => ['label' => 'Penghargaan / Awards',     'icon' => 'briefcase', 'fields' => ['grup', 'tahun', 'judul', 'teks'], 'image' => 'Foto sertifikat'],
     'quality'   => ['label' => 'Quality Standards (ISO)',  'icon' => 'layers',    'fields' => ['judul'], 'image' => 'Logo standar'],
     'cert'      => ['label' => 'Sertifikasi Vendor',       'icon' => 'box',       'fields' => ['grup', 'judul'], 'image' => 'Badge sertifikasi'],
 ];
 $FIELD_LABEL = ['kode' => 'Kode (I/C/A/R/E)', 'judul' => 'Judul', 'teks' => 'Teks', 'tahun' => 'Tahun', 'grup' => 'Brand/Grup'];
+// Per-section label overrides (clearer wording where a generic column is reused for a specific purpose).
+$SECTION_FIELD_LABEL = [
+    'award' => ['grup' => 'Kategori (Award Partner / Award Customer)', 'tahun' => 'Tahun (mis. 2019)',
+                'judul' => 'Nama penghargaan', 'teks' => 'Brand / Pemberi (mis. Dell EMC)'],
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verify_csrf($_POST['csrf_token'] ?? '')) { set_flash('error', 'Token tidak valid.'); redirect(admin_url('?page=about')); }
@@ -110,10 +115,10 @@ foreach (array_keys($SECTIONS) as $s) {
                 <input type="checkbox" name="items[<?= $id ?>][now]" value="1" style="width:auto" <?= ($r['kode'] ?? '') === 'now' ? 'checked' : '' ?>> Tandai "Sekarang"
               </label>
             <?php elseif ($f === 'teks'): ?>
-              <div style="flex:1;min-width:280px;width:100%"><label style="font-size:11px;color:var(--text-muted)"><?= $FIELD_LABEL[$f] ?></label>
+              <div style="flex:1;min-width:280px;width:100%"><label style="font-size:11px;color:var(--text-muted)"><?= $SECTION_FIELD_LABEL[$seksi][$f] ?? $FIELD_LABEL[$f] ?></label>
                 <textarea name="items[<?= $id ?>][teks]" rows="2"><?= htmlspecialchars($r['teks'] ?? '') ?></textarea></div>
             <?php else: ?>
-              <div style="<?= in_array($f, ['kode','tahun','grup'], true) ? 'width:120px' : 'flex:1;min-width:160px' ?>"><label style="font-size:11px;color:var(--text-muted)"><?= $FIELD_LABEL[$f] ?></label>
+              <div style="<?= in_array($f, ['kode','tahun'], true) ? 'width:120px' : 'flex:1;min-width:160px' ?>"><label style="font-size:11px;color:var(--text-muted)"><?= $SECTION_FIELD_LABEL[$seksi][$f] ?? $FIELD_LABEL[$f] ?></label>
                 <input type="text" name="items[<?= $id ?>][<?= $f ?>]" value="<?= htmlspecialchars($r[$f] ?? '') ?>"></div>
             <?php endif; ?>
           <?php endforeach; ?>

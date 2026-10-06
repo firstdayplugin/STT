@@ -26,16 +26,25 @@ $seo = ['title' => $c('title', 'Our Solutions') . ' — ' . get_setting('site_na
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 
-$banner_img = $img($c('banner_img', 'solutions/coming-soon-banner.png'));
+$banner_img = $img($c('banner_img', 'solutions/banner-promo.jpg'));
 $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url = '#';
+// Solutions hero photo: admin-editable (Konten Halaman → Solutions → "Foto Hero"),
+// defaulting to the towers image the client picked.
+$sol_hero = $img($c('hero_img', 'design3/towers-up.jpg'));
 ?>
 <main class="page-body sol-page">
-  <div class="sol-wrap">
 
-    <div class="sol-head">
-      <h1><?= htmlspecialchars($c('title', 'Our Solutions')) ?></h1>
-      <p><?= $c('lead', '') ?></p>
+  <!-- Full-bleed Solutions hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $sol_hero === '' ? ' idh--plain' : '' ?>"<?= $sol_hero !== '' ? ' style="background-image:url(' . htmlspecialchars($sol_hero) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="solFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy">
+      <h1 class="idh-title"><?= htmlspecialchars($c('title', 'Our Solutions')) ?></h1>
+      <?php if (trim(strip_tags((string)$c('lead', ''))) !== ''): ?><div class="idh-intro"><?= $c('lead', '') ?></div><?php endif; ?>
     </div>
+  </section>
+
+  <div class="sol-wrap">
 
     <?php if ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
     <?php if ($banner_has_link): ?>

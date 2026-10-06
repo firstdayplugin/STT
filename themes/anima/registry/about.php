@@ -5,6 +5,7 @@
  * arrays in about.php for now, with a TODO to bind them to CMS repeater/gallery modules later.
  */
 return [
+  'hero_img'       => ['label'=>'Foto Hero (background)','type'=>'image','group'=>'Intro','default'=>''],
   'intro_eyebrow'  => ['label'=>'Eyebrow',        'type'=>'text','group'=>'Intro','default'=>'About Us'],
   'intro_title'    => ['label'=>'Judul',          'type'=>'text','group'=>'Intro','default'=>'Enterprise Solution Provider'],
   'intro_body'     => ['label'=>'Paragraf intro', 'type'=>'html','group'=>'Intro','default'=>'Welcome to Sapta Tunas Teknologi. Established in 2015, we are a leading Enterprise Solution Provider dedicated to advancing Business Technology Solutions and Services in Indonesia. We empower organizations across all industries to achieve their goals through efficient IT costs and optimized system performance. Today, we focus on equipping your business to be future-ready by delivering:'],

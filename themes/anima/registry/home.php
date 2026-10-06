@@ -74,6 +74,10 @@ return [
   'why2_img'  => ['label'=>'Why 2 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
   'why3_img'  => ['label'=>'Why 3 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
   'why4_img'  => ['label'=>'Why 4 — gambar','type'=>'image','group'=>'Why Us','default'=>''],
+  'why1_cat'  => ['label'=>'Why 1 — label kategori (kiri atas)','type'=>'text','group'=>'Why Us','default'=>'Enterprise'],
+  'why2_cat'  => ['label'=>'Why 2 — label kategori (kiri atas)','type'=>'text','group'=>'Why Us','default'=>'Coverage'],
+  'why3_cat'  => ['label'=>'Why 3 — label kategori (kiri atas)','type'=>'text','group'=>'Why Us','default'=>'Expertise'],
+  'why4_cat'  => ['label'=>'Why 4 — label kategori (kiri atas)','type'=>'text','group'=>'Why Us','default'=>'Success'],
 
   // ---- Testimonials (section chrome; cards bind to testimonial module later) ----
   'testi_eyebrow'       => ['label'=>'Testimoni — eyebrow',  'type'=>'text', 'group'=>'Testimonials', 'default'=>'Customer Testimonials'],

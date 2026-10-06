@@ -28,17 +28,25 @@ $seo = ['title' => $c('title', 'Our Industries') . ' — ' . get_setting('site_n
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 
-$banner_img = $imgu($c('banner_img', 'solutions/coming-soon-banner.png'));
+$banner_img = $imgu($c('banner_img', 'solutions/banner-promo.jpg'));
 $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url = '#';
+// Industries hero photo: CMS-editable (Konten Halaman → Industri → "Foto Hero"), default = towers image.
+$ind_hero = $imgu($c('hero_img', 'design3/towers-up.jpg'));
 $n = count($rows);
 ?>
 <main class="page-body indpg-page">
-  <div class="indpg-wrap">
 
-    <div class="indpg-head">
-      <h1><?= htmlspecialchars($c('title', 'Our Industries')) ?></h1>
-      <p><?= $c('lead', '') ?></p>
+  <!-- Full-bleed Industries hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $ind_hero === '' ? ' idh--plain' : '' ?>"<?= $ind_hero !== '' ? ' style="background-image:url(' . htmlspecialchars($ind_hero) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="indFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy">
+      <h1 class="idh-title"><?= htmlspecialchars($c('title', 'Our Industries')) ?></h1>
+      <?php if (trim(strip_tags((string)$c('lead', ''))) !== ''): ?><div class="idh-intro"><?= $c('lead', '') ?></div><?php endif; ?>
     </div>
+  </section>
+
+  <div class="indpg-wrap">
 
     <?php if ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
     <?php if ($banner_has_link): ?>
@@ -58,9 +66,15 @@ $n = count($rows);
         // A lone card on the final row spans the full width (Figma: Cross Industry).
         $wide = ($i === $n - 1 && ($n % 3) === 1) ? ' wide' : '';
       ?>
+      <?php $isub = tr_field('industri', (int)$r['id'], 'subtitle', $r['subtitle'] ?? ''); ?>
       <a class="indl-card<?= $wide ?>" href="<?= htmlspecialchars($href) ?>">
         <span class="indl-ic"><?= $card_icon($r['icon'] ?? '') ?></span>
-        <span class="indl-name notranslate" translate="no"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
+        <span class="indl-body">
+          <span class="indl-name notranslate" translate="no"><?= htmlspecialchars(tr_field('industri', (int)$r['id'], 'label', $r['label'])) ?></span>
+          <?php if (trim((string)$isub) !== ''): ?><span class="indl-sub"><?= htmlspecialchars($isub) ?></span><?php endif; ?>
+        </span>
+        <span class="indl-go"><?= htmlspecialchars(t('explore', 'Explore')) ?>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <?php endforeach; ?>
     </div>

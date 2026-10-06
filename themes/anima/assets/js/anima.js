@@ -216,10 +216,15 @@ function frame(){
   const t=performance.now()*0.001;const idle=Math.sin(t*0.5)*0.03;
   hint.style.opacity=(1-clamp(p/0.05)).toFixed(2);
 
-  const cov=coverScale();const sc=lerp(cov,0.9,shrink);
+  // scale.com layout (>=1024): cube sits vertically CENTERED and larger; on smaller
+  // screens keep the older raised/compact cube that sits above the bottom captions.
+  const side=innerWidth>=1024;
+  const yB=side?0.0:1.6;                 // vertical offset: centered vs raised
+  const xC=side?-(SLIDES.length-1)*0.31*clamp(assemble):0; // re-center the assembled fan
+  const cov=coverScale();const sc=lerp(cov,side?1.12:0.9,shrink);
   const turn=-0.18*shrink, sway=Math.sin(p*Math.PI*2)*0.07;
   front.scale.setScalar(sc);
-  front.rotation.y=turn+sway+idle; front.rotation.x=0.05*shrink; front.position.z=-0.6*shrink; front.position.y=1.6*shrink;
+  front.rotation.y=turn+sway+idle; front.rotation.x=0.05*shrink; front.position.z=-0.6*shrink; front.position.y=yB*shrink; front.position.x=xC;
   frontEdge.material.opacity=0.5*shrink;
 
   const phase=assemble*(SLIDES.length-1);
@@ -230,7 +235,7 @@ function frame(){
   backs.forEach(g=>{const i=g.userData.i;const a=clamp(assemble*1.0);
     g.userData.mesh.material.opacity=a*(0.82-i*0.13);
     g.userData.e.material.opacity=a*(0.5-i*0.07);
-    g.position.x=lerp(0,i*0.62,a);g.position.y=1.6*shrink+lerp(0,-i*0.12,a);g.position.z=-i*0.6-(1-a)*0.5;
+    g.position.x=xC+lerp(0,i*0.62,a);g.position.y=yB*shrink+lerp(0,-i*0.12,a);g.position.z=-i*0.6-(1-a)*0.5;
     g.rotation.y=front.rotation.y*0.9;g.rotation.x=front.rotation.x;g.scale.setScalar(1);});
 
   // captions
@@ -358,29 +363,54 @@ requestAnimationFrame(frame);
       panel=document.getElementById('tfiPanel'),fill=document.getElementById('tfiFill');
   var imgs=[].slice.call(media.querySelectorAll('.tfi-img'));
   var items=[].slice.call(sec.querySelectorAll('.tfi-item'));
-  var N=items.length, INTRO=0.24, cur=-1;
+  var N=items.length, INTRO=0.30, cur=-1;
   function cl(v,a,b){return v<a?a:(v>b?b:v);}
   function lerp(a,b,t){return a+(b-a)*t;}
   function smooth(t){return t*t*(3-2*t);}
-  function setActive(i){
-    if(i===cur)return; cur=i;
-    imgs.forEach(function(im){im.classList.toggle('on',+im.dataset.i===i);});
-    items.forEach(function(it){var a=+it.dataset.i===i;it.classList.toggle('act',a);it.classList.toggle('dim',!a);});
-  }
   function frame(){
     var vh=window.innerHeight, total=sec.offsetHeight-vh;
     var p=cl(-sec.getBoundingClientRect().top/total,0,1);
     var zp=smooth(cl(p/INTRO,0,1));
     var mw=lerp(100,48,zp);
     media.style.width=mw+'%'; panel.style.width=(100-mw)+'%';
-    panel.style.opacity=cl((zp-0.35)/0.65,0,1);
+    panel.style.opacity=cl((zp-0.40)/0.60,0,1);
     stage.style.margin='0 '+lerp(0,44,zp)+'px';
     stage.style.borderRadius=lerp(0,30,zp)+'px';
     stage.style.height=lerp(100,82,zp)+'vh';
     stage.style.transform='scale('+lerp(1.06,1,zp)+')';
+
     var ip=cl((p-INTRO)/(1-INTRO),0,1);
-    setActive(cl(Math.floor(ip*N+0.0001),0,N-1));
-    fill.style.height=(ip*100)+'%';
+    var active=cl(Math.floor(ip*N+0.0001),0,N-1);
+
+    // Telkom-style reveal: BEFORE scroll all pillar images sit side-by-side
+    // (a filmstrip). As the intro plays they slide together into ONE stacked
+    // image; after the intro it's the standard one-image-per-pillar switch.
+    var mob = (window.matchMedia && window.matchMedia('(max-width:900px)').matches);
+    var slot=100/N, gap=0;                         // flush filmstrip (no gaps, like Telkom)
+    imgs.forEach(function(im,idx){
+      if(mob){                                     // mobile: no filmstrip, plain switch
+        im.style.left='0%'; im.style.width='100%'; im.style.right='auto'; im.style.borderRadius='0';
+        im.style.transform='none'; im.style.zIndex=(idx===active?'3':'1');
+        im.style.opacity=(idx===active?1:0).toString(); return;
+      }
+      var lf=idx*slot+gap/2, wf=slot-gap;
+      im.style.left=lerp(lf,0,zp).toFixed(3)+'%';
+      im.style.width=lerp(wf,100,zp).toFixed(3)+'%';
+      im.style.right='auto';
+      im.style.borderRadius='0';
+      if(p>=INTRO){                                 // switching phase: crossfade active
+        im.style.opacity=(idx===active)?'1':'0';
+        im.style.zIndex=(idx===active)?'3':'1';
+        im.style.transform=(idx===active)?'scale(1.04)':'scale(1)';
+      } else {                                      // filmstrip: opaque panels sliding together,
+        im.style.opacity='1';                       // lead on top so they merge without ghosting
+        im.style.zIndex=String(N-idx);
+        im.style.transform='scale(1)';
+      }
+    });
+
+    items.forEach(function(it){var a=+it.dataset.i===active;it.classList.toggle('act',a);it.classList.toggle('dim',!a);});
+    fill.style.height=(ip*100)+'%'; cur=active;
   }
   var tick=false;
   function onScroll(){if(!tick){tick=true;requestAnimationFrame(function(){frame();tick=false;});}}
@@ -388,16 +418,45 @@ requestAnimationFrame(frame);
 })();
 ;
 (function(){
-  var track=document.getElementById('whyTrack'); if(!track)return;
-  var cards=[].slice.call(track.children);
-  function frame(){var cx=innerWidth/2;
-    cards.forEach(function(c){var r=c.getBoundingClientRect();var d=Math.abs((r.left+r.width/2)-cx);
-      var near=Math.max(0,1-d/(innerWidth*0.26));
-      c.style.transform='scale('+(1+0.24*near)+')';
-      c.style.opacity=(0.5+0.5*Math.max(0,1-d/(innerWidth*0.5))).toFixed(2);
-      c.style.zIndex=near>0.6?'5':'1';});
-    requestAnimationFrame(frame);}
-  requestAnimationFrame(frame);
+  // What Sets Us Apart — scale.com/enterprise coverflow: one focused centre card,
+  // neighbours receding in 3D, arrows + click-to-focus + gentle autoplay.
+  var track=document.getElementById('wsaTrack'); if(!track)return;
+  var cards=[].slice.call(track.querySelectorAll('.wsa-card')); var N=cards.length; if(!N)return;
+  var active=0, timer=null, VIS=2;                 // always show centre + 2 each side (5)
+  function circD(i){var d=i-active; while(d>N/2)d-=N; while(d<-N/2)d+=N; return d;}
+  function layout(){
+    var cw=cards[0].offsetWidth||480;
+    var step=cw*0.75;                              // 1/4 overlap → neighbours show ~3/4
+    // Viewport width = 3.3x card width so the two outer cards are clipped to ~1/2.
+    var vp=track.parentElement, stage=vp.parentElement;
+    var avail=(stage.clientWidth||cw*3.3)-180;     // minus the 90px arrow gutters
+    vp.style.width=Math.max(cw, Math.min(cw*3.3, avail)).toFixed(0)+'px';
+    cards.forEach(function(c,i){
+      var d=circD(i), ad=Math.abs(d), show=ad<=VIS;
+      var sc=1-ad*0.08;                            // centre 1, then 0.92, 0.84 (subtle)
+      var x=d*step;
+      // Cards stay flat & vertically aligned (no tilt) — matches scale.com.
+      c.style.transition=show?'':'none';           // hidden cards jump instantly (seamless loop)
+      c.style.transform='translate(-50%,-50%) translateX('+x.toFixed(1)+'px) scale('+sc.toFixed(3)+')';
+      c.style.zIndex=String(100-ad);
+      c.style.opacity=show?(d===0?'1':(ad===1?'1':'0.94')):'0';
+      c.style.filter=(d===0)?'none':'brightness(.88)';
+      c.style.pointerEvents=show?'auto':'none';
+      c.classList.toggle('is-active',d===0);
+    });
+  }
+  function go(dir){active=(active+dir+N)%N;layout();}
+  function to(i){active=((i%N)+N)%N;layout();}
+  function auto(){if(N<2)return;clearInterval(timer);timer=setInterval(function(){go(1);},5000);}
+  var prev=document.getElementById('wsaPrev'),next=document.getElementById('wsaNext');
+  if(prev)prev.addEventListener('click',function(){go(-1);auto();});
+  if(next)next.addEventListener('click',function(){go(1);auto();});
+  cards.forEach(function(c,i){c.addEventListener('click',function(){if(circD(i)!==0){to(i);auto();}});});
+  var stage=track.closest('.wsa-stage')||track;
+  stage.addEventListener('mouseenter',function(){clearInterval(timer);});
+  stage.addEventListener('mouseleave',auto);
+  addEventListener('resize',layout);
+  layout();auto();
 })();
 ;
 (function(){

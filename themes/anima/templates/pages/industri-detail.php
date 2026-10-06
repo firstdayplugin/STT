@@ -32,16 +32,19 @@ $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 ?>
 <main class="page-body idt2">
-  <div class="idt2-wrap">
 
-    <div class="indpg-head">
-      <h1><?= htmlspecialchars($ind_label) ?></h1>
-      <?php if (trim($intro) !== ''): ?><p><?= $intro ?></p><?php endif; ?>
+  <!-- Full-bleed industry hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $hero_img === '' ? ' idh--plain' : '' ?>"<?= $hero_img !== '' ? ' style="background-image:url(' . htmlspecialchars($hero_img) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="idhFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy">
+      <div class="idh-eyebrow"><?= htmlspecialchars(get_content('industri', 'detail_eyebrow', 'Industries')) ?></div>
+      <h1 class="idh-title notranslate" translate="no"><?= htmlspecialchars($ind_label) ?></h1>
+      <?php if (trim($intro) !== ''): ?><p class="idh-intro"><?= $intro ?></p><?php endif; ?>
     </div>
+  </section>
 
-    <?php if ($hero_img !== ''): ?>
-    <div class="idt2-hero"><img src="<?= htmlspecialchars($hero_img) ?>" alt="<?= htmlspecialchars($ind_label) ?>" data-fallback="bg"></div>
-    <?php endif; ?>
+  <div class="idt2-wrap">
 
     <?php if ($pillars): ?>
     <!-- Pillars now read top-to-bottom (scroll). The sticky rail is a scroll-spy:

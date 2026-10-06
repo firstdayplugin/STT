@@ -72,9 +72,15 @@
 /* ================= ABOUT US ================= */
 .ab{padding:8px 0 20px}
 .ab-sec{padding:40px 0}
-.ab-intro{text-align:center;padding:44px 24px 8px}
+.ab-intro{text-align:center;padding:46px 24px 8px}
 .ab-intro h1{font-size:clamp(28px,3.4vw,42px);color:var(--blue-ink)}
 .ab-intro .lead{max-width:78ch;margin:16px auto 0;color:var(--ink-2);line-height:1.85;font-size:15.5px}
+/* About hero copy: wider column + roomier width for the long welcome paragraph. */
+.idh-copy--about{max-width:1080px}
+.idh-copy--about .idh-intro{max-width:82ch}
+/* Career hero: two-line title (line 2 in accent blue), slightly smaller so both lines sit well. */
+.idh-title-accent{display:inline-block;color:#6ea9ff;margin-top:4px}
+.cr2 .idh-title{font-size:clamp(26px,4vw,48px);line-height:1.14}
 /* "Delivering" pillars — clean icon-card grid (responsive / mobile-friendly). */
 /* Centered flex so 5 pillars lay out 3-on-top, 2-on-bottom (both rows centered). */
 .ab-pillars{max-width:1100px;margin:34px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:18px}
@@ -310,10 +316,13 @@ table.tier tr.grp td{background:var(--bg-soft);font-family:'Space Grotesk',sans-
 .sol-head h1{font-size:clamp(30px,3.6vw,48px);color:var(--blue);font-weight:800;margin:0}
 .sol-head p{max-width:84ch;margin:20px auto 0;color:var(--ink-2);line-height:1.7;font-size:15.5px}
 
-/* Coming Soon banner — full-width rounded image */
-.sol-banner{display:block;margin:34px 0 8px;border-radius:22px;overflow:hidden;
+/* Coming Soon banner — full-width rounded image. Roomy top gap so it sits
+   comfortably below the hero (aesthetic breathing space). */
+.sol-page .sol-wrap{padding-top:6px}
+.sol-banner{display:block;margin:52px 0 8px;border-radius:22px;overflow:hidden;
   box-shadow:0 24px 60px rgba(14,42,78,.10);line-height:0}
 .sol-banner img{width:100%;height:auto;display:block}
+@media(max-width:700px){.sol-banner{margin:34px 0 8px}}
 
 /* Divider between blocks */
 .sol-div{height:1px;background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent);
@@ -426,23 +435,78 @@ body.sol-modal-open{overflow:hidden}
 .indpg-head h1{font-size:clamp(30px,3.6vw,48px);color:var(--blue);font-weight:800;margin:0}
 .indpg-head p{max-width:84ch;margin:20px auto 0;color:var(--ink-2);line-height:1.7;font-size:15.5px}
 
-.indl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:36px 0 0}
-.indl-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-  min-height:360px;padding:40px 24px;text-decoration:none;
-  background:var(--blue-050,#eef5fd);border:1px solid #d8e8fb;border-radius:20px;
-  transition:transform .25s,box-shadow .25s,background .25s}
-.indl-card:hover{transform:translateY(-4px);box-shadow:0 26px 56px rgba(14,42,78,.12);background:#e7f1fe}
-.indl-card.wide{grid-column:1 / -1;min-height:300px}
-.indl-ic{display:grid;place-items:center;height:96px;color:var(--blue)}
-.indl-ic img{height:92px;width:auto;object-fit:contain}
-.indl-ic svg{width:72px;height:72px;stroke:var(--blue);stroke-width:1.7;fill:none}
-.indl-name{font-size:clamp(20px,2vw,27px);font-weight:800;color:var(--blue-ink);text-align:center;line-height:1.2}
+/* ===== Industries grid — premium cards: white icon medallion, subtitle, and a
+   vivid blue "flip" on hover with an Explore chip. ===== */
+.indl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:40px 0 0}
+.indl-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;min-height:288px;padding:44px 26px;text-decoration:none;
+  background:#fff;border:1px solid #e2ecf9;border-radius:22px;box-shadow:0 10px 30px rgba(14,42,78,.05);
+  transition:transform .32s cubic-bezier(.16,1,.3,1),box-shadow .32s,border-color .32s;
+  opacity:0;transform:translateY(26px);animation:indlUp .6s cubic-bezier(.16,1,.3,1) forwards}
+/* gradient wash that fades in on hover */
+.indl-card::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .32s;
+  background:linear-gradient(150deg,#2478e0 0%,#1b63c7 55%,#12a7b8 130%)}
+.indl-card:hover{transform:translateY(-9px);border-color:transparent;
+  box-shadow:0 34px 70px rgba(24,86,180,.34)}
+.indl-card:hover::before{opacity:1}
+.indl-card.wide{grid-column:1 / -1;min-height:210px}
+/* icon medallion — stays white so the blue icon reads on both card states */
+.indl-ic{display:grid;place-items:center;width:96px;height:96px;border-radius:26px;background:#fff;
+  box-shadow:0 12px 30px rgba(20,60,140,.14);transition:transform .32s,box-shadow .32s}
+.indl-card:hover .indl-ic{transform:scale(1.06) translateY(-2px);box-shadow:0 16px 40px rgba(4,20,50,.30)}
+.indl-ic img{width:52px;height:52px;object-fit:contain}
+.indl-ic svg{width:52px;height:52px;stroke:var(--blue);stroke-width:1.7;fill:none}
+.indl-body{display:flex;flex-direction:column;align-items:center;gap:8px}
+.indl-name{font-size:clamp(19px,1.7vw,24px);font-weight:800;color:var(--blue-ink);text-align:center;
+  line-height:1.22;transition:color .32s}
+.indl-sub{font-size:13.5px;color:var(--dim,#7a8798);text-align:center;line-height:1.5;max-width:24ch;transition:color .32s}
+.indl-go{display:inline-flex;align-items:center;gap:7px;margin-top:2px;font-size:13.5px;font-weight:700;
+  color:#fff;opacity:0;transform:translateY(6px);transition:opacity .32s,transform .32s}
+.indl-go svg{width:16px;height:16px}
+.indl-card:hover .indl-name,.indl-card:hover .indl-sub{color:#fff}
+.indl-card:hover .indl-go{opacity:1;transform:none}
+@keyframes indlUp{to{opacity:1;transform:none}}
+.indl-card:nth-child(2){animation-delay:.06s}.indl-card:nth-child(3){animation-delay:.12s}
+.indl-card:nth-child(4){animation-delay:.18s}.indl-card:nth-child(5){animation-delay:.24s}
+.indl-card:nth-child(6){animation-delay:.30s}.indl-card:nth-child(7){animation-delay:.36s}
+@media(prefers-reduced-motion:reduce){.indl-card{opacity:1;transform:none;animation:none}}
 
 /* --- Industry detail (Figma "Industries / <Name>") --- */
 .idt2{padding:0 0 66px}
 .idt2-hero{margin:26px 0 20px;border-radius:22px;overflow:hidden;line-height:0;
   box-shadow:0 24px 60px rgba(14,42,78,.10);height:clamp(200px,26vw,340px)}
 .idt2-hero img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+
+/* ===== Full-bleed industry-detail HERO (photo + copy overlay + tech-network FX) ===== */
+.idh{position:relative;isolation:isolate;overflow:hidden;
+  min-height:clamp(430px,64vh,640px);display:flex;align-items:center;justify-content:center;
+  background:#0b1b34 center/cover no-repeat}
+.idh--plain{background:radial-gradient(120% 140% at 78% 8%,#13396f 0%,#0d2650 42%,#081428 100%)}
+.idh-ov{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(7,18,40,.60) 0%,rgba(7,18,40,.40) 42%,rgba(6,20,48,.72) 100%)}
+/* .tk-fx (canvas) sits at z-index:2 with mix-blend:screen — defined in anima.css */
+.idh-copy{position:relative;z-index:3;text-align:center;max-width:1000px;margin:0 auto;
+  padding:clamp(80px,12vh,132px) 26px}
+.idh-eyebrow{display:inline-block;font-family:'Space Grotesk','Inter',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#8fd0ff;margin-bottom:18px}
+.idh-title{font-family:'Space Grotesk','Inter',sans-serif;font-weight:800;color:#fff;
+  font-size:clamp(30px,5vw,60px);line-height:1.08;letter-spacing:-.02em;margin:0;
+  text-shadow:0 2px 30px rgba(4,14,34,.45)}
+.idh-intro{margin:22px auto 0;max-width:72ch;color:rgba(233,240,250,.94);
+  font-size:clamp(15px,1.15vw,17.5px);line-height:1.78;text-shadow:0 1px 18px rgba(4,14,34,.4)}
+/* Emphasised positioning line (Services hero): distinct from the body paragraph. */
+.idh-tagline{margin:18px auto 0;max-width:70ch;font-style:italic;font-weight:600;
+  color:#bfe0ff;font-size:clamp(14.5px,1.05vw,16.5px);line-height:1.6;
+  padding-top:16px;border-top:1px solid rgba(160,205,255,.22);text-shadow:0 1px 16px rgba(4,14,34,.4)}
+/* Hero CTA button — solid light pill that pops on the dark photo. */
+.idh-btn{display:inline-flex;align-items:center;gap:9px;margin-top:28px;
+  padding:14px 26px;border-radius:100px;background:#fff;color:#0e2a4e;font-weight:700;
+  font-size:15px;box-shadow:0 14px 34px rgba(4,14,34,.28);transition:transform .2s,box-shadow .2s}
+.idh-btn svg{width:18px;height:18px;stroke:#2478e0}
+.idh-btn:hover{transform:translateY(-2px);box-shadow:0 20px 44px rgba(4,14,34,.34)}
+.idh-btn:hover svg{transform:translateX(3px);transition:transform .2s}
+@media(max-width:700px){.idh{min-height:clamp(360px,72vh,520px)}.idh-copy{padding:64px 20px}
+  .idh-intro{font-size:15px;line-height:1.7}.idh-tagline{font-size:14px}}
 
 /* Pillars: sticky scroll-spy rail (read by scrolling; click only to jump). */
 .idt2-nav{position:sticky;top:66px;z-index:30;display:flex;flex-wrap:wrap;gap:8px;padding:10px;margin:4px 0 34px;
@@ -1044,3 +1108,60 @@ body.sol-modal-open{overflow:hidden}
 .ab-quality .ab-card-img{height:230px}
 @media(max-width:900px){.ab-quality-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.ab-quality-grid{grid-template-columns:1fr}.ab-cards-award .ab-card-img,.ab-cards-cert .ab-card-img,.ab-quality .ab-card-img{height:190px}}
+
+/* ============================================================
+   About — Vision & Mission (sticky image) + Awards refinement
+   Authoritative block: appended last so it wins the cascade over
+   the earlier iterative .ab-vm / .ab-award rules above.
+   ============================================================ */
+/* ---- Vision & Mission: ONE pinned image on the left, copy scrolls on the right ---- */
+.ab-vm.ab-vm-sticky{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:start}
+/* Pinned image: kept SHORTER than the copy column so there's real scroll travel. */
+.ab-vm-sticky .ab-vm-media{position:sticky;top:104px;align-self:start;display:block;grid-template-rows:none;min-height:0;
+  transform:none!important;will-change:auto!important;opacity:1!important}
+.ab-vm-sticky .ab-vm-img{position:relative;height:clamp(440px,56vh,560px);border-radius:26px;overflow:hidden;clip-path:none!important;
+  box-shadow:0 30px 70px rgba(14,42,78,.16);margin:0}
+.ab-vm-sticky .ab-vm-img>img{width:100%;height:100%;object-fit:cover;display:block}
+/* Copy column: generous spacing so it is meaningfully taller than the image (drives the pin). */
+.ab-vm-sticky .ab-vm-text{display:flex;flex-direction:column;gap:40px;justify-content:flex-start;padding:6px 0 8px}
+.ab-vm-sticky .ab-vcard,.ab-vm-sticky .ab-mcard{margin:0}
+.ab-vm-sticky .ab-vcard{padding:46px 44px 50px}
+.ab-vm-sticky .ab-vcard p{font-size:16.5px;line-height:1.85}
+.ab-vm-sticky .ab-mcard{padding:44px 44px 48px}
+.ab-vm-sticky .ab-mlist{gap:20px 30px}
+.ab-vm-sticky .ab-mlist li{font-size:15px;line-height:1.6}
+@media(max-width:900px){
+  .ab-vm.ab-vm-sticky{grid-template-columns:1fr;gap:22px}
+  .ab-vm-sticky .ab-vm-media{position:static;top:auto}
+  .ab-vm-sticky .ab-vm-img{height:auto;aspect-ratio:16/10}
+  .ab-vm-sticky .ab-vm-text{gap:22px}
+}
+
+/* ---- Awards card: year (top) · trophy · brand (light) · award name (semibold) ---- */
+.ab-cards-award .ab-card.ab-award{padding:18px 18px 22px;display:flex;flex-direction:column;text-align:center}
+.ab-award .yr{font-size:15px;font-weight:700;color:var(--blue);letter-spacing:.02em;margin:0 0 12px}
+.ab-cards-award .ab-award .org{font-size:13px;font-weight:400;color:var(--dim,#7a8798);line-height:1.4;margin:14px 0 3px}
+.ab-cards-award .ab-award .ttl{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.42;margin-top:0;letter-spacing:-.005em}
+
+/* ===== Awards — single year-sorted horizontal carousel (saptatunas.com style) ===== */
+.ab-rail-wrap{position:relative;margin-top:14px}
+.ab-rail{display:flex;gap:22px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;
+  padding:8px 4px 18px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ab-rail::-webkit-scrollbar{display:none}
+.ab-rail .ab-award{flex:0 0 auto;width:230px;scroll-snap-align:start;margin:0;padding:18px 18px 22px}
+/* clean white trophy frame (the old .ab-cards-award treatment, re-applied to the rail) */
+.ab-rail .ab-card-img{aspect-ratio:auto;height:220px;background:#fff!important;border:1px solid var(--line)!important;border-radius:12px}
+.ab-rail .ab-card-img::before,.ab-rail .ab-card-img::after{content:none!important;display:none!important;background:none!important}
+.ab-rail .ab-card-img>img{width:100%;height:100%;object-fit:contain!important;padding:12px;box-sizing:border-box}
+.ab-rail-arrow{position:absolute;top:calc(50% - 26px);transform:translateY(-50%);z-index:5;width:46px;height:46px;
+  border-radius:50%;border:1px solid #dbe7f8;background:#fff;color:var(--blue);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 10px 26px rgba(14,42,78,.14);transition:transform .2s,box-shadow .2s,opacity .2s}
+.ab-rail-arrow:hover{transform:translateY(-50%) scale(1.06);box-shadow:0 14px 32px rgba(14,42,78,.2)}
+.ab-rail-arrow svg{width:20px;height:20px;stroke:var(--blue);stroke-width:2.2;fill:none}
+.ab-rail-prev{left:-8px}.ab-rail-next{right:-8px}
+.ab-rail-arrow[disabled]{opacity:.35;cursor:default;pointer-events:none}
+@media(max-width:600px){.ab-rail .ab-award{width:70vw;max-width:280px}.ab-rail-prev{left:-4px}.ab-rail-next{right:-4px}}
+
+/* ===== Milestone — more breathing room between the intro copy and the slider below ===== */
+.ab-mile-sec .ab-head{margin-bottom:clamp(40px,6vh,72px)}
+.ab-mile-sec{padding-top:clamp(24px,4vh,48px)}

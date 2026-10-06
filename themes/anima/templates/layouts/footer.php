@@ -84,5 +84,7 @@
 <script src="<?= theme_asset('assets/js/anima.js') ?>"></script>
 <?php endif; ?>
 <script src="<?= theme_asset('assets/js/anima-ui.js') ?>"></script>
+<!-- Cursor-reactive tech-network hero FX (no-ops on pages without a .tk-fx canvas). -->
+<script src="<?= theme_asset('assets/js/hero-fx.js') ?>" defer></script>
 </body>
 </html>

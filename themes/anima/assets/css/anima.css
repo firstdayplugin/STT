@@ -894,7 +894,7 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
 .tfi-stage{position:relative;display:flex;width:100%;height:100%;background:#eef3fb;overflow:hidden;
   box-shadow:0 40px 120px rgba(9,20,45,.16);will-change:width,height,border-radius,transform}
 .tfi-media{position:relative;flex:none;height:100%;overflow:hidden;background:#dfe7f2}
-.tfi-img{position:absolute;inset:0;background-color:#0a1730;background-image:linear-gradient(135deg,#12295a,#0a1730);background-size:cover;background-position:center;opacity:0;transition:opacity .7s ease;transform:scale(1.04)}
+.tfi-img{position:absolute;top:0;bottom:0;left:0;width:100%;right:auto;background-color:#0a1730;background-image:linear-gradient(135deg,#12295a,#0a1730);background-size:cover;background-position:center;opacity:0;transition:opacity .55s ease;overflow:hidden;will-change:left,width,opacity;transform:none}
 .tfi-img.on{opacity:1}
 .tfi-media-ov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(15,30,60,.04),rgba(15,30,60,.12))}
 .tfi-panel{position:relative;flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:center;
@@ -954,6 +954,11 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
 .tk-foot .tk-dots i{width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.34);transition:.3s;cursor:pointer}
 .tk-foot .tk-dots i.on{background:#fff;width:34px}
 @media(max-width:900px){.tk-cur{clip-path:none!important}.tk-next,.tk-tab{display:none!important}.tk-navpod{left:auto;right:20px;bottom:16px}}
+/* Interactive tech-network FX layer: above the photo/overlay, below the copy & nav. */
+.tk-fx{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;display:block;
+  opacity:.95;mix-blend-mode:screen}
+.tk-cur .tk-copy{z-index:4}
+@media(max-width:900px){.tk-fx{opacity:.8}}
 
 
 /* === NON-PROTECTED POLISH ===
@@ -1394,3 +1399,95 @@ body.nav-open .nh-widget,body.nav-open .va-widget{display:none}
 .goog-te-banner-frame,.goog-te-banner-frame.skiptranslate,iframe.goog-te-banner-frame,iframe.skiptranslate,.goog-te-balloon-frame,#goog-gt-tt,.goog-te-gadget-icon,.goog-tooltip,.goog-tooltip:hover,.goog-te-spinner-pos{display:none!important;visibility:hidden!important;height:0!important;width:0!important;border:0!important}
 .goog-text-highlight{background:none!important;box-shadow:none!important;color:inherit!important}
 html,body{top:0!important;position:static!important}
+
+/* ============================================================
+   Prism (Solutions cube) — scale.com layout: text LEFT, cube RIGHT, cube
+   vertically centered & large. Side layout at >=1024px (covers 13.3" MacBook);
+   below that, the centered/stacked layout above still applies.
+   ============================================================ */
+@media(min-width:1024px){
+  .prism .stage > canvas#prismCanvas{left:auto;right:0;width:58%}
+  .prism-overlay{flex-direction:column;align-items:flex-start;justify-content:center;
+    padding:0 0 0 clamp(48px,7vw,130px)}
+  .prism-caps{width:min(40%,540px);text-align:left;height:auto;min-height:210px}
+  .prism-caps .cap{text-align:left}
+  .prism-dots{justify-content:flex-start;margin-top:26px}
+  .prism-logos{max-width:min(40%,540px);margin-top:40px}
+  .prism-logos .lset{justify-content:flex-start}
+  .prism-hint{left:auto;right:6%;text-align:right}
+}
+/* Futuristic caption type — lighter weight + tighter tracking (both layouts). */
+.prism-caps h2{font-family:'Space Grotesk','Inter',sans-serif;font-weight:500;letter-spacing:-.022em;
+  font-size:clamp(30px,3.2vw,52px);line-height:1.06;color:#0e2244}
+.prism-caps h2 b{font-weight:600;color:#1e6fe0}
+.prism-caps p{font-weight:400;font-size:16.5px;color:#46566f;letter-spacing:.005em}
+
+
+/* ============================================================
+   WHAT SETS US APART — scale.com/enterprise coverflow (light).
+   Minimal cards: full-bleed image + white text overlay, no number,
+   no white text panel. White section background, arrows both sides.
+   ============================================================ */
+.wsa{position:relative;background:#fff;color:#0b1220;padding:96px 0 108px;overflow:hidden}
+.wsa-head{text-align:center;max-width:860px;margin:0 auto 52px;padding:0 20px}
+.wsa-eye{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#2f7be0;font-weight:700;margin-bottom:14px}
+.wsa-head h2{font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;font-size:clamp(30px,4vw,52px);line-height:1.06;letter-spacing:-.026em;color:#0b1220;margin:0}
+.wsa-head h2 .b{color:#2f7be0}
+.wsa-head p{margin-top:16px;color:#5a677a;font-size:16px;line-height:1.7}
+
+/* Contained (NOT full-width): cards are clipped at the viewport edges, leaving
+   empty gutters left/right where the arrows live — matches scale.com/enterprise. */
+/* Wide but NOT full-width. Viewport width is set by JS to 3.3x the card width so
+   the two outer cards are cut to ~1/2 (centre full, neighbours 3/4, outer 1/2),
+   and it sits centred inside a wider stage whose side gutters hold the arrows. */
+.wsa-stage{position:relative;width:100%;max-width:1900px;margin:0 auto;padding:0 90px}
+.wsa-viewport{position:relative;height:580px;overflow:hidden;margin:0 auto}
+.wsa-track{position:absolute;inset:0}
+
+.wsa-card{position:absolute;left:50%;top:50%;width:clamp(300px,30vw,520px);height:clamp(400px,34vw,560px);
+  transform:translate(-50%,-50%);transform-origin:center center;
+  border-radius:22px;overflow:hidden;background:#0b1220;
+  transition:transform .6s cubic-bezier(.22,.72,.2,1),opacity .5s ease,filter .5s ease;
+  will-change:transform,opacity;cursor:pointer}
+.wsa-media{position:absolute;inset:0;background:linear-gradient(135deg,#12295a,#0a1730)}
+.wsa-media img{width:100%;height:100%;object-fit:cover;display:block}
+.wsa-media::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,12,24,0) 44%,rgba(6,12,24,.5) 76%,rgba(6,12,24,.9))}
+
+.wsa-cat{position:absolute;left:20px;top:18px;z-index:2;display:inline-flex;align-items:center;gap:9px;
+  font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.95);font-weight:600;
+  text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.wsa-cat::before{content:"";width:22px;height:22px;border-radius:6px;flex:none;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(2px)}
+
+.wsa-cap{position:absolute;left:22px;right:22px;bottom:22px;z-index:2}
+.wsa-t{margin:0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;
+  font-size:clamp(18px,1.45vw,23px);line-height:1.22;letter-spacing:-.012em;color:#fff}
+.wsa-s{margin:9px 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.82);max-width:38ch;
+  opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s ease}
+.wsa-card.is-active .wsa-s{opacity:1;transform:none}
+
+.wsa-arw{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:9px;
+  border:1px solid #e6eaf1;background:#fff;color:#5b6675;display:grid;place-items:center;cursor:pointer;z-index:200;
+  box-shadow:0 3px 10px rgba(24,58,104,.08);
+  transition:background .2s ease,color .2s ease,box-shadow .2s ease}
+.wsa-arw.prev{left:20px}
+.wsa-arw.next{right:20px}
+.wsa-arw:hover{background:#f4f7fb;color:#0b1220;box-shadow:0 5px 14px rgba(24,58,104,.12)}
+.wsa-arw:active{transform:translateY(-50%) scale(.92)}
+.wsa-arw svg{width:15px;height:15px;stroke-width:2.2}
+
+@media(max-width:1024px){
+  .wsa-stage{padding:0 58px}
+  .wsa-viewport{height:480px}
+  .wsa-card{width:clamp(240px,28vw,360px);height:clamp(340px,34vw,420px)}
+}
+@media(max-width:640px){
+  .wsa{padding:66px 0 74px}
+  .wsa-head{margin-bottom:34px}
+  .wsa-stage{padding:0 42px}
+  .wsa-viewport{height:400px}
+  .wsa-card{width:min(72vw,300px);height:min(96vw,380px)}
+  .wsa-arw{width:28px;height:28px;border-radius:8px}
+  .wsa-arw.prev{left:6px}.wsa-arw.next{right:6px}
+}

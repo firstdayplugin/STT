@@ -27,16 +27,22 @@ $seo = ['title' => 'Career — ' . get_setting('site_name', 'Sapta Tunas Teknolo
         'description' => mb_substr(strip_tags($c('lead', $lead_default)), 0, 160)];
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
-$team = $imgu($c('team_image', ''));
+// The career "team photo" banner (CMS: Career → Foto tim) now doubles as the hero background.
+$cr_hero = $imgu($c('team_image', 'career/team.jpg'));
 ?>
-<main class="page-body"><div class="cr-wrap">
+<main class="page-body cr2">
 
-  <div class="cr-head">
-    <h1><?= htmlspecialchars($c('title', 'Build the future with Us')) ?><br><span class="blue"><?= htmlspecialchars($c('title2', 'Grow your career at Sapta Tunas Teknologi')) ?></span></h1>
-    <p><?= $c('lead', $lead_default) ?></p>
-  </div>
+  <!-- Full-bleed Career hero: team photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $cr_hero === '' ? ' idh--plain' : '' ?>"<?= $cr_hero !== '' ? ' style="background-image:url(' . htmlspecialchars($cr_hero) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="crFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy idh-copy--about">
+      <h1 class="idh-title"><?= htmlspecialchars($c('title', 'Build the future with Us')) ?><br><span class="idh-title-accent"><?= htmlspecialchars($c('title2', 'Grow your career at Sapta Tunas Teknologi')) ?></span></h1>
+      <?php if (trim(strip_tags((string)$c('lead', $lead_default))) !== ''): ?><div class="idh-intro"><?= $c('lead', $lead_default) ?></div><?php endif; ?>
+    </div>
+  </section>
 
-  <div class="cr-team phb"><?php if ($team): ?><img src="<?= htmlspecialchars($team) ?>" alt="" data-fallback="remove"><?php endif; ?></div>
+  <div class="cr-wrap">
 
   <form class="cr-search" method="get" action="<?= url('career') ?>">
     <input type="text" name="q" value="<?= htmlspecialchars($q) ?>" placeholder="<?= htmlspecialchars(t('search_jobs', 'Search by keywords')) ?>">

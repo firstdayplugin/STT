@@ -6,9 +6,10 @@
  * header, the Coming Soon banner, and the shared UI labels.
  */
 return [
+  'hero_img'       => ['label'=>'Foto Hero (background)','type'=>'image','group'=>'Header','default'=>'design3/towers-up.jpg'],
   'title'          => ['label'=>'Judul halaman',       'type'=>'text', 'group'=>'Header','default'=>'Our Solutions'],
   'lead'           => ['label'=>'Paragraf intro',      'type'=>'html', 'group'=>'Header','default'=>'We understand that every industry has its own unique challenges and needs. That’s why STT provides solutions that are not only diverse but also tailored to client needs.'],
-  'banner_img'     => ['label'=>'Banner Coming Soon (gambar)', 'type'=>'image','group'=>'Coming Soon','default'=>'solutions/coming-soon-banner.png'],
+  'banner_img'     => ['label'=>'Banner Coming Soon (gambar)', 'type'=>'image','group'=>'Coming Soon','default'=>'solutions/banner-promo.jpg'],
   'banner_url'     => ['label'=>'Banner — link tujuan','type'=>'text', 'group'=>'Coming Soon','default'=>'#'],
   'label_solution' => ['label'=>'Label "Solution:"',   'type'=>'text', 'group'=>'Label','default'=>'Solution:'],
   'label_partner'  => ['label'=>'Label "Partner:"',    'type'=>'text', 'group'=>'Label','default'=>'Partner:'],

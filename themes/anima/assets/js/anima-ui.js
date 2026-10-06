@@ -282,7 +282,9 @@
 (function(){
   var root=document.querySelector('.page-shell.ab'); if(!root) return;
   if(!('IntersectionObserver' in window)) return;
-  var sel=['.ab-intro','.ab-vm-media','.ab-vm-text .ab-vcard','.ab-vm-text .ab-mcard',
+  // NOTE: .ab-vm-media is intentionally excluded — it is position:sticky, and the
+  // reveal-up transform/will-change would break the pin. It stays visible as-is.
+  var sel=['.ab-intro','.ab-vm-text .ab-vcard','.ab-vm-text .ab-mcard',
            '.ab-values-grid .ab-val','.ab-mile-top','.ab-mile-timeline',
            '.ab-sec > .ab-head','.ab-slider','.ab-quality-grid .ab-card'];
   var els=[];

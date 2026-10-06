@@ -33,7 +33,8 @@ $group_by = function (array $rows, string $key) {
     foreach ($rows as $r) { $k = trim((string)($r[$key] ?? '')); if ($k === '') $k = '—'; $g[$k][] = $r; }
     return $g;
 };
-$awardsByYear = $group_by($awards, 'tahun');
+// Awards are shown as ONE list sorted by year (oldest → newest), matching saptatunas.com.
+usort($awards, fn($a, $b) => ((int)($a['tahun'] ?? 0)) <=> ((int)($b['tahun'] ?? 0)));
 $certsByBrand = $group_by($certs, 'grup');
 
 // Milestone data for the cross-fade slider (JSON injected CSP-safely).
@@ -54,15 +55,27 @@ $arrowR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wid
 $arrowRt = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
 $vimg1 = aimg('about', 'vision_img1', '');
 $vimg2 = aimg('about', 'vision_img2', '');
+// About hero photo: admin-editable (Konten Halaman → Tentang Kami → "Foto Hero"),
+// with a sensible existing default when nothing has been uploaded yet.
+$abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
 ?>
 <main class="page-body">
+
+  <!-- Full-bleed About hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
+  <section class="idh<?= $abhero === '' ? ' idh--plain' : '' ?>"<?= $abhero !== '' ? ' style="background-image:url(' . htmlspecialchars($abhero) . ')"' : '' ?>>
+    <div class="idh-ov" aria-hidden="true"></div>
+    <canvas class="tk-fx" id="abhFx" data-fade="center" aria-hidden="true"></canvas>
+    <div class="idh-copy idh-copy--about">
+      <div class="idh-eyebrow"><?= ac('about', 'intro_eyebrow') ?></div>
+      <h1 class="idh-title"><?= ac('about', 'intro_title') ?></h1>
+      <div class="idh-intro"><?= ac('about', 'intro_body', true) ?></div>
+    </div>
+  </section>
+
   <div class="page-shell ab">
 
-    <!-- Intro -->
+    <!-- Intro pillars (the "delivering:" list that follows the hero welcome). -->
     <section class="ab-intro">
-      <div class="eyebrow"><?= ac('about', 'intro_eyebrow') ?></div>
-      <h1><?= ac('about', 'intro_title') ?></h1>
-      <p class="lead"><?= ac('about', 'intro_body', true) ?></p>
       <?php
         // Render the five "delivering" pillars as a clean icon-card grid.
         // Source stays CMS-editable (about → intro_deliver, a <ul> of <li><strong>Title</strong> — desc</li>).
@@ -97,11 +110,10 @@ $vimg2 = aimg('about', 'vision_img2', '');
       <?php endif; ?>
     </section>
 
-    <!-- Vision + Mission (image LEFT, text RIGHT) -->
-    <section class="ab-sec ab-vm">
+    <!-- Vision + Mission — ONE sticky image (left) pinned while the copy (right) scrolls. -->
+    <section class="ab-sec ab-vm ab-vm-sticky">
       <div class="ab-vm-media">
-        <div class="ab-vm-img ab-vm-img1<?= $vimg1 ? '' : ' phb' ?>"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 1</span><?php endif; ?></div>
-        <div class="ab-vm-img ab-vm-img2<?= $vimg2 ? '' : ' phb' ?>"><?php if ($vimg2): ?><img src="<?= htmlspecialchars($vimg2) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar 2</span><?php endif; ?></div>
+        <div class="ab-vm-img<?= $vimg1 ? '' : ' phb' ?>"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar</span><?php endif; ?></div>
       </div>
       <div class="ab-vm-text">
         <div class="ab-vcard">
@@ -164,30 +176,26 @@ $vimg2 = aimg('about', 'vision_img2', '');
     </section>
     <?php endif; ?>
 
-    <!-- Awards SLIDER (by year) -->
+    <!-- Awards — one continuous, year-sorted carousel (like saptatunas.com), scroll with arrows. -->
     <?php if ($awards): ?>
-    <section class="ab-sec">
+    <section class="ab-sec ab-awards-sec">
       <div class="ab-head"><h2><?= ac('about', 'awards_title') ?></h2><p><?= ac('about', 'awards_intro') ?></p></div>
-      <div class="ab-slider" data-year-slider>
-        <div class="ab-slider-head">
-          <button class="ab-mile-arrow" data-year-prev aria-label="Tahun sebelumnya"><?= $arrowL ?></button>
-          <div class="ab-slider-year" data-year-label><?= htmlspecialchars((string)array_key_first($awardsByYear)) ?></div>
-          <button class="ab-mile-arrow" data-year-next aria-label="Tahun berikutnya"><?= $arrowRt ?></button>
+      <div class="ab-rail-wrap" data-carousel>
+        <button class="ab-rail-arrow ab-rail-prev" data-carousel-prev aria-label="Sebelumnya"><?= $arrowL ?></button>
+        <div class="ab-rail" data-carousel-track>
+          <?php foreach ($awards as $a): $ai = $aimgu($a);
+            $a_brand = trim((string)$atr($a, 'teks'));       // Brand/Pemberi (e.g. Dell EMC)
+            $a_year  = trim((string)($a['tahun'] ?? ''));     // Year (e.g. 2019)
+          ?>
+            <div class="ab-card ab-award">
+              <?php if ($a_year !== ''): ?><div class="yr"><?= htmlspecialchars($a_year) ?></div><?php endif; ?>
+              <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($atr($a, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
+              <?php if ($a_brand !== ''): ?><div class="org"><?= htmlspecialchars($a_brand) ?></div><?php endif; ?>
+              <div class="ttl"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
+            </div>
+          <?php endforeach; ?>
         </div>
-        <?php foreach ($awardsByYear as $yr => $items): ?>
-        <div class="ab-slider-page" data-year-page="<?= htmlspecialchars($yr) ?>"<?= $yr === array_key_first($awardsByYear) ? '' : ' hidden' ?>>
-          <div class="ab-cards ab-cards-award">
-            <?php foreach ($items as $a): $ai = $aimgu($a); ?>
-              <?php $a_sub = trim((string)$atr($a, 'teks')); ?>
-              <div class="ab-card ab-award">
-                <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($atr($a, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
-                <?php if ($a_sub !== ''): ?><div class="org"><?= htmlspecialchars($a_sub) ?></div><?php endif; ?>
-                <div class="ttl"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-        <?php endforeach; ?>
+        <button class="ab-rail-arrow ab-rail-next" data-carousel-next aria-label="Berikutnya"><?= $arrowRt ?></button>
       </div>
     </section>
     <?php endif; ?>

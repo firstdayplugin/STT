@@ -11,9 +11,9 @@ $seg  = trim($uri, '/');
 $map  = [
   ''             => 'home',
   'home'         => 'home',
-  'contact-us' => 'contact',
+  'hubungi-kami' => 'contact',
   'contact'      => 'contact',
-  'about-us' => 'about',
+  'tentang-kami' => 'about',
   'about'        => 'about',
 ];
 $page = $map[$seg] ?? null;

@@ -151,6 +151,7 @@ include theme_path('templates/layouts/header.php');
       <div class="tk-cur" id="tkCur">
         <div class="tk-bg" id="tkCurBg"></div>
         <div class="tk-ov"></div>
+        <canvas class="tk-fx" id="tkFx" aria-hidden="true"></canvas>
         <div class="tk-copy">
           <div class="tk-eyebrow notranslate" translate="no" id="tkEye"<?= trim((string)($h0['eye'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['eye'] ?? '')) ?></div>
           <h1 class="tk-h1" id="tkH1"<?= trim((string)($h0['h'] ?? '')) === '' ? ' hidden' : '' ?>><?= htmlspecialchars((string)($h0['h'] ?? '')) ?></h1>
@@ -164,6 +165,7 @@ include theme_path('templates/layouts/header.php');
       <div class="tk-next" id="tkNext">
         <div class="tk-bg" id="tkNextBg"></div>
         <div class="tk-ov2"></div>
+        <canvas class="tk-fx" id="tkFx2" aria-hidden="true"></canvas>
       </div>
       <!-- Telkom corner masks sit OUTSIDE the image clipping containers. This is important: the SVG must be able to overlap the image edge cleanly. -->
       <div class="tk-tab" id="tkTab"></div>
@@ -304,28 +306,42 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
   </div>
 </section>
 
-<!-- ===== WHY US ===== -->
-<section class="why2" id="why">
-  <div class="why2-head">
-    <div class="why2-eye"><?= hc('why_eyebrow') ?></div>
+<!-- ===== WHAT SETS US APART (scale.com/enterprise-style coverflow) ===== -->
+<section class="wsa" id="why">
+  <div class="wsa-head">
+    <div class="wsa-eye"><?= hc('why_eyebrow') ?></div>
     <h2><?= hc('why_title') ?></h2>
     <p><?= hc('why_intro') ?></p>
   </div>
-  <div class="whyloop">
-    <div class="whyloop-track" id="whyTrack">
+  <div class="wsa-stage">
+    <button type="button" class="wsa-arw prev" id="wsaPrev" aria-label="<?= htmlspecialchars(t('prev', 'Sebelumnya')) ?>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="wsa-viewport">
+      <div class="wsa-track" id="wsaTrack">
         <?php
-          $why_items = [];
+          $why_base = [];
           for ($i = 1; $i <= 4; $i++) {
-            $why_items[] = ['n'=>$i, 't'=>hc("why{$i}_title"), 's'=>hc("why{$i}_sub"), 'img'=>aimg('home', "why{$i}_img", '')];
+            $why_base[] = ['t'=>hc("why{$i}_title"), 's'=>hc("why{$i}_sub"), 'img'=>aimg('home', "why{$i}_img", ''), 'cat'=>hc("why{$i}_cat")];
           }
-          // Rendered twice for the seamless marquee loop.
-          foreach (array_merge($why_items, $why_items) as $w): ?>
-        <div class="wl-card">
-          <div class="wl-img"><?php if ($w['img'] !== ''): ?><img src="<?= htmlspecialchars($w['img']) ?>" data-fallback="remove" alt="" loading="lazy" decoding="async"><?php endif; ?></div>
-          <div class="wl-body"><span class="wl-num"><?= (int)$w['n'] ?></span><div class="wl-t"><?= $w['t'] ?></div><div class="wl-s"><?= $w['s'] ?></div></div>
-        </div>
+          // Duplicated so the coverflow always shows 5 symmetric cards (2 + centre + 2)
+          // and loops seamlessly, matching scale.com/enterprise.
+          $why_items = array_merge($why_base, $why_base, $why_base);
+          foreach ($why_items as $k => $w): ?>
+        <article class="wsa-card<?= $k === 0 ? ' is-active' : '' ?>" data-i="<?= $k ?>">
+          <div class="wsa-media"><?php if ($w['img'] !== ''): ?><img src="<?= htmlspecialchars($w['img']) ?>" alt="" loading="lazy" decoding="async" data-fallback="bg"><?php endif; ?></div>
+          <?php if (trim(strip_tags((string)$w['cat'])) !== ''): ?><span class="wsa-cat"><?= $w['cat'] ?></span><?php endif; ?>
+          <div class="wsa-cap">
+            <h3 class="wsa-t"><?= $w['t'] ?></h3>
+            <?php if (trim(strip_tags((string)$w['s'])) !== ''): ?><p class="wsa-s"><?= $w['s'] ?></p><?php endif; ?>
+          </div>
+        </article>
         <?php endforeach; ?>
+      </div>
     </div>
+    <button type="button" class="wsa-arw next" id="wsaNext" aria-label="<?= htmlspecialchars(t('next', 'Berikutnya')) ?>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
   </div>
 </section>
 
