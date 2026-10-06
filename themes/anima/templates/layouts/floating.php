@@ -29,26 +29,7 @@ $__soc_label = ['wa'=>'WhatsApp Chat','linkedin'=>'LinkedIn','youtube'=>'YouTube
 $__has_help = ($__wa !== '' || !empty($__soc));
 $T = fn($k, $d) => function_exists('t') ? t($k, $d) : $d;
 ?>
-<?php if ($__has_help): ?>
-<!-- Need Help (bottom-left) -->
-<div class="nh-widget" id="nhWidget">
-  <div class="nh-list" id="nhList" hidden>
-    <?php if ($__wa !== ''): ?>
-      <a class="nh-item nh-wa" href="<?= htmlspecialchars($__wa) ?>" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24"><?= $__svg['wa'] ?></svg><span><?= htmlspecialchars($__soc_label['wa']) ?></span></a>
-    <?php endif; ?>
-    <?php foreach ($__soc as $net => $u): ?>
-      <a class="nh-item" href="<?= htmlspecialchars($u) ?>" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24"><?= $__svg[$net] ?></svg><span><?= htmlspecialchars($__soc_label[$net]) ?></span></a>
-    <?php endforeach; ?>
-  </div>
-  <button class="nh-toggle" id="nhToggle" type="button" aria-expanded="false" aria-controls="nhList">
-    <svg class="nh-ic-open" viewBox="0 0 24 24"><path d="M12 18h.01"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/></svg>
-    <svg class="nh-ic-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    <span><?= htmlspecialchars($T('need_help', 'Need Help')) ?></span>
-  </button>
-</div>
-<?php endif; ?>
+<?php /* Bottom-left "Need Help" + social floating widget removed per client request. */ ?>
 
 <!-- Virtual Assistant (bottom-right) -->
 <div class="va-widget" id="vaWidget"<?= $__wa_raw !== '' ? ' data-wa="' . htmlspecialchars($__wa_raw) . '"' : '' ?>>
