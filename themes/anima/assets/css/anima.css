@@ -1491,3 +1491,28 @@ html,body{top:0!important;position:static!important}
   .wsa-arw{width:28px;height:28px;border-radius:8px}
   .wsa-arw.prev{left:6px}.wsa-arw.next{right:6px}
 }
+
+
+/* ============================================================
+   HEADER REVISION — bigger logo, menu centred across the FULL
+   header width with even spacing, language as plain EN / ID
+   (no flag icons).
+   ============================================================ */
+.brand-logo,header .brand-logo,header.scrolled .brand-logo{height:56px}
+.nav{gap:24px}
+/* Centre the menu relative to the whole header width (independent of the
+   brand/actions widths); brand stays left, actions stay right. */
+.nav .menu{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  margin:0;gap:40px;font-size:14px}
+.nav .brand{margin-right:auto}
+.nav .nav-right{margin-left:auto}
+/* Language switch: text-only EN / ID, no flag icons */
+.gt-switch .gt-flag{display:none!important}
+.gt-switch .gt-opt{gap:0;padding:6px 13px;font-size:12.5px}
+@media(max-width:1200px){
+  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:48px}
+  .nav .menu{gap:22px;font-size:13.5px}
+}
+@media(max-width:960px){
+  .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:46px}
+}
