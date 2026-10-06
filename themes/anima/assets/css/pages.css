@@ -1158,9 +1158,9 @@ body.sol-modal-open{overflow:hidden}
   box-shadow:0 10px 26px rgba(14,42,78,.14);transition:transform .2s,box-shadow .2s,opacity .2s}
 .ab-rail-arrow:hover{transform:translateY(-50%) scale(1.06);box-shadow:0 14px 32px rgba(14,42,78,.2)}
 .ab-rail-arrow svg{width:20px;height:20px;stroke:var(--blue);stroke-width:2.2;fill:none}
-.ab-rail-prev{left:-8px}.ab-rail-next{right:-8px}
+.ab-rail-prev{left:0}.ab-rail-next{right:0}
 .ab-rail-arrow[disabled]{opacity:.35;cursor:default;pointer-events:none}
-@media(max-width:600px){.ab-rail .ab-award{width:70vw;max-width:280px}.ab-rail-prev{left:-4px}.ab-rail-next{right:-4px}}
+@media(max-width:600px){.ab-rail .ab-award{width:70vw;max-width:280px}.ab-rail-prev{left:0}.ab-rail-next{right:0}}
 
 /* ===== Milestone — more breathing room between the intro copy and the slider below ===== */
 .ab-mile-sec .ab-head{margin-bottom:clamp(40px,6vh,72px)}

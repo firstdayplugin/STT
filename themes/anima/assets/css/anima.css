@@ -1518,3 +1518,22 @@ html,body{top:0!important;position:static!important}
   .brand-logo,header .brand-logo,header.scrolled .brand-logo{height:42px}
   .nav{padding-left:20px;padding-right:20px}
 }
+
+
+/* ============================================================
+   GLOBAL WIDTH — scale.com-style: content, header & footer span
+   near the full viewport with thin ~40px side gutters. Text-heavy
+   blocks keep their own narrower max-width (higher specificity),
+   so they read as "padded further in" while the rest goes wide.
+   ============================================================ */
+:root{--maxw:2200px}
+.wrap,.page-shell{max-width:var(--maxw);padding-left:40px;padding-right:40px}
+.footer-wrap{max-width:var(--maxw);padding-left:40px;padding-right:40px}
+.hero-inner,.hero-quick .qin{max-width:var(--maxw);padding-left:40px;padding-right:40px}
+.nav{max-width:var(--maxw)}
+@media(max-width:1200px){
+  .wrap,.page-shell,.footer-wrap,.hero-inner,.hero-quick .qin{padding-left:28px;padding-right:28px}
+}
+@media(max-width:640px){
+  .wrap,.page-shell,.footer-wrap,.hero-inner,.hero-quick .qin{padding-left:20px;padding-right:20px}
+}
