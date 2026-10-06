@@ -100,39 +100,44 @@ $socials  = [
       <p><?= ac('contact', 'hero_sub') ?></p>
     </div>
 
-    <section class="ct">
+    <section class="ct" id="request-proposal">
       <div class="ct-card">
         <!-- Left: form -->
         <div class="ct-form">
           <h2><?= ac('contact', 'form_title', true) ?></h2>
           <p><?= ac('contact', 'form_sub') ?></p>
-          <?php if ($ct_sent): ?>
-            <div class="ct-alert ok"><?= htmlspecialchars(ac('contact', 'form_success', true) ?: 'Terima kasih! Pesan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.') ?></div>
-          <?php elseif ($ct_err !== ''): ?>
-            <div class="ct-alert err"><?= htmlspecialchars($ct_err) ?></div>
+          <?php if ($rp_sent): ?>
+            <div class="ct-alert ok">Terima kasih! Permintaan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.</div>
+          <?php elseif ($rp_err !== ''): ?>
+            <div class="ct-alert err"><?= htmlspecialchars($rp_err) ?></div>
           <?php endif; ?>
-          <form method="post" action="<?= htmlspecialchars(url('contact-us')) ?>" novalidate>
-            <input type="hidden" name="_form" value="contact">
+          <form method="post" action="<?= htmlspecialchars(url('contact-us') . '#request-proposal') ?>" novalidate>
+            <input type="hidden" name="_form" value="proposal">
             <div class="ct-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-            <div class="ct-field">
-              <label for="ct-name"><?= ac('contact', 'f_name') ?></label>
-              <input id="ct-name" name="name" type="text" placeholder="<?= ac('contact', 'f_name_ph') ?>">
+            <?php $rp_solutions = ['Modernize Infrastructure','Cybersecurity','Data Management','Artificial Intelligence (AI)','AI Platform & Applications','Other']; ?>
+            <div class="ct-field"><label for="nm">Full Name</label><input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div>
+            <div class="ct-2col">
+              <div class="ct-field"><label for="em">Email</label><input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
+              <div class="ct-field"><label for="ph">Mobile Phone</label><input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div>
             </div>
-            <div class="ct-field">
-              <label for="ct-email"><?= ac('contact', 'f_email') ?></label>
-              <input id="ct-email" name="email" type="email" placeholder="<?= ac('contact', 'f_email_ph') ?>">
+            <div class="ct-2col">
+              <div class="ct-field"><label for="co">Company / Organization</label><input id="co" name="company" type="text" placeholder="Your company / organization" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>"></div>
+              <div class="ct-field"><label for="jr">Job Role</label><input id="jr" name="job_role" type="text" placeholder="e.g. IT Manager" value="<?= htmlspecialchars($_POST['job_role'] ?? '') ?>"></div>
             </div>
-            <div class="ct-field">
-              <label for="ct-phone"><?= ac('contact', 'f_phone') ?></label>
-              <input id="ct-phone" name="phone" type="tel" placeholder="<?= ac('contact', 'f_phone_ph') ?>">
+            <div class="ct-2col">
+              <div class="ct-field"><label for="ind">Industries</label><input id="ind" name="industry" type="text" placeholder="e.g. Financial Services" value="<?= htmlspecialchars($_POST['industry'] ?? '') ?>"></div>
+              <div class="ct-field"><label for="loc">Locations</label><input id="loc" name="location" type="text" placeholder="e.g. Jakarta, Indonesia" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"></div>
             </div>
-            <div class="ct-field">
-              <label for="ct-msg"><?= ac('contact', 'f_msg') ?></label>
-              <textarea id="ct-msg" name="message" placeholder="<?= ac('contact', 'f_msg_ph') ?>"></textarea>
+            <div class="ct-field"><label for="sol">Select Solutions</label>
+              <select id="sol" name="solution" class="ct-select">
+                <option value="" <?= empty($_POST['solution']) ? 'selected' : '' ?>>Select Solutions</option>
+                <?php foreach ($rp_solutions as $__sol): ?><option value="<?= htmlspecialchars($__sol) ?>"<?= (($_POST['solution'] ?? '') === $__sol) ? ' selected' : '' ?>><?= htmlspecialchars($__sol) ?></option><?php endforeach; ?>
+              </select>
             </div>
+            <div class="ct-field"><label for="ms">Message</label><textarea id="ms" name="message" placeholder="Please type your request solution / product here!"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
             <?php if (turnstile_enabled()): ?><div class="ct-field"><?= turnstile_widget() ?></div><?php endif; ?>
             <button class="btn btn-primary ct-submit" type="submit">
-              <?= ac('contact', 'f_submit') ?>
+              <?= ac('contact', 'f_submit') ?: 'Submit' ?>
               <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
           </form>
@@ -150,31 +155,31 @@ $socials  = [
             <?php endif; ?>
             <?php if ($phone): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_phone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$phone)) ?>"><?= htmlspecialchars($phone) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($prophone): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0116 0v1"/><rect x="2.5" y="13" width="3.5" height="6" rx="1.5"/><rect x="18" y="13" width="3.5" height="6" rx="1.5"/><path d="M18 19a4 4 0 01-4 3h-1.5"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_prophone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$prophone)) ?>"><?= htmlspecialchars($prophone) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($wa_num): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 01-11.9 7L4 20l1.6-4A8 8 0 1120 11.5z"/><path d="M8.8 8.5c-.3 0-.6.1-.8.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.9 4.5 3.9 2.2.8 2.7.7 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.3-.2-.6-.4l-1.5-.7c-.2-.1-.4-.1-.6.1l-.6.8c-.1.2-.3.2-.5.1-.7-.3-1.4-.6-2.1-1.5-.5-.6-.9-1.3-1-1.5-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.6c-.2-.4-.3-.4-.5-.4z"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_wa') ?></div><div class="val"><a href="https://wa.me/<?= htmlspecialchars($wa_num) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($wa_disp) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($email): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_email') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($email) ?>"><?= htmlspecialchars($email) ?></a></div></div>
             </li>
             <?php endif; ?>
             <?php if ($proemail): ?>
             <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+              <span class="ct-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M5.4 5.4l3.6 3.6M15 15l3.6 3.6M18.6 5.4L15 9M9 15l-3.6 3.6"/></svg></span>
               <div><div class="lbl"><?= ac('contact', 'l_proemail') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($proemail) ?>"><?= htmlspecialchars($proemail) ?></a></div></div>
             </li>
             <?php endif; ?>
@@ -191,78 +196,17 @@ $socials  = [
         </div>
       </div>
 
+      <?php $m = trim((string)$maps); if ($m !== ''): /* Google Maps shows ONLY when set in CMS; hidden by default */ ?>
       <div class="ct-map">
-        <?php $m = trim((string)$maps); if ($m !== ''): ?>
-          <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?>
-            <?= $m /* full embed HTML from settings */ ?>
-          <?php else: ?>
-            <iframe src="<?= htmlspecialchars($m) ?>" width="100%" height="420" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi kantor"></iframe>
-          <?php endif; ?>
+        <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?>
+          <?= $m /* full embed HTML from settings */ ?>
         <?php else: ?>
-          <div class="ct-map-ph"><?= ac('contact', 'map_placeholder') ?></div>
+          <iframe src="<?= htmlspecialchars($m) ?>" width="100%" height="420" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi kantor"></iframe>
         <?php endif; ?>
       </div>
+      <?php endif; ?>
     </section>
   </div>
-
-  <!-- Request Proposal (moved from Home) -->
-  <section class="contact-sec" id="request-proposal">
-    <div class="wrap">
-      <div class="form" id="contact">
-        <div class="form-eyebrow"><?= hc('contact_eyebrow', 'Request Proposal') ?></div>
-        <h3><?= hc('contact_title', 'Request a Proposal') ?></h3>
-        <p><?= hc('contact_intro', 'Tell us about your needs and our team will get back to you shortly.') ?></p>
-        <?php if ($rp_sent): ?>
-          <div class="form-alert ok">Terima kasih! Permintaan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.</div>
-        <?php elseif ($rp_err !== ''): ?>
-          <div class="form-alert err"><?= htmlspecialchars($rp_err) ?></div>
-        <?php endif; ?>
-        <form method="post" action="<?= htmlspecialchars(url('contact-us') . '#request-proposal') ?>" novalidate>
-          <input type="hidden" name="_form" value="proposal">
-          <div class="form-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-          <?php
-            $rp_solutions = ['Modernize Infrastructure', 'Cybersecurity', 'Data Management',
-                             'Artificial Intelligence (AI)', 'AI Platform & Applications', 'Other'];
-          ?>
-          <div class="field full"><label for="nm">Full Name</label>
-            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div></div>
-          <div class="form-grid">
-            <div class="field"><label for="em">Email</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-              <input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div></div>
-            <div class="field"><label for="ph">Mobile Phone</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M5 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
-              <input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div></div>
-            <div class="field"><label for="co">Company / Organization</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>
-              <input id="co" name="company" type="text" placeholder="Your company / organization" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>"></div></div>
-            <div class="field"><label for="jr">Job Role</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-              <input id="jr" name="job_role" type="text" placeholder="e.g. IT Manager" value="<?= htmlspecialchars($_POST['job_role'] ?? '') ?>"></div></div>
-            <div class="field"><label for="ind">Industries</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-              <input id="ind" name="industry" type="text" placeholder="e.g. Financial Services" value="<?= htmlspecialchars($_POST['industry'] ?? '') ?>"></div></div>
-            <div class="field"><label for="loc">Locations</label>
-              <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M12 21s-7-5.2-7-11a7 7 0 0114 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              <input id="loc" name="location" type="text" placeholder="e.g. Jakarta, Indonesia" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"></div></div>
-          </div>
-          <div class="field full"><label for="sol">Select Solutions</label>
-            <div class="field-wrap"><svg class="fic" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></svg>
-            <select id="sol" name="solution" class="field-select">
-              <option value="" <?= empty($_POST['solution']) ? 'selected' : '' ?>>Select Solutions</option>
-              <?php foreach ($rp_solutions as $__sol): ?>
-                <option value="<?= htmlspecialchars($__sol) ?>"<?= (($_POST['solution'] ?? '') === $__sol) ? ' selected' : '' ?>><?= htmlspecialchars($__sol) ?></option>
-              <?php endforeach; ?>
-            </select></div></div>
-          <div class="field full"><label for="ms">Message</label>
-            <textarea id="ms" name="message" placeholder="Please type your request solution / product here!"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
-          <?php if (turnstile_enabled()): ?><div class="field full"><?= turnstile_widget() ?></div><?php endif; ?>
-          <button class="form-submit" type="submit">Submit <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </form>
-      </div>
-    </div>
-  </section>
 </main>
 <?= turnstile_script() ?>
 <?php include theme_path('templates/layouts/footer.php'); ?>

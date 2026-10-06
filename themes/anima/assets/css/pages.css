@@ -49,8 +49,16 @@
   background:var(--blue-050,#e8f1fe);color:var(--blue)}
 .ct-ic svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none}
 .ct-item .lbl{font-size:15px;font-weight:800;color:var(--blue-ink);margin-bottom:3px}
-.ct-item .val,.ct-item .val a{font-size:14.5px;color:var(--blue);line-height:1.55;word-break:break-word}
-.ct-item .val a:hover{text-decoration:underline}
+.ct-item .val,.ct-item .val a{font-size:14.5px;color:var(--ink-2);line-height:1.55;word-break:break-word;text-decoration:none}
+.ct-item .val a:hover{color:var(--ink);text-decoration:underline}
+/* Request Proposal form in the contact card: paired fields + select styling */
+.ct-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.ct-select{width:100%;font:inherit;font-size:14.5px;color:var(--ink);background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:11px 12px;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a86ad' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:18px}
+.ct-select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-050)}
+@media(max-width:560px){.ct-2col{grid-template-columns:1fr}}
 .ct-social{margin-top:30px}
 .ct-social .lbl{font-size:16px;font-weight:800;color:var(--blue-ink);margin-bottom:14px}
 .ct-social-row{display:flex;gap:14px}
