@@ -555,3 +555,73 @@ requestAnimationFrame(frame);
   addEventListener("load",clip);setTimeout(clip,300);setTimeout(clip,800);
 })();
 ;
+
+(function(){
+  // Testimonial scroll-carousel (claude.com/enterprise): 3 cards visible, centre
+  // grows on scroll, sides shrink — smooth via lerp. Arrows/dots/click/swipe nav.
+  var track=document.getElementById('tscTrack'); if(!track)return;
+  var cards=[].slice.call(track.querySelectorAll('.tsc-card')); var N=cards.length; if(!N)return;
+  var vp=track.parentElement, sec=track.closest('.tsc');
+  var active=0, curZoom=0, tgtZoom=0;
+  function cl(v,a,b){return v<a?a:(v>b?b:v);}
+  function circD(i){var d=i-active; if(N>1){ while(d> N/2)d-=N; while(d<-N/2)d+=N; } return d;}
+  var cur=cards.map(function(){return {x:null,s:0.82,o:0};});
+  function scrollZoom(){
+    var r=sec.getBoundingClientRect(), vh=innerHeight||1;
+    var c=r.top + r.height/2, d=Math.abs(c - vh/2)/(vh/2 + r.height/2);
+    tgtZoom = cl(1-d,0,1);              // 1 when section is centred in viewport
+  }
+  function frame(){
+    curZoom += (tgtZoom-curZoom)*0.07;                 // smooth, slightly "laggy"
+    var cw=cards[0].offsetWidth||900, spread=cw*0.56;
+    cards.forEach(function(c,i){
+      var d=circD(i), ad=Math.abs(d), show=ad<=1, act=d===0;
+      var tx=d*spread;
+      var ts=act ? (0.97+0.09*curZoom) : (0.82-0.06*curZoom);
+      var to=show ? (act?1:(0.6-0.14*curZoom)) : 0;
+      var u=cur[i]; if(u.x===null){u.x=tx;u.s=ts;u.o=to;}
+      u.x += (tx-u.x)*0.10; u.s += (ts-u.s)*0.10; u.o += (to-u.o)*0.12;
+      c.style.transform='translate(-50%,-50%) translateX('+u.x.toFixed(1)+'px) scale('+u.s.toFixed(4)+')';
+      c.style.opacity=u.o.toFixed(3);
+      c.style.zIndex=String(100-ad);
+      c.style.pointerEvents=show?'auto':'none';
+      c.classList.toggle('is-active',act);
+      var v=c.querySelector('.tsc-vid'); if(v){ if(act){ var p=v.play&&v.play(); if(p&&p.catch)p.catch(function(){}); } else { try{v.pause();}catch(e){} } }
+    });
+    requestAnimationFrame(frame);
+  }
+  function setActive(i){ active=((i%N)+N)%N; syncDots(); }   // loops both ways → always 3 cards
+  // dots
+  var dotsWrap=document.getElementById('tscDots'), dots=[];
+  if(dotsWrap){ for(var i=0;i<N;i++){ (function(idx){ var d=document.createElement('i'); d.addEventListener('click',function(){setActive(idx);}); dotsWrap.appendChild(d); dots.push(d); })(i); } }
+  function syncDots(){ dots.forEach(function(d,i){ d.classList.toggle('on',i===active); }); }
+  // arrows
+  var prev=sec.querySelector('[data-tsc-prev]'), next=sec.querySelector('[data-tsc-next]');
+  if(prev)prev.addEventListener('click',function(){setActive(active-1);});
+  if(next)next.addEventListener('click',function(){setActive(active+1);});
+  // click a side card to focus it (not when clicking the play button)
+  cards.forEach(function(c,i){ c.addEventListener('click',function(e){ if(e.target.closest('[data-tsc-play]'))return; if(circD(i)!==0)setActive(i); }); });
+  // swipe
+  var sx=null; vp.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+  vp.addEventListener('touchend',function(e){ if(sx===null)return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>45)setActive(active+(dx<0?1:-1)); sx=null; });
+
+  // lightbox (full video)
+  var lb=document.getElementById('tscLightbox'), lbMedia=document.getElementById('tscLbMedia');
+  function lbOpen(card){
+    if(!lb||!lbMedia)return;
+    var mp4=card.getAttribute('data-vmp4'), emb=card.getAttribute('data-vembed');
+    if(mp4){ lbMedia.innerHTML='<video src="'+mp4+'" controls autoplay playsinline></video>'; }
+    else if(emb){ var sep=emb.indexOf('?')>-1?'&':'?'; lbMedia.innerHTML='<iframe src="'+emb+sep+'autoplay=1" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>'; }
+    else return;
+    lb.hidden=false; document.body.style.overflow='hidden';
+  }
+  function lbClose(){ if(!lb)return; lb.hidden=true; lbMedia.innerHTML=''; document.body.style.overflow=''; }
+  cards.forEach(function(c){ var pb=c.querySelector('[data-tsc-play]'); if(pb)pb.addEventListener('click',function(e){e.stopPropagation();lbOpen(c);}); });
+  if(lb){ lb.querySelectorAll('[data-tsc-lbclose]').forEach(function(x){x.addEventListener('click',lbClose);}); }
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')lbClose(); });
+
+  addEventListener('scroll',scrollZoom,{passive:true});
+  addEventListener('resize',scrollZoom);
+  scrollZoom(); syncDots(); requestAnimationFrame(frame);
+})();
+;

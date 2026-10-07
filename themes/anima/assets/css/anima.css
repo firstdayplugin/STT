@@ -1561,3 +1561,76 @@ html,body{top:0!important;position:static!important}
   .tel-footer-shell{padding-left:20px;padding-right:20px}
   .tel-footer-logo{left:20px}
 }
+
+
+/* ============================================================
+   TESTIMONIAL SCROLL CAROUSEL (claude.com/solutions/enterprise)
+   3 cards visible: centre full, sides ~1/3. Centre grows on scroll,
+   sides shrink (smooth, lerp-driven in JS). Video teaser + lightbox.
+   ============================================================ */
+.tsc{position:relative;background:#fff;color:#0b1220;padding:84px 0 96px;overflow:hidden}
+.tsc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;max-width:var(--maxw);margin:0 auto 30px;padding:0 40px}
+.tsc-eye{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#2f7be0;font-weight:700;margin-bottom:12px}
+.tsc-title{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:clamp(26px,3.4vw,44px);line-height:1.08;letter-spacing:-.01em;margin:0;color:#0b1220}
+.tsc-nav{display:flex;gap:10px;flex:none}
+.tsc-arw{width:46px;height:46px;border-radius:12px;border:1px solid #e4e9f1;background:#fff;color:#2a3547;display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.tsc-arw:hover{background:#f4f7fb;color:#0b1220;box-shadow:0 6px 16px rgba(24,58,104,.12)}
+.tsc-arw:disabled{opacity:.35;cursor:default}
+.tsc-arw svg{width:20px;height:20px}
+
+.tsc-viewport{position:relative;width:100%;overflow-x:clip;overflow-y:visible;padding:40px 0}
+.tsc-track{position:relative;height:clamp(440px,50vw,560px)}
+
+.tsc-card{position:absolute;left:50%;top:50%;width:clamp(300px,66vw,980px);height:clamp(440px,50vw,560px);
+  display:grid;grid-template-columns:1.05fr .95fr;border-radius:22px;overflow:hidden;
+  background:#12161d;color:#fff;transform-origin:center center;transform:translate(-50%,-50%);
+  box-shadow:0 30px 70px rgba(10,20,40,.28);transition:opacity .45s ease,filter .45s ease;cursor:pointer}
+.tsc-card.is-active{cursor:default}
+.tsc-body{padding:40px 38px;display:flex;flex-direction:column;position:relative;z-index:2}
+.tsc-q{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:clamp(17px,1.7vw,26px);line-height:1.32;margin:0 0 auto;max-width:34ch}
+.tsc-stat{font-weight:700;font-size:clamp(30px,3vw,48px);line-height:1;margin:18px 0 5px;letter-spacing:-.01em}
+.tsc-statcap{font-size:13px;color:rgba(255,255,255,.66);max-width:30ch;line-height:1.5}
+.tsc-meta{margin-top:16px;display:grid;grid-template-columns:auto 1fr;gap:5px 22px;font-size:12.5px}
+.tsc-meta b{color:rgba(255,255,255,.55);font-weight:500}.tsc-meta span{color:#fff}
+.tsc-person{display:flex;gap:12px;align-items:center;margin-top:20px}
+.tsc-av{width:42px;height:42px;border-radius:50%;overflow:hidden;background:#2a3344;border:1px solid rgba(255,255,255,.18);flex:none;display:block}
+.tsc-av img{width:100%;height:100%;object-fit:cover;display:block}
+.tsc-nm{display:block;font-weight:700;font-size:14.5px}.tsc-rl{display:block;font-size:12.5px;color:rgba(255,255,255,.65)}
+
+.tsc-media{position:relative;overflow:hidden;background:linear-gradient(135deg,#1b2740,#0a1322)}
+.tsc-vid,.tsc-poster,.tsc-abs{position:absolute;inset:0;width:100%;height:100%}
+.tsc-vid{object-fit:cover;display:block}
+.tsc-poster,.tsc-abs{background-size:cover;background-position:center}
+.tsc-abs{background-color:#101a2e;background-image:
+  radial-gradient(60% 55% at 22% 20%,rgba(90,150,255,.45),transparent),
+  radial-gradient(55% 55% at 82% 78%,rgba(60,210,190,.38),transparent)}
+.tsc-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,16,22,.55),rgba(12,16,22,0) 45%)}
+.tsc-play{position:absolute;right:18px;bottom:18px;z-index:3;width:60px;height:60px;border-radius:16px;border:0;
+  background:#fff;color:#0b1220;display:grid;place-items:center;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.34);transition:transform .2s}
+.tsc-play:hover{transform:scale(1.06)}.tsc-play svg{width:24px;height:24px;margin-left:2px}
+
+.tsc-dots{display:flex;gap:8px;justify-content:center;margin-top:22px}
+.tsc-dots i{width:26px;height:4px;border-radius:3px;background:#cdd8ea;cursor:pointer;transition:.25s}
+.tsc-dots i.on{background:#2f7be0;width:34px}
+
+/* Lightbox (full video) */
+.tsc-lb{position:fixed;inset:0;z-index:999;display:grid;place-items:center}
+.tsc-lb[hidden]{display:none}
+.tsc-lb-scrim{position:absolute;inset:0;background:rgba(6,10,18,.82);backdrop-filter:blur(4px)}
+.tsc-lb-panel{position:relative;z-index:2;width:min(92vw,1040px);aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.tsc-lb-media,.tsc-lb-media video,.tsc-lb-media iframe{width:100%;height:100%;border:0;display:block;object-fit:contain;background:#000}
+.tsc-lb-x{position:absolute;top:-14px;right:-14px;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#0b1220;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.tsc-lb-x svg{width:20px;height:20px}
+
+@media(max-width:1024px){
+  .tsc-head{padding:0 28px}
+  .tsc-card{width:clamp(280px,82vw,760px);height:clamp(360px,74vw,460px)}
+  .tsc-track{gap:20px}
+}
+@media(max-width:640px){
+  .tsc{padding:58px 0 66px}
+  .tsc-head{padding:0 20px}
+  .tsc-card{width:86vw;height:auto;min-height:480px;grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .tsc-card .tsc-media{min-height:200px;order:-1}
+  .tsc-lb-x{top:6px;right:6px}
+}

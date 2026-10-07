@@ -35,6 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'tipe'      => (($_POST['tipe'] ?? 'text') === 'video') ? 'video' : 'text',
             'video_url' => trim($_POST['video_url'] ?? ''),
             'rating'    => (int)($_POST['rating'] ?? 5),
+            // Enterprise carousel fields (all optional; hidden on the front when empty)
+            'stat_value'=> trim($_POST['stat_value'] ?? ''),
+            'stat_label'=> trim($_POST['stat_label'] ?? ''),
+            'm_industry'=> trim($_POST['m_industry'] ?? ''),
+            'm_size'    => trim($_POST['m_size'] ?? ''),
+            'm_product' => trim($_POST['m_product'] ?? ''),
+            'm_location'=> trim($_POST['m_location'] ?? ''),
             'urutan'    => (int)($_POST['urutan'] ?? 0),
             'is_active' => isset($_POST['is_active']) ? 1 : 0,
         ];
@@ -58,6 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $vp = upload_image($_FILES['video_poster'], 'testimonial');
             if ($vp) $data['video_poster'] = $vp;
         }
+        // Handle abstract background upload (shown behind text-only cards)
+        if (!empty($_FILES['bg_image']['name'])) {
+            $bg = upload_image($_FILES['bg_image'], 'testimonial');
+            if ($bg) $data['bg_image'] = $bg;
+        }
 
         // Keep only columns that actually exist in the table.
         $writable = array_intersect_key($data, array_flip($cols));
@@ -68,9 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute("INSERT INTO testimonial (" . implode(',', $keys) . ") VALUES ($ph)", array_values($writable));
             set_flash('success', 'Testimoni berhasil ditambahkan.');
         } elseif ($_POST['action'] === 'update' && $id > 0) {
-            // Only overwrite foto/video_poster when a new file was uploaded.
+            // Only overwrite foto/video_poster/bg_image when a new file was uploaded.
             if (!isset($data['foto'])) unset($writable['foto']);
             if (!isset($data['video_poster'])) unset($writable['video_poster']);
+            if (!isset($data['bg_image'])) unset($writable['bg_image']);
             $set = implode(', ', array_map(fn($k) => "$k=?", array_keys($writable)));
             $params = array_values($writable);
             $params[] = $id;
@@ -248,6 +261,50 @@ $csrf = generate_csrf();
         <label>Cerita Lengkap (halaman detail)</label>
         <textarea name="detail" rows="6" class="wysiwyg"><?= htmlspecialchars($edit_item['detail'] ?? '') ?></textarea>
         <div class="form-hint">Cerita/story panjang yang tampil di halaman detail testimoni. Boleh dikosongkan.</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Angka Statistik (opsional)</label>
+          <input type="text" name="stat_value" placeholder='mis. 98%, 24/7, 0' value="<?= htmlspecialchars($edit_item['stat_value'] ?? '') ?>">
+          <div class="form-hint">Angka besar yang menonjol di kartu (seperti claude.com). Kosongkan bila tidak ada.</div>
+        </div>
+        <div class="form-group">
+          <label>Keterangan Angka (opsional)</label>
+          <input type="text" name="stat_label" placeholder="mis. uptime infrastruktur selama kemitraan" value="<?= htmlspecialchars($edit_item['stat_label'] ?? '') ?>">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Industry (meta)</label>
+          <input type="text" name="m_industry" placeholder="mis. Healthcare / Clinic" value="<?= htmlspecialchars($edit_item['m_industry'] ?? '') ?>">
+        </div>
+        <div class="form-group">
+          <label>Company size (meta)</label>
+          <input type="text" name="m_size" placeholder="mis. Enterprise" value="<?= htmlspecialchars($edit_item['m_size'] ?? '') ?>">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Product / Solution (meta)</label>
+          <input type="text" name="m_product" placeholder="mis. Managed IT Infrastructure" value="<?= htmlspecialchars($edit_item['m_product'] ?? '') ?>">
+        </div>
+        <div class="form-group">
+          <label>Location (meta)</label>
+          <input type="text" name="m_location" placeholder="mis. Jakarta, Indonesia" value="<?= htmlspecialchars($edit_item['m_location'] ?? '') ?>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Background Abstrak (kartu teks, opsional)</label>
+        <?php if (!empty($edit_item['bg_image'])): ?>
+          <div class="img-upload-row" style="margin-bottom:8px">
+            <div class="img-preview"><img src="<?= uploads_url($edit_item['bg_image']) ?>" alt=""></div>
+            <span class="text-muted" style="font-size:12px">Background saat ini</span>
+          </div>
+        <?php endif; ?>
+        <input type="file" name="bg_image" accept="image/*">
+        <div class="form-hint">Gambar latar untuk testimoni <em>tanpa video</em>. Kosongkan untuk latar gradien default.</div>
       </div>
 
       <div class="form-row">

@@ -307,31 +307,90 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
 </section>
 
 <!-- ===== WHAT THEY SAY (OpenAI-style) ===== -->
-<section class="testi" id="testimonials">
-  <div class="wrap">
-    <div class="testi-head">
-      <div class="testi-eye"><?= hc('testi_eyebrow') ?></div>
-      <h2><?= hc('testi_title') ?></h2>
-      <p><?= hc('testi_intro') ?></p>
+<?php
+/* Resolve a testimonial video URL into a playable shape: mp4 file, or YouTube/Vimeo embed. */
+if (!function_exists('tsc_video')) {
+  function tsc_video(string $u): array {
+    $u = trim($u);
+    if ($u === '') return ['kind'=>'', 'embed'=>'', 'mp4'=>''];
+    if (preg_match('~(?:youtube\.com/.*[?&]v=|youtu\.be/|youtube\.com/embed/)([A-Za-z0-9_-]{6,})~', $u, $m))
+      return ['kind'=>'embed', 'embed'=>'https://www.youtube.com/embed/'.$m[1].'?rel=0', 'mp4'=>''];
+    if (preg_match('~vimeo\.com/(?:video/)?(\d+)~', $u, $m))
+      return ['kind'=>'embed', 'embed'=>'https://player.vimeo.com/video/'.$m[1], 'mp4'=>''];
+    $abs = preg_match('#^(https?:|/)#', $u) ? $u : uploads_url($u);
+    if (preg_match('~\.(mp4|webm|ogg|mov)(\?|$)~i', $u)) return ['kind'=>'mp4', 'embed'=>'', 'mp4'=>$abs];
+    return ['kind'=>'embed', 'embed'=>$abs, 'mp4'=>''];
+  }
+}
+?>
+<section class="tsc" id="testimonials">
+  <div class="tsc-head">
+    <div class="tsc-head-l">
+      <div class="tsc-eye"><?= hc('testi_eyebrow') ?></div>
+      <h2 class="tsc-title"><?= hc('testi_title') ?></h2>
     </div>
-    <div class="tst-grid">
-      <?php if (!empty($home_testi)): foreach ($home_testi as $t):
-        $tv = (($t['tipe'] ?? 'text') === 'video');
-        $tav = !empty($t['foto']) ? uploads_url($t['foto']) : '';
-        $trole = trim(($t['jabatan'] ?? '') . (!empty($t['perusahaan']) ? ', ' . $t['perusahaan'] : ''));
-        $thref = url('testimonial/' . (!empty($t['slug']) ? $t['slug'] : $t['id'])); ?>
-      <a class="tcard" href="<?= htmlspecialchars($thref) ?>">
-        <span class="tbadge <?= $tv ? 'video' : 'text' ?>"><?php if ($tv): ?><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Video<?php else: ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h10M7 16h6"/></svg>Text<?php endif; ?></span>
-        <p class="quote">&ldquo;<?= htmlspecialchars($t['isi']) ?>&rdquo;</p>
-        <div class="person">
-          <div class="tperson-av"><?php if ($tav): ?><img src="<?= htmlspecialchars($tav) ?>" data-fallback="remove" alt=""><?php endif; ?><?php if ($tv): ?><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span><?php endif; ?></div>
-          <div><div class="pname"><?= htmlspecialchars($t['nama']) ?></div><div class="prole"><?= htmlspecialchars($trole) ?></div></div>
+    <div class="tsc-nav">
+      <button type="button" class="tsc-arw" data-tsc-prev aria-label="<?= htmlspecialchars(t('prev','Sebelumnya')) ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button type="button" class="tsc-arw" data-tsc-next aria-label="<?= htmlspecialchars(t('next','Berikutnya')) ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+  </div>
+
+  <?php if (!empty($home_testi)): ?>
+  <div class="tsc-viewport">
+    <div class="tsc-track" id="tscTrack">
+      <?php foreach ($home_testi as $k => $t):
+        $tv    = (($t['tipe'] ?? 'text') === 'video');
+        $vinfo = tsc_video((string)($t['video_url'] ?? ''));
+        $hasV  = $tv && $vinfo['kind'] !== '';
+        $poster= !empty($t['video_poster']) ? uploads_url($t['video_poster']) : '';
+        $bg    = !empty($t['bg_image']) ? uploads_url($t['bg_image']) : '';
+        $av    = !empty($t['foto']) ? uploads_url($t['foto']) : '';
+        $role  = trim(($t['jabatan'] ?? '') . (!empty($t['perusahaan']) ? ', ' . $t['perusahaan'] : ''));
+        $stat  = trim((string)($t['stat_value'] ?? '')); $statcap = trim((string)($t['stat_label'] ?? ''));
+        $meta  = array_filter([
+          'Industry'     => (string)($t['m_industry'] ?? ''),
+          'Company size' => (string)($t['m_size'] ?? ''),
+          'Product'      => (string)($t['m_product'] ?? ''),
+          'Location'     => (string)($t['m_location'] ?? ''),
+        ], fn($v) => trim($v) !== '');
+      ?>
+      <article class="tsc-card <?= $hasV ? 'is-video' : 'is-text' ?>" data-i="<?= $k ?>"
+        <?= $hasV && $vinfo['kind']==='mp4'   ? 'data-vmp4="'.htmlspecialchars($vinfo['mp4']).'"' : '' ?>
+        <?= $hasV && $vinfo['kind']==='embed' ? 'data-vembed="'.htmlspecialchars($vinfo['embed']).'"' : '' ?>>
+        <div class="tsc-body">
+          <p class="tsc-q">&ldquo;<?= htmlspecialchars($t['isi']) ?>&rdquo;</p>
+          <?php if ($stat !== ''): ?><div class="tsc-stat"><?= htmlspecialchars($stat) ?></div><?php if ($statcap !== ''): ?><div class="tsc-statcap"><?= htmlspecialchars($statcap) ?></div><?php endif; endif; ?>
+          <?php if ($meta): ?><div class="tsc-meta"><?php foreach ($meta as $mk => $mv): ?><b><?= htmlspecialchars($mk) ?>:</b><span><?= htmlspecialchars($mv) ?></span><?php endforeach; ?></div><?php endif; ?>
+          <div class="tsc-person">
+            <span class="tsc-av"><?php if ($av): ?><img src="<?= htmlspecialchars($av) ?>" data-fallback="remove" alt=""><?php endif; ?></span>
+            <span><span class="tsc-nm notranslate" translate="no"><?= htmlspecialchars($t['nama']) ?></span><span class="tsc-rl"><?= htmlspecialchars($role) ?></span></span>
+          </div>
         </div>
-        <span class="watch"><?= $tv ? 'Watch story' : 'Read story' ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <?php endforeach; else: ?>
-      <div class="tst-empty"><?= hc('testi_empty') ?></div>
-      <?php endif; ?>
+        <div class="tsc-media">
+          <?php if ($hasV && $vinfo['kind']==='mp4'): ?>
+            <video class="tsc-vid" src="<?= htmlspecialchars($vinfo['mp4']) ?>" muted loop playsinline preload="metadata"<?= $poster ? ' poster="'.htmlspecialchars($poster).'"' : '' ?>></video>
+          <?php elseif ($hasV): ?>
+            <div class="tsc-poster"<?= $poster ? ' style="background-image:url('.htmlspecialchars($poster).')"' : '' ?>></div>
+          <?php else: ?>
+            <div class="tsc-abs"<?= $bg ? ' style="background-image:url('.htmlspecialchars($bg).')"' : '' ?>></div>
+          <?php endif; ?>
+          <?php if ($hasV): ?><button type="button" class="tsc-play" data-tsc-play aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><?php endif; ?>
+        </div>
+      </article>
+      <?php endforeach; ?>
+    </div>
+  </div>
+  <div class="tsc-dots" id="tscDots"></div>
+  <?php else: ?>
+    <div class="wrap"><div class="tst-empty"><?= hc('testi_empty') ?></div></div>
+  <?php endif; ?>
+
+  <!-- Full-video lightbox -->
+  <div class="tsc-lb" id="tscLightbox" hidden>
+    <div class="tsc-lb-scrim" data-tsc-lbclose></div>
+    <div class="tsc-lb-panel">
+      <button type="button" class="tsc-lb-x" data-tsc-lbclose aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <div class="tsc-lb-media" id="tscLbMedia"></div>
     </div>
   </div>
 </section>
