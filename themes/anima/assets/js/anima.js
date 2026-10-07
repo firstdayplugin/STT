@@ -571,6 +571,44 @@ requestAnimationFrame(frame);
     var c=r.top + r.height/2, d=Math.abs(c - vh/2)/(vh/2 + r.height/2);
     tgtZoom = cl(1-d,0,1);              // 1 when section is centred in viewport
   }
+  // ---- in-card media: teaser autoplay (muted) on the active card; Play = full inline ----
+  var lastActive=-1;
+  function ytId(u){var m=(u||'').match(/embed\/([A-Za-z0-9_-]+)/);return m?m[1]:'';}
+  function vimeoId(u){var m=(u||'').match(/video\/(\d+)/);return m?m[1]:'';}
+  function teaserSrc(emb){
+    if(/youtube\.com/.test(emb)){var id=ytId(emb);return 'https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&loop=1&playlist='+id+'&controls=0&modestbranding=1&playsinline=1&rel=0&showinfo=0';}
+    if(/vimeo\.com/.test(emb)){return 'https://player.vimeo.com/video/'+vimeoId(emb)+'?background=1&autoplay=1&muted=1&loop=1';}
+    return emb;
+  }
+  function fullSrc(emb){
+    if(/youtube\.com/.test(emb)){var id=ytId(emb);return 'https://www.youtube.com/embed/'+id+'?autoplay=1&mute=0&controls=1&playsinline=1&rel=0';}
+    if(/vimeo\.com/.test(emb)){return 'https://player.vimeo.com/video/'+vimeoId(emb)+'?autoplay=1&muted=0';}
+    return emb;
+  }
+  function ensureEmbed(c, src){
+    var m=c.querySelector('.tsc-media'); if(!m)return;
+    var wrap=c.querySelector('.tsc-embed');
+    if(!wrap){ wrap=document.createElement('div'); wrap.className='tsc-embed'; m.appendChild(wrap); }
+    if(wrap.getAttribute('data-src')!==src){ wrap.setAttribute('data-src',src); wrap.innerHTML='<iframe src="'+src+'" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>'; }
+  }
+  function enMedia(c){                           // active → start muted teaser
+    if(!c || c.classList.contains('is-playing'))return;
+    var mp4=c.getAttribute('data-vmp4'), emb=c.getAttribute('data-vembed');
+    if(mp4){ var v=c.querySelector('.tsc-vid'); if(v){ v.muted=true; v.controls=false; v.loop=true; var p=v.play&&v.play(); if(p&&p.catch)p.catch(function(){}); } }
+    else if(emb){ ensureEmbed(c, teaserSrc(emb)); }
+  }
+  function deMedia(c){                           // leaves active → stop & reset
+    if(!c)return; c.classList.remove('is-playing');
+    var mp4=c.getAttribute('data-vmp4'), emb=c.getAttribute('data-vembed');
+    if(mp4){ var v=c.querySelector('.tsc-vid'); if(v){ try{v.pause();}catch(e){} v.muted=true; v.controls=false; } }
+    else if(emb){ var f=c.querySelector('.tsc-embed'); if(f)f.parentNode.removeChild(f); }
+  }
+  function playFull(c){                          // Play button → full video INSIDE the card
+    c.classList.add('is-playing');
+    var mp4=c.getAttribute('data-vmp4'), emb=c.getAttribute('data-vembed');
+    if(mp4){ var v=c.querySelector('.tsc-vid'); if(v){ v.muted=false; v.controls=true; v.loop=false; var p=v.play&&v.play(); if(p&&p.catch)p.catch(function(){}); } }
+    else if(emb){ ensureEmbed(c, fullSrc(emb)); }
+  }
   function frame(){
     curZoom += (tgtZoom-curZoom)*0.07;                 // smooth, slightly "laggy"
     var cw=cards[0].offsetWidth||900, spread=cw*0.56;
@@ -586,8 +624,12 @@ requestAnimationFrame(frame);
       c.style.zIndex=String(100-ad);
       c.style.pointerEvents=show?'auto':'none';
       c.classList.toggle('is-active',act);
-      var v=c.querySelector('.tsc-vid'); if(v){ if(act){ var p=v.play&&v.play(); if(p&&p.catch)p.catch(function(){}); } else { try{v.pause();}catch(e){} } }
     });
+    if(active!==lastActive){                      // focus changed → swap teaser media
+      if(lastActive>=0)deMedia(cards[lastActive]);
+      enMedia(cards[active]);
+      lastActive=active;
+    }
     requestAnimationFrame(frame);
   }
   function setActive(i){ active=((i%N)+N)%N; syncDots(); }   // loops both ways → always 3 cards
@@ -605,20 +647,15 @@ requestAnimationFrame(frame);
   var sx=null; vp.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
   vp.addEventListener('touchend',function(e){ if(sx===null)return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>45)setActive(active+(dx<0?1:-1)); sx=null; });
 
-  // lightbox (full video)
-  var lb=document.getElementById('tscLightbox'), lbMedia=document.getElementById('tscLbMedia');
-  function lbOpen(card){
-    if(!lb||!lbMedia)return;
-    var mp4=card.getAttribute('data-vmp4'), emb=card.getAttribute('data-vembed');
-    if(mp4){ lbMedia.innerHTML='<video src="'+mp4+'" controls autoplay playsinline></video>'; }
-    else if(emb){ var sep=emb.indexOf('?')>-1?'&':'?'; lbMedia.innerHTML='<iframe src="'+emb+sep+'autoplay=1" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>'; }
-    else return;
-    lb.hidden=false; document.body.style.overflow='hidden';
-  }
-  function lbClose(){ if(!lb)return; lb.hidden=true; lbMedia.innerHTML=''; document.body.style.overflow=''; }
-  cards.forEach(function(c){ var pb=c.querySelector('[data-tsc-play]'); if(pb)pb.addEventListener('click',function(e){e.stopPropagation();lbOpen(c);}); });
-  if(lb){ lb.querySelectorAll('[data-tsc-lbclose]').forEach(function(x){x.addEventListener('click',lbClose);}); }
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape')lbClose(); });
+  // Play button → full video plays INSIDE the card (no popup/lightbox)
+  cards.forEach(function(c,i){
+    var pb=c.querySelector('[data-tsc-play]');
+    if(pb)pb.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(circD(i)!==0){ setActive(i); }   // focus the card first if it was a side card
+      playFull(c);
+    });
+  });
 
   addEventListener('scroll',scrollZoom,{passive:true});
   addEventListener('resize',scrollZoom);

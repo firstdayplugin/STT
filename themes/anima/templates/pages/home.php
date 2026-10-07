@@ -384,15 +384,6 @@ if (!function_exists('tsc_video')) {
   <?php else: ?>
     <div class="wrap"><div class="tst-empty"><?= hc('testi_empty') ?></div></div>
   <?php endif; ?>
-
-  <!-- Full-video lightbox -->
-  <div class="tsc-lb" id="tscLightbox" hidden>
-    <div class="tsc-lb-scrim" data-tsc-lbclose></div>
-    <div class="tsc-lb-panel">
-      <button type="button" class="tsc-lb-x" data-tsc-lbclose aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-      <div class="tsc-lb-media" id="tscLbMedia"></div>
-    </div>
-  </div>
 </section>
 
 <?php include theme_path('templates/layouts/footer.php'); ?>
