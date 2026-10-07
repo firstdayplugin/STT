@@ -1342,24 +1342,24 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .nh-item.nh-wa svg{color:#25D366}
 @keyframes nhIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 /* --- Satu AI launcher (macOS glass + web3) --- */
-.va-toggle{position:relative;width:62px;height:62px;border:0;border-radius:50%;cursor:pointer;color:#fff;
+.va-toggle{position:relative;width:54px;height:54px;border:0;border-radius:50%;cursor:pointer;color:#fff;
   display:grid;place-items:center;margin-left:auto;overflow:visible;
   background:linear-gradient(160deg,#6cc4ff,#0a84ff);
-  box-shadow:0 14px 34px rgba(10,132,255,.45),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -7px 16px rgba(8,70,170,.4);
+  box-shadow:0 12px 28px rgba(10,132,255,.4),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -6px 14px rgba(8,70,170,.38);
   transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .va-logo{display:grid;place-items:center}
-.va-logo img{width:33px;height:33px;object-fit:contain;
+.va-logo img{width:29px;height:29px;object-fit:contain;
   filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.28));
   transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-/* idle pulse halo */
+/* idle pulse halo (subtle) */
 .va-toggle::after{content:"";position:absolute;inset:0;border-radius:50%;
-  box-shadow:0 0 0 0 rgba(10,132,255,.4);animation:saPulse 2.6s ease-out infinite}
+  box-shadow:0 0 0 0 rgba(10,132,255,.32);animation:saPulse 2.8s ease-out infinite}
 /* rotating ring on hover (futuristic) */
 .va-toggle::before{content:"";position:absolute;inset:-3px;border-radius:50%;z-index:-1;
   background:conic-gradient(from 0deg,transparent 0 55%,rgba(150,200,255,.95),rgba(180,150,255,.7),transparent 90%);
   opacity:0;transition:opacity .35s;animation:saSpin 3.2s linear infinite}
 @keyframes saSpin{to{transform:rotate(360deg)}}
-@keyframes saPulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,.4)}70%{box-shadow:0 0 0 15px rgba(10,132,255,0)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0)}}
+@keyframes saPulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,.32)}70%{box-shadow:0 0 0 12px rgba(10,132,255,0)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0)}}
 .va-toggle:hover{transform:translateY(-3px) scale(1.07);box-shadow:0 20px 46px rgba(10,132,255,.55),inset 0 1px 0 rgba(255,255,255,.6)}
 .va-toggle:hover::before{opacity:1}
 .va-toggle:hover .va-logo img{transform:rotate(-8deg) scale(1.08)}
@@ -1374,50 +1374,59 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
   .va-toggle::after,.va-toggle::before{animation:none}
 }
 
-/* --- Satu AI prompt tooltip (macOS glass + web3) --- */
-.sa-tip{position:absolute;right:0;bottom:76px;width:398px;max-width:calc(100vw - 28px);
-  background:rgba(255,255,255,.68);
+/* --- Satu AI prompt tooltip (compact: blue header + glass body) --- */
+.sa-tip{position:absolute;right:0;bottom:70px;width:288px;max-width:calc(100vw - 28px);
+  border-radius:18px;overflow:hidden;
+  background:rgba(255,255,255,.72);
   -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
-  border:1px solid rgba(255,255,255,.65);border-radius:22px;padding:12px 13px 12px;
-  box-shadow:0 22px 50px -14px rgba(16,24,40,.5),0 2px 10px rgba(16,24,40,.08),inset 0 1px 0 rgba(255,255,255,.75);
-  animation:vaIn .4s cubic-bezier(.16,1,.3,1) both}
-/* web3 iridescent hairline border */
-.sa-tip::before{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;pointer-events:none;
-  background:linear-gradient(135deg,rgba(120,180,255,.95),rgba(170,130,255,.55) 45%,rgba(90,230,210,.7));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;opacity:.6}
-.sa-tip-x{position:absolute;top:10px;right:12px;border:0;background:rgba(120,135,160,.12);border-radius:50%;
-  width:22px;height:22px;display:grid;place-items:center;color:#5b6b82;cursor:pointer;padding:0;line-height:0;transition:background .2s}
-.sa-tip-x svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2}
-.sa-tip-x:hover{background:rgba(120,135,160,.22)}
-.sa-tip-head{display:flex;align-items:center;gap:10px;margin-bottom:9px;padding-right:22px}
-.sa-tip-logo{width:32px;height:32px;border-radius:11px;flex:none;display:grid;place-items:center;
-  background:linear-gradient(160deg,#6cc4ff,#0a84ff);box-shadow:0 5px 12px rgba(10,132,255,.42),inset 0 1px 0 rgba(255,255,255,.5)}
-.sa-tip-logo img{width:18px;height:18px;object-fit:contain;filter:brightness(0) invert(1)}
-.sa-tip-hi{font-weight:700;font-size:13.5px;letter-spacing:-.01em;color:#0b1830;line-height:1.3;min-height:18px}
-.sa-caret{display:inline-block;width:2px;height:14px;background:#0a84ff;margin-left:2px;vertical-align:-2px;animation:saBlink 1s step-end infinite}
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 16px 40px -18px rgba(16,24,40,.42),inset 0 1px 0 rgba(255,255,255,.7);
+  animation:saReveal .6s cubic-bezier(.16,1,.3,1) both}
+@keyframes saReveal{
+  0%{opacity:0;transform:translateY(16px) scale(.88);filter:blur(6px)}
+  60%{filter:blur(0)}
+  100%{opacity:1;transform:none;filter:blur(0)}}
+/* header bar */
+.sa-tip-h{position:relative;display:flex;align-items:center;gap:9px;padding:10px 11px;overflow:hidden;color:#fff;
+  background:linear-gradient(120deg,#0a84ff 0%,#3a74ff 55%,#6a5cff 100%)}
+.sa-tip-h::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.35) 50%,transparent 80%);
+  transform:translateX(-120%);animation:saSheen 3.6s ease-in-out 1.2s infinite}
+@keyframes saSheen{0%,72%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.sa-tip-logo{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;
+  background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.sa-tip-logo img{width:16px;height:16px;object-fit:contain;filter:brightness(0) invert(1)}
+.sa-tip-id{min-width:0}
+.sa-tip-nm{font-weight:700;font-size:12.5px;line-height:1;letter-spacing:.01em}
+.sa-tip-on{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;opacity:.95;margin-top:3px}
+.sa-tip-on i{width:6px;height:6px;border-radius:50%;background:#49f08a;flex:none;
+  box-shadow:0 0 0 0 rgba(73,240,138,.7);animation:saLive 1.9s ease-out infinite}
+@keyframes saLive{0%{box-shadow:0 0 0 0 rgba(73,240,138,.6)}70%{box-shadow:0 0 0 6px rgba(73,240,138,0)}100%{box-shadow:0 0 0 0 rgba(73,240,138,0)}}
+.sa-tip-x{margin-left:auto;width:22px;height:22px;flex:none;border:0;border-radius:50%;cursor:pointer;color:#fff;padding:0;
+  background:rgba(255,255,255,.2);display:grid;place-items:center;transition:background .2s}
+.sa-tip-x:hover{background:rgba(255,255,255,.34)}
+.sa-tip-x svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+/* glass body */
+.sa-tip-b{padding:11px 12px 12px}
+.sa-tip-hi{font-weight:500;font-size:12.5px;color:#30405c;line-height:1.4;min-height:18px;margin-bottom:10px}
+.sa-caret{display:inline-block;width:2px;height:13px;background:#0a84ff;margin-left:1px;vertical-align:-2px;animation:saBlink 1s step-end infinite}
 @keyframes saBlink{50%{opacity:0}}
-/* eye-catching live badge */
-.sa-tip-status{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.01em;
-  margin:0 0 10px;padding:4px 11px 4px 9px;border-radius:999px;color:#0a8a3c;
-  background:linear-gradient(120deg,rgba(52,199,89,.16),rgba(48,209,170,.14));border:1px solid rgba(52,199,89,.32);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.sa-tip-status i{position:relative;width:8px;height:8px;border-radius:50%;background:#34c759;flex:none;
-  box-shadow:0 0 0 0 rgba(52,199,89,.6);animation:saLive 1.8s ease-out infinite}
-@keyframes saLive{0%{box-shadow:0 0 0 0 rgba(52,199,89,.55)}70%{box-shadow:0 0 0 7px rgba(52,199,89,0)}100%{box-shadow:0 0 0 0 rgba(52,199,89,0)}}
-.sa-tip-acts{display:flex;gap:8px;margin-top:2px}
-.sa-btn{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:13px;
-  padding:10px 12px;font-size:12px;font-weight:600;letter-spacing:-.01em;line-height:1.25;font-family:inherit;cursor:pointer;
+.sa-tip-acts{display:flex;gap:8px}
+.sa-btn{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:11px;
+  padding:8px 10px;font-size:12px;font-weight:600;letter-spacing:-.01em;font-family:inherit;cursor:pointer;
   text-decoration:none;white-space:nowrap;transition:transform .2s,box-shadow .2s,filter .2s,background .2s}
-.sa-btn svg{width:15px;height:15px;flex:none}
+.sa-btn svg{width:14px;height:14px;flex:none}
 .sa-btn-ai{color:#fff;background:linear-gradient(180deg,#5cb6ff,#0a84ff);
-  box-shadow:0 7px 16px rgba(10,132,255,.4),inset 0 1px 0 rgba(255,255,255,.55)}
-.sa-btn-ai:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(10,132,255,.5),inset 0 1px 0 rgba(255,255,255,.6)}
-.sa-btn-wa{color:#0a7a38;background:rgba(52,199,89,.14);border:1px solid rgba(52,199,89,.32);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  box-shadow:0 6px 14px rgba(10,132,255,.36),inset 0 1px 0 rgba(255,255,255,.5)}
+.sa-btn-ai:hover{transform:translateY(-1px);box-shadow:0 9px 18px rgba(10,132,255,.46)}
+.sa-btn-wa{color:#0a7a38;background:rgba(52,199,89,.14);border:1px solid rgba(52,199,89,.32)}
 .sa-btn-wa:hover{transform:translateY(-1px);background:rgba(52,199,89,.22)}
 .sa-btn-wa svg{color:#25D366}
-@media(prefers-reduced-motion:reduce){.sa-tip-status i{animation:none}}
+@media(prefers-reduced-motion:reduce){
+  .sa-tip{animation:none}
+  .sa-tip-h::after{animation:none;opacity:0}
+  .sa-tip-on i{animation:none}
+}
 .va-panel{position:absolute;right:0;bottom:74px;width:340px;max-width:calc(100vw - 40px);background:#fff;border:1px solid var(--line);
   border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(14,42,78,.28);animation:vaIn .3s cubic-bezier(.16,1,.3,1) both}
 @keyframes vaIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -1446,10 +1455,10 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 @media(max-width:600px){
   .nh-widget{left:14px;bottom:16px}.va-widget{right:14px;bottom:16px}
   .nh-toggle span{display:none}.nh-toggle{padding:14px}
-  .va-toggle{width:56px;height:56px}
-  .va-toggle .va-logo img{width:30px;height:30px}
-  .va-panel{bottom:70px}
-  .sa-tip{bottom:72px}
+  .va-toggle{width:50px;height:50px}
+  .va-toggle .va-logo img{width:27px;height:27px}
+  .va-panel{bottom:64px}
+  .sa-tip{bottom:64px}
 }
 /* Keep the mobile nav drawer clear of the floating widgets. */
 body.nav-open .nh-widget,body.nav-open .va-widget{display:none}
