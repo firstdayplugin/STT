@@ -214,7 +214,70 @@ include theme_path('templates/layouts/header.php');
 $orbit_cards = $orbit_json;
 if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => hc('ind' . $i, true), 'title' => '', 'sub' => '', 'img' => '', 'c1' => '', 'c2' => '', 'url' => '']; } }
 ?>
+<?php $__stt_logo = theme_url('assets/img/stt-logo.png'); ?>
 <section class="ind2" id="industries"<?= $orbit_json ? ' data-orbit="' . htmlspecialchars(json_encode($orbit_json), ENT_QUOTES) . '"' : '' ?>>
+  <!-- Desktop: single-viewBox SVG orbit (web from logo + orbit rings + white glow). Everything
+       lives in one coordinate system so lines & cards can never drift across screen sizes. -->
+  <div class="ind2-stage" aria-hidden="true">
+    <svg class="ind2-svg" id="ind2Svg" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="ind2Web" gradientUnits="userSpaceOnUse" cx="590" cy="350" r="430">
+          <stop offset="0" stop-color="#2478E0" stop-opacity="0.75"/>
+          <stop offset="0.55" stop-color="#2478E0" stop-opacity="0.42"/>
+          <stop offset="1" stop-color="#2478E0" stop-opacity="0.12"/>
+        </radialGradient>
+        <radialGradient id="ind2White" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.9"/>
+          <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- orbit rings (ambient) -->
+      <g>
+        <ellipse cx="590" cy="350" rx="362" ry="210" transform="rotate(17.19 590 350)" fill="none" stroke="#2478E0" stroke-opacity="0.30" stroke-width="1.3"/>
+        <ellipse cx="590" cy="350" rx="470" ry="272" transform="rotate(17.19 590 350)" fill="none" stroke="#2478E0" stroke-opacity="0.22" stroke-width="1.2" stroke-dasharray="3 7"/>
+      </g>
+      <g id="ind2Odots"></g>
+      <ellipse cx="590" cy="350" rx="112" ry="60" fill="none" stroke="#2478E0" stroke-opacity="0.30" stroke-width="1.1"/>
+      <!-- spider web (logo -> each card) -->
+      <g id="ind2Lines" fill="none" stroke="url(#ind2Web)" stroke-width="1.6" stroke-linecap="round"></g>
+      <!-- white radiant glow + ripple behind the logo -->
+      <ellipse cx="590" cy="350" rx="212" ry="150" fill="url(#ind2White)">
+        <animate attributeName="opacity" values="0.78;1;0.78" dur="3.8s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="590" cy="350" rx="140" ry="86" fill="none" stroke="#ffffff" stroke-width="2" opacity="0">
+        <animate attributeName="rx" values="140;240" dur="4.4s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="86;150" dur="4.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0" dur="4.4s" repeatCount="indefinite"/>
+      </ellipse>
+      <image href="<?= htmlspecialchars($__stt_logo) ?>" x="504" y="317.3" width="172" height="65.4" preserveAspectRatio="xMidYMid meet"></image>
+      <g id="ind2Pulses"></g>
+      <g id="ind2Nodes"></g>
+      <!-- industry cards (from CMS) as foreignObject so they scale with the viewBox -->
+      <g id="ind2Fo">
+        <?php foreach ($orbit_cards as $k => $c): $__u = $c['url'] !== '' ? url(ltrim($c['url'], '/')) : '#'; ?>
+        <foreignObject class="io-fo" width="230" height="160">
+          <a xmlns="http://www.w3.org/1999/xhtml" class="io-card" data-ci="<?= $k ?>" href="<?= htmlspecialchars($__u) ?>"
+             <?php if ($c['img'] !== ''): ?>data-img="<?= htmlspecialchars($c['img']) ?>"<?php endif; ?>
+             data-c1="<?= htmlspecialchars($c['c1']) ?>" data-c2="<?= htmlspecialchars($c['c2']) ?>">
+            <span class="io-ex">EXPLORE →</span>
+            <span class="io-lbl notranslate" translate="no"><?= htmlspecialchars($c['label']) ?></span>
+          </a>
+        </foreignObject>
+        <?php endforeach; ?>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Heading: hidden on desktop (logo is the hub); shown on mobile above the grid -->
+  <div class="ind2-center">
+    <div class="ind2-eye"><?= hc('industries_eyebrow') ?></div>
+    <h2 class="ind2-word"><?= hc('industries_title') ?></h2>
+    <div class="ind2-sub"><?= hc('industries_sub') ?></div>
+  </div>
+
+  <!-- Mobile: static grid of the same cards -->
   <div class="ind2-cards" id="ind2cards">
     <?php foreach ($orbit_cards as $c): ?>
       <a class="ind2-card" href="<?= htmlspecialchars($c['url'] !== '' ? url(ltrim($c['url'], '/')) : '#') ?>"
@@ -222,11 +285,6 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
          <?php if ($c['c1'] !== ''): ?>data-c1="<?= htmlspecialchars($c['c1']) ?>" data-c2="<?= htmlspecialchars($c['c2']) ?>"<?php endif; ?>>
         <span class="ex">EXPLORE →</span><span class="lbl notranslate" translate="no"><?= htmlspecialchars($c['label']) ?></span></a>
     <?php endforeach; ?>
-  </div>
-  <div class="ind2-center">
-    <div class="ind2-eye"><?= hc('industries_eyebrow') ?></div>
-    <h2 class="ind2-word"><?= hc('industries_title') ?></h2>
-    <div class="ind2-sub"><?= hc('industries_sub') ?></div>
   </div>
 </section>
 

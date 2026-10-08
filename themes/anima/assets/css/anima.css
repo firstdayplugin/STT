@@ -1721,3 +1721,24 @@ html,body{top:0!important;position:static!important}
   .tsc-body{max-width:100%;padding:30px 26px}
   .tsc-media::after{background:linear-gradient(0deg,rgba(9,12,18,.9),rgba(9,12,18,.45) 55%,rgba(9,12,18,.2))}
 }
+
+/* ===== Our Industries — SVG orbit stage (desktop), Gemini-style ===== */
+.ind2-stage{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:16px}
+.ind2-svg{width:min(100%,1240px);height:auto;max-height:100%;display:block}
+.io-fo{overflow:visible}
+.io-card{display:block;position:relative;border-radius:14px;overflow:hidden;color:#fff;text-decoration:none;
+  background:linear-gradient(135deg,#1d478c,#3f80e2);background-size:cover;background-position:center;
+  box-shadow:0 14px 30px -14px rgba(14,42,78,.55);
+  transform-origin:center center;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.io-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,22,44,.12),rgba(10,22,44,.72))}
+.io-ex{position:absolute;top:9px;left:11px;z-index:2;font-size:8px;letter-spacing:.14em;font-weight:700;opacity:.92}
+.io-lbl{position:absolute;left:11px;bottom:10px;z-index:2;font-size:12px;font-weight:700;line-height:1.14;max-width:88%}
+/* desktop: the logo hub replaces the heading; the flat grid is mobile-only */
+.ind2-center{display:none}
+.ind2-cards{display:none}
+@media(prefers-reduced-motion:reduce){ .io-card{transition:none} }
+@media(max-width:900px){
+  .ind2-stage{display:none}
+  .ind2-center{display:flex}
+  .ind2-cards{display:grid}
+}

@@ -460,28 +460,88 @@ requestAnimationFrame(frame);
 })();
 ;
 (function(){
-  var wrap=document.getElementById('ind2cards'); if(!wrap)return;
-  if(window.matchMedia&&window.matchMedia('(max-width:900px)').matches)return; /* mobile: CSS static grid */
-  var cards=[].slice.call(wrap.children), N=cards.length, base=0, hover=-1, TILT=0.34;
-  // §14.2 — CMS media per card: data-img paints a photo, data-c1/data-c2 override the gradient.
-  // Set via JS style props (CSP-safe; no inline style attributes).
-  cards.forEach(function(c){var img=c.getAttribute('data-img'),c1=c.getAttribute('data-c1'),c2=c.getAttribute('data-c2');
-    if(img){c.style.backgroundImage="url('"+img.replace(/'/g,"%27")+"')";c.style.backgroundSize='cover';c.style.backgroundPosition='center';c.classList.add('has-img');}
-    else if(c1&&c2){c.style.backgroundImage='linear-gradient(135deg,'+c1+','+c2+')';}});
-  cards.forEach(function(c,i){c.addEventListener('mouseenter',function(){hover=i;c.classList.add('hover');});
-    c.addEventListener('mouseleave',function(){hover=-1;c.classList.remove('hover');});});
-  function frame(){var sec=wrap.getBoundingClientRect();var cx=sec.width/2,cy=sec.height*0.5;
-    var Rx=sec.width*0.33,Ry=sec.height*0.30,cosT=Math.cos(TILT),sinT=Math.sin(TILT);
-    if(hover<0)base+=0.0034;
-    cards.forEach(function(c,i){var a=base+i*(Math.PI*2/N);var bx=Math.cos(a),by=Math.sin(a);
-      var X=bx*Rx,Y=by*Ry;var px=X*cosT-Y*sinT,py=X*sinT+Y*cosT;var depth=(by+1)/2;
-      var s=(i===hover)?1.28:(0.5+0.72*depth);
-      c.style.left=(cx+px)+'px';c.style.top=(cy+py)+'px';
-      c.style.transform='translate(-50%,-50%) scale('+s.toFixed(3)+')';
-      c.style.opacity=(0.32+0.68*depth).toFixed(2);
-      c.style.zIndex=(i===hover)?999:Math.round(depth*100);});
-    requestAnimationFrame(frame);}
+  // Our Industries — single-viewBox SVG orbit (web from logo + orbit rings + white glow).
+  // Everything (cards as <foreignObject>, lines, nodes, pulses) shares one coordinate
+  // system, so it scales identically on any screen / DPI. Mobile uses the CSS grid.
+  var svg=document.getElementById('ind2Svg'); if(!svg)return;
+  if(window.matchMedia&&window.matchMedia('(max-width:900px)').matches)return;
+  var SVGNS="http://www.w3.org/2000/svg";
+  var gLines=document.getElementById('ind2Lines'),gNodes=document.getElementById('ind2Nodes'),
+      gPulses=document.getElementById('ind2Pulses'),gOdots=document.getElementById('ind2Odots'),
+      gFo=document.getElementById('ind2Fo');
+  var fos=[].slice.call(gFo.querySelectorAll('foreignObject')), N=fos.length; if(!N)return;
+  var CW=196,CH=126,FW=230,FH=160, cx=590,cy=350,Rx=362,Ry=210,TILT=0.30,CURVE=0.12,RRX=112,RRY=60;
+  var cards=[], st=[];
+  for(var i=0;i<N;i++){
+    var fo=fos[i], a=fo.querySelector('.io-card');
+    a.style.width=CW+'px'; a.style.height=CH+'px'; a.style.margin=((FH-CH)/2)+'px '+((FW-CW)/2)+'px';
+    var img=a.getAttribute('data-img'),c1=a.getAttribute('data-c1'),c2=a.getAttribute('data-c2');
+    if(img){ a.style.backgroundImage="url('"+img.replace(/'/g,"%27")+"')"; a.classList.add('has-img'); }
+    else if(c1&&c2){ a.style.backgroundImage='linear-gradient(135deg,'+c1+','+c2+')'; }
+    var p=document.createElementNS(SVGNS,'path'); gLines.appendChild(p);
+    var nd=document.createElementNS(SVGNS,'circle'); nd.setAttribute('r','3'); nd.setAttribute('fill','#2478E0'); gNodes.appendChild(nd);
+    var nh=document.createElementNS(SVGNS,'circle'); nh.setAttribute('r','6'); nh.setAttribute('fill','#2478E0'); nh.setAttribute('opacity','0.16'); gNodes.appendChild(nh);
+    var pu=document.createElementNS(SVGNS,'circle'); pu.setAttribute('r','2.2'); pu.setAttribute('fill','#e8f3ff'); gPulses.appendChild(pu);
+    cards.push({fo:fo,a:a,path:p,node:nd,halo:nh,pulse:pu}); st.push({s:0.72,o:0.6});
+  }
+  svg.appendChild(gNodes); // nodes on top of cards
+  var OD=3, odEls=[];
+  for(var od=0;od<OD;od++){
+    var h=document.createElementNS(SVGNS,'circle'); h.setAttribute('r','7'); h.setAttribute('fill','#2478E0'); h.setAttribute('opacity','0.18'); gOdots.appendChild(h);
+    var dd=document.createElementNS(SVGNS,'circle'); dd.setAttribute('r','3'); dd.setAttribute('fill','#2478E0'); dd.setAttribute('opacity','0.75'); gOdots.appendChild(dd);
+    odEls.push({h:h,d:dd});
+  }
+  var hover=-1, base=0, t=0;
+  function hit(e){var el=document.elementFromPoint(e.clientX,e.clientY);var c=el&&el.closest?el.closest('[data-ci]'):null;hover=c?(+c.getAttribute('data-ci')):-1;}
+  svg.addEventListener('pointermove',hit,{passive:true});
+  svg.addEventListener('pointerleave',function(){hover=-1;});
+  function qpt(ax,ay,px,py,bx,by,tt){var u=1-tt;return[u*u*ax+2*u*tt*px+tt*tt*bx,u*u*ay+2*u*tt*py+tt*tt*by];}
+  function frame(){
+    t+=0.016; base += (hover<0 ? 0.0020 : 0.00035);  // slow drastically on hover, never dead
+    var cosT=Math.cos(TILT), sinT=Math.sin(TILT), order=[];
+    for(var i=0;i<N;i++){
+      var a=base+i*(Math.PI*2/N), bx=Math.cos(a), by=Math.sin(a);
+      var X=bx*Rx, Y=by*Ry, px=X*cosT-Y*sinT, py=X*sinT+Y*cosT, depth=(by+1)/2;
+      var x=cx+px, y=cy+py, c=cards[i], s=st[i];
+      var tgtS=(i===hover)?1.26:(0.62+0.52*depth), tgtO=(i===hover)?1:(0.5+0.5*depth);
+      s.s+=(tgtS-s.s)*0.14; s.o+=(tgtO-s.o)*0.14;
+      c.fo.setAttribute('x',(x-FW/2).toFixed(1)); c.fo.setAttribute('y',(y-FH/2).toFixed(1));
+      c.a.style.transform='scale('+s.s.toFixed(4)+')'; c.a.style.opacity=s.o.toFixed(3);
+      var dx=x-cx, dy=y-cy, dl=Math.hypot(dx,dy)||1, ux=dx/dl, uy=dy/dl, nx=-uy, ny=ux;
+      var tr=1/Math.sqrt((ux/RRX)*(ux/RRX)+(uy/RRY)*(uy/RRY));
+      var sx=cx+ux*tr, sy=cy+uy*tr, ex=x, ey=y;
+      var mxp=(sx+ex)/2, myp=(sy+ey)/2, seg=Math.hypot(ex-sx,ey-sy), cpx=mxp+nx*seg*CURVE, cpy=myp+ny*seg*CURVE;
+      c.path.setAttribute('d','M'+sx.toFixed(1)+' '+sy.toFixed(1)+'Q'+cpx.toFixed(1)+' '+cpy.toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1));
+      c.node.setAttribute('cx',ex.toFixed(1)); c.node.setAttribute('cy',ey.toFixed(1));
+      c.halo.setAttribute('cx',ex.toFixed(1)); c.halo.setAttribute('cy',ey.toFixed(1));
+      c.halo.setAttribute('opacity',(0.10+0.10*(0.5+0.5*Math.sin(t*2.2+i))).toFixed(3));
+      var tt=((t/2.8)+i/N)%1, pp=qpt(sx,sy,cpx,cpy,ex,ey,tt);
+      c.pulse.setAttribute('cx',pp[0].toFixed(1)); c.pulse.setAttribute('cy',pp[1].toFixed(1));
+      c.pulse.setAttribute('opacity',(0.85*(1-tt)+0.1).toFixed(2));
+      order.push({i:i,depth:depth});
+    }
+    for(var od2=0;od2<OD;od2++){
+      var oa=t*0.14+od2*(Math.PI*2/OD), oX=470*Math.cos(oa), oY=272*Math.sin(oa);
+      var opx=oX*cosT-oY*sinT, opy=oX*sinT+oY*cosT, ox=cx+opx, oy=cy+opy, e=odEls[od2];
+      e.h.setAttribute('cx',ox.toFixed(1)); e.h.setAttribute('cy',oy.toFixed(1));
+      e.d.setAttribute('cx',ox.toFixed(1)); e.d.setAttribute('cy',oy.toFixed(1));
+    }
+    order.sort(function(p,q){return p.depth-q.depth;});
+    for(var k=0;k<order.length;k++){ gFo.appendChild(cards[order[k].i].fo); }
+    requestAnimationFrame(frame);
+  }
   requestAnimationFrame(frame);
+})();
+;
+(function(){
+  // Paint the mobile static-grid industry cards (#ind2cards) from their CMS media.
+  // (Desktop uses the SVG foreignObject cards above; this keeps the mobile grid in sync.)
+  var wrap=document.getElementById('ind2cards'); if(!wrap)return;
+  [].forEach.call(wrap.children,function(c){
+    var img=c.getAttribute('data-img'),c1=c.getAttribute('data-c1'),c2=c.getAttribute('data-c2');
+    if(img){ c.style.backgroundImage="url('"+img.replace(/'/g,"%27")+"')"; c.style.backgroundSize='cover'; c.style.backgroundPosition='center'; c.classList.add('has-img'); }
+    else if(c1&&c2){ c.style.backgroundImage='linear-gradient(135deg,'+c1+','+c2+')'; }
+  });
 })();
 ;
 (function(){
