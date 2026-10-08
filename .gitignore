@@ -1,0 +1,7 @@
+# Runtime / dev artifacts (never commit)
+error.log
+*.log
+/preview/*.local.php
+
+# Local env / secrets
+.env
