@@ -1766,9 +1766,11 @@ html,body{top:0!important;position:static!important}
 .sh-cta svg{width:17px;height:17px}
 
 /* logos — ukuran SAMA, transparan (tanpa kartu putih), diputihkan biar kebaca di bg gelap */
-.sh-logos{position:relative;margin-top:32px;min-height:64px;max-width:500px;display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px;transition:opacity .3s ease}
-/* TINGGI SAMA PERSIS untuk semua logo (png & svg) -> seragam; transparan + diputihkan utk bg gelap */
-.sh-logos img{height:26px;width:auto;max-width:130px;object-fit:contain;filter:brightness(0) invert(1);opacity:.7;transition:opacity .25s}
+/* Logo sudah di-trim (tanpa padding) -> TINGGI seragam = ukuran tampak sama.
+   width auto mengikuti rasio; max-width menjaga wordmark lebar tak mendominasi. */
+.sh-logos{position:relative;margin-top:30px;min-height:90px;max-width:540px;display:flex;flex-wrap:wrap;
+  align-items:center;gap:22px 28px;transition:opacity .3s ease}
+.sh-logos img{height:25px;width:auto;max-width:132px;object-fit:contain;filter:brightness(0) invert(1);opacity:.72;transition:opacity .25s}
 .sh-logos img:hover{opacity:1}
 
 /* STAGE kanan — 3 panel kaca */
@@ -1809,7 +1811,9 @@ html,body{top:0!important;position:static!important}
    STATEMENT — scroll-synced TYPING effect (futuristic). Driven by solhero.js.
    Padding atas/bawah dibuat seimbang (teks center) + section lebih pendek.
    ============================================================================ */
-.statement.typing{height:130vh}
+/* Section panjang -> scroll terasa "berat" & typing pelan (ala scale.com).
+   Teks tetap center (padding atas = bawah). */
+.statement.typing{height:300vh}
 .statement.typing .stmt-sticky{align-items:center;padding-top:0;padding-bottom:0}
 .statement.typing .stmt{font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(26px,3.5vw,48px);font-weight:600;line-height:1.5;text-align:center;letter-spacing:-.012em}
 .statement.typing .c{color:rgba(20,32,46,.10);transition:color .16s ease,text-shadow .3s ease}
