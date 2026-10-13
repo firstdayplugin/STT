@@ -184,15 +184,35 @@ include theme_path('templates/layouts/header.php');
 
 
 
-<!-- ===== PRISM (WebGL scroll story) ===== -->
-<section class="prism" id="solutions"<?= $slides_json ? ' data-slides="' . htmlspecialchars(json_encode($slides_json), ENT_QUOTES) . '"' : '' ?>>
-  <div class="stage">
-    <canvas id="prismCanvas"></canvas>
-    <div class="prism-hint" id="prismHint">Scroll</div>
-    <div class="prism-overlay">
-      <div class="prism-caps" id="prismCaps"></div>
-      <div class="prism-dots" id="prismDots"></div>
-      <div class="prism-logos" id="prismLogos"></div>
+<!-- ===== SOLUTIONS HERO (scale.com-style 3D glass panels, CSS/SVG, CMS-driven) ===== -->
+<!-- Middle panel = media (foto/video dari CMS, auto ganti). Teks + logo ikut berganti
+     sinkron per slide. Panel depan & belakang kaca transparan + line-art kontur melengkung.
+     Driven by assets/js/solhero.js (old WebGL prism in anima.js self-disables sans #prismCanvas). -->
+<section class="solhero" id="solutions"<?= $slides_json ? ' data-slides="' . htmlspecialchars(json_encode($slides_json), ENT_QUOTES) . '"' : '' ?>>
+  <div class="sh-scroll">
+    <div class="sh-pin">
+      <div class="sh-frame">
+        <div class="sh-copy" id="shCopy">
+          <div class="sh-eye" id="shEye"></div>
+          <h2 class="sh-h notranslate" translate="no" id="shH"></h2>
+          <p class="sh-p" id="shP"></p>
+          <a class="sh-cta" id="shCta" href="#">Lihat Solusi
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div class="sh-logos" id="shLogos"></div>
+        </div>
+        <div class="sh-stage">
+          <div class="sh-deck" id="shDeck">
+            <div class="sh-panel sh-glass" id="shB"><div class="sh-face"><div class="sh-art" id="shArtB"></div></div></div>
+            <div class="sh-panel sh-media" id="shM"><div class="sh-face"><div class="sh-mediawrap" id="shMedia"></div><div class="sh-art" id="shArtM"></div><span class="sh-chip" id="shChip"><i></i><b></b></span></div></div>
+            <div class="sh-panel sh-glass" id="shF"><div class="sh-face"><div class="sh-art" id="shArtF"></div></div></div>
+          </div>
+        </div>
+        <div class="sh-over" id="shOver">
+          <div class="sh-eye" id="shOverEye"></div>
+          <h2 class="sh-overh notranslate" translate="no" id="shOverH"></h2>
+          <p class="sh-overp" id="shOverP"></p>
+        </div>
+      </div>
     </div>
   </div>
 </section>

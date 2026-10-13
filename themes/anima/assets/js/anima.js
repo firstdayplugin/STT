@@ -105,7 +105,7 @@ requestAnimationFrame(frame);
 
 })();
 ;
-(function(){
+(function(){if(!document.getElementById('prismCanvas'))return; /* disabled: #solutions now uses CSS/SVG solhero.js */
 let SLIDES=[
   {eyebrow:"Modernize Infrastructure", h:'Modernize <b>Infrastructure</b>', p:'Private cloud, migrasi, hingga cloud repatriation — dirancang untuk kebutuhan Anda.', dark:'#0a1430',mid:'#123a6a',accent:'#42a0ff',label:'INFRA', logos:['dell','nut','vmware','sangfor']},
   {eyebrow:"Cybersecurity", h:'<b>Cybersecurity</b>', p:'Perlindungan menyeluruh untuk aset digital dan operasional bisnis.', dark:'#101430',mid:'#20306e',accent:'#6f8bff',label:'SECURITY', logos:['sangfor','redhat','microsoft']},

@@ -82,6 +82,7 @@
 <?php include theme_path('templates/layouts/floating.php'); ?>
 <?php if (!empty($anima_load_home_js)): ?>
 <script src="<?= theme_asset('assets/js/anima.js') ?>"></script>
+<script src="<?= theme_asset('assets/js/solhero.js') ?>" defer></script>
 <?php endif; ?>
 <script src="<?= theme_asset('assets/js/anima-ui.js') ?>"></script>
 <!-- Cursor-reactive tech-network hero FX (no-ops on pages without a .tk-fx canvas). -->
