@@ -123,7 +123,7 @@ $__sa_lines = array_values(array_filter([
   if(paClose) paClose.addEventListener('click', function(){ setPanel(false); });
   if(tipX) tipX.addEventListener('click', function(){
     setTip(false);
-    try{ localStorage.setItem('saTipDismissed','1'); }catch(e){}
+    try{ sessionStorage.setItem('saTipDismissed','1'); }catch(e){}
   });
   if(openChat) openChat.addEventListener('click', function(){ setPanel(true); });
 
@@ -137,9 +137,32 @@ $__sa_lines = array_values(array_filter([
 
   document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ setPanel(false); setTip(false); } });
 
-  // Auto-reveal the tooltip once per visitor, shortly after load.
-  var dismissed=false; try{ dismissed = localStorage.getItem('saTipDismissed')==='1'; }catch(e){}
-  if(!dismissed){ setTimeout(function(){ if(!W.classList.contains('open')) setTip(true); }, 1400); }
+  // Auto-popup once per SESSION (re-arms each visit) + subtle chat chime.
+  // Browsers block audio without a user gesture, so we unlock audio on the first
+  // interaction and reveal right after — still feels automatic, and has sound.
+  var dismissed=false; try{ dismissed = sessionStorage.getItem('saTipDismissed')==='1'; }catch(e){}
+  var ac=null, shown=false;
+  function chime(){
+    try{
+      if(!ac || ac.state!=='running') return;           // silent kalau audio belum di-unlock
+      var t=ac.currentTime;
+      [[660,0],[880,0.085]].forEach(function(n){          // 2 nada sine lembut (halus, nggak lebay)
+        var o=ac.createOscillator(), g=ac.createGain();
+        o.type='sine'; o.frequency.value=n[0]; o.connect(g); g.connect(ac.destination);
+        var s=t+n[1];
+        g.gain.setValueAtTime(0.0001,s);
+        g.gain.exponentialRampToValueAtTime(0.055, s+0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, s+0.17);
+        o.start(s); o.stop(s+0.19);
+      });
+    }catch(e){}
+  }
+  function reveal(){ if(shown) return; shown=true; if(dismissed || W.classList.contains('open')) return; setTip(true); chime(); }
+  if(!dismissed){
+    function onGesture(){ try{ if(!ac) ac=new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume(); }catch(e){} setTimeout(reveal, 420); }
+    ['pointerdown','keydown','touchstart'].forEach(function(ev){ addEventListener(ev, onGesture, {once:true, passive:true}); });
+    setTimeout(reveal, 2600);  // fallback: kalau user diam, tetap muncul (tanpa suara)
+  }
 
   // Typing-text animation (loops through the CMS lines).
   var phrases=[]; try{ phrases = JSON.parse(W.getAttribute('data-lines')||'[]'); }catch(e){}
