@@ -217,8 +217,8 @@ include theme_path('templates/layouts/header.php');
   </div>
 </section>
 
-<!-- ===== STATEMENT (scroll word-reveal, pemisah Solutions & Industries) ===== -->
-<section class="statement" id="statement">
+<!-- ===== STATEMENT (scroll-synced TYPING effect; driven by solhero.js) ===== -->
+<section class="statement typing" id="statement">
   <div class="stmt-sticky">
     <div class="wrap">
       <p class="stmt" id="stmtText"><?= hc('statement_text') ?></p>

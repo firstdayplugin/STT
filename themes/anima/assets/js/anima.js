@@ -268,6 +268,7 @@ requestAnimationFrame(frame);
 })();
 ;
 (function(){
+  if(document.querySelector('#statement.typing'))return; /* disabled: typing effect in solhero.js */
   var el=document.getElementById('stmtText'); if(!el)return;
   var HL={Sapta:1,Tunas:1,Teknologi:1,Business:1,Technology:1,Solutions:1,Services:1,Indonesia:1,"2015":1};
   var words=el.textContent.trim().split(/\s+/);

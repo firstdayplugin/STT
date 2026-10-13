@@ -116,3 +116,39 @@
   addEventListener('resize',measure);
   measure(); requestAnimationFrame(frame);
 })();
+
+/* ============================================================================
+   STATEMENT — scroll-synced TYPING effect (futuristic). Characters type out as
+   the user scrolls through the section; keywords get a glowing gradient; a
+   neon caret sits at the last typed character. Old word-reveal in anima.js
+   self-disables when #statement has class "typing".
+   ========================================================================== */
+(function(){
+  var sec=document.getElementById('statement');
+  if(!sec||!sec.classList.contains('typing')) return;
+  var el=document.getElementById('stmtText'); if(!el) return;
+  var kw=/^(Sapta|Tunas|Teknologi|Business|Technology|Solutions|Services|Indonesia|2015)$/i;
+  var text=(el.textContent||'').replace(/\s+/g,' ').trim();
+  if(!text) return;
+  var esc=function(c){return c==='<'?'&lt;':c==='>'?'&gt;':c==='&'?'&amp;':c;};
+  // Spasi = teks biasa (breakable) biar kalimat tetap wrap jadi beberapa baris;
+  // hanya karakter non-spasi yang dibungkus span & diketik satu per satu.
+  var html='', toks=text.split(/(\s+)/);
+  toks.forEach(function(tok){
+    if(/^\s+$/.test(tok)){ html+=' '; return; }
+    var isk=kw.test(tok.replace(/[.,]/g,''));
+    html+='<span class="wd">';
+    for(var i=0;i<tok.length;i++) html+='<span class="c'+(isk?' kw':'')+'">'+esc(tok[i])+'</span>';
+    html+='</span>';
+  });
+  el.innerHTML=html;
+  var cs=[].slice.call(el.querySelectorAll('.c'));
+  function cl(v,a,b){return v<a?a:(v>b?b:v);}
+  function upd(){
+    var r=sec.getBoundingClientRect(), tot=sec.offsetHeight-innerHeight||1;
+    var p=cl(-r.top/tot,0,1);
+    var n=Math.floor(cl(p/0.82,0,1)*cs.length);  // selesai ketik sebelum section lepas pin
+    for(var i=0;i<cs.length;i++){ cs[i].classList.toggle('on', i<n); cs[i].classList.toggle('cursor', i===n-1); }
+  }
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
+})();
