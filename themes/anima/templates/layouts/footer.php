@@ -6,7 +6,7 @@
 
     <div class="tel-footer-shell">
       <svg class="tel-footer-notch" viewBox="0 0 620 120" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 0 H610 C560 20 540 100 495 120 H0 Z" fill="#fff"/>
+        <path d="M0 0 H580 C510 0 510 120 440 120 H0 Z" fill="#fff"/>
       </svg>
 
 <?php
@@ -74,9 +74,6 @@
         <span><a href="<?= url('privacy-policy') ?>"><?= htmlspecialchars(t('privacy_policy', 'Privacy Policy')) ?></a> &nbsp;|&nbsp; <a href="<?= url('compliance-policy') ?>"><?= htmlspecialchars(t('compliance_policy', 'Compliance Policy')) ?></a> &nbsp;|&nbsp; <span><?= htmlspecialchars(get_setting('site_tagline', 'Enterprise Solution Provider')) ?></span></span>
       </div>
     </div>
-    <button class="tel-footer-top" type="button" aria-label="Back to top" data-scrolltop>
-      <svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg>
-    </button>
   </div>
 </footer>
 <?php include theme_path('templates/layouts/floating.php'); ?>

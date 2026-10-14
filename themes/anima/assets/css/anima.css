@@ -753,9 +753,9 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
   filter:none !important;
   margin-top:80px;
 }
-/* Full-bleed footer: spans edge-to-edge, sharp outer corners. Radius survives
-   only at the logo notch (the SVG cut top-left). */
-.tel-footer-shell{position:relative;overflow:hidden;min-height:405px;background:#171e2b;border-radius:0;padding:92px clamp(20px,5vw,72px) 0;
+/* Full-bleed footer: spans edge-to-edge with both top corners rounded.
+   The smooth S-notch beside the logo is the SVG overlay cut top-left. */
+.tel-footer-shell{position:relative;overflow:hidden;min-height:405px;background:#171e2b;border-radius:28px 28px 0 0;padding:92px clamp(20px,5vw,72px) 0;
 }
 .tel-footer-notch{position:absolute;left:0;top:0;width:min(34%, 430px);height:86px;display:block;z-index:1;
   pointer-events:none;
@@ -860,12 +860,6 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
   line-height:1.4;
 }
 .tel-footer-bottom a{color:rgba(255,255,255,.9)}
-.tel-footer-top{position:absolute;z-index:20;right:32px;bottom:64px;width:58px;height:58px;border:0;border-radius:50%;background:#fff;color:var(--blue-ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28);transition:background .2s;}
-.tel-footer-top:hover{background:#eaf1fb}
-.tel-footer-top svg{
-  width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;
-  stroke-linecap:round;stroke-linejoin:round;
-}
 @media(max-width:1100px){
   .tel-footer-content{grid-template-columns:1fr;gap:42px}
   .tel-footer-brand{padding-top:38px}
@@ -882,7 +876,6 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
   .tel-footer-logo img{width:210px;max-height:66px}
   .tel-footer-links{grid-template-columns:1fr;gap:24px}
   .tel-footer-bottom{flex-direction:column;align-items:flex-start}
-  .tel-footer-top{right:18px;bottom:26px;width:50px;height:50px}
 }
 @media(prefers-reduced-motion:reduce){
   .tel-footer *{animation:none !important;transition:none !important}
@@ -1625,12 +1618,10 @@ html,body{top:0!important;position:static!important}
    ============================================================ */
 .tel-footer-shell{padding-left:40px;padding-right:40px}
 .tel-footer-logo{left:40px}
-.tel-footer-top{right:40px}
 .tel-footer-content{grid-template-columns:minmax(300px,1fr) minmax(620px,2fr)}
 @media(max-width:1200px){
   .tel-footer-shell{padding-left:28px;padding-right:28px}
   .tel-footer-logo{left:28px}
-  .tel-footer-top{right:28px}
 }
 @media(max-width:1100px){
   .tel-footer-content{grid-template-columns:1fr}
