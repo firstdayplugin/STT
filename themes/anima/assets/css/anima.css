@@ -1802,10 +1802,10 @@ html,body{top:0!important;position:static!important}
    ============================================================================ */
 /* Section panjang -> scroll terasa "berat" & typing pelan (ala scale.com).
    Teks tetap center (padding atas = bawah). */
-.statement.typing{height:300vh}
+.statement.typing{height:440vh}
 .statement.typing .stmt-sticky{align-items:center;padding-top:0;padding-bottom:0}
-.statement.typing .stmt{font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(26px,3.5vw,48px);font-weight:600;line-height:1.5;text-align:center;letter-spacing:-.012em}
-.statement.typing .c{color:rgba(20,32,46,.10);transition:color .16s ease,text-shadow .3s ease}
+.statement.typing .stmt{font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(19px,2.4vw,32px);font-weight:600;line-height:1.5;text-align:center;letter-spacing:-.01em;max-width:1000px;margin:0 auto}
+.statement.typing .c{color:rgba(20,32,46,.045);transition:color .5s cubic-bezier(.22,.61,.36,1),text-shadow .55s ease}
 .statement.typing .c.on{color:#14202E}
 .statement.typing .c.kw.on{background:linear-gradient(100deg,#8fc3ff,#4f9bff 52%,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(79,155,255,.25)}
 /* kursor glowing futuristik di karakter terakhir yang diketik */

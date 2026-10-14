@@ -147,7 +147,7 @@
   function upd(){
     var r=sec.getBoundingClientRect(), tot=sec.offsetHeight-innerHeight||1;
     var p=cl(-r.top/tot,0,1);
-    var n=Math.floor(cl(p/0.82,0,1)*cs.length);  // selesai ketik sebelum section lepas pin
+    var n=Math.floor(cl(p/0.9,0,1)*cs.length);  // selesai ketik sebelum section lepas pin
     for(var i=0;i<cs.length;i++){ cs[i].classList.toggle('on', i<n); cs[i].classList.toggle('cursor', i===n-1); }
   }
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
