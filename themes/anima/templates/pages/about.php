@@ -61,16 +61,42 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
 ?>
 <main class="page-body">
 
-  <!-- Full-bleed About hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
-  <section class="idh<?= $abhero === '' ? ' idh--plain' : '' ?>"<?= $abhero !== '' ? ' style="background-image:url(' . htmlspecialchars($abhero) . ')"' : '' ?>>
-    <div class="idh-ov" aria-hidden="true"></div>
-    <canvas class="tk-fx" id="abhFx" data-fade="center" aria-hidden="true"></canvas>
-    <div class="idh-copy idh-copy--about">
-      <div class="idh-eyebrow"><?= ac('about', 'intro_eyebrow') ?></div>
-      <h1 class="idh-title"><?= ac('about', 'intro_title') ?></h1>
-      <div class="idh-intro"><?= ac('about', 'intro_body', true) ?></div>
+  <?php
+  // Scale.com-style constellation hero: two parent capabilities + their service areas,
+  // joined by animated connector lines. Boxes drift organically and follow the cursor;
+  // hovering a card zooms the photo and its label together. Photos reuse existing site
+  // assets (design3/*) — admin can swap them later. Boxes are decorative (not links).
+  // [key, label, image(uploads path), isParent, left, top, size(px)]
+  $abh_boxes = [
+    ['infra',         'Infrastructure Services',    'design3/towers-up.jpg',      true,  '7%',  '20%', 150],
+    ['consult',       'Consulting',                 'design3/team-meeting.jpg',   false, '25%', '17%', 112],
+    ['deploy',        'Enterprise Deployment',      'design3/office-desks.jpg',   false, '22%', '62%', 128],
+    ['managed-infra', 'Managed Infrastructure',     'design3/office-corridor.jpg',false, '6%',  '57%', 112],
+    ['cyber',         'Cybersecurity Services',     'design3/monitor-dark.jpg',   true,  '80%', '19%', 150],
+    ['assess',        'Assessment & Testing',       'design3/person-laptop.jpg',  false, '65%', '16%', 112],
+    ['risk',          'Security Risk & Compliance', 'design3/glass-facade.jpg',   false, '62%', '62%', 120],
+    ['managed-cyber', 'Managed Cybersecurity',      'design3/desk-red.jpg',       false, '79%', '57%', 130],
+  ];
+  ?>
+  <section class="abh" id="abhero" aria-label="Enterprise infrastructure and security">
+    <svg class="abh-links" id="abhLinks" aria-hidden="true"></svg>
+    <div class="abh-copy">
+      <h1>The infrastructure and security your business runs on.</h1>
+      <p>Enterprises across Indonesia trust Sapta Tunas Teknologi to build, protect, and operate the systems behind their operations.</p>
     </div>
+    <div class="abh-stage" id="abhStage">
+      <?php foreach ($abh_boxes as $b): list($k, $label, $img, $parent, $lx, $ty, $sz) = $b; ?>
+        <div class="abh-box<?= $parent ? ' parent' : '' ?>" data-k="<?= htmlspecialchars($k) ?>" style="left:<?= $lx ?>;top:<?= $ty ?>;--w:<?= (int)$sz ?>px;--h:<?= (int)$sz ?>px">
+          <div class="abh-inner">
+            <div class="abh-frame" style="width:var(--w);height:var(--h)"><img src="<?= htmlspecialchars(uploads_url($img)) ?>" alt="<?= htmlspecialchars($label) ?>"></div>
+            <div class="abh-lbl"><span class="abh-tick"></span><?= htmlspecialchars($label) ?></div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+    <div class="abh-hint" aria-hidden="true"><span>Scroll to explore</span><span class="abh-k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></div>
   </section>
+  <script src="<?= theme_asset('assets/js/abouthero.js') ?>" defer></script>
 
   <div class="page-shell ab">
 
