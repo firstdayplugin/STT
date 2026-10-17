@@ -1317,13 +1317,12 @@ body.sol-modal-open{overflow:hidden}
    Full-width band placed before .page-shell. Static stack on mobile.
    ========================================================================== */
 .icv-wrap{position:relative;z-index:0;height:520vh}
-.icv-pin{position:sticky;top:0;height:100vh;overflow:hidden;border-radius:30px 30px 0 0;
-  background:radial-gradient(120% 95% at 50% 0%,#0c1526 0%,#070b14 60%,#05080f 100%);
-  box-shadow:0 -24px 60px rgba(4,8,18,.5)}
+.icv-pin{position:sticky;top:0;height:100vh;overflow:hidden;
+  background:radial-gradient(120% 95% at 50% 0%,#0c1526 0%,#070b14 60%,#05080f 100%)}
 .icv-inner{position:relative;max-width:1240px;height:100%;margin:0 auto;padding:0 24px}
 .icv-net{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 
-.icv-head{position:absolute;left:0;right:0;top:9%;text-align:center;z-index:3;padding:0 24px}
+.icv-head{position:absolute;left:0;right:0;top:14%;text-align:center;z-index:3;padding:0 24px}
 .icv-head h2{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:clamp(28px,3.4vw,46px);
   font-weight:600;letter-spacing:-.03em;color:#eef3fb}
 .icv-head h2 .hl{background:linear-gradient(120deg,#5aa6ff,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -1355,7 +1354,7 @@ body.sol-modal-open{overflow:hidden}
 /* Mobile: static dark stack — ICARE readable, cards stacked, no pinned scene */
 @media(max-width:860px){
   .icv-wrap{height:auto}
-  .icv-pin{position:static;height:auto;padding:64px 20px 44px;border-radius:24px 24px 0 0}
+  .icv-pin{position:static;height:auto;padding:56px 20px 44px}
   .icv-net{display:none}
   .icv-inner{height:auto;padding:0}
   .icv-head{position:static}
