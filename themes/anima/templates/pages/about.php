@@ -136,21 +136,33 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   <script src="<?= theme_asset('assets/js/abouthero.js') ?>" defer></script>
   <script src="<?= theme_asset('assets/js/aboutscene.js') ?>" defer></script>
 
-  <div class="page-shell ab">
-
-    <!-- Values (ICARE) — each letter has an uploadable icon/3D image -->
-    <section class="ab-sec">
-      <div class="ab-head"><h2><?= ac('about', 'values_eyebrow') ?> <span class="blue"><?= ac('about', 'values_title', true) ?></span></h2></div>
-      <div class="ab-values-grid">
-        <?php foreach ($values as $v): $vi = $aimgu($v); ?>
-          <div class="ab-val">
-            <div class="ab-val-badge"><?php if ($vi): ?><img src="<?= htmlspecialchars($vi) ?>" alt="<?= htmlspecialchars($v['kode'] ?? '') ?>"><?php else: ?><span><?= htmlspecialchars($v['kode'] ?? '') ?></span><?php endif; ?></div>
-            <h3><?= htmlspecialchars($atr($v, 'judul')) ?></h3>
-            <p><?= htmlspecialchars($atr($v, 'teks')) ?></p>
-          </div>
-        <?php endforeach; ?>
+  <!-- Our Value — ICARE constellation (dark, scroll-scrubbed). The ICARE letters
+       (wireframe + corner ticks) stay readable; scrolling wires each value card in
+       one-by-one via a drawing cable, with the active letter lit. Motion in
+       aboutvalue.js; collapses to a static stack on mobile. CMS: about_items 'value'. -->
+  <section class="icv-wrap" id="icvWrap" aria-label="Our Value — ICARE">
+    <div class="icv-pin">
+      <div class="icv-inner">
+        <canvas class="icv-net" id="icvNet" aria-hidden="true"></canvas>
+        <div class="icv-head">
+          <h2><?= ac('about', 'values_eyebrow') ?: 'Our' ?> <span class="hl"><?= ac('about', 'values_title') ?: 'Value' ?></span></h2>
+        </div>
+        <div class="icv-letters" id="icvLetters">
+          <?php foreach ($values as $v): ?>
+            <div class="icv-ltr" data-k="<?= htmlspecialchars($v['kode'] ?? '') ?>"><i class="tl"></i><i class="br"></i><?= htmlspecialchars($v['kode'] ?? '') ?><span class="cap"><?= htmlspecialchars($atr($v, 'judul')) ?></span></div>
+          <?php endforeach; ?>
+        </div>
+        <div class="icv-cards" id="icvCards">
+          <?php foreach ($values as $v): ?>
+            <div class="icv-card"><span class="lb"><?= htmlspecialchars($v['kode'] ?? '') ?></span><div class="t"><?= htmlspecialchars(mb_convert_case($atr($v, 'judul'), MB_CASE_TITLE, 'UTF-8')) ?></div><div class="d"><?= htmlspecialchars($atr($v, 'teks')) ?></div></div>
+          <?php endforeach; ?>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/aboutvalue.js') ?>" defer></script>
+
+  <div class="page-shell ab">
 
     <!-- Milestone SLIDER (cross-fade; timeline drives the text+image above) -->
     <?php if ($milestones): ?>
