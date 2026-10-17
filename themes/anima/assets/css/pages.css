@@ -1267,11 +1267,22 @@ body.sol-modal-open{overflow:hidden}
   font-weight:600;letter-spacing:-.02em;margin-bottom:26px;
   background:linear-gradient(180deg,#fff,#bcd0ee);-webkit-background-clip:text;background-clip:text;color:transparent}
 .abd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.abd-mcard{position:relative;text-align:left;padding:18px 18px 18px 16px;border-radius:14px;
-  background:rgba(16,26,46,.72);border:1px solid rgba(120,160,230,.2);backdrop-filter:blur(6px);
-  box-shadow:0 18px 40px -26px rgba(0,0,0,.8)}
-.abd-mcard .n{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;color:#5fa0ef;margin-bottom:9px}
-.abd-mcard p{font-size:13px;line-height:1.5;color:#c3d0e4}
+.abd-mcard{position:relative;overflow:hidden;text-align:left;padding:20px 20px 20px 22px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(22,34,60,.82),rgba(11,19,38,.82));
+  border:1px solid rgba(120,160,230,.18);backdrop-filter:blur(8px);
+  box-shadow:0 20px 44px -26px rgba(0,0,0,.85);
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),border-color .45s ease,box-shadow .45s ease}
+.abd-mcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#5aa6ff,#37c9bd);opacity:.85}
+.abd-mcard::after{content:"";position:absolute;inset:0;border-radius:16px;opacity:0;pointer-events:none;
+  transition:opacity .45s ease;background:radial-gradient(130% 90% at 8% 0%,rgba(90,166,255,.16),transparent 58%)}
+.abd-mcard:hover{transform:translateY(-5px);border-color:rgba(130,175,255,.5);
+  box-shadow:0 34px 66px -24px rgba(0,0,0,.9),0 0 0 1px rgba(130,175,255,.35),0 0 30px -6px rgba(90,160,255,.4)}
+.abd-mcard:hover::after{opacity:1}
+.abd-mcard .n{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;
+  font-size:12.5px;font-weight:700;letter-spacing:.02em;color:#bfe0ff;margin-bottom:13px;
+  background:linear-gradient(135deg,rgba(90,166,255,.18),rgba(55,201,189,.12));border:1px solid rgba(130,175,255,.3)}
+.abd-mcard p{font-size:13.5px;line-height:1.55;color:#cdd8ea;margin:0}
 
 /* Mobile: static, clean stack — no pinned scene, native scroll */
 @media(max-width:860px){
