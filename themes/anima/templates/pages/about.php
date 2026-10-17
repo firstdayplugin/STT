@@ -77,7 +77,10 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     ['risk',          'Security Risk & Compliance', 'design3/glass-facade.jpg',   false, '62%', '62%', 120],
     ['managed-cyber', 'Managed Cybersecurity',      'design3/desk-red.jpg',       false, '79%', '57%', 130],
   ];
+  // Dummy video for the dark scene card (admin can replace uploads/about/vision.mp4).
+  $abhero_video = uploads_url('about/vision.mp4');
   ?>
+  <div class="abh-stack">
   <section class="abh" id="abhero" aria-label="Enterprise infrastructure and security">
     <svg class="abh-links" id="abhLinks" aria-hidden="true"></svg>
     <div class="abh-copy">
@@ -96,32 +99,44 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     </div>
     <div class="abh-hint" aria-hidden="true"><span>Scroll to explore</span><span class="abh-k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></div>
   </section>
-  <script src="<?= theme_asset('assets/js/abouthero.js') ?>" defer></script>
 
-  <div class="page-shell ab">
+  <!-- Dark "cover" scene: rises over the hero, presents OUR VISION with a video
+       card, then the card shrinks + lifts and OUR MISSION appears as glass cards
+       wired to the card by flowing cables. Scroll-driven motion in aboutscene.js;
+       collapses to a static stack on mobile. Replaces the old flat Vision+Mission. -->
+  <div class="abd-wrap" id="abdWrap">
+    <div class="abd-pin">
+      <div class="abd-stage">
+        <canvas class="abd-net" id="abdNet" aria-hidden="true"></canvas>
 
-    <!-- Vision + Mission — ONE sticky image (left) pinned while the copy (right) scrolls. -->
-    <section class="ab-sec ab-vm ab-vm-sticky">
-      <div class="ab-vm-media">
-        <div class="ab-vm-img<?= $vimg1 ? '' : ' phb' ?>"><?php if ($vimg1): ?><img src="<?= htmlspecialchars($vimg1) ?>" alt="" data-fallback="bg"><?php else: ?><span class="ab-ph">Gambar</span><?php endif; ?></div>
-      </div>
-      <div class="ab-vm-text">
-        <div class="ab-vcard">
-          <span class="ab-vm-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span>
-          <h2><?= ac('about', 'vision_title') ?></h2>
+        <div class="abd-v" id="abdV">
+          <h2><?= ac('about', 'vision_title') ?: 'Our Vision' ?></h2>
           <p><?= ac('about', 'vision_body') ?></p>
         </div>
-        <div class="ab-mcard">
-          <span class="ab-vm-ic ab-vm-ic-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h11l-2 3 2 3H5"/></svg></span>
-          <h2><?= ac('about', 'mission_title') ?></h2>
-          <ul class="ab-mlist">
-            <?php foreach ($mission as $m): ?>
-              <li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars($atr($m, 'teks')) ?></span></li>
+
+        <div class="abd-card" id="abdCard">
+          <?php if (!empty($abhero_video)): ?>
+          <video src="<?= htmlspecialchars($abhero_video) ?>" muted loop playsinline autoplay preload="auto"></video>
+          <?php endif; ?>
+          <canvas id="abdCardArt" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="abd-miss" id="abdMiss">
+          <h3><?= ac('about', 'mission_title') ?: 'Our Mission' ?></h3>
+          <div class="abd-grid">
+            <?php foreach ($mission as $i => $m): ?>
+              <div class="abd-mcard"><span class="n"><?= sprintf('%02d', (int)$i + 1) ?></span><p><?= htmlspecialchars($atr($m, 'teks')) ?></p></div>
             <?php endforeach; ?>
-          </ul>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+  </div><!-- /.abh-stack -->
+  <script src="<?= theme_asset('assets/js/abouthero.js') ?>" defer></script>
+  <script src="<?= theme_asset('assets/js/aboutscene.js') ?>" defer></script>
+
+  <div class="page-shell ab">
 
     <!-- Values (ICARE) — each letter has an uploadable icon/3D image -->
     <section class="ab-sec">
