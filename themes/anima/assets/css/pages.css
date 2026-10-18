@@ -1512,7 +1512,7 @@ body.sol-modal-open{overflow:hidden}
 .cw-head h2{font-size:clamp(26px,3.3vw,44px);font-weight:600;letter-spacing:-.03em;color:#0b1220}
 .cw-head h2 .blue{background:linear-gradient(120deg,#2f7be0,#2560c8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .cw-head p{margin:11px auto 0;max-width:560px;color:#64748b;font-size:13.5px;line-height:1.55}
-.cw-body{flex:1;display:grid;grid-template-columns:300px 1fr;gap:28px;padding:3vh clamp(28px,5vw,80px) 4vh;align-items:center;min-height:0}
+.cw-body{flex:1;display:grid;grid-template-columns:280px 1fr;gap:28px;padding:3vh clamp(28px,5vw,72px) 4vh;align-items:center;min-height:0}
 .cw-side{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;gap:18px}
 .cw-catwrap{position:relative;min-height:112px}
 .cw-cat{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}
@@ -1531,10 +1531,11 @@ body.sol-modal-open{overflow:hidden}
 .cw-nav li.past::before{background:#8fb6ef}
 .cw-wall{position:relative;height:100%}
 .cw-layer{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
-  grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.2vw,20px);opacity:0;pointer-events:none}
+  grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1vw,18px) clamp(10px,1vw,18px);opacity:0;pointer-events:none}
 .cw-layer.on{opacity:1;pointer-events:auto}
-.cw-layer.few{grid-template-columns:repeat(3,minmax(0,160px));justify-content:center}
-.cw-badge{position:relative;width:100%;max-width:160px;will-change:transform,opacity}
+.cw-layer.few{grid-template-columns:repeat(3,minmax(0,150px));justify-content:center}
+@media(min-width:861px) and (max-width:1120px){.cw-body{grid-template-columns:220px 1fr;gap:20px;padding:3vh 24px 4vh}}
+.cw-badge{position:relative;width:100%;max-width:150px;will-change:transform,opacity}
 .cw-badge .bx{position:relative;border-radius:16px;background:#fff;overflow:hidden;aspect-ratio:1/1;
   box-shadow:0 18px 36px -20px rgba(20,50,110,.42),0 0 0 1px rgba(20,50,110,.06);display:grid;place-items:center;padding:12px;
   transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s}
