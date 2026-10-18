@@ -1317,8 +1317,9 @@ body.sol-modal-open{overflow:hidden}
    Full-width band placed before .page-shell. Static stack on mobile.
    ========================================================================== */
 .icv-wrap{position:relative;z-index:0;height:520vh}
-.icv-pin{position:sticky;top:0;height:100vh;overflow:hidden;
-  background:radial-gradient(120% 95% at 50% 0%,#0c1526 0%,#070b14 60%,#05080f 100%)}
+.icv-pin{position:sticky;top:0;height:100vh;overflow:hidden;border-radius:30px 30px 0 0;
+  background:radial-gradient(120% 95% at 50% 0%,#0c1526 0%,#070b14 60%,#05080f 100%);
+  box-shadow:0 -26px 70px rgba(4,8,18,.5)}
 .icv-inner{position:relative;max-width:1240px;height:100%;margin:0 auto;padding:0 24px}
 .icv-net{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 
@@ -1369,4 +1370,65 @@ body.sol-modal-open{overflow:hidden}
   .icv-net{display:none}.icv-head,.icv-letters,.icv-cards{position:static}
   .icv-letters{margin:30px auto 8px}.icv-cards{margin:44px auto 0;flex-wrap:wrap}
   .icv-card{opacity:1!important;transform:none!important}
+}
+
+/* ============================================================================
+   About Us — "Our Milestone" horizontal journey (markup in about.php, motion in
+   aboutmile.js). Light, scroll-scrubbed: vertical scroll travels the timeline
+   sideways; centred year focuses (huge year + bullets + photo) while the rail
+   fills. Full-width band between Vision/Mission and Our Value. Static vertical
+   stack on mobile.
+   ========================================================================== */
+.mj-wrap{position:relative;z-index:1;height:1040vh}
+.mj-pin{position:sticky;top:0;height:100vh;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% -10%,#f4f8ff 0%,#fff 46%,#fff 100%)}
+.mj-head{position:absolute;left:0;right:0;top:11%;text-align:center;z-index:5;padding:0 24px}
+.mj-eyebrow{font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#5a86c9;margin-bottom:10px}
+.mj-head h2{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:clamp(26px,3.2vw,44px);font-weight:600;letter-spacing:-.03em;color:#0b1220}
+.mj-head h2 .b{background:linear-gradient(120deg,#2f7be0,#2560c8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mj-stage{position:absolute;left:0;right:0;top:51%;transform:translateY(-50%);height:56%;overflow:hidden;z-index:3}
+.mj-track{position:absolute;top:0;left:0;height:100%;display:flex;gap:60px;align-items:center;will-change:transform}
+.mj-slide{position:relative;width:clamp(620px,70vw,980px);height:100%;display:grid;grid-template-columns:.9fr 1.05fr;gap:clamp(24px,3vw,56px);align-items:center;will-change:transform,opacity}
+.mj-txt{position:relative}
+.mj-year{font-size:clamp(64px,8vw,132px);font-weight:300;line-height:.9;letter-spacing:-.04em;
+  background:linear-gradient(135deg,#2f7be0,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mj-list{margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;padding:0}
+.mj-list li{position:relative;list-style:none;padding-left:22px;font-size:clamp(13.5px,1.02vw,16px);line-height:1.4;color:#2a3342;font-weight:500}
+.mj-list li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#2f7be0,#37c9bd)}
+.mj-single{margin-top:20px;font-size:clamp(15px,1.2vw,18px);line-height:1.5;color:#2a3342;font-weight:500;max-width:420px}
+.mj-media{position:relative;height:min(62vh,440px);border-radius:22px;overflow:hidden;
+  box-shadow:0 40px 80px -36px rgba(20,50,110,.4),0 2px 8px rgba(20,50,110,.08)}
+.mj-media img{position:absolute;inset:-6% -12%;width:124%;height:112%;object-fit:cover;will-change:transform}
+.mj-media::after{content:"";position:absolute;inset:0;border-radius:22px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.mj-rail{position:absolute;left:clamp(24px,6vw,96px);right:clamp(24px,6vw,96px);bottom:9%;height:60px;z-index:6}
+.mj-line{position:absolute;left:0;right:0;top:12px;height:2px;background:#e2e8f2;border-radius:2px}
+.mj-fill{position:absolute;left:0;top:12px;height:2px;border-radius:2px;background:linear-gradient(90deg,#2f7be0,#37c9bd);width:0}
+.mj-head-dot{position:absolute;top:13px;width:11px;height:11px;border-radius:50%;background:#2f7be0;transform:translate(-50%,-50%);box-shadow:0 0 0 5px rgba(47,123,224,.18),0 0 16px 2px rgba(47,123,224,.5)}
+.mj-yr{position:absolute;transform:translateX(-50%);top:26px;font-size:12px;font-weight:600;color:#9aa7bd;white-space:nowrap;transition:color .3s}
+.mj-yr b{position:absolute;left:50%;top:-16px;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:#fff;border:2px solid #cdd7e6;transition:all .3s}
+.mj-yr.on{color:#1f63c7}
+.mj-yr.on b{background:#2f7be0;border-color:#2f7be0;box-shadow:0 0 0 4px rgba(47,123,224,.16)}
+.mj-yr.past b{border-color:#7fb0ef}
+.mj-hint{position:absolute;left:50%;bottom:3.4%;transform:translateX(-50%);z-index:6;color:#9aa7bd;font-size:12px;letter-spacing:.04em}
+
+/* Mobile: static vertical timeline (no horizontal scroll) */
+@media(max-width:860px){
+  .mj-wrap{height:auto}
+  .mj-pin{position:static;height:auto;padding:56px 0 30px}
+  .mj-head{position:static}
+  .mj-stage{position:static;transform:none;height:auto;overflow:visible;margin-top:30px}
+  .mj-track{position:static;flex-direction:column;gap:34px;padding:0 20px;transform:none!important}
+  .mj-slide{width:100%;grid-template-columns:1fr;gap:16px;opacity:1!important;transform:none!important}
+  .mj-year{font-size:clamp(48px,14vw,70px)}
+  .mj-media{height:auto;aspect-ratio:4/3}
+  .mj-media img{position:static;inset:auto;width:100%;height:100%;transform:none!important}
+  .mj-rail,.mj-hint{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .mj-wrap{height:auto}.mj-pin{position:static;height:auto;padding:70px 0 40px}
+  .mj-stage{position:static;transform:none;height:auto;overflow:visible}
+  .mj-track{position:static;flex-direction:column;gap:40px;padding:0 24px;transform:none!important}
+  .mj-slide{width:100%;opacity:1!important;transform:none!important}
+  .mj-media img{position:static;inset:auto;width:100%;height:100%;transform:none!important}
+  .mj-rail,.mj-hint{display:none}
 }

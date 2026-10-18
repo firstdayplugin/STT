@@ -136,6 +136,58 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   <script src="<?= theme_asset('assets/js/abouthero.js') ?>" defer></script>
   <script src="<?= theme_asset('assets/js/aboutscene.js') ?>" defer></script>
 
+  <?php
+  // Our Milestone — official validated timeline (exact copy of the client's data).
+  // Horizontal journey: scroll travels sideways through the years. Photos are
+  // placeholders (design3/*), swappable here. [year, items[], image(uploads path)]
+  $mile_data = [
+    ['2015', ['Established on May 8th, 2015'], 'design3/office-plant.jpg'],
+    ['2016', ['Trusted Solution Provider Dell Technologies', 'Solution Provider Professional of VMware by Broadcom'], 'design3/office-desks.jpg'],
+    ['2017', ['Dell Technologies Platinum Partner', 'Partnership with Microsoft'], 'design3/team-meeting.jpg'],
+    ['2018', ['Dell Technologies Titanium Partner', 'Advanced VMware by Broadcom'], 'design3/glass-facade.jpg'],
+    ['2019', ['Partnership with Veeam', 'Partnership with Commvault'], 'design3/office-open.jpg'],
+    ['2020', ['Partnership with Cisco', 'Partnership with Fortinet'], 'design3/monitor-dark.jpg'],
+    ['2021', ['Partnership with RedHat'], 'design3/desk-window.jpg'],
+    ['2022', ['Partnership with NVIDIA', 'Partnership with Weka'], 'design3/ai-phone.jpg'],
+    ['2023', ['Partnership with Sangfor', 'Partnership with Nutanix', 'Partnership with HYCU'], 'design3/office-corridor.jpg'],
+    ['2024', ['Dell Advanced Performing Services', 'Partnership with Elastic', 'Partnership with Cyble', 'Partnership with Rafay'], 'design3/team-work.jpg'],
+    ['2025', ['Partnership with infraon', 'Partnership with SenseTime', 'Partnership with Xeratic', 'Partner with Soca'], 'design3/imac-design.jpg'],
+    ['Present', ['Partnership with AMD', 'Partnership with T-Innoware', 'Partnership with Redis'], 'design3/towers-up.jpg'],
+  ];
+  $mile_n = count($mile_data);
+  ?>
+  <section class="mj-wrap" id="mjWrap" aria-label="Our Milestone">
+    <div class="mj-pin">
+      <div class="mj-head">
+        <div class="mj-eyebrow">Our Journey</div>
+        <h2>Our <span class="b">Milestone</span></h2>
+      </div>
+      <div class="mj-stage"><div class="mj-track" id="mjTrack">
+        <?php foreach ($mile_data as $m): list($yr, $items, $img) = $m; ?>
+          <div class="mj-slide">
+            <div class="mj-txt">
+              <div class="mj-year"><?= htmlspecialchars($yr) ?></div>
+              <?php if (count($items) > 1): ?>
+                <ul class="mj-list"><?php foreach ($items as $it): ?><li><?= htmlspecialchars($it) ?></li><?php endforeach; ?></ul>
+              <?php else: ?>
+                <div class="mj-single"><?= htmlspecialchars($items[0] ?? '') ?></div>
+              <?php endif; ?>
+            </div>
+            <div class="mj-media"><img src="<?= htmlspecialchars(uploads_url($img)) ?>" alt=""></div>
+          </div>
+        <?php endforeach; ?>
+      </div></div>
+      <div class="mj-rail" id="mjRail">
+        <div class="mj-line"></div><div class="mj-fill" id="mjFill"></div><div class="mj-head-dot" id="mjDot"></div>
+        <?php foreach ($mile_data as $i => $m): ?>
+          <div class="mj-yr" style="left:<?= $mile_n > 1 ? (($i / ($mile_n - 1)) * 100) : 0 ?>%"><b></b><?= htmlspecialchars($m[0]) ?></div>
+        <?php endforeach; ?>
+      </div>
+      <div class="mj-hint" aria-hidden="true">scroll to travel through the years &rarr;</div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/aboutmile.js') ?>" defer></script>
+
   <!-- Our Value — ICARE constellation (dark, scroll-scrubbed). The ICARE letters
        (wireframe + corner ticks) stay readable; scrolling wires each value card in
        one-by-one via a drawing cable, with the active letter lit. Motion in
@@ -163,35 +215,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   <script src="<?= theme_asset('assets/js/aboutvalue.js') ?>" defer></script>
 
   <div class="page-shell ab">
-
-    <!-- Milestone SLIDER (cross-fade; timeline drives the text+image above) -->
-    <?php if ($milestones): ?>
-    <section class="ab-sec ab-mile-sec">
-      <div class="ab-head ab-mile-head"><h2><?= ac('about', 'milestone_title', true) ?></h2><?php $mile_body = ac('about', 'milestone_body', true); if (trim(strip_tags($mile_body)) !== ''): ?><p><?= $mile_body ?></p><?php endif; ?></div>
-      <div class="ab-mile" data-milestones="<?= htmlspecialchars(json_encode($mile_json, JSON_UNESCAPED_UNICODE), ENT_QUOTES) ?>">
-        <div class="ab-mile-top">
-          <div class="ab-mile-text" data-mile-text>
-            <h3 data-mile-title></h3>
-            <p data-mile-body></p>
-          </div>
-          <div class="ab-mile-media">
-            <div class="ab-mile-frame phb"><img data-mile-img alt="" data-fallback="bg"></div>
-          </div>
-        </div>
-        <div class="ab-mile-timeline">
-          <button class="ab-mile-arrow" data-mile-prev aria-label="Sebelumnya"><?= $arrowL ?></button>
-          <div class="ab-mile-track" data-mile-track>
-            <?php foreach ($milestones as $i => $m): $now = (($m['kode'] ?? '') === 'now'); ?>
-              <button class="ab-mile-node<?= $i === 0 ? ' on' : '' ?><?= $now ? ' now' : '' ?>" data-mile-node="<?= $i ?>">
-                <span class="dot"></span><span class="yr"><?= htmlspecialchars($m['tahun'] ?? '') ?></span>
-              </button>
-            <?php endforeach; ?>
-          </div>
-          <button class="ab-mile-arrow" data-mile-next aria-label="Berikutnya"><?= $arrowRt ?></button>
-        </div>
-      </div>
-    </section>
-    <?php endif; ?>
 
     <!-- Awards — one continuous, year-sorted carousel (like saptatunas.com), scroll with arrows. -->
     <?php if ($awards): ?>
