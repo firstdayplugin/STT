@@ -242,7 +242,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
       </div>
       <div class="aw-info" id="awInfo"><div class="org"></div><div class="ttl"></div></div>
       <div class="aw-count" aria-hidden="true"><b><?= $awn ?>+</b><span>awards &amp;<br>recognitions</span></div>
-      <div class="aw-hint" aria-hidden="true">scroll to explore the trophy case &rarr;</div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/aboutawards.js') ?>" defer></script>
@@ -322,7 +321,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
           <?php $cwi++; endforeach; ?>
         </div>
       </div>
-      <div class="cw-hint" aria-hidden="true">scroll to walk the credential wall &darr;</div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/aboutcert.js') ?>" defer></script>
