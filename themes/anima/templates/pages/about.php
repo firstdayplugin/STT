@@ -214,73 +214,119 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   </section>
   <script src="<?= theme_asset('assets/js/aboutvalue.js') ?>" defer></script>
 
-  <div class="page-shell ab">
+  <!-- Awards — "3D Spotlight Coverflow" (light, scroll-scrubbed). Trophies rotate
+       through a central spotlight; the centred card is big & clear with its year,
+       and the org + title read below. Motion in aboutawards.js; static grid on
+       mobile. CMS: about_items 'award' (tahun / teks=org / judul / gambar). -->
+  <?php if ($awards): $awn = count($awards); ?>
+  <section class="aw-wrap" id="awWrap" aria-label="Awards" style="height:<?= max(480, ($awn + 1) * 86) ?>vh">
+    <div class="aw-pin">
+      <div class="aw-glow" aria-hidden="true"></div>
+      <div class="aw-head">
+        <div class="aw-eyebrow">Recognition</div>
+        <h2 class="aw-title"><?= ac('about', 'awards_title') ?: 'Awards' ?></h2>
+        <p><?= ac('about', 'awards_intro') ?></p>
+      </div>
+      <div class="aw-stage" id="awStage">
+        <?php foreach ($awards as $a): $ai = $aimgu($a);
+          $a_org = trim((string)$atr($a, 'teks'));
+          $a_ttl = trim((string)$atr($a, 'judul'));
+          $a_year = trim((string)($a['tahun'] ?? ''));
+        ?>
+          <div class="aw-card" data-org="<?= htmlspecialchars($a_org) ?>" data-ttl="<?= htmlspecialchars($a_ttl) ?>">
+            <?php if ($a_year !== ''): ?><span class="yr"><?= htmlspecialchars($a_year) ?></span><?php endif; ?>
+            <div class="ph"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($a_ttl) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
+            <div class="cap"><?php if ($a_org !== ''): ?><span class="co"><?= htmlspecialchars($a_org) ?></span><?php endif; ?><?= htmlspecialchars($a_ttl) ?></div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="aw-info" id="awInfo"><div class="org"></div><div class="ttl"></div></div>
+      <div class="aw-count" aria-hidden="true"><b><?= $awn ?>+</b><span>awards &amp;<br>recognitions</span></div>
+      <div class="aw-hint" aria-hidden="true">scroll to explore the trophy case &rarr;</div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/aboutawards.js') ?>" defer></script>
+  <?php endif; ?>
 
-    <!-- Awards — one continuous, year-sorted carousel (like saptatunas.com), scroll with arrows. -->
-    <?php if ($awards): ?>
-    <section class="ab-sec ab-awards-sec">
-      <div class="ab-head"><h2><?= ac('about', 'awards_title') ?></h2><p><?= ac('about', 'awards_intro') ?></p></div>
-      <div class="ab-rail-wrap" data-carousel>
-        <button class="ab-rail-arrow ab-rail-prev" data-carousel-prev aria-label="Sebelumnya"><?= $arrowL ?></button>
-        <div class="ab-rail" data-carousel-track>
-          <?php foreach ($awards as $a): $ai = $aimgu($a);
-            $a_brand = trim((string)$atr($a, 'teks'));       // Brand/Pemberi (e.g. Dell EMC)
-            $a_year  = trim((string)($a['tahun'] ?? ''));     // Year (e.g. 2019)
-          ?>
-            <div class="ab-card ab-award">
-              <?php if ($a_year !== ''): ?><div class="yr"><?= htmlspecialchars($a_year) ?></div><?php endif; ?>
-              <div class="ab-card-img phb"><?php if ($ai): ?><img src="<?= htmlspecialchars($ai) ?>" alt="<?= htmlspecialchars($atr($a, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Sertifikat</span><?php endif; ?></div>
-              <?php if ($a_brand !== ''): ?><div class="org"><?= htmlspecialchars($a_brand) ?></div><?php endif; ?>
-              <div class="ttl"><?= htmlspecialchars($atr($a, 'judul')) ?></div>
+  <!-- Our Quality Standards — "Trust Seals" (dark band). International standard
+       marks become framed plaques on a dark wall; each reveals with a light sweep
+       as the band enters view, tied by a glowing trust rail. Motion in
+       aboutquality.js; static stack on mobile. CMS: about_items 'quality'. -->
+  <?php if ($quality): $qn = count($quality); ?>
+  <section class="qs" id="qsSec" aria-label="Our Quality Standards">
+    <canvas class="qs-bg" id="qsBg" aria-hidden="true"></canvas>
+    <div class="qs-head">
+      <div class="qs-eyebrow">Accredited &amp; Certified</div>
+      <h2><?= ac('about', 'quality_title', true) ?></h2>
+      <p><?= ac('about', 'quality_intro') ?></p>
+    </div>
+    <div class="qs-rail-wrap">
+      <div class="qs-rail" aria-hidden="true"><i id="qsFill"></i></div>
+      <div class="qs-grid" id="qsGrid" style="--n:<?= min(3, max(1, $qn)) ?>">
+        <?php foreach ($quality as $q): $qi = $aimgu($q);
+          $q_ttl = trim((string)$atr($q, 'judul'));
+          $q_sub = trim((string)$atr($q, 'teks'));
+        ?>
+          <div class="qs-card">
+            <span class="qs-node" aria-hidden="true"></span>
+            <div class="qs-frame"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="<?= htmlspecialchars($q_ttl) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($q_ttl) ?: 'Logo' ?></span><?php endif; ?></div>
+            <?php if ($q_ttl !== '' || $q_sub !== ''): ?>
+            <div class="qs-meta"><?php if ($q_ttl !== ''): ?><div class="t"><?= htmlspecialchars($q_ttl) ?></div><?php endif; ?><?php if ($q_sub !== ''): ?><div class="s"><?= htmlspecialchars($q_sub) ?></div><?php endif; ?></div>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <div class="qs-foot">Independently audited &amp; internationally accredited</div>
+  </section>
+  <script src="<?= theme_asset('assets/js/aboutquality.js') ?>" defer></script>
+  <?php endif; ?>
+
+  <!-- List of Certification — "Brand Credential Wall" (light, pinned & scroll-
+       scrubbed). Vertical scroll walks through vendor categories; each category's
+       badges light up one-by-one into a wall, the active category index highlights,
+       and the tabs are clickable. Motion in aboutcert.js; static per-category grid
+       on mobile. CMS: about_items 'cert' (grup = category). -->
+  <?php if ($certs): $cwn = count($certsByBrand); $cwi = 0; ?>
+  <section class="cw-wrap" id="cwWrap" aria-label="List of Certification" style="height:<?= max(320, $cwn * 115) ?>vh">
+    <div class="cw-pin">
+      <div class="cw-head">
+        <div class="cw-eyebrow">Proven Professional</div>
+        <h2><?= ac('about', 'certs_title', true) ?></h2>
+        <p><?= ac('about', 'certs_intro') ?></p>
+      </div>
+      <div class="cw-body">
+        <aside class="cw-side">
+          <div class="cw-catwrap">
+            <?php $cwi = 0; foreach ($certsByBrand as $brand => $items): ?>
+              <div class="cw-cat<?= $cwi === 0 ? ' on' : '' ?>"><div class="n"><?= htmlspecialchars($brand) ?></div><div class="c"><b><?= count($items) ?></b>certifications</div></div>
+            <?php $cwi++; endforeach; ?>
+          </div>
+          <ol class="cw-nav" id="cwNav">
+            <?php $cwi = 0; foreach ($certsByBrand as $brand => $items): ?>
+              <li class="<?= $cwi === 0 ? 'on' : '' ?>" data-i="<?= $cwi ?>"><?= htmlspecialchars($brand) ?></li>
+            <?php $cwi++; endforeach; ?>
+          </ol>
+        </aside>
+        <div class="cw-wall" id="cwWall">
+          <?php $cwi = 0; foreach ($certsByBrand as $brand => $items): ?>
+            <div class="cw-layer<?= $cwi === 0 ? ' on' : '' ?><?= count($items) <= 3 ? ' few' : '' ?>">
+              <div class="cw-mcat"><?= htmlspecialchars($brand) ?></div>
+              <?php foreach ($items as $c): $ci = $aimgu($c); $c_cap = trim((string)$atr($c, 'judul')); ?>
+                <div class="cw-badge">
+                  <div class="bx"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="<?= htmlspecialchars($c_cap) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
+                  <?php if ($c_cap !== ''): ?><div class="cap"><?= htmlspecialchars($c_cap) ?></div><?php endif; ?>
+                </div>
+              <?php endforeach; ?>
             </div>
-          <?php endforeach; ?>
+          <?php $cwi++; endforeach; ?>
         </div>
-        <button class="ab-rail-arrow ab-rail-next" data-carousel-next aria-label="Berikutnya"><?= $arrowRt ?></button>
       </div>
-    </section>
-    <?php endif; ?>
+      <div class="cw-hint" aria-hidden="true">scroll to walk the credential wall &darr;</div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/aboutcert.js') ?>" defer></script>
+  <?php endif; ?>
 
-    <!-- Quality Standards SLIDER (horizontal carousel) -->
-    <?php if ($quality): ?>
-    <section class="ab-sec">
-      <div class="ab-head"><h2><?= ac('about', 'quality_title', true) ?></h2><p><?= ac('about', 'quality_intro') ?></p></div>
-      <div class="ab-quality-grid">
-        <?php foreach ($quality as $q): $qi = $aimgu($q); ?>
-          <div class="ab-card ab-quality">
-            <div class="ab-card-img phb"><?php if ($qi): ?><img src="<?= htmlspecialchars($qi) ?>" alt="<?= htmlspecialchars($atr($q, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph"><?= htmlspecialchars($atr($q, 'judul')) ?: 'Logo' ?></span><?php endif; ?></div>
-            <?php if (trim((string)$atr($q, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($q, 'judul')) ?></div><?php endif; ?>
-          </div>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-    <!-- Certifications SLIDER (by brand) -->
-    <?php if ($certs): ?>
-    <section class="ab-sec">
-      <div class="ab-head"><h2><?= ac('about', 'certs_title', true) ?></h2><p><?= ac('about', 'certs_intro') ?></p></div>
-      <div class="ab-slider" data-year-slider>
-        <div class="ab-slider-head">
-          <button class="ab-mile-arrow" data-year-prev aria-label="Brand sebelumnya"><?= $arrowL ?></button>
-          <div class="ab-slider-year" data-year-label><?= htmlspecialchars((string)array_key_first($certsByBrand)) ?></div>
-          <button class="ab-mile-arrow" data-year-next aria-label="Brand berikutnya"><?= $arrowRt ?></button>
-        </div>
-        <?php foreach ($certsByBrand as $brand => $items): ?>
-        <div class="ab-slider-page" data-year-page="<?= htmlspecialchars($brand) ?>"<?= $brand === array_key_first($certsByBrand) ? '' : ' hidden' ?>>
-          <div class="ab-cards ab-cards-cert">
-            <?php foreach ($items as $c): $ci = $aimgu($c); ?>
-              <div class="ab-card ab-cert">
-                <div class="ab-card-img phb"><?php if ($ci): ?><img src="<?= htmlspecialchars($ci) ?>" alt="<?= htmlspecialchars($atr($c, 'judul')) ?>" loading="lazy" data-fallback="bg"><?php else: ?><span class="ab-ph">Badge</span><?php endif; ?></div>
-                <?php if (trim((string)$atr($c, 'judul')) !== ''): ?><div class="cap"><?= htmlspecialchars($atr($c, 'judul')) ?></div><?php endif; ?>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-  </div>
 </main>
 <?php include theme_path('templates/layouts/footer.php'); ?>
