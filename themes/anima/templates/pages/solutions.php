@@ -235,7 +235,6 @@ if (strpos($hero_title_raw, '[') !== false) {
           </div>
         <?php endforeach; ?>
       </div>
-      <div class="sd-hint" aria-hidden="true">scroll to explore our solutions &darr;</div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/soldeck.js') ?>" defer></script>
