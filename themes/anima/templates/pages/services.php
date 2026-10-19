@@ -33,76 +33,102 @@ include theme_path('templates/layouts/header.php');
 // Services hero photo: per-page CMS field (service_pages.hero_image), default = the towers image.
 $sv_hero = !empty($p['hero_image']) ? uploads_url($p['hero_image']) : uploads_url('design3/towers-up.jpg');
 ?>
-<main class="page-body sv2">
+<main class="page-body sv2 svc-page">
+<?php
+// Lifecycle stages → hero loop nodes (CMS: service_pages.extra2, "A → B → C").
+if (empty($lifecycle)) $lifecycle = ['Rencanakan', 'Bangun', 'Kelola', 'Lindungi', 'Optimalkan'];
+$lc_icons = [
+  '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',                         // plan / search
+  '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>', // build
+  '<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 2h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 22h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/>', // manage / gear
+  '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',   // protect / shield
+  '<path d="M4 20l5-5 3 3 8-8"/><path d="M15 10h5v5"/>',                                 // optimize / trend
+];
+// Headline accent: honour [word], else gradient the last word(s).
+$svc_acc = function (string $raw): string {
+    $raw = trim($raw);
+    if ($raw === '') return '';
+    if (strpos($raw, '[') !== false) return preg_replace('/\[(.+?)\]/u', '<span class="b">$1</span>', htmlspecialchars($raw, ENT_QUOTES, 'UTF-8'));
+    $safe = htmlspecialchars($raw, ENT_QUOTES, 'UTF-8');
+    return preg_replace('/((?:\S+\s+)?\S+)(\s*)$/u', '<span class="b">$1</span>$2', $safe);
+};
+$svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
+?>
 
-  <!-- Full-bleed Services hero: photo background + copy overlay + cursor-reactive tech-network FX. -->
-  <section class="idh<?= $sv_hero === '' ? ' idh--plain' : '' ?>"<?= $sv_hero !== '' ? ' style="background-image:url(' . htmlspecialchars($sv_hero) . ')"' : '' ?>>
-    <div class="idh-ov" aria-hidden="true"></div>
-    <canvas class="tk-fx" id="svFx" data-fade="center" aria-hidden="true"></canvas>
-    <div class="idh-copy idh-copy--about">
-      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="idh-eyebrow"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
-      <h1 class="idh-title"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? 'Services')) ?></h1>
-      <?php if (trim((string)$T('body')) !== ''): ?><div class="idh-intro"><?= htmlspecialchars($T('body')) ?></div><?php endif; ?>
-      <?php if (trim((string)$T('extra1')) !== ''): ?><p class="idh-tagline"><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
-      <?php if (!empty($p['cta_label'])): ?>
-        <a class="idh-btn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
-      <?php endif; ?>
+  <!-- Hero: "Lifecycle Loop" — delivery stages on a glowing loop with a travelling
+       comet (continuous end-to-end cycle). Motion in svchero.js; static list on mobile. -->
+  <section class="svc-hero" id="svcHero" aria-label="<?= htmlspecialchars(strip_tags($T('headline') ?: ($p['judul'] ?? 'Services'))) ?>">
+    <canvas class="svc-net" id="svcNet" aria-hidden="true"></canvas>
+    <div class="svc-copy" id="svcCopy">
+      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="svc-eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
+      <h1 class="svc-title"><?= $svc_headline ?></h1>
     </div>
-  </section>
-
-  <div class="sv2-wrap">
-
-  <?php if ($pillars): ?>
-  <section class="sv2-pillars reveal">
-    <?php foreach ($pillars as $i => $pl): $tags = array_values(array_filter(array_map('trim', explode(',', (string)($pl['tags'] ?? ''))))); $has = !empty($pl['link_slug']); ?>
-    <?= $has ? '<a class="sv2-pcard" href="' . htmlspecialchars(url($pl['link_slug'])) . '">' : '<div class="sv2-pcard nolink">' ?>
-      <span class="sv2-picon"><?= icon($pillar_icons[$i] ?? 'layers', 30) ?></span>
-      <?php if (!empty($pl['badge'])): ?><span class="sv2-badge"><?= htmlspecialchars($pl['badge']) ?></span><?php endif; ?>
-      <h2 translate="no" class="notranslate"><?= htmlspecialchars($TP($pl, 'judul')) ?></h2>
-      <p><?= htmlspecialchars($TP($pl, 'deskripsi')) ?></p>
-      <?php if ($tags): ?><div class="sv2-chips" translate="no"><?php foreach ($tags as $t): ?><span><?= htmlspecialchars($t) ?></span><?php endforeach; ?></div><?php endif; ?>
-      <?php if ($has): ?><span class="sv2-more"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></span><?php endif; ?>
-    <?= $has ? '</a>' : '</div>' ?>
-    <?php endforeach; ?>
-  </section>
-  <?php endif; ?>
-
-  <?php if ($supporting): ?>
-  <section class="sv2-sec">
-    <div class="sv2-head"><h2><?= htmlspecialchars(t('supporting_capability', 'Supporting Capability')) ?></h2></div>
-    <div class="sv2-support reveal">
-      <?php foreach ($supporting as $i => $s): ?>
-      <div class="sv2-scard">
-        <span class="sv2-sicon"><?= icon($support_icons[$i] ?? 'box', 24) ?></span>
-        <?php if (!empty($s['badge'])): ?><span class="sv2-stag"><?= htmlspecialchars($s['badge']) ?></span><?php endif; ?>
-        <h3 translate="no" class="notranslate"><?= htmlspecialchars($TP($s, 'judul')) ?></h3>
-        <p><?= htmlspecialchars($TP($s, 'deskripsi')) ?></p>
-      </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <?php if ($lifecycle): ?>
-  <section class="sv2-sec">
-    <div class="sv2-head"><h2><?= htmlspecialchars(t('delivery_lifecycle', 'End-to-End Lifecycle')) ?></h2></div>
-    <div class="sv2-flow reveal">
+    <div class="svc-stage" id="svcStage">
+      <div class="svc-hub" id="svcHub" aria-hidden="true"><span class="ring2"></span><div class="lbl"><b>END&ndash;TO&ndash;END</b><span>Lifecycle</span></div></div>
       <?php foreach ($lifecycle as $i => $step): ?>
-        <div class="sv2-step">
-          <span class="sv2-step-ic"><?= icon($step_icons[$i] ?? 'circle', 24) ?></span>
-          <span class="sv2-step-n"><?= $i + 1 ?></span>
-          <span class="sv2-step-l"><?= htmlspecialchars($step) ?></span>
+        <div class="svc-node">
+          <span class="step"><?= $i + 1 ?></span>
+          <span class="ic"><svg viewBox="0 0 24 24"><?= $lc_icons[$i % count($lc_icons)] ?></svg></span>
+          <span class="n"><?= htmlspecialchars($step) ?></span>
         </div>
-        <?php if ($i < count($lifecycle) - 1): ?><span class="sv2-flow-line" aria-hidden="true"></span><?php endif; ?>
       <?php endforeach; ?>
     </div>
   </section>
-  <?php endif; ?>
+  <script src="<?= theme_asset('assets/js/svchero.js') ?>" defer></script>
 
-  <section class="sv2-closing">
-    <h2><?= htmlspecialchars(trim((string)$T('extra3')) ?: 'One Partner. End-to-End Capability.') ?></h2>
-    <a class="btn sv2-closing-btn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+  <section class="svc-main">
+    <div class="svc-wrap">
+
+      <?php if ($pillars): ?>
+      <section class="svc-pillars reveal">
+        <?php foreach ($pillars as $i => $pl):
+          $tags = array_values(array_filter(array_map('trim', explode(',', (string)($pl['tags'] ?? '')))));
+          $has = !empty($pl['link_slug']);
+        ?>
+        <?= $has ? '<a class="svc-pcard" href="' . htmlspecialchars(url($pl['link_slug'])) . '">' : '<div class="svc-pcard nolink">' ?>
+          <span class="svc-picon"><?= icon($pillar_icons[$i] ?? 'layers', 28) ?></span>
+          <?php if (!empty($pl['badge'])): ?><span class="svc-badge"><?= htmlspecialchars($pl['badge']) ?></span><?php endif; ?>
+          <h2 translate="no" class="notranslate"><?= htmlspecialchars($TP($pl, 'judul')) ?></h2>
+          <p><?= htmlspecialchars($TP($pl, 'deskripsi')) ?></p>
+          <?php if ($tags): ?><div class="svc-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
+          <?php if ($has): ?><span class="svc-more"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></span><?php endif; ?>
+        <?= $has ? '</a>' : '</div>' ?>
+        <?php endforeach; ?>
+      </section>
+      <?php endif; ?>
+
+      <?php if ($supporting): ?>
+      <section class="svc-sec">
+        <div class="svc-head"><h2><?= htmlspecialchars(t('supporting_capability', 'Supporting Capability')) ?></h2></div>
+        <div class="svc-support reveal">
+          <?php foreach ($supporting as $i => $s): ?>
+          <div class="svc-scard">
+            <span class="svc-sicon"><?= icon($support_icons[$i] ?? 'box', 24) ?></span>
+            <?php if (!empty($s['badge'])): ?><span class="svc-stag"><?= htmlspecialchars($s['badge']) ?></span><?php endif; ?>
+            <h3 translate="no" class="notranslate"><?= htmlspecialchars($TP($s, 'judul')) ?></h3>
+            <p><?= htmlspecialchars($TP($s, 'deskripsi')) ?></p>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </section>
+      <?php endif; ?>
+
+    </div>
   </section>
 
-</div></main>
+  <!-- Closing CTA band (shared .sol-cta style; dust in solcta.js). -->
+  <section class="sol-cta" aria-label="Contact">
+    <canvas class="sol-cta-bg" id="solCtaBg" aria-hidden="true"></canvas>
+    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="core" aria-hidden="true"></span>
+    <div class="sol-cta-in">
+      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
+      <h2><?= $svc_acc(trim((string)$T('extra3')) ?: 'One Partner. End-to-End Capability.') ?></h2>
+      <?php if (trim((string)$T('extra1')) !== ''): ?><p><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
+      <div class="btns">
+        <a class="btn btn-p" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+      </div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/solcta.js') ?>" defer></script>
+</main>
 <?php include theme_path('templates/layouts/footer.php'); ?>
