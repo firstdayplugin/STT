@@ -7,6 +7,7 @@
  */
 return [
   'hero_img'       => ['label'=>'Foto Hero (background)','type'=>'image','group'=>'Header','default'=>'design3/towers-up.jpg'],
+  'hero_eyebrow'   => ['label'=>'Hero — eyebrow (label kecil)','type'=>'text','group'=>'Header','default'=>'Enterprise Solution Provider'],
   'title'          => ['label'=>'Judul halaman',       'type'=>'text', 'group'=>'Header','default'=>'Our Solutions'],
   'lead'           => ['label'=>'Paragraf intro',      'type'=>'html', 'group'=>'Header','default'=>'We understand that every industry has its own unique challenges and needs. That’s why STT provides solutions that are not only diverse but also tailored to client needs.'],
   'banner_img'     => ['label'=>'Banner Coming Soon (gambar)', 'type'=>'image','group'=>'Coming Soon','default'=>'solutions/banner-promo.jpg'],
