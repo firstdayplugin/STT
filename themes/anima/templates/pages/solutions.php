@@ -168,87 +168,124 @@ if (strpos($hero_title_raw, '[') !== false) {
     <?php endif; ?>
     <?php endif; ?>
 
-    <?php foreach ($sections as $i => $s):
-        $sid    = (int)$s['id'];
-        $judul  = tr_field('solutions_section', $sid, 'judul', $s['judul']);
-        $solusi = tr_field('solutions_section', $sid, 'solusi', $s['solusi'] ?? '');
-        $detail = tr_field('solutions_section', $sid, 'detail', $s['detail'] ?? '');
-        $has_detail = trim(strip_tags($detail)) !== '';
-        $illus  = $img((string)($s['gambar'] ?? ''));
-        $ptn    = $img((string)($s['partner_img'] ?? ''));
-        $href   = trim((string)($s['url'] ?? '')); if ($href === '') $href = '#';
-        $href_r = preg_match('#^https?:#', $href) ? $href : ($href === '#' ? '#' : url(ltrim($href, '/')));
-        $red    = (($s['teks_warna'] ?? '') === 'red');
-        $cta_l  = tr_field('solutions_section', $sid, 'cta_label', $s['cta_label'] ?? '');
-        $cta_u  = trim((string)($s['cta_url'] ?? '')); if ($cta_u === '') $cta_u = '#';
-        $img_left = ($i % 2 === 0); // 1st, 3rd, 5th → illustration on the left (matches Figma)
-    ?>
-    <?php if ($i > 0): ?><div class="sol-div"></div><?php endif; ?>
-    <?php $anchor = make_slug(strip_tags((string)($s['judul'] ?? ''))); ?>
-    <section class="sol-row<?= $img_left ? '' : ' rev' ?>"<?= $anchor !== '' ? ' id="' . htmlspecialchars($anchor) . '"' : '' ?>>
-
-      <div class="sol-media">
-        <?php if ($illus): ?><img class="sol-illus-img" src="<?= htmlspecialchars($illus) ?>" alt="<?= htmlspecialchars(strip_tags($judul)) ?>" data-fallback="bg"><?php endif; ?>
-        <?php if ($has_detail): ?>
-          <button type="button" class="sol-more" data-sol-open="<?= $sid ?>" aria-haspopup="dialog"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></button>
-        <?php else: ?>
-          <a class="sol-more" href="<?= htmlspecialchars($href_r) ?>"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></a>
-        <?php endif; ?>
-      </div>
-
-      <div class="sol-text">
-        <h2 translate="no" class="notranslate"><?= $judul ?></h2>
-        <?php if ($solusi !== ''): ?>
-          <div class="sol-label"><?= htmlspecialchars($lbl_solution) ?></div>
-          <p class="sol-desc<?= $red ? ' red' : '' ?>"><?= nl2br(htmlspecialchars($solusi)) ?></p>
-        <?php endif; ?>
-        <?php $logos = $Q("SELECT gambar, nama FROM solution_logos WHERE solution_id=? AND is_active=1 ORDER BY urutan, id", [$sid]); ?>
-        <div class="sol-label"><?= htmlspecialchars($lbl_partner) ?></div>
-        <?php if ($logos): ?>
-          <div class="sol-partners sol-partners-grid">
-            <?php foreach ($logos as $lg): $lsrc = $img((string)($lg['gambar'] ?? '')); if ($lsrc === '') continue; ?>
-              <span class="sol-plogo sol-plogo-img"><img src="<?= htmlspecialchars($lsrc) ?>" alt="<?= htmlspecialchars((string)($lg['nama'] ?? 'Partner')) ?>" loading="lazy" data-fallback="remove"></span>
-            <?php endforeach; ?>
-          </div>
-        <?php elseif ($ptn): ?>
-          <div class="sol-partners"><img src="<?= htmlspecialchars($ptn) ?>" alt="Partners" data-fallback="remove"></div>
-        <?php else: ?>
-          <div class="sol-partners sol-partners-ph" role="img" aria-label="Partner logos placeholder"><?php for ($k = 0; $k < 6; $k++): ?><span class="sol-plogo"></span><?php endfor; ?></div>
-        <?php endif; ?>
-        <?php if (trim($cta_l) !== '' && $cta_u !== '#'): ?>
-          <a class="sol-cta-btn" href="<?= htmlspecialchars(preg_match('#^https?:#', $cta_u) ? $cta_u : url(ltrim($cta_u, '/'))) ?>">
-            <span><?= htmlspecialchars($cta_l) ?></span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
-          </a>
-        <?php endif; ?>
-      </div>
-
-    </section>
-
-    <?php if ($has_detail): ?>
-    <div class="sol-modal" id="solm-<?= $sid ?>" aria-hidden="true">
-      <div class="sol-modal-scrim" data-sol-close></div>
-      <div class="sol-modal-panel" role="dialog" aria-modal="true" aria-labelledby="solm-<?= $sid ?>-t">
-        <button type="button" class="sol-modal-x" data-sol-close aria-label="<?= htmlspecialchars(t('close', 'Tutup')) ?>">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="sol-modal-head">
-          <div class="sol-modal-eye"><?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?></div>
-          <h2 id="solm-<?= $sid ?>-t"><?= $judul ?></h2>
-        </div>
-        <div class="sol-modal-body"><?= $detail ?></div>
-        <div class="sol-modal-foot">
-          <a class="btn btn-primary sol-modal-cta" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
-        </div>
-      </div>
-    </div>
-    <?php endif; ?>
-    <?php endforeach; ?>
-
     <?php if (empty($sections)): ?>
       <p class="bl-empty">Belum ada section solusi.</p>
     <?php endif; ?>
 
+  </div><!-- /.sol-wrap -->
+
+  <?php
+  // Precompute per-section data (used by the deck panels and the modals).
+  $sol_rows = [];
+  foreach ($sections as $i => $s) {
+      $sid = (int)$s['id'];
+      $href = trim((string)($s['url'] ?? '')); if ($href === '') $href = '#';
+      $detail = tr_field('solutions_section', $sid, 'detail', $s['detail'] ?? '');
+      $sol_rows[] = [
+          'sid'        => $sid,
+          'judul'      => tr_field('solutions_section', $sid, 'judul', $s['judul']),
+          'solusi'     => tr_field('solutions_section', $sid, 'solusi', $s['solusi'] ?? ''),
+          'detail'     => $detail,
+          'has_detail' => (trim(strip_tags($detail)) !== ''),
+          'illus'      => $img((string)($s['gambar'] ?? '')),
+          'anchor'     => make_slug(strip_tags((string)($s['judul'] ?? ''))),
+          'href_r'     => preg_match('#^https?:#', $href) ? $href : ($href === '#' ? '#' : url(ltrim($href, '/'))),
+          'logos'      => $Q("SELECT gambar, nama FROM solution_logos WHERE solution_id=? AND is_active=1 ORDER BY urutan, id", [$sid]),
+      ];
+  }
+  ?>
+
+  <?php if ($sections): $sol_n = count($sol_rows); ?>
+  <!-- Solutions "Deck" — dark, pinned, scroll-scrubbed. Vertical scroll walks
+       through the 5 solutions (heavy lerp); each: big index, title, description,
+       a uniform partner-logo wall (whitened → colour on hover, cascades in) and a
+       See More button. Rail nav on the left. Motion in soldeck.js; static stack on
+       mobile. CMS: solutions_section + solution_logos. -->
+  <section class="sd-wrap" id="sdWrap" aria-label="<?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?>" style="height:<?= max(320, $sol_n * 112) ?>vh">
+    <div class="sd-pin">
+      <canvas class="sd-bg" id="sdBg" aria-hidden="true"></canvas>
+      <div class="sd-eye"><?= htmlspecialchars($c('deck_eyebrow', 'What we deliver')) ?></div>
+      <div class="sd-rail" id="sdRail">
+        <?php foreach ($sol_rows as $i => $r): ?>
+          <button type="button" data-i="<?= $i ?>" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= htmlspecialchars(strip_tags($r['judul'])) ?>"><span class="d"></span><span class="idx"><?= sprintf('%02d', $i + 1) ?></span></button>
+        <?php endforeach; ?>
+      </div>
+      <div class="sd-stage" id="sdStage">
+        <?php foreach ($sol_rows as $i => $r): ?>
+          <div class="sd-panel<?= $i === 0 ? ' on' : '' ?>" data-i="<?= $i ?>"<?= $r['anchor'] !== '' ? ' id="' . htmlspecialchars($r['anchor']) . '"' : '' ?>>
+            <div class="sd-txt">
+              <div class="sd-num"><?= sprintf('%02d', $i + 1) ?></div>
+              <h2 class="sd-title notranslate" translate="no"><?= $r['judul'] ?></h2>
+              <div class="sd-lbl"><?= htmlspecialchars($lbl_solution) ?></div>
+              <?php if (trim($r['solusi']) !== ''): ?><p class="sd-desc"><?= nl2br(htmlspecialchars($r['solusi'])) ?></p><?php endif; ?>
+              <?php if ($r['logos']): ?>
+                <div class="sd-logos">
+                  <?php foreach ($r['logos'] as $lg): $lsrc = $img((string)($lg['gambar'] ?? '')); if ($lsrc === '') continue; ?>
+                    <div class="cell"><img src="<?= htmlspecialchars($lsrc) ?>" alt="<?= htmlspecialchars((string)($lg['nama'] ?? 'Partner')) ?>" loading="lazy" data-fallback="remove"></div>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
+              <?php if ($r['has_detail']): ?>
+                <button type="button" class="sd-cta" data-sol-open="<?= $r['sid'] ?>" aria-haspopup="dialog"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></button>
+              <?php else: ?>
+                <a class="sd-cta" href="<?= htmlspecialchars($r['href_r']) ?>"><?= htmlspecialchars($lbl_cta) ?> <?= $arrow ?></a>
+              <?php endif; ?>
+            </div>
+            <div class="sd-media"><span class="glow" aria-hidden="true"></span><?php if ($r['illus']): ?><img src="<?= htmlspecialchars($r['illus']) ?>" alt="<?= htmlspecialchars(strip_tags($r['judul'])) ?>" data-fallback="bg"><?php endif; ?></div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="sd-hint" aria-hidden="true">scroll to explore our solutions &darr;</div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/soldeck.js') ?>" defer></script>
+
+  <!-- Solution detail modals (futuristic). Opened by the See More buttons via
+       anima-ui.js; body renders the CMS "Detail" (WYSIWYG) HTML. -->
+  <?php foreach ($sol_rows as $r): if (!$r['has_detail']) continue; $sid = $r['sid']; ?>
+  <div class="sol-modal" id="solm-<?= $sid ?>" aria-hidden="true">
+    <div class="sol-modal-scrim" data-sol-close></div>
+    <div class="sol-modal-panel" role="dialog" aria-modal="true" aria-labelledby="solm-<?= $sid ?>-t">
+      <div class="sol-modal-fx" aria-hidden="true"><span class="grid"></span><span class="au au1"></span><span class="au au2"></span></div>
+      <span class="sol-modal-cn tl" aria-hidden="true"></span><span class="sol-modal-cn tr" aria-hidden="true"></span><span class="sol-modal-cn bl" aria-hidden="true"></span><span class="sol-modal-cn br" aria-hidden="true"></span>
+      <button type="button" class="sol-modal-x" data-sol-close aria-label="<?= htmlspecialchars(t('close', 'Tutup')) ?>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="sol-modal-body">
+        <div class="sol-modal-eye"><?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?></div>
+        <h2 class="sol-modal-t notranslate" translate="no" id="solm-<?= $sid ?>-t"><?= $r['judul'] ?></h2>
+        <div class="sol-modal-detail"><?= $r['detail'] ?></div>
+      </div>
+      <div class="sol-modal-foot">
+        <span class="sol-modal-note"><?= htmlspecialchars($c('modal_note', "Let's design the right solution for your business.")) ?></span>
+        <a class="sol-modal-cta" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+      </div>
+    </div>
   </div>
+  <?php endforeach; ?>
+  <?php endif; ?>
+
+  <!-- Pre-footer CTA band — dark immersive bridge into the footer. CMS-editable. -->
+  <?php
+  $cta_b1l = trim((string)$c('cta_btn1_label', 'Contact Us'));
+  $cta_b1u = trim((string)$c('cta_btn1_url', 'contact-us'));
+  $cta_b2l = trim((string)$c('cta_btn2_label', 'Explore Solutions'));
+  $cta_b2u = trim((string)$c('cta_btn2_url', '#sdWrap'));
+  $cta_href = function ($u) { $u = trim($u); if ($u === '' || $u === '#' || strpos($u, '#') === 0) return ($u === '' ? '#' : $u); return preg_match('#^https?:#', $u) ? $u : url(ltrim($u, '/')); };
+  ?>
+  <section class="sol-cta" aria-label="Contact">
+    <canvas class="sol-cta-bg" id="solCtaBg" aria-hidden="true"></canvas>
+    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="core" aria-hidden="true"></span>
+    <div class="sol-cta-in">
+      <div class="eye"><?= htmlspecialchars($c('cta_eyebrow', 'Start your transformation')) ?></div>
+      <h2><?= $promo_title($c('cta_title', 'Ready to modernize your [enterprise?]')) ?></h2>
+      <?php if (trim(strip_tags((string)$c('cta_text', ''))) !== '' || true): ?><p><?= htmlspecialchars($c('cta_text', "Let's design the right foundation, security, data, and AI strategy for your business — backed by a partner trusted by global technology leaders across the region.")) ?></p><?php endif; ?>
+      <div class="btns">
+        <?php if ($cta_b1l !== ''): ?><a class="btn btn-p" href="<?= htmlspecialchars($cta_href($cta_b1u)) ?>"><?= htmlspecialchars($cta_b1l) ?> <?= $arrow ?></a><?php endif; ?>
+        <?php if ($cta_b2l !== ''): ?><a class="btn btn-g" href="<?= htmlspecialchars($cta_href($cta_b2u)) ?>"><?= htmlspecialchars($cta_b2l) ?></a><?php endif; ?>
+      </div>
+    </div>
+  </section>
+  <script src="<?= theme_asset('assets/js/solcta.js') ?>" defer></script>
 </main>
 <?php include theme_path('templates/layouts/footer.php'); ?>

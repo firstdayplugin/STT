@@ -15,4 +15,13 @@ return [
   'label_solution' => ['label'=>'Label "Solution:"',   'type'=>'text', 'group'=>'Label','default'=>'Solution:'],
   'label_partner'  => ['label'=>'Label "Partner:"',    'type'=>'text', 'group'=>'Label','default'=>'Partner:'],
   'card_cta'       => ['label'=>'Teks tombol kartu',   'type'=>'text', 'group'=>'Label','default'=>'See More'],
+  'deck_eyebrow'   => ['label'=>'Deck — eyebrow',      'type'=>'text', 'group'=>'Solution Deck','default'=>'What we deliver'],
+  'modal_note'     => ['label'=>'Popup — catatan kaki','type'=>'text', 'group'=>'Solution Deck','default'=>"Let's design the right solution for your business."],
+  'cta_eyebrow'    => ['label'=>'CTA — eyebrow',       'type'=>'text', 'group'=>'CTA (pre-footer)','default'=>'Start your transformation'],
+  'cta_title'      => ['label'=>'CTA — judul (pakai [..] utk aksen)','type'=>'text','group'=>'CTA (pre-footer)','default'=>'Ready to modernize your [enterprise?]'],
+  'cta_text'       => ['label'=>'CTA — paragraf',      'type'=>'text', 'group'=>'CTA (pre-footer)','default'=>"Let's design the right foundation, security, data, and AI strategy for your business — backed by a partner trusted by global technology leaders across the region."],
+  'cta_btn1_label' => ['label'=>'CTA — tombol 1 teks', 'type'=>'text', 'group'=>'CTA (pre-footer)','default'=>'Contact Us'],
+  'cta_btn1_url'   => ['label'=>'CTA — tombol 1 link', 'type'=>'text', 'group'=>'CTA (pre-footer)','default'=>'contact-us'],
+  'cta_btn2_label' => ['label'=>'CTA — tombol 2 teks (opsional)','type'=>'text','group'=>'CTA (pre-footer)','default'=>'Explore Solutions'],
+  'cta_btn2_url'   => ['label'=>'CTA — tombol 2 link', 'type'=>'text', 'group'=>'CTA (pre-footer)','default'=>'#sdWrap'],
 ];
