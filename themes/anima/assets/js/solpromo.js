@@ -37,4 +37,26 @@
 
   show(0);
   if (!reduce) restart();
+
+  // Heavy, weighty rise as the promo section covers the hero (About Us feel).
+  var sec = document.getElementById('pmSec');
+  var feat = document.getElementById('pmFeat');
+  var head = sec && sec.querySelector('.pm-head');
+  var MQd = window.matchMedia('(max-width:860px), (prefers-reduced-motion:reduce)');
+  if (sec && feat && !MQd.matches) {
+    var ep = 0, raf = false;
+    function cover() {
+      if (MQd.matches) { feat.style.opacity = ''; feat.style.transform = ''; if (head) { head.style.opacity = ''; head.style.transform = ''; } raf = false; return; }
+      var r = sec.getBoundingClientRect();
+      var target = Math.min(Math.max((innerHeight - r.top) / (innerHeight * 0.72), 0), 1);
+      ep += (target - ep) * 0.06;                 // heavy trailing
+      if (Math.abs(target - ep) < 0.0004) ep = target;
+      var e = ep < 0.5 ? 2 * ep * ep : 1 - Math.pow(-2 * ep + 2, 2) / 2; // ease
+      feat.style.opacity = e.toFixed(3);
+      feat.style.transform = 'translateY(' + ((1 - e) * 72).toFixed(1) + 'px)';
+      if (head) { head.style.opacity = Math.min(1, e * 1.4).toFixed(3); head.style.transform = 'translateY(' + ((1 - Math.min(1, e * 1.4)) * 34).toFixed(1) + 'px)'; }
+      requestAnimationFrame(cover);
+    }
+    requestAnimationFrame(cover);
+  }
 })();

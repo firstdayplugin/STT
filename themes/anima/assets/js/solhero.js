@@ -14,7 +14,7 @@
   var copy = document.getElementById('solCopy');
   var cv = document.getElementById('solNet');
   if (!arena || !core || !cv) return;
-  var nodes = [].slice.call(arena.querySelectorAll('.sh-node'));
+  var nodes = [].slice.call(arena.querySelectorAll('.scn-node'));
   if (!nodes.length) return;
 
   // Fan-arc layout: x spread 14%→86%, y dips up in the middle (edges lower).
@@ -43,11 +43,17 @@
   });
   function cc(el) { var r = el.getBoundingClientRect(), s = sec.getBoundingClientRect(); return { x: (r.left - s.left + r.width / 2) * DPR, y: (r.top - s.top + r.height / 2) * DPR }; }
 
+  var sp = 0;   // lerped scroll progress → heavy, weighty recede as the promo covers
   function frame() {
     if (MQ.matches) { running = false; ctx.clearRect(0, 0, W, H); return; }
     t += 0.016; mx += (tx - mx) * 0.05; my += (ty - my) * 0.05;
-    arena.style.transform = 'translate(' + (mx * 26).toFixed(1) + 'px,' + (my * 20).toFixed(1) + 'px)';
-    if (copy) copy.style.transform = 'translate(' + (mx * -10).toFixed(1) + 'px,' + (my * -8).toFixed(1) + 'px)';
+    var spT = Math.min(Math.max(scrollY / (innerHeight * 1.15), 0), 1);
+    sp += (spT - sp) * 0.055;                    // heavy trailing (About Us feel)
+    var lift = sp * 70, sc = 1 - sp * 0.07;
+    arena.style.opacity = (1 - sp).toFixed(3);
+    arena.style.transform = 'translate(' + (mx * 26).toFixed(1) + 'px,' + (my * 20 - lift).toFixed(1) + 'px) scale(' + sc.toFixed(3) + ')';
+    if (copy) { copy.style.opacity = Math.max(0, 1 - sp * 1.2).toFixed(3); copy.style.transform = 'translate(' + (mx * -10).toFixed(1) + 'px,' + (my * -8 - lift * 0.6).toFixed(1) + 'px)'; }
+    var sd = sec.querySelector('.scn-scroll'); if (sd) sd.style.opacity = Math.max(0, 1 - sp * 3).toFixed(3);
     ctx.clearRect(0, 0, W, H);
     dust.forEach(function (d) { d.y -= d.s; if (d.y < 0) d.y = 1; ctx.beginPath(); ctx.arc(d.x * W, d.y * H, d.r, 0, 7); ctx.fillStyle = 'rgba(120,170,255,' + d.a + ')'; ctx.fill(); });
     var c = cc(core);
@@ -68,15 +74,6 @@
   function start() { if (!running && !MQ.matches) { running = true; requestAnimationFrame(frame); } }
   (MQ.addEventListener ? MQ.addEventListener('change', start) : MQ.addListener(start));
   start();
-
-  // fade/recede the hero contents as the promo rises over it
-  addEventListener('scroll', function () {
-    if (MQ.matches) return;
-    var sp = Math.min(Math.max(scrollY / (innerHeight * 0.85), 0), 1);
-    arena.style.opacity = (1 - sp).toFixed(3);
-    if (copy) copy.style.opacity = (1 - sp * 1.1).toFixed(3);
-    var sd = sec.querySelector('.sh-scroll'); if (sd) sd.style.opacity = (1 - sp * 3).toFixed(3);
-  }, { passive: true });
 
   // hover dims the other nodes
   nodes.forEach(function (n) {

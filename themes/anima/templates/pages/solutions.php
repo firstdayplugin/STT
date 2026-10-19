@@ -85,23 +85,23 @@ if (strpos($hero_title_raw, '[') !== false) {
        promo rises up over the pinned hero (premium "cover" scroll, like About Us).
        Hero: solhero.js (cursor parallax, data lines, clickable nodes → sections).
        Promo: solpromo.js (auto-advancing featured spotlight). Mobile: both static. -->
-  <div class="sh-stack">
-    <section class="sh" id="solHero" aria-label="<?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?>">
-      <canvas class="sh-net" id="solNet" aria-hidden="true"></canvas>
-      <div class="sh-copy" id="solCopy">
-        <?php if (trim((string)$c('hero_eyebrow', '')) !== ''): ?><div class="sh-eyebrow"><?= htmlspecialchars($c('hero_eyebrow', 'Enterprise Solution Provider')) ?></div><?php endif; ?>
-        <h1 class="sh-title"><?= $hero_title ?></h1>
+  <div class="scn-stack">
+    <section class="scn" id="solHero" aria-label="<?= htmlspecialchars(strip_tags($c('title', 'Our Solutions'))) ?>">
+      <canvas class="scn-net" id="solNet" aria-hidden="true"></canvas>
+      <div class="scn-copy" id="solCopy">
+        <?php if (trim((string)$c('hero_eyebrow', '')) !== ''): ?><div class="scn-eyebrow"><?= htmlspecialchars($c('hero_eyebrow', 'Enterprise Solution Provider')) ?></div><?php endif; ?>
+        <h1 class="scn-title"><?= $hero_title ?></h1>
       </div>
-      <div class="sh-arena" id="solArena">
-        <div class="sh-core" id="solCore"><span class="orb"></span><span class="ring"></span><span class="ring"></span><span class="ring"></span><div class="lbl"><img class="mk" src="<?= htmlspecialchars($mark_glow) ?>" alt="STT"></div></div>
+      <div class="scn-arena" id="solArena">
+        <div class="scn-core" id="solCore"><span class="orb"></span><span class="ring"></span><span class="ring"></span><span class="ring"></span><div class="lbl"><img class="mk" src="<?= htmlspecialchars($mark_glow) ?>" alt="STT"></div></div>
         <?php foreach ($sol_nodes as $nd): ?>
-          <a class="sh-node" href="#<?= htmlspecialchars($nd['slug']) ?>">
+          <a class="scn-node" href="#<?= htmlspecialchars($nd['slug']) ?>">
             <span class="ic"><svg viewBox="0 0 24 24"><?= $nd['ic'] ?></svg></span>
             <span class="nm"><?= htmlspecialchars($nd['nm']) ?><?php if ($nd['sub'] !== ''): ?><small><?= htmlspecialchars($nd['sub']) ?></small><?php endif; ?></span>
           </a>
         <?php endforeach; ?>
       </div>
-      <div class="sh-scroll" aria-hidden="true"><i></i>scroll</div>
+      <div class="scn-scroll" aria-hidden="true"><i></i>scroll</div>
     </section>
 
     <?php if ($promos): ?>
@@ -151,7 +151,7 @@ if (strpos($hero_title_raw, '[') !== false) {
     </section>
     <script src="<?= theme_asset('assets/js/solpromo.js') ?>" defer></script>
     <?php endif; ?>
-  </div><!-- /.sh-stack -->
+  </div><!-- /.scn-stack -->
   <script src="<?= theme_asset('assets/js/solhero.js') ?>" defer></script>
 
   <div class="sol-wrap">
