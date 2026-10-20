@@ -121,19 +121,21 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
   <script src="<?= theme_asset('assets/js/soldeck.js') ?>" defer></script>
   <?php endif; ?>
 
-  <!-- Closing CTA band (shared .sol-cta style; dust in solcta.js). -->
-  <section class="sol-cta" aria-label="Contact">
-    <canvas class="sol-cta-bg" id="solCtaBg" aria-hidden="true"></canvas>
-    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="core" aria-hidden="true"></span>
-    <div class="sol-cta-in">
-      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
-      <h2><?= $svc_acc(trim((string)$T('extra3')) ?: 'One Partner. End-to-End Capability.') ?></h2>
-      <?php if (trim((string)$T('extra1')) !== ''): ?><p><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
-      <div class="btns">
+  <!-- Closing CTA "Finale" (light; reveal + particles in ctafinale.js). Its
+       white bottom meets the footer's white band, so the transition is smooth. -->
+  <section class="cf" aria-label="Contact">
+    <canvas class="cf-bg" id="cfBg" aria-hidden="true"></canvas>
+    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="au au3" aria-hidden="true"></span>
+    <span class="ring" aria-hidden="true"></span>
+    <div class="cf-in">
+      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="cf-eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
+      <h2 class="cf-h" data-text="<?= htmlspecialchars(trim((string)$T('extra3')) ?: 'One Partner. End-to-End [Capability.]', ENT_QUOTES, 'UTF-8') ?>"></h2>
+      <?php if (trim((string)$T('extra1')) !== ''): ?><p class="cf-p"><?= htmlspecialchars($T('extra1')) ?></p><?php endif; ?>
+      <div class="cf-btns">
         <a class="btn btn-p" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
       </div>
     </div>
   </section>
-  <script src="<?= theme_asset('assets/js/solcta.js') ?>" defer></script>
+  <script src="<?= theme_asset('assets/js/ctafinale.js') ?>" defer></script>
 </main>
 <?php include theme_path('templates/layouts/footer.php'); ?>

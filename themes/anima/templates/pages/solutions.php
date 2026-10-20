@@ -264,7 +264,8 @@ if (strpos($hero_title_raw, '[') !== false) {
   <?php endforeach; ?>
   <?php endif; ?>
 
-  <!-- Pre-footer CTA band — dark immersive bridge into the footer. CMS-editable. -->
+  <!-- Pre-footer CTA "Finale" (light) — animated on scroll; its white bottom meets
+       the footer's white band seamlessly. CMS-editable; headline [word] = accent. -->
   <?php
   $cta_b1l = trim((string)$c('cta_btn1_label', 'Contact Us'));
   $cta_b1u = trim((string)$c('cta_btn1_url', 'contact-us'));
@@ -272,19 +273,20 @@ if (strpos($hero_title_raw, '[') !== false) {
   $cta_b2u = trim((string)$c('cta_btn2_url', '#sdWrap'));
   $cta_href = function ($u) { $u = trim($u); if ($u === '' || $u === '#' || strpos($u, '#') === 0) return ($u === '' ? '#' : $u); return preg_match('#^https?:#', $u) ? $u : url(ltrim($u, '/')); };
   ?>
-  <section class="sol-cta" aria-label="Contact">
-    <canvas class="sol-cta-bg" id="solCtaBg" aria-hidden="true"></canvas>
-    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="core" aria-hidden="true"></span>
-    <div class="sol-cta-in">
-      <div class="eye"><?= htmlspecialchars($c('cta_eyebrow', 'Start your transformation')) ?></div>
-      <h2><?= $promo_title($c('cta_title', 'Ready to modernize your [enterprise?]')) ?></h2>
-      <?php if (trim(strip_tags((string)$c('cta_text', ''))) !== '' || true): ?><p><?= htmlspecialchars($c('cta_text', "Let's design the right foundation, security, data, and AI strategy for your business — backed by a partner trusted by global technology leaders across the region.")) ?></p><?php endif; ?>
-      <div class="btns">
+  <section class="cf" aria-label="Contact">
+    <canvas class="cf-bg" id="cfBg" aria-hidden="true"></canvas>
+    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="au au3" aria-hidden="true"></span>
+    <span class="ring" aria-hidden="true"></span>
+    <div class="cf-in">
+      <?php if (trim((string)$c('cta_eyebrow', '')) !== ''): ?><div class="cf-eye"><?= htmlspecialchars($c('cta_eyebrow', 'Start your transformation')) ?></div><?php endif; ?>
+      <h2 class="cf-h" data-text="<?= htmlspecialchars($c('cta_title', 'Ready to modernize your [enterprise?]'), ENT_QUOTES, 'UTF-8') ?>"></h2>
+      <p class="cf-p"><?= htmlspecialchars($c('cta_text', "Let's design the right foundation, security, data, and AI strategy for your business — backed by a partner trusted by global technology leaders across the region.")) ?></p>
+      <div class="cf-btns">
         <?php if ($cta_b1l !== ''): ?><a class="btn btn-p" href="<?= htmlspecialchars($cta_href($cta_b1u)) ?>"><?= htmlspecialchars($cta_b1l) ?> <?= $arrow ?></a><?php endif; ?>
         <?php if ($cta_b2l !== ''): ?><a class="btn btn-g" href="<?= htmlspecialchars($cta_href($cta_b2u)) ?>"><?= htmlspecialchars($cta_b2l) ?></a><?php endif; ?>
       </div>
     </div>
   </section>
-  <script src="<?= theme_asset('assets/js/solcta.js') ?>" defer></script>
+  <script src="<?= theme_asset('assets/js/ctafinale.js') ?>" defer></script>
 </main>
 <?php include theme_path('templates/layouts/footer.php'); ?>
