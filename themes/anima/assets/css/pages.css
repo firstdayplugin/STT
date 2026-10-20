@@ -175,10 +175,13 @@
   .ab-vm,.ab-mile{grid-template-columns:1fr}
 }
 
-/* ================= SERVICE DETAIL (tier comparison) ================= */
-.svc-hero{text-align:center;padding:44px 24px 22px}
-.svc-hero h1{font-size:clamp(28px,3.4vw,44px);color:var(--blue-ink)}
-.svc-hero p{max-width:74ch;margin:16px auto 0;color:var(--ink-2);line-height:1.8;font-size:15.5px}
+/* ================= SERVICE DETAIL (tier comparison) =================
+   Scoped away from the Services LANDING (.svc-page), which reuses the
+   .svc-hero class for its dark immersive hero — otherwise .svc-hero h1
+   here would override the landing's white .svc-title to dark navy. */
+.page-body:not(.svc-page) .svc-hero{text-align:center;padding:44px 24px 22px}
+.page-body:not(.svc-page) .svc-hero h1{font-size:clamp(28px,3.4vw,44px);color:var(--blue-ink)}
+.page-body:not(.svc-page) .svc-hero p{max-width:74ch;margin:16px auto 0;color:var(--ink-2);line-height:1.8;font-size:15.5px}
 .svc-media{height:clamp(240px,32vw,440px);border-radius:calc(var(--radius) + 6px);overflow:hidden;margin:8px 0 40px;
   border:1px solid var(--line);background:radial-gradient(120% 120% at 70% 10%,#12295a,#0a1730);display:grid;place-items:center}
 .svc-media img{width:100%;height:100%;object-fit:cover}
