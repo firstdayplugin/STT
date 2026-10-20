@@ -76,45 +76,50 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
   </section>
   <script src="<?= theme_asset('assets/js/svchero.js') ?>" defer></script>
 
-  <section class="svc-main">
-    <div class="svc-wrap">
-
-      <?php if ($pillars): ?>
-      <section class="svc-pillars reveal">
-        <?php foreach ($pillars as $i => $pl):
-          $tags = array_values(array_filter(array_map('trim', explode(',', (string)($pl['tags'] ?? '')))));
-          $has = !empty($pl['link_slug']);
-        ?>
-        <?= $has ? '<a class="svc-pcard" href="' . htmlspecialchars(url($pl['link_slug'])) . '">' : '<div class="svc-pcard nolink">' ?>
-          <span class="svc-picon"><?= icon($pillar_icons[$i] ?? 'layers', 28) ?></span>
-          <?php if (!empty($pl['badge'])): ?><span class="svc-badge"><?= htmlspecialchars($pl['badge']) ?></span><?php endif; ?>
-          <h2 translate="no" class="notranslate"><?= htmlspecialchars($TP($pl, 'judul')) ?></h2>
-          <p><?= htmlspecialchars($TP($pl, 'deskripsi')) ?></p>
-          <?php if ($tags): ?><div class="svc-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
-          <?php if ($has): ?><span class="svc-more"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></span><?php endif; ?>
-        <?= $has ? '</a>' : '</div>' ?>
+  <?php
+  // Capabilities "Deck" — the 2 lead pillars + supporting capabilities as a single
+  // dark, pinned, scroll-scrubbed deck (same language as the Solutions deck). The
+  // right side is a glowing icon emblem instead of a photo. Reuses .sd-* + soldeck.js.
+  $caps = [];
+  foreach ($pillars as $i => $pl)   $caps[] = ['row' => $pl, 'icon' => $pillar_icons[$i] ?? 'layers'];
+  foreach ($supporting as $i => $s) $caps[] = ['row' => $s,  'icon' => $support_icons[$i] ?? 'box'];
+  $cap_n = count($caps);
+  ?>
+  <?php if ($caps): ?>
+  <section class="sd-wrap svc-deck" id="sdWrap" aria-label="<?= htmlspecialchars(t('supporting_capability', 'What we deliver')) ?>" style="height:<?= max(320, $cap_n * 112) ?>vh">
+    <div class="sd-pin">
+      <canvas class="sd-bg" id="sdBg" aria-hidden="true"></canvas>
+      <div class="sd-eye"><?= htmlspecialchars(t('what_we_deliver', 'What we deliver')) ?></div>
+      <div class="sd-rail" id="sdRail">
+        <?php foreach ($caps as $i => $c): ?>
+          <button type="button" data-i="<?= $i ?>" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= htmlspecialchars(strip_tags($TP($c['row'], 'judul'))) ?>"><span class="d"></span><span class="idx"><?= sprintf('%02d', $i + 1) ?></span></button>
         <?php endforeach; ?>
-      </section>
-      <?php endif; ?>
-
-      <?php if ($supporting): ?>
-      <section class="svc-sec">
-        <div class="svc-head"><h2><?= htmlspecialchars(t('supporting_capability', 'Supporting Capability')) ?></h2></div>
-        <div class="svc-support reveal">
-          <?php foreach ($supporting as $i => $s): ?>
-          <div class="svc-scard">
-            <span class="svc-sicon"><?= icon($support_icons[$i] ?? 'box', 24) ?></span>
-            <?php if (!empty($s['badge'])): ?><span class="svc-stag"><?= htmlspecialchars($s['badge']) ?></span><?php endif; ?>
-            <h3 translate="no" class="notranslate"><?= htmlspecialchars($TP($s, 'judul')) ?></h3>
-            <p><?= htmlspecialchars($TP($s, 'deskripsi')) ?></p>
+      </div>
+      <div class="sd-stage" id="sdStage">
+        <?php foreach ($caps as $i => $c): $cr = $c['row'];
+          $tags = array_values(array_filter(array_map('trim', explode(',', (string)($cr['tags'] ?? '')))));
+          $has = !empty($cr['link_slug']);
+        ?>
+          <div class="sd-panel<?= $i === 0 ? ' on' : '' ?>" data-i="<?= $i ?>">
+            <div class="sd-txt">
+              <div class="sd-num"><?= sprintf('%02d', $i + 1) ?></div>
+              <?php if (!empty($cr['badge'])): ?><span class="sd-badge"><?= htmlspecialchars($cr['badge']) ?></span><?php endif; ?>
+              <h2 class="sd-title notranslate" translate="no"><?= $svc_acc($TP($c['row'], 'judul')) ?></h2>
+              <?php if (trim((string)$TP($c['row'], 'deskripsi')) !== ''): ?><p class="sd-desc"><?= htmlspecialchars($TP($c['row'], 'deskripsi')) ?></p><?php endif; ?>
+              <?php if ($tags): ?><div class="sd-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
+              <?php if ($has): ?><a class="sd-cta" href="<?= htmlspecialchars(url($cr['link_slug'])) ?>"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></a><?php endif; ?>
+            </div>
+            <div class="sd-media sd-emblem" aria-hidden="true">
+              <span class="glow"></span><span class="ring r1"></span><span class="ring r2"></span>
+              <span class="ic"><?= icon($c['icon'], 60) ?></span>
+            </div>
           </div>
-          <?php endforeach; ?>
-        </div>
-      </section>
-      <?php endif; ?>
-
+        <?php endforeach; ?>
+      </div>
     </div>
   </section>
+  <script src="<?= theme_asset('assets/js/soldeck.js') ?>" defer></script>
+  <?php endif; ?>
 
   <!-- Closing CTA band (shared .sol-cta style; dust in solcta.js). -->
   <section class="sol-cta" aria-label="Contact">
