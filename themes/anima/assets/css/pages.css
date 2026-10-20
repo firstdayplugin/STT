@@ -1813,7 +1813,11 @@ body.sol-modal-open{overflow:hidden}
    Services — "Lifecycle Loop" hero + dark pillars/supporting (full dark
    immersive). JS: svchero.js. CTA band reuses .sol-cta (+ solcta.js).
    ===================================================================== */
-.svc-page{background:#070d1a}
+/* Services landing is a full-bleed dark page (hero + deck) ending in the light
+   .cf finale, which must sit flush against the footer. Zero the .sv2 bottom
+   padding (0 0 70px) — otherwise 70px of the dark .svc-page background shows as
+   a black strip between the finale and the footer's white band. */
+.svc-page{background:#070d1a;padding-bottom:0}
 .svc-hero{position:relative;z-index:1;height:100vh;min-height:680px;overflow:hidden;
   background:radial-gradient(85% 70% at 50% 92%,#17254a 0%,#0c1430 46%,#060b18 100%)}
 .svc-hero::before{content:"";position:absolute;inset:0;z-index:0;opacity:.5;
