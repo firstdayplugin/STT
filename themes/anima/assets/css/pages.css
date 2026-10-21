@@ -2098,16 +2098,19 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
    ============================================================================ */
 .wn-page{background:#060b18}
 /* ---- cover ---- */
-.wn-cover{position:relative;height:min(80vh,800px);min-height:540px;overflow:hidden;display:flex;align-items:center}
+.wn-cover{position:relative;height:min(76vh,720px);min-height:500px;overflow:hidden;display:flex;align-items:center;padding:clamp(96px,12vh,124px) 0 clamp(44px,7vh,72px)}
 .wn-cover-img{position:absolute;inset:-6% 0;z-index:0;background-size:cover;background-position:center;transform:scale(1.06)}
-.wn-cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(0deg,rgba(6,11,24,.96) 0%,rgba(6,11,24,.6) 34%,rgba(6,11,24,.2) 64%,rgba(6,11,24,.5) 100%)}
+.wn-cover::after{content:"";position:absolute;inset:0;z-index:1;background:
+  linear-gradient(90deg,rgba(5,9,18,.95) 0%,rgba(5,9,18,.84) 30%,rgba(5,9,18,.5) 62%,rgba(5,9,18,.3) 100%),
+  linear-gradient(0deg,rgba(5,9,18,.88) 0%,rgba(5,9,18,.35) 40%,transparent 72%)}
 .wn-cover-eye{position:absolute;top:30px;left:50%;transform:translateX(-50%);z-index:3;font-size:11.5px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;color:#9fc0ef}
-.wn-cover-in{position:relative;z-index:3;max-width:900px;padding:40px clamp(28px,6vw,90px)}
+.wn-cover-in{position:relative;z-index:3;max-width:900px;padding:0 clamp(28px,6vw,90px)}
 .wn-cover-meta{display:flex;gap:12px;align-items:center;margin-bottom:20px}
 .wn-chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:6px 13px;border-radius:999px;background:rgba(10,20,40,.72);color:#fff;backdrop-filter:blur(6px)}
 .wn-chip-grad{background:linear-gradient(135deg,#2478e0,#1f5fd0);box-shadow:0 10px 24px -8px rgba(47,123,224,.8);backdrop-filter:none}
 .wn-cover-date{font-size:13px;color:#c2d2ee;font-weight:600;letter-spacing:.02em}
-.wn-cover-in h1{font-size:clamp(28px,4.4vw,56px);font-weight:700;letter-spacing:-.035em;line-height:1.08;color:#fff;max-width:18ch}
+.wn-cover-in h1{font-size:clamp(23px,2.9vw,40px);font-weight:700;letter-spacing:-.03em;line-height:1.14;color:#fff;max-width:640px;
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 2px 30px rgba(0,8,24,.5)}
 .wn-cover-in h1 a{color:inherit}
 .wn-cover-in p{margin:18px 0 0;max-width:620px;color:#cdd9ef;font-size:clamp(14px,1.2vw,16.5px);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .wn-cover-btn{margin-top:26px;display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:#0b1220;background:#fff;padding:14px 26px;border-radius:13px;box-shadow:0 20px 44px -16px rgba(0,0,0,.6);transition:transform .25s,box-shadow .25s}

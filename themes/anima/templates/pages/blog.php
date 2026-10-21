@@ -25,6 +25,8 @@ $years = $Q("SELECT YEAR(created_at) y, COUNT(*) c FROM blog WHERE status='publi
 $fmt = fn($d) => $d ? date('F j, Y', strtotime($d)) : '';
 $img = fn($p) => $p ? (preg_match('#^(https?:|/|data:)#', $p) ? $p : uploads_url($p)) : '';
 $rt  = fn($k) => max(1, (int)ceil(str_word_count(strip_tags((string)$k)) / 200)); // ~200 wpm
+// Plain, safe text: strip tags, decode entities (so stored &nbsp; etc. don't show literally), re-escape.
+$txt = fn($s) => htmlspecialchars(trim(html_entity_decode(strip_tags((string)$s), ENT_QUOTES | ENT_HTML5, 'UTF-8')), ENT_QUOTES, 'UTF-8');
 // Deterministic gradient fallback for posts without an image.
 $grad = function ($id) {
     $g = [['#12325f', '#0a1b38', '73,200,210'], ['#17405f', '#0a2030', '90,160,255'], ['#143a52', '#0b2436', '73,214,199'],
@@ -51,7 +53,7 @@ $media = function ($p) use ($img, $grad) {
 };
 // data-* attributes used by the client-side filter.
 $dataAttr = function ($p) {
-    $s = strtolower(trim(($p['judul'] ?? '') . ' ' . strip_tags($p['excerpt'] ?? '') . ' ' . ($p['kategori'] ?? '')));
+    $s = strtolower(trim(html_entity_decode(strip_tags(($p['judul'] ?? '') . ' ' . ($p['excerpt'] ?? '') . ' ' . ($p['kategori'] ?? '')), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
     return ' data-cat="' . htmlspecialchars((string)($p['kat_slug'] ?? '')) . '"'
          . ' data-y="' . (int)date('Y', strtotime($p['created_at'] ?? 'now')) . '"'
          . ' data-s="' . htmlspecialchars($s, ENT_QUOTES) . '"';
@@ -72,8 +74,8 @@ $clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
         <?php if (!empty($featured['kategori'])): ?><span class="wn-chip wn-chip-grad"><?= htmlspecialchars($featured['kategori']) ?></span><?php endif; ?>
         <span class="wn-cover-date"><?= htmlspecialchars($fmt($featured['created_at'])) ?></span>
       </div>
-      <h1><a href="<?= url('blog/' . $featured['slug']) ?>"><?= htmlspecialchars($featured['judul']) ?></a></h1>
-      <?php if (trim((string)($featured['excerpt'] ?? '')) !== ''): ?><p><?= htmlspecialchars(strip_tags($featured['excerpt'])) ?></p><?php endif; ?>
+      <h1><a href="<?= url('blog/' . $featured['slug']) ?>"><?= $txt($featured['judul']) ?></a></h1>
+      <?php if (trim((string)($featured['excerpt'] ?? '')) !== ''): ?><p><?= $txt($featured['excerpt']) ?></p><?php endif; ?>
       <a class="wn-cover-btn" href="<?= url('blog/' . $featured['slug']) ?>"><?= ac('blog', 'read_more') ?: 'Read Story' ?> <?= $arrow ?></a>
     </div>
     <div class="wn-cue" aria-hidden="true"><?= htmlspecialchars(t('scroll', 'Scroll')) ?></div>
@@ -119,8 +121,8 @@ $clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
         <span class="wn-lead-img"><?php $media($lead); ?></span>
         <span class="wn-lead-body">
           <span class="d"><?= htmlspecialchars($fmt($lead['created_at'])) ?></span>
-          <span class="wn-lead-h"><?= htmlspecialchars($lead['judul']) ?></span>
-          <?php if (trim((string)($lead['excerpt'] ?? '')) !== ''): ?><span class="wn-ex"><?= htmlspecialchars(strip_tags($lead['excerpt'])) ?></span><?php endif; ?>
+          <span class="wn-lead-h"><?= $txt($lead['judul']) ?></span>
+          <?php if (trim((string)($lead['excerpt'] ?? '')) !== ''): ?><span class="wn-ex"><?= $txt($lead['excerpt']) ?></span><?php endif; ?>
           <span class="wn-foot"><span class="wn-rt"><?= $clock ?><?= $rt($lead['konten'] ?? '') ?> min read</span><span class="wn-read"><?= ac('blog','read_more') ?: 'Read More' ?> <?= $arrow ?></span></span>
         </span>
       </a>
@@ -132,8 +134,8 @@ $clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
           <a class="wn-card-img" href="<?= url('blog/' . $p['slug']) ?>"><?php $media($p); ?></a>
           <div class="wn-card-body">
             <span class="d"><?= htmlspecialchars($fmt($p['created_at'])) ?></span>
-            <h3><a href="<?= url('blog/' . $p['slug']) ?>"><?= htmlspecialchars($p['judul']) ?></a></h3>
-            <?php if (trim((string)($p['excerpt'] ?? '')) !== ''): ?><p><?= htmlspecialchars(strip_tags($p['excerpt'])) ?></p><?php endif; ?>
+            <h3><a href="<?= url('blog/' . $p['slug']) ?>"><?= $txt($p['judul']) ?></a></h3>
+            <?php if (trim((string)($p['excerpt'] ?? '')) !== ''): ?><p><?= $txt($p['excerpt']) ?></p><?php endif; ?>
             <div class="wn-foot"><span class="wn-rt"><?= $clock ?><?= $rt($p['konten'] ?? '') ?> min read</span>
               <a class="wn-read" href="<?= url('blog/' . $p['slug']) ?>"><?= ac('blog','read_more') ?: 'Read' ?> <?= $arrow ?></a></div>
           </div>
