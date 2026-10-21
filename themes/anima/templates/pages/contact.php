@@ -77,6 +77,9 @@ $seo = [
 $anima_body_class = 'page-inner';
 include theme_path('templates/layouts/header.php');
 
+$cc  = fn(string $k, string $d = '') => get_content('contact', $k, $d);
+$txt = fn($s) => htmlspecialchars(trim(html_entity_decode(strip_tags((string)$s), ENT_QUOTES | ENT_HTML5, 'UTF-8')), ENT_QUOTES, 'UTF-8');
+
 $address  = get_setting('site_address', '');
 $phone    = get_setting('site_phone', '');
 $prophone = get_setting('site_phone_prosupport', '');
@@ -92,121 +95,133 @@ $socials  = [
   ['url'=>get_setting('youtube_url', ''),   'path'=>'<path d="M23 12s0-3.2-.4-4.74a2.5 2.5 0 00-1.76-1.77C19.3 5.3 12 5.3 12 5.3s-7.3 0-8.84.19A2.5 2.5 0 001.4 7.26C1 8.8 1 12 1 12s0 3.2.4 4.74a2.5 2.5 0 001.76 1.77c1.54.19 8.84.19 8.84.19s7.3 0 8.84-.19a2.5 2.5 0 001.76-1.77C23 15.2 23 12 23 12zM9.75 15.02V8.98L15.5 12z"/>'],
 ];
 ?>
-<main class="page-body">
-  <div class="page-shell">
-    <div class="page-hero">
-      <div class="eyebrow"><?= ac('contact', 'hero_title') ?></div>
-      <h1><?= ac('contact', 'hero_title') ?></h1>
-      <p><?= ac('contact', 'hero_sub') ?></p>
-    </div>
+<?php
+$rp_solutions = ['Modernize Infrastructure','Cybersecurity','Data Management','Artificial Intelligence (AI)','AI Platform & Applications','Other'];
+$site_name  = get_setting('site_name', 'Sapta Tunas Teknologi');
+$maps_q     = $address !== '' ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($address) : '';
+$maps_dir   = $address !== '' ? 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($address) : '';
+?>
+<main class="page-body cu-page">
 
-    <section class="ct" id="request-proposal">
-      <div class="ct-card">
-        <!-- Left: form -->
-        <div class="ct-form">
-          <h2><?= ac('contact', 'form_title', true) ?></h2>
-          <p><?= ac('contact', 'form_sub') ?></p>
+  <!-- Dark immersive hero -->
+  <section class="cu-hero">
+    <canvas class="cu-net" id="cuNet" aria-hidden="true"></canvas>
+    <span class="cu-au cu-au1" aria-hidden="true"></span><span class="cu-au cu-au2" aria-hidden="true"></span>
+    <div class="cu-hero-in">
+      <div class="cu-eye"><?= $txt($cc('hero_eyebrow', 'Contact Us')) ?></div>
+      <h1><?= $txt($cc('hero_title', "Let's build")) ?> <span class="g"><?= $txt($cc('hero_title2', "what's next.")) ?></span></h1>
+      <?php $hs = trim(strip_tags((string)$cc('hero_sub', 'Have a question or an IT challenge to solve? Our team is ready to help — reach out and we will get back to you fast.'))); if ($hs !== ''): ?>
+      <p><?= $txt($cc('hero_sub', 'Have a question or an IT challenge to solve? Our team is ready to help — reach out and we will get back to you fast.')) ?></p>
+      <?php endif; ?>
+      <div class="cu-scue"><?= htmlspecialchars(t('scroll', 'Scroll')) ?></div>
+    </div>
+  </section>
+
+  <!-- Light body: form + reach us -->
+  <div class="cu-body" id="request-proposal">
+    <div class="cu-wrap">
+      <div class="reveal"><div class="cu-k"><?= $txt($cc('form_kicker', 'Get in touch')) ?></div>
+        <h2 class="cu-h"><?= $txt($cc('form_title', 'Tell us what you')) ?> <span class="g"><?= $txt($cc('form_title2', 'need')) ?></span></h2></div>
+
+      <div class="cu-grid">
+        <!-- Form -->
+        <div class="cu-card reveal">
           <?php if ($rp_sent): ?>
-            <div class="ct-alert ok">Terima kasih! Permintaan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.</div>
+            <div class="cu-alert ok"><?= htmlspecialchars(t('contact_sent', 'Thank you! We have received your request and our team will get back to you shortly.')) ?></div>
           <?php elseif ($rp_err !== ''): ?>
-            <div class="ct-alert err"><?= htmlspecialchars($rp_err) ?></div>
+            <div class="cu-alert err"><?= htmlspecialchars($rp_err) ?></div>
           <?php endif; ?>
           <form method="post" action="<?= htmlspecialchars(url('contact-us') . '#request-proposal') ?>" novalidate>
             <input type="hidden" name="_form" value="proposal">
-            <div class="ct-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-            <?php $rp_solutions = ['Modernize Infrastructure','Cybersecurity','Data Management','Artificial Intelligence (AI)','AI Platform & Applications','Other']; ?>
-            <div class="ct-field"><label for="nm">Full Name</label><input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div>
-            <div class="ct-2col">
-              <div class="ct-field"><label for="em">Email</label><input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
-              <div class="ct-field"><label for="ph">Mobile Phone</label><input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div>
-            </div>
-            <div class="ct-2col">
-              <div class="ct-field"><label for="co">Company / Organization</label><input id="co" name="company" type="text" placeholder="Your company / organization" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>"></div>
-              <div class="ct-field"><label for="jr">Job Role</label><input id="jr" name="job_role" type="text" placeholder="e.g. IT Manager" value="<?= htmlspecialchars($_POST['job_role'] ?? '') ?>"></div>
-            </div>
-            <div class="ct-2col">
-              <div class="ct-field"><label for="ind">Industries</label><input id="ind" name="industry" type="text" placeholder="e.g. Financial Services" value="<?= htmlspecialchars($_POST['industry'] ?? '') ?>"></div>
-              <div class="ct-field"><label for="loc">Locations</label><input id="loc" name="location" type="text" placeholder="e.g. Jakarta, Indonesia" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"></div>
-            </div>
-            <div class="ct-field"><label for="sol">Select Solutions</label>
-              <select id="sol" name="solution" class="ct-select">
-                <option value="" <?= empty($_POST['solution']) ? 'selected' : '' ?>>Select Solutions</option>
+            <div class="cu-hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+            <div class="cu-f"><label for="nm"><?= $txt($cc('f_name', 'Full Name')) ?></label><input id="nm" name="name" type="text" placeholder="Your full name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"></div>
+            <div class="cu-2"><div class="cu-f"><label for="em"><?= $txt($cc('f_email', 'Email')) ?></label><input id="em" name="email" type="email" placeholder="you@company.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
+              <div class="cu-f"><label for="ph"><?= $txt($cc('f_phone', 'Mobile Phone')) ?></label><input id="ph" name="phone" type="tel" placeholder="+62 8xx-xxxx-xxxx" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div></div>
+            <div class="cu-2"><div class="cu-f"><label for="co"><?= $txt($cc('f_company', 'Company / Organization')) ?></label><input id="co" name="company" type="text" placeholder="Your company / organization" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>"></div>
+              <div class="cu-f"><label for="jr"><?= $txt($cc('f_role', 'Job Role')) ?></label><input id="jr" name="job_role" type="text" placeholder="e.g. IT Manager" value="<?= htmlspecialchars($_POST['job_role'] ?? '') ?>"></div></div>
+            <div class="cu-2"><div class="cu-f"><label for="ind"><?= $txt($cc('f_industry', 'Industry')) ?></label><input id="ind" name="industry" type="text" placeholder="e.g. Financial Services" value="<?= htmlspecialchars($_POST['industry'] ?? '') ?>"></div>
+              <div class="cu-f"><label for="loc"><?= $txt($cc('f_location', 'Location')) ?></label><input id="loc" name="location" type="text" placeholder="e.g. Jakarta, Indonesia" value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"></div></div>
+            <div class="cu-f"><label for="sol"><?= $txt($cc('f_solution', 'Select Solution')) ?></label>
+              <select id="sol" name="solution">
+                <option value="" <?= empty($_POST['solution']) ? 'selected' : '' ?>>Select a solution…</option>
                 <?php foreach ($rp_solutions as $__sol): ?><option value="<?= htmlspecialchars($__sol) ?>"<?= (($_POST['solution'] ?? '') === $__sol) ? ' selected' : '' ?>><?= htmlspecialchars($__sol) ?></option><?php endforeach; ?>
               </select>
             </div>
-            <div class="ct-field"><label for="ms">Message</label><textarea id="ms" name="message" placeholder="Please type your request solution / product here!"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
-            <?php if (turnstile_enabled()): ?><div class="ct-field"><?= turnstile_widget() ?></div><?php endif; ?>
-            <button class="btn btn-primary ct-submit" type="submit">
-              <?= ac('contact', 'f_submit') ?: 'Submit' ?>
-              <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
+            <div class="cu-f"><label for="ms"><?= $txt($cc('f_message', 'Message')) ?></label><textarea id="ms" name="message" placeholder="Tell us about your solution / product need"><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea></div>
+            <?php if (turnstile_enabled()): ?><div class="cu-f"><?= turnstile_widget() ?></div><?php endif; ?>
+            <button class="cu-submit" type="submit"><?= $txt($cc('f_submit', 'Send message')) ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           </form>
         </div>
 
-        <!-- Right: info -->
-        <div class="ct-info">
-          <h3><?= ac('contact', 'info_title') ?></h3>
-          <ul class="ct-list">
-            <?php if ($address): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_address') ?></div><div class="val"><?= htmlspecialchars($address) ?></div></div>
-            </li>
-            <?php endif; ?>
-            <?php if ($phone): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_phone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$phone)) ?>"><?= htmlspecialchars($phone) ?></a></div></div>
-            </li>
-            <?php endif; ?>
-            <?php if ($prophone): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0116 0v1"/><rect x="2.5" y="13" width="3.5" height="6" rx="1.5"/><rect x="18" y="13" width="3.5" height="6" rx="1.5"/><path d="M18 19a4 4 0 01-4 3h-1.5"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_prophone') ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$prophone)) ?>"><?= htmlspecialchars($prophone) ?></a></div></div>
-            </li>
-            <?php endif; ?>
-            <?php if ($wa_num): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 01-11.9 7L4 20l1.6-4A8 8 0 1120 11.5z"/><path d="M8.8 8.5c-.3 0-.6.1-.8.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.9 4.5 3.9 2.2.8 2.7.7 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.3-.2-.6-.4l-1.5-.7c-.2-.1-.4-.1-.6.1l-.6.8c-.1.2-.3.2-.5.1-.7-.3-1.4-.6-2.1-1.5-.5-.6-.9-1.3-1-1.5-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.6c-.2-.4-.3-.4-.5-.4z"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_wa') ?></div><div class="val"><a href="https://wa.me/<?= htmlspecialchars($wa_num) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($wa_disp) ?></a></div></div>
-            </li>
-            <?php endif; ?>
-            <?php if ($email): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_email') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($email) ?>"><?= htmlspecialchars($email) ?></a></div></div>
-            </li>
-            <?php endif; ?>
-            <?php if ($proemail): ?>
-            <li class="ct-item">
-              <span class="ct-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M5.4 5.4l3.6 3.6M15 15l3.6 3.6M18.6 5.4L15 9M9 15l-3.6 3.6"/></svg></span>
-              <div><div class="lbl"><?= ac('contact', 'l_proemail') ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($proemail) ?>"><?= htmlspecialchars($proemail) ?></a></div></div>
-            </li>
-            <?php endif; ?>
-          </ul>
-
-          <div class="ct-social">
-            <div class="lbl"><?= ac('contact', 'social_title') ?></div>
-            <div class="ct-social-row">
-              <?php $__any_social = false; foreach ($socials as $s): $su = trim((string)$s['url']); if ($su === '' || $su === '#') continue; $__any_social = true; ?>
+        <!-- Reach us -->
+        <div class="cu-card cu-ri reveal">
+          <h3><?= $txt($cc('info_title', 'Reach us')) ?></h3>
+          <p><?= $txt($cc('info_sub', "Prefer to talk directly? Here's how to find us.")) ?></p>
+          <?php if ($address): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_address', 'Address')) ?></div><div class="val"><?= htmlspecialchars($address) ?></div></div></div>
+          <?php endif; ?>
+          <?php if ($phone): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_phone', 'Phone')) ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$phone)) ?>"><?= htmlspecialchars($phone) ?></a></div></div></div>
+          <?php endif; ?>
+          <?php if ($prophone): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0116 0v1"/><rect x="2.5" y="13" width="3.5" height="6" rx="1.5"/><rect x="18" y="13" width="3.5" height="6" rx="1.5"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_prophone', 'ProSupport 7×24 Hotline')) ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$prophone)) ?>"><?= htmlspecialchars($prophone) ?></a></div></div></div>
+          <?php endif; ?>
+          <?php if ($wa_num): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a8 8 0 01-11.9 7L4 20l1.6-4A8 8 0 1120 11.5z"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_wa', 'WhatsApp')) ?></div><div class="val"><a href="https://wa.me/<?= htmlspecialchars($wa_num) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($wa_disp) ?></a></div></div></div>
+          <?php endif; ?>
+          <?php if ($email): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_email', 'Email')) ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($email) ?>"><?= htmlspecialchars($email) ?></a></div></div></div>
+          <?php endif; ?>
+          <?php if ($proemail): ?>
+          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            <div><div class="lbl"><?= $txt($cc('l_proemail', 'ProSupport Email')) ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($proemail) ?>"><?= htmlspecialchars($proemail) ?></a></div></div></div>
+          <?php endif; ?>
+          <?php if (!empty(array_filter($socials, fn($s) => trim((string)$s['url']) !== '' && trim((string)$s['url']) !== '#'))): ?>
+          <div class="cu-social"><div class="lbl"><?= $txt($cc('social_title', 'Social Media')) ?></div>
+            <div class="cu-social-row">
+              <?php foreach ($socials as $s): $su = trim((string)$s['url']); if ($su === '' || $su === '#') continue; ?>
                 <a href="<?= htmlspecialchars($su) ?>" target="_blank" rel="noopener" aria-label="social"><svg viewBox="0 0 24 24"><?= $s['path'] ?></svg></a>
               <?php endforeach; ?>
-            </div>
-          </div>
+            </div></div>
+          <?php endif; ?>
         </div>
       </div>
+    </div>
 
-      <?php $m = trim((string)$maps); if ($m !== ''): /* Google Maps shows ONLY when set in CMS; hidden by default */ ?>
-      <div class="ct-map">
-        <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?>
-          <?= $m /* full embed HTML from settings */ ?>
+    <!-- Map finale -->
+    <section class="cu-mapsec"><div class="cu-wrap">
+      <div class="reveal"><div class="cu-k"><?= $txt($cc('map_kicker', 'Visit us')) ?></div>
+        <h2 class="cu-h"><?= $txt($cc('map_title', 'Come say')) ?> <span class="g"><?= $txt($cc('map_title2', 'hello')) ?></span></h2></div>
+      <div class="cu-mapcard reveal">
+        <?php $m = trim((string)$maps); if ($m !== ''): ?>
+          <div class="cu-map">
+            <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?><?= $m ?>
+            <?php else: ?><iframe src="<?= htmlspecialchars($m) ?>" style="border:0;width:100%;height:100%" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="<?= htmlspecialchars($site_name) ?> — location"></iframe><?php endif; ?>
+          </div>
         <?php else: ?>
-          <iframe src="<?= htmlspecialchars($m) ?>" width="100%" height="420" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi kantor"></iframe>
+          <div class="cu-map cu-map-mock"><span class="road r1"></span><span class="road r2"></span><span class="road r3"></span><span class="water"></span>
+            <div class="pin"><div class="drop"></div><div class="pulse"></div></div>
+          </div>
+        <?php endif; ?>
+        <?php if ($address): ?>
+        <div class="cu-office">
+          <h4><?= htmlspecialchars($site_name) ?></h4>
+          <p><?= htmlspecialchars($address) ?></p>
+          <div class="cu-obtns">
+            <?php if ($maps_q): ?><a class="cu-ob cu-ob-p" href="<?= htmlspecialchars($maps_q) ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> <?= htmlspecialchars(t('open_in_maps', 'Open in Maps')) ?></a><?php endif; ?>
+            <?php if ($maps_dir): ?><a class="cu-ob cu-ob-g" href="<?= htmlspecialchars($maps_dir) ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg> <?= htmlspecialchars(t('get_directions', 'Get directions')) ?></a><?php endif; ?>
+          </div>
+        </div>
         <?php endif; ?>
       </div>
-      <?php endif; ?>
-    </section>
+    </div></section>
   </div>
 </main>
+<script src="<?= theme_asset('assets/js/contactpage.js') ?>" defer></script>
 <?= turnstile_script() ?>
 <?php include theme_path('templates/layouts/footer.php'); ?>
