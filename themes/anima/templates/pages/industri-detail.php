@@ -138,15 +138,36 @@ include theme_path('templates/layouts/header.php');
           </div>
           <div class="idc-con">
             <canvas aria-hidden="true"></canvas>
-            <?php if ($fitur): foreach ($fitur as $k => $f): ?>
+            <?php if ($fitur): foreach ($fitur as $k => $f):
+              $f_title = trim((string)($f['judul'] ?? ''));
+              $f_teks  = trim((string)($f['teks'] ?? ''));
+              $has = $f_teks !== '';
+            ?>
+              <?php if ($has): ?>
+              <button type="button" class="idc-node has-detail<?= $k === 0 ? ' lead' : '' ?>" aria-haspopup="dialog">
+                <span class="idc-dot"><?= $cap_svg($f_title) ?></span>
+                <span class="idc-lb"><?= htmlspecialchars($f_title) ?></span>
+                <div class="idc-nd" hidden><?= $f_teks ?></div>
+              </button>
+              <?php else: ?>
               <div class="idc-node<?= $k === 0 ? ' lead' : '' ?>">
-                <span class="idc-dot"><?= $cap_svg($f['judul'] ?? '') ?></span>
-                <span class="idc-lb"><?= htmlspecialchars($f['judul'] ?? '') ?></span>
+                <span class="idc-dot"><?= $cap_svg($f_title) ?></span>
+                <span class="idc-lb"><?= htmlspecialchars($f_title) ?></span>
               </div>
+              <?php endif; ?>
             <?php endforeach; endif; ?>
           </div>
         </article>
         <?php endforeach; ?>
+      </div>
+    </div>
+    <!-- capability detail popover (fixed overlay; filled from the clicked node) -->
+    <div class="idc-modal" id="idcModal" hidden>
+      <div class="idc-modal-scrim" data-idc-close></div>
+      <div class="idc-modal-card" role="dialog" aria-modal="true" aria-labelledby="idcModalT">
+        <button type="button" class="idc-modal-x" data-idc-close aria-label="<?= htmlspecialchars(t('close', 'Close')) ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <div class="idc-modal-head"><span class="idc-modal-ic" id="idcModalIc" aria-hidden="true"></span><h3 class="idc-modal-t" id="idcModalT"></h3></div>
+        <div class="idc-modal-body" id="idcModalBody"></div>
       </div>
     </div>
   </section>

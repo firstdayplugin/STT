@@ -1997,7 +1997,12 @@ body.sol-modal-open{overflow:hidden}
 .idc-stage{position:absolute;inset:0;z-index:3}
 .idc-panel{position:absolute;inset:0;display:grid;grid-template-columns:.92fr 1.08fr;align-items:center;gap:40px;
   padding:92px clamp(40px,7vw,120px) 70px;will-change:opacity}
-.idc-txt{max-width:520px;max-height:66vh;overflow:hidden;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent)}
+.idc-txt{max-width:520px;max-height:76vh;overflow-y:auto;overflow-x:hidden;padding-right:10px;
+  scrollbar-width:thin;scrollbar-color:rgba(120,170,255,.4) transparent;overscroll-behavior:auto}
+.idc-txt::-webkit-scrollbar{width:5px}
+.idc-txt::-webkit-scrollbar-track{background:transparent}
+.idc-txt::-webkit-scrollbar-thumb{background:rgba(120,170,255,.38);border-radius:3px}
+.idc-txt::-webkit-scrollbar-thumb:hover{background:rgba(120,170,255,.6)}
 .idc-num{font-size:clamp(70px,10vw,140px);font-weight:800;line-height:.82;letter-spacing:-.04em;
   background:linear-gradient(160deg,rgba(120,170,255,.9),rgba(73,214,199,.25));-webkit-background-clip:text;background-clip:text;color:transparent}
 .idc-peye{margin-top:14px;font-size:12px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:#7fa6e6}
@@ -2047,4 +2052,41 @@ body.sol-modal-open{overflow:hidden}
   .idc-con canvas{display:none}
   .idc-con{display:flex;flex-wrap:wrap;gap:16px 12px;justify-content:flex-start}
   .idc-node{position:static!important;transform:none!important;opacity:1!important;width:98px}
+}
+
+/* ---- Industry capability detail popover (clickable nodes) ---- */
+.idc-node.has-detail{cursor:pointer}
+button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;-webkit-appearance:none;appearance:none}
+.idc-node.has-detail .idc-dot::after{content:"";position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,#2f7be0,#49d6c7);box-shadow:0 2px 8px rgba(40,120,255,.6);
+  -webkit-mask:linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0)}
+.idc-node.has-detail .idc-dot{position:relative}
+.idc-node.has-detail .idc-dot::before{content:"+";position:absolute;top:-5px;right:-5px;width:16px;height:16px;z-index:2;
+  display:grid;place-items:center;font-size:12px;font-weight:800;line-height:1;color:#fff}
+.idc-node.has-detail:hover .idc-lb{color:#fff}
+.idc-modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px}
+.idc-modal[hidden]{display:none}
+.idc-modal-scrim{position:absolute;inset:0;background:rgba(4,9,20,.72);backdrop-filter:blur(6px);opacity:0;transition:opacity .25s}
+.idc-modal.open .idc-modal-scrim{opacity:1}
+.idc-modal-card{position:relative;z-index:1;width:min(560px,100%);max-height:84vh;overflow:auto;padding:34px 34px 30px;
+  border-radius:22px;background:linear-gradient(165deg,rgba(23,37,70,.97),rgba(11,19,40,.98));
+  border:1px solid rgba(120,170,255,.28);box-shadow:0 40px 90px -30px rgba(0,8,30,.9),inset 0 1px 0 rgba(255,255,255,.07);
+  color:#c7d6f2;opacity:0;transform:translateY(16px) scale(.98);transition:opacity .28s,transform .28s}
+.idc-modal.open .idc-modal-card{opacity:1;transform:none}
+.idc-modal-x{position:absolute;top:16px;right:16px;width:34px;height:34px;display:grid;place-items:center;cursor:pointer;
+  background:rgba(120,160,235,.1);border:1px solid rgba(120,170,255,.25);border-radius:10px;color:#9fb6e0;transition:.2s}
+.idc-modal-x:hover{background:rgba(120,160,235,.2);color:#fff}
+.idc-modal-x svg{width:16px;height:16px}
+.idc-modal-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-right:40px}
+.idc-modal-ic{flex:0 0 auto;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(160deg,rgba(47,123,224,.9),rgba(31,95,208,.85));border:1px solid rgba(130,185,255,.5)}
+.idc-modal-ic svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.7}
+.idc-modal-t{margin:0;font-size:clamp(19px,2.2vw,24px);font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1.2}
+.idc-modal-body{font-size:14.5px;line-height:1.72;color:#aebfe0}
+.idc-modal-body p{margin:0 0 11px}.idc-modal-body p:last-child{margin-bottom:0}
+.idc-modal-body ul{margin:8px 0;padding-left:18px}.idc-modal-body li{margin:5px 0}
+.idc-modal-body strong,.idc-modal-body b{color:#dbe7ff}
+@media (max-width:860px){
+  .idc-modal{padding:16px}
+  .idc-modal-card{padding:26px 22px 24px;max-height:88vh}
 }

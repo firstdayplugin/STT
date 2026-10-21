@@ -33,6 +33,34 @@
     })();
   })();
 
+  /* ---- capability detail popover (works for desktop nodes AND mobile chips) ---- */
+  (function () {
+    if (!deck) return;
+    var modal = document.getElementById('idcModal'); if (!modal) return;
+    var icEl = document.getElementById('idcModalIc'), tEl = document.getElementById('idcModalT'), bEl = document.getElementById('idcModalBody');
+    var last = null;
+    function open(node) {
+      var dot = node.querySelector('.idc-dot'), lb = node.querySelector('.idc-lb'), nd = node.querySelector('.idc-nd');
+      if (icEl) icEl.innerHTML = dot ? dot.innerHTML : '';
+      if (tEl) tEl.textContent = lb ? lb.textContent.trim() : '';
+      if (bEl) bEl.innerHTML = nd ? nd.innerHTML : '';
+      modal.hidden = false; document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { modal.classList.add('open'); });
+      last = node;
+    }
+    function close() {
+      modal.classList.remove('open'); document.body.style.overflow = '';
+      setTimeout(function () { modal.hidden = true; }, 260);
+      if (last) { try { last.focus(); } catch (e) {} last = null; }
+    }
+    deck.addEventListener('click', function (e) {
+      var n = e.target.closest ? e.target.closest('.idc-node.has-detail') : null;
+      if (n) { e.preventDefault(); open(n); }
+    });
+    modal.addEventListener('click', function (e) { if (e.target.hasAttribute('data-idc-close')) close(); });
+    addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+  })();
+
   if (!deck || MQ.matches) return;   // the deck itself only animates on desktop
 
   /* ---- ambient dust inside the pinned stage ---- */
