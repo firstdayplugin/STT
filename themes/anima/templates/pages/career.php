@@ -77,7 +77,7 @@ $icCal   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
     <!-- Why join us -->
     <section class="cx-wrap">
       <div class="reveal"><div class="cx-sec-k"><?= $txt($c('why_kicker', 'Why Sapta Tunas')) ?></div>
-        <h2 class="cx-sec-h"><?= $c('why_title', true) ? $c('why_title', true) : 'A place to <span class="g">grow</span>, not just work' ?></h2>
+        <h2 class="cx-sec-h"><?php $wt = trim((string)$c('why_title', '')); echo $wt !== '' ? $wt : 'A place to <span class="g">grow</span>, not just work'; ?></h2>
         <?php $ws = trim(strip_tags((string)$c('why_sub', 'We invest in people. Here is what you can expect when you build your career with us.'))); if ($ws !== ''): ?><p class="cx-sec-sub"><?= $txt($c('why_sub', 'We invest in people. Here is what you can expect when you build your career with us.')) ?></p><?php endif; ?></div>
       <div class="cx-vals">
         <?php foreach ($VALS as $i => $v): ?>
@@ -92,7 +92,7 @@ $icCal   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
     <!-- Open roles -->
     <section class="cx-wrap cx-jobs" id="cx-jobs">
       <div class="reveal"><div class="cx-sec-k"><?= htmlspecialchars(t('open_positions', 'Open Positions')) ?></div>
-        <h2 class="cx-sec-h"><?= $c('jobs_title', true) ? $c('jobs_title', true) : 'Find your <span class="g">next role</span>' ?></h2></div>
+        <h2 class="cx-sec-h"><?php $jt = trim((string)$c('jobs_title', '')); echo $jt !== '' ? $jt : 'Find your <span class="g">next role</span>'; ?></h2></div>
 
       <div class="cx-bar reveal">
         <label class="cx-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
