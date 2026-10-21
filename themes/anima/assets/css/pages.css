@@ -1956,3 +1956,95 @@ body.sol-modal-open{overflow:hidden}
 .cf.lit .cf-btns{opacity:1;transform:none}
 @media (max-width:860px){.cf{padding:72px 20px 60px}.cf .ring{width:420px;height:420px}}
 @media (prefers-reduced-motion:reduce){.cf .au,.cf .ring{animation:none}}
+
+/* ============================================================================
+   INDUSTRY DETAIL — "Command Deck" (industri-detail.php, JS: inddeck.js).
+   Cinematic hero → pinned scroll-scrubbed pillar deck with capability
+   constellations → light .cf finale. Static stacked layout on mobile.
+   ============================================================================ */
+.idc-page{background:#060b18;padding-bottom:0}
+
+/* ---- hero ---- */
+.idc-hero{position:relative;height:92vh;min-height:620px;overflow:hidden;display:grid;place-items:center;text-align:center;
+  background:radial-gradient(90% 80% at 50% 10%,#17254a 0%,#0c1430 48%,#060b18 100%)}
+.idc-photo{position:absolute;inset:0;z-index:0;opacity:.3;background-image:var(--idc-photo,none);background-size:cover;background-position:center;
+  mask-image:radial-gradient(76% 72% at 50% 44%,#000 28%,transparent 82%);-webkit-mask-image:radial-gradient(76% 72% at 50% 44%,#000 28%,transparent 82%)}
+.idc-hero--plain .idc-photo{display:none}
+.idc-hero-ov{position:absolute;inset:0;z-index:1;background:radial-gradient(70% 60% at 50% 46%,transparent 40%,rgba(6,11,24,.55) 100%)}
+.idc-net{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.idc-scan{position:absolute;left:0;right:0;height:38%;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(90,160,255,.07) 60%,rgba(73,214,199,.13));animation:idcScan 7.5s ease-in-out infinite}
+@keyframes idcScan{0%{transform:translateY(-60%)}50%{transform:translateY(160%)}100%{transform:translateY(-60%)}}
+.idc-hero-in{position:relative;z-index:4;padding:0 24px;max-width:1000px}
+.idc-eye{font-size:12.5px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;color:#7fa6e6;margin-bottom:22px}
+.idc-h1{font-size:clamp(34px,6vw,76px);font-weight:700;letter-spacing:-.04em;line-height:1.03;color:#fff;margin:0}
+.idc-h1 .g,.idc-ph .g{background:linear-gradient(120deg,#5aa0ff,#49d6c7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.idc-intro{margin:22px auto 0;max-width:640px;color:#a9bbdd;font-size:clamp(14px,1.3vw,16.5px);line-height:1.7}
+.idc-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:4;color:#7f97c4;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.idc-cue::after{content:"";display:block;width:1px;height:34px;margin:10px auto 0;background:linear-gradient(#7f97c4,transparent);animation:idcCue 1.8s ease-in-out infinite}
+@keyframes idcCue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ---- pinned deck ---- */
+.idc-deck{position:relative;z-index:1;background:radial-gradient(75% 60% at 80% 12%,#13203c 0%,#0a1328 46%,#060b18 100%)}
+.idc-pin{position:sticky;top:0;height:100vh;overflow:hidden}
+.idc-dust{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.idc-deck-eye{position:absolute;top:26px;left:50%;transform:translateX(-50%);z-index:6;font-size:11.5px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:#6f8bbd}
+.idc-rail{position:absolute;right:34px;top:50%;transform:translateY(-50%);z-index:7;display:flex;flex-direction:column;gap:16px}
+.idc-rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:flex-end;color:#5d75a6;font-size:11px;font-weight:700;letter-spacing:.1em;transition:color .3s}
+.idc-rail .d{width:9px;height:9px;border-radius:50%;background:#35456b;box-shadow:0 0 0 4px rgba(90,150,240,0);transition:.35s}
+.idc-rail button.on{color:#cfe0ff}
+.idc-rail button.on .d{background:#5aa0ff;box-shadow:0 0 0 4px rgba(90,150,240,.14),0 0 16px 2px rgba(90,160,255,.7)}
+.idc-stage{position:absolute;inset:0;z-index:3}
+.idc-panel{position:absolute;inset:0;display:grid;grid-template-columns:.92fr 1.08fr;align-items:center;gap:40px;
+  padding:92px clamp(40px,7vw,120px) 70px;will-change:opacity}
+.idc-txt{max-width:520px;max-height:66vh;overflow:hidden;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent)}
+.idc-num{font-size:clamp(70px,10vw,140px);font-weight:800;line-height:.82;letter-spacing:-.04em;
+  background:linear-gradient(160deg,rgba(120,170,255,.9),rgba(73,214,199,.25));-webkit-background-clip:text;background-clip:text;color:transparent}
+.idc-peye{margin-top:14px;font-size:12px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:#7fa6e6}
+.idc-ph{margin-top:16px;font-size:clamp(23px,2.6vw,37px);font-weight:600;letter-spacing:-.025em;line-height:1.14;color:#fff}
+.idc-prose{margin-top:16px;color:#a9bbdd;font-size:15px;line-height:1.7}
+.idc-prose p{margin:0 0 11px}.idc-prose p:last-child{margin-bottom:0}
+.idc-prose strong,.idc-prose b{color:#cfe0ff}
+.idc-prose ul,.idc-prose ol{margin:10px 0;padding-left:20px}.idc-prose li{margin:5px 0}
+.idc-prose a{color:#8fc0ff;text-decoration:underline}
+/* staggered reveal */
+.idc-rv{opacity:0;transform:translateY(22px);filter:blur(5px);transition:opacity .7s,transform .7s,filter .7s}
+.idc-panel.show .idc-rv{opacity:1;transform:none;filter:none}
+.idc-panel.show .idc-rv.d2{transition-delay:.08s}.idc-panel.show .idc-rv.d3{transition-delay:.18s}
+
+/* ---- constellation ---- */
+.idc-con{position:relative;height:min(74vh,620px)}
+.idc-con canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.idc-node{position:absolute;transform:translate(-50%,-50%) scale(.4);z-index:2;text-align:center;width:112px;opacity:0;
+  transition:opacity .5s cubic-bezier(.2,.7,.2,1)}
+.idc-node.in{opacity:1}
+.idc-dot{width:58px;height:58px;margin:0 auto;border-radius:16px;display:grid;place-items:center;color:#9fd0ff;
+  background:linear-gradient(160deg,rgba(28,44,86,.95),rgba(13,22,48,.92));border:1px solid rgba(120,170,255,.4);
+  box-shadow:0 16px 34px -12px rgba(0,12,45,.9),inset 0 1px 0 rgba(255,255,255,.08);transition:transform .35s,box-shadow .35s,border-color .35s,color .35s}
+.idc-dot svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.7}
+.idc-dot img{width:30px;height:30px;object-fit:contain}
+.idc-lb{display:block;margin-top:9px;font-size:11.5px;font-weight:700;color:#c4d6f4;line-height:1.25}
+.idc-node:hover .idc-dot{transform:translateY(-3px);border-color:rgba(120,200,255,.85);color:#e6f2ff;
+  box-shadow:0 24px 50px -14px rgba(40,120,255,.75),0 0 0 1px rgba(120,200,255,.5)}
+.idc-node.lead .idc-dot{background:linear-gradient(160deg,rgba(47,123,224,.9),rgba(31,95,208,.85));color:#fff;border-color:rgba(130,185,255,.6)}
+
+/* ---- mobile / reduced-motion: static stacked, capabilities as chips ---- */
+@media (max-width:860px),(prefers-reduced-motion:reduce){
+  .idc-hero{height:auto;min-height:0;padding:120px 20px 64px}
+  .idc-scan,.idc-cue{display:none}
+  .idc-deck{height:auto!important}
+  .idc-pin{position:static;height:auto;overflow:visible;padding:16px 0 0}
+  .idc-dust{display:none}
+  .idc-deck-eye{position:static;transform:none;margin:0 20px 6px;display:block}
+  .idc-rail{display:none}
+  .idc-stage{position:static}
+  .idc-panel{position:static!important;opacity:1!important;visibility:visible!important;transform:none!important;
+    grid-template-columns:1fr;gap:22px;padding:40px 20px;border-top:1px solid rgba(120,160,235,.1)}
+  .idc-txt{max-height:none;overflow:visible;-webkit-mask-image:none;mask-image:none;max-width:none}
+  .idc-rv{opacity:1!important;transform:none!important;filter:none!important}
+  .idc-num{font-size:62px}
+  .idc-con{height:auto}
+  .idc-con canvas{display:none}
+  .idc-con{display:flex;flex-wrap:wrap;gap:16px 12px;justify-content:flex-start}
+  .idc-node{position:static!important;transform:none!important;opacity:1!important;width:98px}
+}

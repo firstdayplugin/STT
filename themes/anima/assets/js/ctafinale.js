@@ -10,12 +10,20 @@
   if (!sec) return;
   var h = sec.querySelector('.cf-h');
   if (h && h.getAttribute('data-text')) {
-    var words = h.getAttribute('data-text').split(/\s+/);
-    h.innerHTML = words.map(function (w) {
-      var m = /^(.*)\[(.+?)\](.*)$/.exec(w);
-      var inner = m ? (m[1] + '<span class="g">' + m[2] + '</span>' + m[3]) : w;
-      return '<span class="w">' + inner + '</span>';
-    }).join(' ');
+    // Split into word spans; a [ ... ] span (one or many words) becomes the gradient
+    // accent and its brackets are stripped. Backward-compatible with single-word [x].
+    var raw = h.getAttribute('data-text'), out = [];
+    var push = function (str, grad) {
+      str.split(/\s+/).forEach(function (w) {
+        if (!w) return;
+        out.push('<span class="w">' + (grad ? '<span class="g">' + w + '</span>' : w) + '</span>');
+      });
+    };
+    var gi = raw.indexOf('['), gj = raw.indexOf(']');
+    if (gi !== -1 && gj !== -1 && gj > gi) {
+      push(raw.slice(0, gi), false); push(raw.slice(gi + 1, gj), true); push(raw.slice(gj + 1), false);
+    } else { push(raw, false); }
+    h.innerHTML = out.join(' ');
     [].slice.call(h.querySelectorAll('.w')).forEach(function (w, i) { w.style.transitionDelay = (0.12 + i * 0.08) + 's'; });
   }
 
