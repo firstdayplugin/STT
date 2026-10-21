@@ -34,6 +34,16 @@ $banner_url = trim($c('banner_url', '#')); if ($banner_url === '') $banner_url =
 $ind_hero = $imgu($c('hero_img', 'design3/towers-up.jpg'));
 $n = count($rows);
 
+// Promo spotlight — SAME multi-banner component as /solutions (shared solutions_promo table).
+$promos = $Q("SELECT * FROM solutions_promo WHERE is_active=1 ORDER BY urutan, id");
+// Title accent: escape, then turn [word] into a gradient-highlighted span.
+$promo_title = function (string $raw): string {
+    $safe = htmlspecialchars($raw, ENT_QUOTES, 'UTF-8');
+    return preg_replace('/\[(.+?)\]/u', '<span class="g">$1</span>', $safe);
+};
+$arrow  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+$arrowL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+
 /* Per-sector accent, clean stroke line-icon and capability tags, keyed by slug.
    Label / subtitle / link stay CMS-driven; this only styles the rail card. */
 $IND_META = [
@@ -61,8 +71,56 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
     </div>
   </section>
 
-  <!-- Promo banner (CMS image), floating over the hero like Solutions -->
-  <?php if ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
+  <!-- Promo spotlight — identical multi-banner component as /solutions (solpromo.js). -->
+  <?php if ($promos): ?>
+  <div class="ind2-promo">
+    <section class="pm-sec" id="pmSec" aria-label="News &amp; Promotions">
+      <div class="pm">
+        <div class="pm-head">
+          <div><div class="pm-eyebrow"><?= htmlspecialchars($c('promo_eyebrow', "What's happening at STT")) ?></div><h2>News &amp; <span class="b">Promotions</span></h2></div>
+          <div class="pm-nav"><button type="button" id="pmPrev" aria-label="Sebelumnya"><?= $arrowL ?></button><button type="button" id="pmNext" aria-label="Berikutnya"><?= $arrow ?></button></div>
+        </div>
+        <div class="pm-feat" id="pmFeat">
+          <?php foreach ($promos as $k => $pr): $pid = (int)$pr['id'];
+            $p_img  = $imgu((string)($pr['gambar'] ?? ''));
+            $p_ttl  = trim((string)tr_field('solutions_promo', $pid, 'judul', $pr['judul'] ?? ''));
+            $p_date = trim((string)tr_field('solutions_promo', $pid, 'tanggal', $pr['tanggal'] ?? ''));
+            $p_blb  = trim((string)tr_field('solutions_promo', $pid, 'blurb', $pr['blurb'] ?? ''));
+            $p_cta  = trim((string)tr_field('solutions_promo', $pid, 'cta_text', $pr['cta_text'] ?? ''));
+            $p_url  = trim((string)($pr['url'] ?? '')); if ($p_url === '') $p_url = '#';
+            $p_href = preg_match('#^https?:#', $p_url) ? $p_url : ($p_url === '#' ? '#' : url(ltrim($p_url, '/')));
+            $p_ext  = preg_match('#^https?:#', $p_url) ? ' target="_blank" rel="noopener"' : '';
+          ?>
+          <div class="pm-slide<?= $k === 0 ? ' on' : '' ?>" data-i="<?= $k ?>">
+            <div class="ph"<?= $p_img ? ' style="background-image:url(' . htmlspecialchars($p_img) . ')"' : '' ?>></div>
+            <div class="tint"></div><div class="au au1"></div><div class="au au2"></div><div class="sheen"></div>
+            <span class="cn tl"></span><span class="cn br"></span>
+            <div class="pm-ct">
+              <?php if ($p_date !== ''): ?><span class="dt"><?= htmlspecialchars($p_date) ?></span><?php endif; ?>
+              <?php if ($p_ttl !== ''): ?><h3><?= $promo_title($p_ttl) ?></h3><?php endif; ?>
+              <?php if ($p_blb !== ''): ?><p><?= htmlspecialchars($p_blb) ?></p><?php endif; ?>
+              <?php if ($p_cta !== ''): ?><a class="cta" href="<?= htmlspecialchars($p_href) ?>"<?= $p_ext ?>><?= htmlspecialchars($p_cta) ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><?php endif; ?>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <div class="pm-queue" id="pmQueue" style="--n:<?= max(1, count($promos)) ?>">
+          <?php foreach ($promos as $k => $pr): $pid = (int)$pr['id'];
+            $p_img = $imgu((string)($pr['gambar'] ?? ''));
+            $p_ttl = trim(strip_tags((string)tr_field('solutions_promo', $pid, 'judul', $pr['judul'] ?? '')));
+            $p_ttl = preg_replace('/[\[\]]/', '', $p_ttl);
+          ?>
+          <button type="button" class="pm-thumb<?= $k === 0 ? ' on' : '' ?>" data-i="<?= $k ?>" aria-label="<?= htmlspecialchars($p_ttl) ?>">
+            <span class="ph"<?= $p_img ? ' style="background-image:url(' . htmlspecialchars($p_img) . ')"' : '' ?>></span>
+            <span class="cap"><?= htmlspecialchars($p_ttl) ?></span><span class="bar"></span>
+          </button>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="<?= theme_asset('assets/js/solpromo.js') ?>" defer></script>
+  <?php elseif ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
   <div class="ind2-promo">
     <?php if ($banner_has_link): ?>
     <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>
@@ -120,12 +178,30 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
   <div class="ind2-empty-wrap"><p class="bl-empty">Belum ada industri.</p></div>
   <?php endif; ?>
 
-  <!-- Closing CTA -->
-  <section class="ind2-cta">
-    <h2><?= htmlspecialchars($c('cta_h1', "Don't see your")) ?> <span class="g"><?= htmlspecialchars($c('cta_h2', 'industry?')) ?></span></h2>
-    <p><?= htmlspecialchars($c('cta_sub', "Our cross-industry team builds custom IT solutions for any sector. Let's talk about yours.")) ?></p>
-    <a href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('talk_to_team', 'Talk to our team')) ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  <!-- Pre-footer CTA "Finale" (light) — shared component with Solutions & Services.
+       Animated on scroll; white bottom meets the footer seamlessly. CMS-editable. -->
+  <?php
+  $cta_b1l = trim((string)$c('cta_btn1_label', 'Talk to our team'));
+  $cta_b1u = trim((string)$c('cta_btn1_url', 'contact-us'));
+  $cta_b2l = trim((string)$c('cta_btn2_label', 'Explore Solutions'));
+  $cta_b2u = trim((string)$c('cta_btn2_url', 'solutions'));
+  $cta_href = function ($u) { $u = trim($u); if ($u === '' || $u === '#' || strpos($u, '#') === 0) return ($u === '' ? '#' : $u); return preg_match('#^https?:#', $u) ? $u : url(ltrim($u, '/')); };
+  ?>
+  <section class="cf" aria-label="Contact">
+    <canvas class="cf-bg" id="cfBg" aria-hidden="true"></canvas>
+    <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="au au3" aria-hidden="true"></span>
+    <span class="ring" aria-hidden="true"></span>
+    <div class="cf-in">
+      <?php if (trim((string)$c('cta_eyebrow', '')) !== ''): ?><div class="cf-eye"><?= htmlspecialchars($c('cta_eyebrow', '')) ?></div><?php endif; ?>
+      <h2 class="cf-h" data-text="<?= htmlspecialchars($c('cta_title', "Don't see your [industry?]"), ENT_QUOTES, 'UTF-8') ?>"></h2>
+      <p class="cf-p"><?= htmlspecialchars($c('cta_text', "Our cross-industry team builds custom IT solutions for any sector — let's talk about yours.")) ?></p>
+      <div class="cf-btns">
+        <?php if ($cta_b1l !== ''): ?><a class="btn btn-p" href="<?= htmlspecialchars($cta_href($cta_b1u)) ?>"><?= htmlspecialchars($cta_b1l) ?> <?= $arrow ?></a><?php endif; ?>
+        <?php if ($cta_b2l !== ''): ?><a class="btn btn-g" href="<?= htmlspecialchars($cta_href($cta_b2u)) ?>"><?= htmlspecialchars($cta_b2l) ?></a><?php endif; ?>
+      </div>
+    </div>
   </section>
+  <script src="<?= theme_asset('assets/js/ctafinale.js') ?>" defer></script>
 </main>
 <script src="<?= theme_asset('assets/js/industrail.js') ?>" defer></script>
 <?php include theme_path('templates/layouts/footer.php'); ?>
