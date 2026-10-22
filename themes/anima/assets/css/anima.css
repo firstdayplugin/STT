@@ -1243,14 +1243,21 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 .tk-next{border-radius:0 !important}
 
 /* #3 Cover: photographic slides fill the whole stage (no letterbox); the brand
-   navy stays only as a fallback behind a transparent/absent image. Video keeps
-   contain so a promo clip is never hard-cropped.
-   Slides are RIGHT-anchored: the subject should sit on the right of the source
-   image so it stays fully visible in the narrow "next" panel AND after it slides
-   into the wide "current" panel — giving an obvious sense of motion, while the
-   left-aligned hero copy never covers it. */
-.tk-cur .tk-bg,.tk-next .tk-bg{background-size:cover;background-repeat:no-repeat;background-position:right center;background-color:#0c1b2e}
-.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:cover;object-position:right center;background:#0c1b2e}
+   navy stays only as a fallback behind a transparent/absent image.
+   Per-panel framing (hero-grid spec — compact signature object placed in the
+   right "safe zone" of the source, centre ~57%/50%):
+   - CURRENT (wide left panel): full cover → the object sits on the RIGHT of the
+     panel, just left of the diagonal seam, fully visible; hero copy stays clear
+     on the left.
+   - NEXT (narrow diagonal sliver): a punch-in (zoom) re-frames the SAME object
+     so it shows FULLY and centred inside the sliver, as a self-contained
+     preview that doesn't visually connect to the current panel. Calibrated to
+     the hero grid; keep the slide object inside that safe zone. */
+.tk-cur .tk-bg,.tk-next .tk-bg{background-repeat:no-repeat;background-color:#0c1b2e}
+.tk-cur .tk-bg{background-size:cover;background-position:center}
+.tk-next .tk-bg{background-size:165%;background-position:17% 50%}
+.tk-cur .tk-bg video{object-fit:cover;object-position:center;background:#0c1b2e}
+.tk-next .tk-bg video{object-fit:cover;object-position:center;background:#0c1b2e}
 
 /* #4 Restored diagonal-seam design: the JS-clipped white bay (tk-tab) is visible
    again and the nav arrows sit inside it at the junction. Arrows are chevron-only
