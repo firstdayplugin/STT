@@ -1,7 +1,8 @@
 /* =============================================================================
    About Us hero — scale.com-style constellation.
-   Two parent capability cards link to their service-area cards via animated
-   connector lines. Each card drifts organically (amoeba-like) and follows the
+   Equal capability cards joined by animated connector lines that form a closed
+   ring (built from DOM order, so it adapts to any number of cards — no
+   parent/child). Each card drifts organically (amoeba-like) and follows the
    cursor (parallax, depth by size); hover zoom is handled in CSS. The connector
    lines are redrawn every frame so they stay glued to the moving cards.
    Disabled below 860px, where the cards fall back to a static grid (CSS).
@@ -11,10 +12,14 @@
   var svg  = document.getElementById('abhLinks');
   if (!hero || !svg) return;
 
-  var EDGES = [
-    ['infra', 'consult'], ['infra', 'deploy'], ['infra', 'managed-infra'],
-    ['cyber', 'assess'],  ['cyber', 'risk'],   ['cyber', 'managed-cyber']
-  ];
+  // Ring: connect each card to the next in DOM order and close the loop, so the
+  // lines trace the perimeter around the centre copy (markup orders them that way).
+  var keys = [].slice.call(document.querySelectorAll('.abh-box')).map(function (b) { return b.getAttribute('data-k'); });
+  var EDGES = [];
+  for (var ei = 0; ei < keys.length; ei++) {
+    if (keys.length < 2) break;
+    EDGES.push([keys[ei], keys[(ei + 1) % keys.length]]);
+  }
 
   var boxes = {}, D = {};
   var rnd = function (a, z) { return a + Math.random() * (z - a); };

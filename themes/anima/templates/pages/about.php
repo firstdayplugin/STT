@@ -62,20 +62,19 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
 <main class="page-body">
 
   <?php
-  // Scale.com-style constellation hero: two parent capabilities + their service areas,
-  // joined by animated connector lines. Boxes drift organically and follow the cursor;
-  // hovering a card zooms the photo and its label together. Photos reuse existing site
-  // assets (design3/*) — admin can swap them later. Boxes are decorative (not links).
+  // Scale.com-style constellation hero: five equal capability cards joined by
+  // animated connector lines that trace the perimeter (a closed ring, built in
+  // abouthero.js from DOM order — no parent/child). Boxes drift organically and
+  // follow the cursor; hovering a card zooms the photo + label. Photos reuse
+  // existing site assets (design3/*) — admin can swap them. Decorative (not links).
+  // Order below traces the ring: TL → TR → R → bottom-centre → L.
   // [key, label, image(uploads path), isParent, left, top, size(px)]
   $abh_boxes = [
-    ['infra',         'Infrastructure Services',    'design3/towers-up.jpg',      true,  '7%',  '20%', 150],
-    ['consult',       'Consulting',                 'design3/team-meeting.jpg',   false, '25%', '17%', 112],
-    ['deploy',        'Enterprise Deployment',      'design3/office-desks.jpg',   false, '22%', '62%', 128],
-    ['managed-infra', 'Managed Infrastructure',     'design3/office-corridor.jpg',false, '6%',  '57%', 112],
-    ['cyber',         'Cybersecurity Services',     'design3/monitor-dark.jpg',   true,  '80%', '19%', 150],
-    ['assess',        'Assessment & Testing',       'design3/person-laptop.jpg',  false, '65%', '16%', 112],
-    ['risk',          'Security Risk & Compliance', 'design3/glass-facade.jpg',   false, '62%', '62%', 120],
-    ['managed-cyber', 'Managed Cybersecurity',      'design3/desk-red.jpg',       false, '79%', '57%', 130],
+    ['infra',  'Modernize Infrastructure',     'design3/towers-up.jpg',     false, '12%', '19%', 150],
+    ['cyber',  'Cybersecurity',                'design3/monitor-dark.jpg',  false, '78%', '19%', 150],
+    ['ai',     'Artificial Intelligence (AI)', 'design3/person-laptop.jpg', false, '80%', '60%', 126],
+    ['aiplat', 'AI Platform & Applications',   'design3/desk-red.jpg',      false, '45%', '74%', 132],
+    ['data',   'Data Management',              'design3/office-desks.jpg',  false, '8%',  '60%', 126],
   ];
   // Dummy video for the dark scene card (admin can replace uploads/about/vision.mp4).
   $abhero_video = uploads_url('about/vision.mp4');
@@ -84,8 +83,8 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   <section class="abh" id="abhero" aria-label="Enterprise infrastructure and security">
     <svg class="abh-links" id="abhLinks" aria-hidden="true"></svg>
     <div class="abh-copy">
-      <h1>The infrastructure and security your business runs on.</h1>
-      <p>Enterprises across Indonesia trust Sapta Tunas Teknologi to build, protect, and operate the systems behind their operations.</p>
+      <h1><?= ac('about', 'hero_title') ?: 'Welcome to Sapta Tunas Teknologi' ?></h1>
+      <p><?= ac('about', 'hero_sub') ?: 'Established in 2015, we are leading Enterprise Solution provider dedicated to advancing business technology Solutions and Services in Indonesia.' ?></p>
     </div>
     <div class="abh-stage" id="abhStage">
       <?php foreach ($abh_boxes as $b): list($k, $label, $img, $parent, $lx, $ty, $sz) = $b; ?>
