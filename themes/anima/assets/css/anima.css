@@ -1244,9 +1244,13 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
 
 /* #3 Cover: photographic slides fill the whole stage (no letterbox); the brand
    navy stays only as a fallback behind a transparent/absent image. Video keeps
-   contain so a promo clip is never hard-cropped. */
-.tk-cur .tk-bg,.tk-next .tk-bg{background-size:cover;background-repeat:no-repeat;background-position:center;background-color:#0c1b2e}
-.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:cover;background:#0c1b2e}
+   contain so a promo clip is never hard-cropped.
+   Slides are RIGHT-anchored: the subject should sit on the right of the source
+   image so it stays fully visible in the narrow "next" panel AND after it slides
+   into the wide "current" panel — giving an obvious sense of motion, while the
+   left-aligned hero copy never covers it. */
+.tk-cur .tk-bg,.tk-next .tk-bg{background-size:cover;background-repeat:no-repeat;background-position:right center;background-color:#0c1b2e}
+.tk-cur .tk-bg video,.tk-next .tk-bg video{object-fit:cover;object-position:right center;background:#0c1b2e}
 
 /* #4 Restored diagonal-seam design: the JS-clipped white bay (tk-tab) is visible
    again and the nav arrows sit inside it at the junction. Arrows are chevron-only
