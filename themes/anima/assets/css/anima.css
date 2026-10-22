@@ -1763,13 +1763,15 @@ html,body{top:0!important;position:static!important}
 .sh-cta svg{width:17px;height:17px}
 
 /* logos — ukuran SAMA, transparan (tanpa kartu putih), diputihkan biar kebaca di bg gelap */
-/* Partner logos (-v3): source images are TRIMMED to their artwork (no baked
-   padding), so a single uniform HEIGHT with width:auto makes every logo the
-   same optical size regardless of its shape — the professional way to line up
-   mixed-brand logos. Bump the height here to scale them all up together. */
-.sh-logos{position:relative;margin-top:28px;min-height:84px;max-width:540px;display:flex;flex-wrap:wrap;
-  align-items:center;gap:16px 22px;transition:opacity .3s ease}
-.sh-logos img{height:30px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.82;transition:opacity .25s}
+/* Partner logos (-v4): OPTICAL BALANCE. Each source image is pre-rendered on a
+   canvas of identical HEIGHT, with the artwork scaled so every logo carries the
+   same visual weight (equal optical area — wide wordmarks a touch shorter,
+   compact marks a touch taller) and centred. A single CSS height then renders
+   them all balanced, tight, and without distortion. Bump the height to scale
+   the whole set up together. */
+.sh-logos{position:relative;margin-top:28px;min-height:84px;max-width:560px;display:flex;flex-wrap:wrap;
+  align-items:center;gap:10px 22px;transition:opacity .3s ease}
+.sh-logos img{height:56px;width:auto;filter:brightness(0) invert(1);opacity:.85;transition:opacity .25s}
 .sh-logos img:hover{opacity:1}
 
 /* STAGE kanan — 3 panel kaca */
