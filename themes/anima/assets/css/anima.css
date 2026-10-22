@@ -1255,7 +1255,7 @@ body.nav-open .mnav-scrim{display:block;opacity:1}
      the hero grid; keep the slide object inside that safe zone. */
 .tk-cur .tk-bg,.tk-next .tk-bg{background-repeat:no-repeat;background-color:#0c1b2e}
 .tk-cur .tk-bg{background-size:cover;background-position:center}
-.tk-next .tk-bg{background-size:165%;background-position:17% 50%}
+.tk-next .tk-bg{background-size:150%;background-position:0% 50%}
 .tk-cur .tk-bg video{object-fit:cover;object-position:center;background:#0c1b2e}
 .tk-next .tk-bg video{object-fit:cover;object-position:center;background:#0c1b2e}
 
