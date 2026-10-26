@@ -1771,7 +1771,7 @@ html,body{top:0!important;position:static!important}
    the whole set up together. */
 .sh-logos{position:relative;margin-top:28px;min-height:84px;max-width:560px;display:flex;flex-wrap:wrap;
   align-items:center;gap:10px 22px;transition:opacity .3s ease}
-.sh-logos img{height:56px;width:auto;filter:brightness(0) invert(1);opacity:.85;transition:opacity .25s}
+.sh-logos img{height:46px;width:auto;filter:brightness(0) invert(1);opacity:.85;transition:opacity .25s}
 .sh-logos img:hover{opacity:1}
 
 /* STAGE kanan — 3 panel kaca */
