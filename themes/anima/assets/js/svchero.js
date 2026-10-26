@@ -16,9 +16,13 @@
   var nodes = [].slice.call(stage.querySelectorAll('.svc-node'));
   if (!nodes.length) return;
 
-  var CX = 50, CY = 60;   // loop centre (% of hero)
+  // Nodes are placed inside the dedicated .svc-stage box (not the whole hero),
+  // so the loop is self-contained and scales with the box at any screen size.
   function place() {
-    var w = sec.offsetWidth, h = sec.offsetHeight, ccx = w * CX / 100, ccy = h * CY / 100, rad = Math.min(w, h) * 0.245;
+    var w = stage.offsetWidth, h = stage.offsetHeight;
+    var ccx = w / 2, ccy = h / 2;
+    var rad = Math.min(w, h) / 2 - 54;          // keep node icons inside the box
+    if (rad < 60) rad = Math.min(w, h) * 0.36;
     nodes.forEach(function (nd, i) {
       var ang = -Math.PI / 2 + i * (Math.PI * 2 / nodes.length);
       nd.style.left = (ccx + Math.cos(ang) * rad) + 'px';
@@ -47,7 +51,7 @@
     dust.forEach(function (d) { d.y -= d.s; if (d.y < 0) d.y = 1; ctx.beginPath(); ctx.arc(d.x * W, d.y * H, d.r, 0, 7); ctx.fillStyle = 'rgba(120,170,255,' + d.a + ')'; ctx.fill(); });
     var pts = nodes.map(nodeIc);
     var hx, hy;
-    if (hub) { var hp = cc(hub); hx = hp.x; hy = hp.y; } else { hx = W * CX / 100; hy = H * CY / 100; }
+    if (hub) { var hp = cc(hub); hx = hp.x; hy = hp.y; } else { hx = W / 2; hy = H / 2; }
     // spokes to hub (faint)
     pts.forEach(function (p) { ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(p.x, p.y); ctx.strokeStyle = 'rgba(120,170,255,.1)'; ctx.lineWidth = 1 * DPR; ctx.stroke(); });
     // glowing closed loop
