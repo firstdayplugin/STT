@@ -727,6 +727,14 @@ requestAnimationFrame(frame);
   // swipe
   var sx=null; vp.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
   vp.addEventListener('touchend',function(e){ if(sx===null)return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>45)setActive(active+(dx<0?1:-1)); sx=null; });
+  // Trackpad two-finger horizontal swipe + pointer drag.
+  var tscWLk=false;
+  vp.addEventListener('wheel',function(e){ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>12){ e.preventDefault(); if(tscWLk)return; tscWLk=true; setActive(active+(e.deltaX>0?1:-1)); setTimeout(function(){tscWLk=false;},480); } },{passive:false});
+  var tscPx=null;
+  vp.addEventListener('pointerdown',function(e){tscPx=e.clientX;});
+  vp.addEventListener('pointermove',function(e){ if(tscPx===null)return; if(Math.abs(e.clientX-tscPx)>55){ setActive(active+(e.clientX<tscPx?1:-1)); tscPx=null; } });
+  vp.addEventListener('pointerup',function(){tscPx=null;});
+  vp.addEventListener('pointerleave',function(){tscPx=null;});
 
   // Play button → full video plays INSIDE the card (no popup/lightbox)
   cards.forEach(function(c,i){

@@ -347,6 +347,12 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
 
 <!-- ===== WHAT SETS US APART (scale.com/enterprise-style coverflow) ===== -->
 <section class="wsa" id="why">
+  <?php /* Heading styles inlined so they apply even if a cached anima.css is served. */ ?>
+  <style>
+    .wsa-head h2{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif!important;font-weight:800!important;font-size:clamp(36px,5vw,60px)!important;line-height:1.08!important;letter-spacing:-.02em!important;color:#0b1220!important}
+    .wsa-head h2 .b{background:linear-gradient(100deg,#2f7be0 10%,#37c9bd)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
+    .wsa-head .wsa-intro{font-size:clamp(17px,1.9vw,22px)!important;font-weight:500!important;color:#39485f!important;max-width:720px!important;margin:20px auto 0!important;line-height:1.55!important}
+  </style>
   <div class="wsa-head">
     <h2><?= hc('why_title') ?></h2>
     <p class="wsa-intro"><?= hc('why_intro') ?></p>
