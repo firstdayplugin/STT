@@ -348,9 +348,8 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
 <!-- ===== WHAT SETS US APART (scale.com/enterprise-style coverflow) ===== -->
 <section class="wsa" id="why">
   <div class="wsa-head">
-    <div class="wsa-eye"><?= hc('why_eyebrow') ?></div>
     <h2><?= hc('why_title') ?></h2>
-    <p><?= hc('why_intro') ?></p>
+    <p class="wsa-intro"><?= hc('why_intro') ?></p>
   </div>
   <div class="wsa-stage">
     <button type="button" class="wsa-arw prev" id="wsaPrev" aria-label="<?= htmlspecialchars(t('prev', 'Sebelumnya')) ?>">

@@ -454,6 +454,26 @@ requestAnimationFrame(frame);
   if(next)next.addEventListener('click',function(){go(1);auto();});
   cards.forEach(function(c,i){c.addEventListener('click',function(){if(circD(i)!==0){to(i);auto();}});});
   var stage=track.closest('.wsa-stage')||track;
+  // Trackpad two-finger horizontal swipe + pointer drag to move the deck.
+  var wLock=false;
+  stage.addEventListener('wheel',function(e){
+    if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>12){
+      e.preventDefault();
+      if(wLock)return; wLock=true;
+      go(e.deltaX>0?1:-1); auto();
+      setTimeout(function(){wLock=false;},480);
+    }
+  },{passive:false});
+  var dragX=null;
+  stage.addEventListener('pointerdown',function(e){dragX=e.clientX;});
+  stage.addEventListener('pointermove',function(e){
+    if(dragX===null)return;
+    if(Math.abs(e.clientX-dragX)>55){ go(e.clientX<dragX?1:-1); auto(); dragX=null; }
+  });
+  function endDrag(){dragX=null;}
+  stage.addEventListener('pointerup',endDrag);
+  stage.addEventListener('pointerleave',endDrag);
+  stage.addEventListener('pointercancel',endDrag);
   stage.addEventListener('mouseenter',function(){clearInterval(timer);});
   stage.addEventListener('mouseleave',auto);
   addEventListener('resize',layout);

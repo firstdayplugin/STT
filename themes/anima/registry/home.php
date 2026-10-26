@@ -61,7 +61,7 @@ return [
   // ---- Why Us ----
   'why_eyebrow'         => ['label'=>'Why — eyebrow',        'type'=>'text', 'group'=>'Why Us', 'default'=>'Why Sapta Tunas'],
   'why_title'           => ['label'=>'Why — judul',          'type'=>'html', 'group'=>'Why Us', 'default'=>'What Sets Us <span class="b">Apart</span>'],
-  'why_intro'           => ['label'=>'Why — intro',          'type'=>'text', 'group'=>'Why Us', 'default'=>'Alasan enterprise mempercayakan transformasi teknologinya pada STT.'],
+  'why_intro'           => ['label'=>'Why — intro',          'type'=>'text', 'group'=>'Why Us', 'default'=>'Trusted Expertise. Proven Partnerships. Meaningful Impact.'],
   'why1_title'=> ['label'=>'Why 1 — judul','type'=>'text','group'=>'Why Us','default'=>'Tailored Solutions'],
   'why1_sub'  => ['label'=>'Why 1 — sub',  'type'=>'text','group'=>'Why Us','default'=>'10+ tahun pengalaman, solusi dirancang khusus untukmu'],
   'why2_title'=> ['label'=>'Why 2 — judul','type'=>'text','group'=>'Why Us','default'=>'Broad Range of Solutions & Services'],
