@@ -2608,13 +2608,13 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
   align-items:center;color:#9fc2f5;font-size:14px;font-weight:600;text-decoration:none}
 .csd-back svg{width:18px;height:18px}
 .csd-back:hover{color:#cfe4ff}
-.csd-emblem-hero{position:relative;z-index:2;width:118px;height:118px;margin-bottom:28px;display:grid;place-items:center}
+.csd-emblem-hero{position:relative;z-index:2;width:118px;height:118px;margin-bottom:28px}
 .csd-emblem-hero .glow{position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle,rgba(47,123,224,.55),transparent 70%);filter:blur(10px)}
 .csd-emblem-hero .ring{position:absolute;border-radius:50%}
 .csd-emblem-hero .ring.r2{inset:-20px;border:1px dashed rgba(120,170,255,.25);animation:csdSpin 26s linear infinite}
 .csd-emblem-hero .ring.r3{inset:14px;border:1px solid rgba(55,201,189,.3)}
-.csd-emblem-hero .ic{position:relative;z-index:1;display:grid;place-items:center}
-.csd-emblem-hero .ic svg{width:50px;height:50px;stroke:#bfe0ff;stroke-width:1.6;fill:none}
+.csd-emblem-hero .ic{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:grid;place-items:center}
+.csd-emblem-hero .ic svg{display:block;width:50px;height:50px;stroke:#bfe0ff;stroke-width:1.6;fill:none}
 @keyframes csdSpin{to{transform:rotate(360deg)}}
 .csd-eye{position:relative;z-index:2;max-width:620px;font-size:clamp(13px,1.3vw,15px);font-weight:600;letter-spacing:.06em;
   color:#6fb6ef;margin-bottom:16px}
@@ -2671,7 +2671,7 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .csd-emblem .core{position:relative;width:148px;height:148px;border-radius:38px;display:grid;place-items:center;
   background:linear-gradient(150deg,rgba(47,123,224,.22),rgba(13,30,55,.5));border:1px solid rgba(120,170,255,.3);
   box-shadow:0 30px 70px -20px rgba(47,123,224,.5)}
-.csd-emblem .core svg{width:64px;height:64px;stroke:#cfe8ff;stroke-width:1.5;fill:none}
+.csd-emblem .core svg{display:block;width:64px;height:64px;stroke:#cfe8ff;stroke-width:1.5;fill:none}
 .csd-emblem .count{position:absolute;bottom:-4px;font-size:12px;color:#7f9fca;letter-spacing:.1em}
 /* ---- data & ai ---- */
 .csd-dataai{position:relative;padding:clamp(80px,12vh,140px) 24px;text-align:center;overflow:hidden;
@@ -2734,9 +2734,9 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .pkg-flowline{position:relative;max-width:980px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .pkg-flowline::before{content:"";position:absolute;top:28px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,var(--blue),#37c9bd)}
 .pkg-fn{position:relative;z-index:1;flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
-.pkg-fn .node{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#0d1e37;border:1px solid rgba(55,201,189,.4);
+.pkg-fn .node{position:relative;z-index:1;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#0d1e37;border:1px solid rgba(55,201,189,.4);
   box-shadow:0 0 0 6px #081426,0 0 20px rgba(47,123,224,.4)}
-.pkg-fn .node svg{width:24px;height:24px;stroke:#9fe8df;stroke-width:1.7;fill:none}
+.pkg-fn .node svg{display:block;width:24px;height:24px;stroke:#9fe8df;stroke-width:1.7;fill:none}
 .pkg-fn .lbl{font-size:14px;font-weight:600;color:#cfe0f5;text-align:center}
 /* ---- tiers ---- */
 .pkg-tiers-sec{padding:clamp(66px,10vh,116px) 24px;background:radial-gradient(130% 90% at 50% 0%,#0d2039,#070f1c 70%)}
@@ -2784,8 +2784,11 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
   .pkg-cmp .crow{grid-template-columns:1.35fr .9fr .9fr .9fr}
   .pkg-cmp .crow.head{top:58px}
   .pkg-cmp .crow>div{padding:11px 8px!important;font-size:12px!important}
-  .pkg-flowline{flex-wrap:wrap;gap:20px 10px;justify-content:center}
-  .pkg-flowline::before{display:none}
-  .pkg-fn{flex:0 0 30%}
+  .pkg-flowline{flex-direction:column;align-items:flex-start;gap:16px;max-width:340px;margin:0 auto}
+  .pkg-flowline::before{top:26px;bottom:26px;left:23px;right:auto;width:2px;height:auto;background:linear-gradient(180deg,var(--blue),#37c9bd)}
+  .pkg-fn{flex:none;flex-direction:row;align-items:center;gap:16px;width:100%}
+  .pkg-fn .node{width:48px;height:48px}
+  .pkg-fn .node svg{width:22px;height:22px}
+  .pkg-fn .lbl{font-size:15px;text-align:left}
 }
 @media(prefers-reduced-motion:reduce){.pkg-reveal{opacity:1!important;transform:none!important}}
