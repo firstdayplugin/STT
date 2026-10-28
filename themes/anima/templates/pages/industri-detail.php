@@ -108,10 +108,10 @@ include theme_path('templates/layouts/header.php');
   <?php if ($pillars): ?>
   <!-- Pinned pillar deck. Each .idc-panel dwells sharp, then crossfades; its
        capability constellation assembles from the `fitur` icons. -->
-  <section class="idc-deck" id="idcDeck" style="height:<?= (int)$deck_h ?>vh" aria-label="<?= htmlspecialchars($ind_label) ?> — pilar solusi">
+  <section class="idc-deck" id="idcDeck" style="height:<?= (int)$deck_h ?>vh" aria-label="<?= htmlspecialchars($ind_label) ?> — solution pillars">
     <div class="idc-pin">
       <canvas class="idc-dust" id="idcDust" aria-hidden="true"></canvas>
-      <div class="idc-deck-eye"><?= htmlspecialchars(get_content('industri', 'detail_pillars_eyebrow', 'Solusi per Pilar')) ?></div>
+      <div class="idc-deck-eye"><?= htmlspecialchars(get_content('industri', 'detail_pillars_eyebrow', 'Solutions by Pillar')) ?></div>
       <div class="idc-rail" id="idcRail">
         <span class="idc-rail-line" aria-hidden="true"></span>
         <?php foreach ($pillars as $i => $pl): $rl_nama = tr_field('solusi_pilar', (int)$pl['id'], 'nama', $pl['nama']); ?>
@@ -178,9 +178,9 @@ include theme_path('templates/layouts/header.php');
 
   <?php
   // Light CTA finale (shared .cf; reveal + particles in ctafinale.js).
-  $cta_title = get_content('industri', 'detail_cta_title', 'Siap memperkuat bisnis [' . ($ind_label ?: 'Anda') . '?]');
-  $cta_text  = get_content('industri', 'detail_cta_text', "Diskusikan kebutuhan infrastruktur, keamanan, data, dan AI dengan partner yang dipercaya pemimpin teknologi global.");
-  $cta_label = get_content('industri', 'detail_cta_label', t('contact_us', 'Konsultasikan Kebutuhan Anda'));
+  $cta_title = get_content('industri', 'detail_cta_title', 'Ready to power the future of [' . ($ind_label ?: 'your business') . '?]');
+  $cta_text  = get_content('industri', 'detail_cta_text', "Discuss your infrastructure, security, data, and AI needs with a partner trusted by global technology leaders.");
+  $cta_label = get_content('industri', 'detail_cta_label', t('contact_us', "Let's Discuss Your Needs"));
   $cta_arrow = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   ?>
   <section class="cf" aria-label="Contact">
@@ -188,7 +188,7 @@ include theme_path('templates/layouts/header.php');
     <span class="au au1" aria-hidden="true"></span><span class="au au2" aria-hidden="true"></span><span class="au au3" aria-hidden="true"></span>
     <span class="ring" aria-hidden="true"></span>
     <div class="cf-in">
-      <?php $cta_eye = get_content('industri', 'detail_cta_eyebrow', 'Mulai transformasi Anda'); if (trim($cta_eye) !== ''): ?><div class="cf-eye"><?= htmlspecialchars($cta_eye) ?></div><?php endif; ?>
+      <?php $cta_eye = get_content('industri', 'detail_cta_eyebrow', 'Start your transformation'); if (trim($cta_eye) !== ''): ?><div class="cf-eye"><?= htmlspecialchars($cta_eye) ?></div><?php endif; ?>
       <h2 class="cf-h notranslate" translate="no" data-text="<?= htmlspecialchars($cta_title, ENT_QUOTES, 'UTF-8') ?>"></h2>
       <p class="cf-p"><?= htmlspecialchars($cta_text) ?></p>
       <div class="cf-btns">

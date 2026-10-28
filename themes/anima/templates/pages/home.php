@@ -325,7 +325,11 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
     </div>
     <div class="news-viewport">
       <div class="news-track" id="newsTrack">
-        <?php if (!empty($home_news)): foreach ($home_news as $np): $nimg = !empty($np['gambar_utama']) ? uploads_url($np['gambar_utama']) : ''; ?>
+        <?php if (!empty($home_news)): foreach ($home_news as $np):
+          $gu = trim((string)($np['gambar_utama'] ?? ''));
+          // Imported posts store full external URLs; only prepend the uploads path for bare filenames.
+          $nimg = $gu !== '' ? (preg_match('#^(https?:|/|data:)#', $gu) ? $gu : uploads_url($gu)) : '';
+        ?>
         <article class="ncard">
           <div class="ncard-img">
             <?php if ($nimg): ?><img src="<?= htmlspecialchars($nimg) ?>" data-fallback="bg" alt="" loading="lazy" decoding="async"><?php endif; ?>
