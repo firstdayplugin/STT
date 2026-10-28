@@ -54,8 +54,11 @@ $pick_area_icon = function (array $a, int $i) use ($area_icon_map, $area_icon_fa
 };
 // Hero emblem: a shield for security/cyber pages, stacked layers otherwise.
 $slugl = strtolower((string)($p['slug'] ?? ''));
-$hero_icon = (str_contains($slugl, 'cyber') || str_contains($slugl, 'security')) ? 'lock' : 'layers';
+$hero_icon = (str_contains($slugl, 'cyber') || str_contains($slugl, 'security') || str_contains($slugl, 'soc')) ? 'lock' : 'layers';
 $deck_h = max(360, count($areas) * 140);   // vh — scales with number of areas
+// Package pages: an optional service flow (service_pages.extra2, "A -> B -> C").
+$flow = array_values(array_filter(array_map('trim', explode('→', (string)$T('extra2')))));
+$flow_icons = ['search', 'box', 'settings', 'lock', 'rocket', 'sparkles'];
 
 $seo = ['title' => ($p['judul'] ?? 'Services') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
         'description' => mb_substr(strip_tags($T('body')), 0, 160)];
@@ -150,84 +153,89 @@ include theme_path('templates/layouts/header.php');
 </main>
 <script src="<?= theme_asset('assets/js/svcdetail.js') ?>" defer></script>
 
-<?php else: /* ===== package layout (unchanged) ===== */ ?>
-<main class="page-body sv2"><div class="sv2-wrap svd">
+<?php else: /* ===== immersive package layout (tiers + comparison matrix) ===== */ ?>
+<main class="page-body csd">
 
-  <a class="svd-back" href="<?= url('services') ?>">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-    <?= htmlspecialchars(t('services', 'Services')) ?></a>
-
-  <div class="sv2-hero svd-hero">
-    <?php if (trim((string)$T('tagline')) !== ''): ?><div class="sv2-eyebrow"><?= htmlspecialchars($T('tagline')) ?></div><?php endif; ?>
-    <h1><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
-    <?php if (trim((string)$T('body')) !== ''): ?><p class="sv2-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
+  <!-- Hero: dark constellation (same family as the capability pages). -->
+  <section class="csd-hero" id="csdHero">
+    <canvas class="csd-net" id="csdNet" aria-hidden="true"></canvas>
+    <a class="csd-back" href="<?= url('services') ?>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      <?= htmlspecialchars(t('services', 'Services')) ?></a>
+    <div class="csd-emblem-hero" aria-hidden="true">
+      <span class="glow"></span><span class="ring r2"></span><span class="ring r3"></span>
+      <span class="ic"><?= icon($hero_icon, 50) ?></span>
+    </div>
+    <?php if (trim((string)$T('tagline')) !== ''): ?><div class="csd-eye"><?= htmlspecialchars($T('tagline')) ?></div><?php endif; ?>
+    <h1 class="csd-h1"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
+    <?php if (trim((string)$T('body')) !== ''): ?><p class="csd-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
     <?php if (!empty($p['cta_label'])): ?>
-      <a class="btn btn-primary sv2-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
+      <a class="csd-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
     <?php endif; ?>
-  </div>
-
-    <?php if ($tiers): ?>
-    <section class="sv2-sec">
-      <div class="svd-tiers reveal">
-        <?php foreach ($tiers as $i => $tr): $tid = (int)$tr['id']; $feat = ($i === 1); ?>
-        <div class="svd-tier<?= $feat ? ' featured' : '' ?>">
-          <?php if ($feat): ?><span class="svd-tier-flag"><?= htmlspecialchars(t('recommended', 'Recommended')) ?></span><?php endif; ?>
-          <span class="svd-tier-name"><?= htmlspecialchars($tr['nama']) ?></span>
-          <h3 class="svd-tier-title"><?= htmlspecialchars(tr_field('service_tiers', $tid, 'judul', $tr['judul'] ?? '')) ?></h3>
-          <p><?= htmlspecialchars(tr_field('service_tiers', $tid, 'deskripsi', $tr['deskripsi'] ?? '')) ?></p>
-        </div>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if ($matrix):
-      $tier_labels = [];
-      foreach ($tiers as $tr) { $tier_labels[] = $tr['nama']; }
-      if (!$tier_labels) $tier_labels = ['Gold', 'Platinum', 'Diamond'];
-      $cols = ['v_gold' => $tier_labels[0] ?? 'Gold', 'v_platinum' => $tier_labels[1] ?? 'Platinum', 'v_diamond' => $tier_labels[2] ?? 'Diamond'];
-    ?>
-    <section class="sv2-sec">
-      <div class="sv2-head"><h2><?= htmlspecialchars(t('service_coverage', 'Service Coverage')) ?></h2></div>
-      <!-- Desktop: comparison table -->
-      <div class="svd-matrix reveal">
-        <table>
-          <thead><tr><th><?= htmlspecialchars(t('service_coverage', 'Service Coverage')) ?></th><?php foreach ($cols as $lbl): ?><th><?= htmlspecialchars($lbl) ?></th><?php endforeach; ?></tr></thead>
-          <tbody>
-            <?php foreach ($mgroups as $gname => $rows): ?>
-              <?php if ($gname !== '' && $gname !== 'Service Coverage'): ?><tr class="svd-mgroup"><th colspan="4"><?= htmlspecialchars($gname) ?></th></tr><?php endif; ?>
-              <?php foreach ($rows as $r): ?>
-              <tr>
-                <td class="svd-mrow"><?= htmlspecialchars(tr_field('service_matrix', (int)$r['id'], 'baris', $r['baris'])) ?></td>
-                <td><?= $cell($r['v_gold']) ?></td><td><?= $cell($r['v_platinum']) ?></td><td><?= $cell($r['v_diamond']) ?></td>
-              </tr>
-              <?php endforeach; ?>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-      <!-- Mobile: one stacked card per tier -->
-      <div class="svd-mcards">
-        <?php foreach ($cols as $col => $label): ?>
-        <div class="svd-mcard">
-          <div class="svd-mcard-h"><?= htmlspecialchars($label) ?></div>
-          <?php foreach ($mgroups as $gname => $rows): ?>
-            <?php if ($gname !== '' && $gname !== 'Service Coverage'): ?><div class="svd-mcard-g"><?= htmlspecialchars($gname) ?></div><?php endif; ?>
-            <?php foreach ($rows as $r): ?>
-            <div class="svd-mcard-row"><span class="k"><?= htmlspecialchars(tr_field('service_matrix', (int)$r['id'], 'baris', $r['baris'])) ?></span><span class="v"><?= $cell($r[$col]) ?></span></div>
-            <?php endforeach; ?>
-          <?php endforeach; ?>
-        </div>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
-  <section class="sv2-closing">
-    <h2><?= htmlspecialchars(t('services_closing', 'One Partner. End-to-End Capability.')) ?></h2>
-    <a class="btn sv2-closing-btn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+    <div class="csd-scroll" aria-hidden="true"><span></span>Scroll</div>
   </section>
 
-</div></main>
+  <?php if (count($flow) > 1): ?>
+  <!-- Service flow (service_pages.extra2) — glowing nodes on a connecting line. -->
+  <section class="pkg-flow">
+    <div class="eye"><?= htmlspecialchars(t('service_flow', 'Service Flow')) ?></div>
+    <div class="pkg-flowline">
+      <?php foreach ($flow as $fi => $step): ?>
+        <div class="pkg-fn"><span class="node"><?= icon($flow_icons[$fi % count($flow_icons)], 24) ?></span><span class="lbl"><?= htmlspecialchars($step) ?></span></div>
+      <?php endforeach; ?>
+    </div>
+  </section>
+  <?php endif; ?>
+
+  <?php if ($tiers): ?>
+  <section class="pkg-tiers-sec">
+    <div class="pkg-head"><div class="eye"><?= htmlspecialchars(t('package_positioning', 'Package Positioning')) ?></div><h2><?= htmlspecialchars(t('choose_your_plan', 'Choose Your Plan')) ?></h2></div>
+    <div class="pkg-tiers">
+      <?php foreach ($tiers as $i => $tr): $tid = (int)$tr['id']; $feat = ($i === 1); ?>
+        <div class="pkg-tier pkg-reveal<?= $feat ? ' feat' : '' ?>">
+          <?php if ($feat): ?><span class="flag"><?= htmlspecialchars(t('recommended', 'Recommended')) ?></span><?php endif; ?>
+          <div class="nm"><?= htmlspecialchars($tr['nama']) ?></div>
+          <h3><?= htmlspecialchars(tr_field('service_tiers', $tid, 'judul', $tr['judul'] ?? '')) ?></h3>
+          <p><?= htmlspecialchars(tr_field('service_tiers', $tid, 'deskripsi', $tr['deskripsi'] ?? '')) ?></p>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
+  <?php endif; ?>
+
+  <?php if ($matrix):
+    $tier_labels = [];
+    foreach ($tiers as $tr) { $tier_labels[] = $tr['nama']; }
+    if (!$tier_labels) $tier_labels = ['Gold', 'Platinum', 'Diamond'];
+  ?>
+  <section class="pkg-cmp-sec">
+    <div class="pkg-head"><div class="eye"><?= htmlspecialchars(t('compare', 'Compare')) ?></div><h2><?= htmlspecialchars(t('package_comparison', 'Package Comparison')) ?></h2></div>
+    <div class="pkg-cmp">
+      <div class="crow head">
+        <div><?= htmlspecialchars(t('service_coverage', 'Service Coverage')) ?></div>
+        <div><?= htmlspecialchars($tier_labels[0] ?? 'Gold') ?></div>
+        <div class="feat"><?= htmlspecialchars($tier_labels[1] ?? 'Platinum') ?></div>
+        <div><?= htmlspecialchars($tier_labels[2] ?? 'Diamond') ?></div>
+      </div>
+      <?php foreach ($mgroups as $gname => $rows): ?>
+        <?php if ($gname !== '' && $gname !== 'Service Coverage'): ?><div class="cgroup"><?= htmlspecialchars($gname) ?></div><?php endif; ?>
+        <?php foreach ($rows as $r): ?>
+          <div class="crow item pkg-reveal">
+            <div><?= htmlspecialchars(tr_field('service_matrix', (int)$r['id'], 'baris', $r['baris'])) ?></div>
+            <div><?= $cell($r['v_gold']) ?></div><div class="feat"><?= $cell($r['v_platinum']) ?></div><div><?= $cell($r['v_diamond']) ?></div>
+          </div>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
+    </div>
+  </section>
+  <?php endif; ?>
+
+  <section class="csd-finale">
+    <h2><?= htmlspecialchars(t('services_closing', 'One Partner. End-to-End Capability.')) ?></h2>
+    <a class="csd-fbtn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+  </section>
+
+</main>
+<script src="<?= theme_asset('assets/js/svcdetail.js') ?>" defer></script>
 <?php endif; ?>
 <?php include theme_path('templates/layouts/footer.php'); ?>

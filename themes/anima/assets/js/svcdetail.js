@@ -55,4 +55,17 @@
     addEventListener('resize', upd);
     upd();
   }
+
+  // ---- package pages: reveal tiers + matrix rows on scroll ----
+  var reveals = [].slice.call(document.querySelectorAll('.pkg-reveal'));
+  if (reveals.length) {
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion:reduce)').matches) {
+      reveals.forEach(function (e) { e.classList.add('in'); });
+    } else {
+      var rio = new IntersectionObserver(function (es) {
+        es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); rio.unobserve(en.target); } });
+      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      reveals.forEach(function (e) { rio.observe(e); });
+    }
+  }
 })();
