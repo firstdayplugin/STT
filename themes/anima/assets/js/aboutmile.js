@@ -46,6 +46,7 @@
     if (dot) { var r = rail.getBoundingClientRect(); dot.style.left = (fr * r.width) + 'px'; }
     var act = Math.round(pos);
     yrs.forEach(function (y, i) { y.classList.toggle('on', i === act); y.classList.toggle('past', i < act); });
+    slides.forEach(function (s, i) { s.classList.toggle('is-on', i === act); });   // drives the year bar-draw + underline sweep
 
     requestAnimationFrame(frame);
   }

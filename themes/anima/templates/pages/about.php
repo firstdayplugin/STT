@@ -168,7 +168,10 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
         <?php foreach ($mile_data as $m): list($yr, $items, $img) = $m; ?>
           <div class="mj-slide">
             <div class="mj-txt">
-              <div class="mj-year"><?= htmlspecialchars($yr) ?></div>
+              <div class="mj-yrow">
+                <span class="mj-bar" aria-hidden="true"></span>
+                <div class="mj-ycol"><div class="mj-year"><?= htmlspecialchars($yr) ?></div><span class="mj-uline" aria-hidden="true"></span></div>
+              </div>
               <?php if (count($items) > 1): ?>
                 <ul class="mj-list"><?php foreach ($items as $it): ?><li><?= htmlspecialchars($it) ?></li><?php endforeach; ?></ul>
               <?php else: ?>

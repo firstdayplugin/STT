@@ -1393,8 +1393,18 @@ body.sol-modal-open{overflow:hidden}
 .mj-track{position:absolute;top:0;left:0;height:100%;display:flex;gap:60px;align-items:center;will-change:transform}
 .mj-slide{position:relative;width:clamp(620px,70vw,980px);height:100%;display:grid;grid-template-columns:.9fr 1.05fr;gap:clamp(24px,3vw,56px);align-items:center;will-change:transform,opacity}
 .mj-txt{position:relative}
-.mj-year{font-size:clamp(46px,5.2vw,88px);font-weight:300;line-height:.92;letter-spacing:-.04em;
+/* Kinetic Index year treatment: slim year + accent bar that draws down and an
+   underline that sweeps in as the slide centres (class .is-on set by aboutmile.js). */
+.mj-yrow{display:flex;align-items:stretch;gap:16px}
+.mj-bar{flex:none;width:4px;border-radius:4px;background:linear-gradient(180deg,#2f7be0,#37c9bd);
+  transform:scaleY(0);transform-origin:top;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.mj-ycol{min-width:0}
+.mj-year{font-size:clamp(42px,4.4vw,62px);font-weight:300;line-height:.9;letter-spacing:-.03em;
   background:linear-gradient(135deg,#2f7be0,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mj-uline{display:block;height:2px;width:0;margin-top:13px;border-radius:2px;
+  background:linear-gradient(90deg,#2f7be0,#37c9bd);transition:width .7s ease .1s}
+.mj-slide.is-on .mj-bar{transform:scaleY(1)}
+.mj-slide.is-on .mj-uline{width:clamp(110px,12vw,150px)}
 .mj-list{margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:440px;padding:0}
 .mj-list li{position:relative;list-style:none;padding-left:22px;font-size:clamp(13.5px,1.02vw,16px);line-height:1.4;color:#2a3342;font-weight:500}
 .mj-list li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#2f7be0,#37c9bd)}
@@ -1423,6 +1433,7 @@ body.sol-modal-open{overflow:hidden}
   .mj-track{position:static;flex-direction:column;gap:34px;padding:0 20px;transform:none!important}
   .mj-slide{width:100%;grid-template-columns:1fr;gap:16px;opacity:1!important;transform:none!important}
   .mj-year{font-size:clamp(40px,11vw,58px)}
+  .mj-bar{transform:scaleY(1)!important}.mj-uline{width:clamp(90px,30vw,140px)!important}
   .mj-media{height:auto;aspect-ratio:4/3}
   .mj-media img{position:static;inset:auto;width:100%;height:100%;transform:none!important}
   .mj-rail,.mj-hint{display:none}
@@ -1432,6 +1443,7 @@ body.sol-modal-open{overflow:hidden}
   .mj-stage{position:static;transform:none;height:auto;overflow:visible}
   .mj-track{position:static;flex-direction:column;gap:40px;padding:0 24px;transform:none!important}
   .mj-slide{width:100%;opacity:1!important;transform:none!important}
+  .mj-bar{transform:scaleY(1)!important}.mj-uline{width:clamp(90px,10vw,150px)!important;transition:none}
   .mj-media img{position:static;inset:auto;width:100%;height:100%;transform:none!important}
   .mj-rail,.mj-hint{display:none}
 }
