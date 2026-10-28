@@ -36,7 +36,7 @@ $sv_hero = !empty($p['hero_image']) ? uploads_url($p['hero_image']) : uploads_ur
 <main class="page-body sv2 svc-page">
 <?php
 // Lifecycle stages → hero loop nodes (CMS: service_pages.extra2, "A → B → C").
-if (empty($lifecycle)) $lifecycle = ['Rencanakan', 'Bangun', 'Kelola', 'Lindungi', 'Optimalkan'];
+if (empty($lifecycle)) $lifecycle = ['Plan', 'Build', 'Manage', 'Protect', 'Optimize'];
 $lc_icons = [
   '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',                         // plan / search
   '<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>', // build
@@ -107,7 +107,7 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
               <h2 class="sd-title notranslate" translate="no"><?= $svc_acc($TP($c['row'], 'judul')) ?></h2>
               <?php if (trim((string)$TP($c['row'], 'deskripsi')) !== ''): ?><p class="sd-desc"><?= htmlspecialchars($TP($c['row'], 'deskripsi')) ?></p><?php endif; ?>
               <?php if ($tags): ?><div class="sd-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
-              <?php if ($has): ?><a class="sd-cta" href="<?= htmlspecialchars(url($cr['link_slug'])) ?>"><?= htmlspecialchars(t('learn_more', 'Selengkapnya')) ?> <?= $arrow ?></a><?php endif; ?>
+              <?php if ($has): ?><a class="sd-cta" href="<?= htmlspecialchars(url($cr['link_slug'])) ?>"><?= htmlspecialchars(t('learn_more', 'Learn more')) ?> <?= $arrow ?></a><?php endif; ?>
             </div>
             <div class="sd-media sd-emblem" aria-hidden="true">
               <span class="glow"></span><span class="ring r1"></span><span class="ring r2"></span>
