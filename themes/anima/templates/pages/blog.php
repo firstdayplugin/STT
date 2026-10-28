@@ -144,6 +144,9 @@ $clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
       </div>
 
       <p class="wn-empty" id="wnEmpty" hidden><?= ac('blog','empty_text') ?: 'No articles found.' ?></p>
+
+      <!-- Pagination (client-side; built by blognew.js to page the filtered set). -->
+      <nav class="wn-pager" id="wnPager" aria-label="Pagination" hidden></nav>
     </div>
   </section>
 

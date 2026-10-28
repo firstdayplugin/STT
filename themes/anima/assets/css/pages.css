@@ -2792,3 +2792,34 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
   .pkg-fn .lbl{font-size:15px;text-align:left}
 }
 @media(prefers-reduced-motion:reduce){.pkg-reveal{opacity:1!important;transform:none!important}}
+
+/* =============================================================================
+   Blog listing — client-side pagination (markup built by blognew.js).
+   Light editorial pager: pill buttons, gradient active page, hover lift.
+   ========================================================================== */
+.wn-pager{display:flex;flex-direction:column;align-items:center;gap:14px;margin:56px auto 6px;
+  padding:0 16px;animation:wnPagerIn .5s cubic-bezier(.2,.7,.2,1) both}
+.wn-pager[hidden]{display:none}
+.wn-pg-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px}
+@keyframes wnPagerIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.wn-pg{min-width:44px;height:44px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--line,#e4eaf1);border-radius:13px;background:#fff;color:var(--blue-ink,#0e2a4e);
+  font-family:inherit;font-weight:600;font-size:14.5px;line-height:1;cursor:pointer;
+  transition:color .22s,border-color .22s,background .22s,transform .22s cubic-bezier(.2,.7,.2,1),box-shadow .22s;
+  -webkit-tap-highlight-color:transparent;user-select:none}
+.wn-pg svg{width:17px;height:17px;flex:none}
+.wn-pg:hover:not(:disabled):not(.on){border-color:var(--blue,#2478e0);color:var(--blue,#2478e0);
+  transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(36,120,224,.55)}
+.wn-pg:active:not(:disabled){transform:translateY(0)}
+.wn-pg.on{background:linear-gradient(120deg,var(--blue,#2478e0),#37c9bd);border-color:transparent;color:#fff;
+  box-shadow:0 14px 28px -10px rgba(36,120,224,.6),0 2px 8px rgba(55,201,189,.3);cursor:default}
+.wn-pg:disabled{opacity:.42;cursor:not-allowed}
+.wn-pg.nav .lbl{font-weight:600}
+.wn-pg-gap{min-width:24px;text-align:center;color:var(--dim,#7a8798);font-weight:700;letter-spacing:.06em;align-self:center;pointer-events:none}
+.wn-pager-info{text-align:center;color:var(--dim,#7a8798);font-size:12.5px;letter-spacing:.04em}
+@media(max-width:560px){
+  .wn-pg{min-width:40px;height:40px;padding:0 11px;font-size:13.5px;border-radius:11px}
+  .wn-pg.nav .lbl{display:none}      /* arrows only for Prev/Next on phones */
+  .wn-pg.nav{min-width:40px;padding:0 10px}
+  .wn-pager{gap:7px;margin-top:44px}
+}
