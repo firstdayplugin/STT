@@ -33,8 +33,8 @@ $group_by = function (array $rows, string $key) {
     foreach ($rows as $r) { $k = trim((string)($r[$key] ?? '')); if ($k === '') $k = '—'; $g[$k][] = $r; }
     return $g;
 };
-// Awards are shown as ONE list sorted by year (oldest → newest), matching saptatunas.com.
-usort($awards, fn($a, $b) => ((int)($a['tahun'] ?? 0)) <=> ((int)($b['tahun'] ?? 0)));
+// Awards are shown as ONE list sorted by year, NEWEST → oldest (client request).
+usort($awards, fn($a, $b) => ((int)($b['tahun'] ?? 0)) <=> ((int)($a['tahun'] ?? 0)));
 $certsByBrand = $group_by($certs, 'grup');
 
 // Milestone data for the cross-fade slider (JSON injected CSP-safely).
@@ -153,6 +153,9 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     ['2025', ['Partnership with infraon', 'Partnership with SenseTime', 'Partnership with Xeratic', 'Partner with Soca'], 'design3/imac-design.jpg'],
     ['Present', ['Partnership with AMD', 'Partnership with T-Innoware', 'Partnership with Redis'], 'design3/towers-up.jpg'],
   ];
+  // Client: show the NEWEST year first everywhere — the journey starts at Present
+  // and travels back through the years.
+  $mile_data = array_reverse($mile_data);
   $mile_n = count($mile_data);
   ?>
   <section class="mj-wrap" id="mjWrap" aria-label="Our Milestone">
