@@ -74,6 +74,7 @@
 
   var panels = [].slice.call(deck.querySelectorAll('.idc-panel'));
   var railBtns = [].slice.call(deck.querySelectorAll('.idc-rail button'));
+  var cue = document.getElementById('idcScrollCue');
   var N = panels.length;
   if (!N) return;
 
@@ -139,6 +140,7 @@
       });
     });
     railBtns.forEach(function (b, i) { b.classList.toggle('on', i === active); });
+    if (cue) cue.style.opacity = Math.max(0, 1 - pos / 0.45);   // fades as the first panel settles
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);

@@ -112,9 +112,10 @@ include theme_path('templates/layouts/header.php');
     <div class="idc-pin">
       <canvas class="idc-dust" id="idcDust" aria-hidden="true"></canvas>
       <div class="idc-deck-eye"><?= htmlspecialchars(get_content('industri', 'detail_pillars_eyebrow', 'Solusi per Pilar')) ?></div>
-      <div class="idc-rail" id="idcRail" aria-hidden="true">
-        <?php foreach ($pillars as $i => $pl): ?>
-          <button type="button" class="<?= $i === 0 ? 'on' : '' ?>"><span class="idx"><?= sprintf('%02d', $i + 1) ?></span><span class="d"></span></button>
+      <div class="idc-rail" id="idcRail">
+        <span class="idc-rail-line" aria-hidden="true"></span>
+        <?php foreach ($pillars as $i => $pl): $rl_nama = tr_field('solusi_pilar', (int)$pl['id'], 'nama', $pl['nama']); ?>
+          <button type="button" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= htmlspecialchars($rl_nama) ?>"><span class="rl notranslate" translate="no"><?= htmlspecialchars($rl_nama) ?></span><span class="idx"><?= sprintf('%02d', $i + 1) ?></span><span class="d"></span></button>
         <?php endforeach; ?>
       </div>
       <div class="idc-stage">
@@ -131,7 +132,7 @@ include theme_path('templates/layouts/header.php');
         ?>
         <article class="idc-panel<?= $i === 0 ? ' show' : '' ?>"<?= $i === 0 ? '' : ' style="opacity:0;visibility:hidden"' ?>>
           <div class="idc-txt">
-            <div class="idc-num idc-rv d1"><?= sprintf('%02d', $i + 1) ?></div>
+            <div class="idc-num idc-rv d1"><?= sprintf('%02d', $i + 1) ?><span class="idc-num-tot">/<?= sprintf('%02d', count($pillars)) ?></span></div>
             <div class="idc-peye idc-rv d2"><?= htmlspecialchars($pilar_nama) ?></div>
             <h2 class="idc-ph idc-rv d2 notranslate" translate="no"><?= $accent($heading) ?></h2>
             <div class="idc-prose idc-rv d3"><?= $konten ?></div>
@@ -160,6 +161,7 @@ include theme_path('templates/layouts/header.php');
         </article>
         <?php endforeach; ?>
       </div>
+      <div class="idc-scrollcue" id="idcScrollCue" aria-hidden="true"><span class="idc-sc-t"><?= htmlspecialchars(t('scroll', 'Scroll')) ?> to explore</span><span class="idc-sc-a"><i></i><i></i><i></i></span></div>
     </div>
     <!-- capability detail popover (fixed overlay; filled from the clicked node) -->
     <div class="idc-modal" id="idcModal" hidden>
