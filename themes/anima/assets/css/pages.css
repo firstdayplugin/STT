@@ -2528,7 +2528,7 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .ind2-au1{width:460px;height:460px;left:4%;top:-6%;background:radial-gradient(circle,rgba(47,123,224,.6),transparent 66%);animation:ind2Fl 16s ease-in-out infinite}
 .ind2-au2{width:420px;height:420px;right:2%;bottom:-16%;background:radial-gradient(circle,rgba(55,201,189,.42),transparent 66%);animation:ind2Fl 20s ease-in-out infinite reverse}
 @keyframes ind2Fl{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,22px)}}
-.ind2-hero-in{position:relative;z-index:3;max-width:860px;margin:0 auto;padding:clamp(100px,14vh,142px) 24px clamp(70px,10vh,104px)}
+.ind2-hero-in{position:relative;z-index:3;max-width:860px;margin:0 auto;padding:clamp(100px,14vh,142px) 24px clamp(54px,7vh,80px)}
 .ind2-eye{font-size:12px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;color:#7fa6e6;margin-bottom:18px}
 .ind2-hero-in h1{font-size:clamp(36px,6vw,74px);font-weight:700;letter-spacing:-.045em;line-height:1.03;color:#fff}
 .ind2-hero-in h1 .g{background:linear-gradient(110deg,#5aa0ff,#49d6c7);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -2540,8 +2540,10 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .ind2-promo>.sol-banner{display:block;max-width:1120px;margin:0 auto;border-radius:24px;overflow:hidden;box-shadow:0 44px 90px -50px rgba(0,0,0,.8),0 0 0 1px rgba(120,160,235,.12)}
 .ind2-promo>.sol-banner img{display:block;width:100%;height:auto}
 
-/* intro */
-.ind2-lead{text-align:center;max-width:720px;margin:0 auto;padding:clamp(70px,10vh,96px) 24px clamp(10px,3vh,24px)}
+/* intro — bridges the dark hero into the sector rail (a thin light line descends
+   from the hero to signal the story continues; replaces the old promo panel). */
+.ind2-lead{position:relative;text-align:center;max-width:720px;margin:0 auto;padding:clamp(54px,8vh,82px) 24px clamp(10px,3vh,24px)}
+.ind2-lead::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:1px;height:clamp(32px,5vh,50px);background:linear-gradient(rgba(120,160,235,0),rgba(120,160,235,.55))}
 .ind2-lead .k{font-size:12px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:#6f9be8;margin-bottom:14px}
 .ind2-lead h2{font-size:clamp(26px,3.6vw,46px);font-weight:700;letter-spacing:-.03em;line-height:1.08}
 .ind2-lead h2 .g{background:linear-gradient(110deg,#5aa0ff,#49d6c7);-webkit-background-clip:text;background-clip:text;color:transparent}

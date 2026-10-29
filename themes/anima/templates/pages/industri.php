@@ -71,66 +71,8 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
     </div>
   </section>
 
-  <!-- Promo spotlight — identical multi-banner component as /solutions (solpromo.js). -->
-  <?php if ($promos): ?>
-  <div class="ind2-promo">
-    <section class="pm-sec" id="pmSec" aria-label="News &amp; Promotions">
-      <div class="pm">
-        <div class="pm-head">
-          <div><div class="pm-eyebrow"><?= htmlspecialchars($c('promo_eyebrow', "What's happening at STT")) ?></div><h2>News &amp; <span class="b">Promotions</span></h2></div>
-          <div class="pm-nav"><button type="button" id="pmPrev" aria-label="Sebelumnya"><?= $arrowL ?></button><button type="button" id="pmNext" aria-label="Berikutnya"><?= $arrow ?></button></div>
-        </div>
-        <div class="pm-feat" id="pmFeat">
-          <?php foreach ($promos as $k => $pr): $pid = (int)$pr['id'];
-            $p_img  = $imgu((string)($pr['gambar'] ?? ''));
-            $p_ttl  = trim((string)tr_field('solutions_promo', $pid, 'judul', $pr['judul'] ?? ''));
-            $p_date = trim((string)tr_field('solutions_promo', $pid, 'tanggal', $pr['tanggal'] ?? ''));
-            $p_blb  = trim((string)tr_field('solutions_promo', $pid, 'blurb', $pr['blurb'] ?? ''));
-            $p_cta  = trim((string)tr_field('solutions_promo', $pid, 'cta_text', $pr['cta_text'] ?? ''));
-            $p_url  = trim((string)($pr['url'] ?? '')); if ($p_url === '') $p_url = '#';
-            $p_href = preg_match('#^https?:#', $p_url) ? $p_url : ($p_url === '#' ? '#' : url(ltrim($p_url, '/')));
-            $p_ext  = preg_match('#^https?:#', $p_url) ? ' target="_blank" rel="noopener"' : '';
-          ?>
-          <div class="pm-slide<?= $k === 0 ? ' on' : '' ?>" data-i="<?= $k ?>">
-            <div class="ph"<?= $p_img ? ' style="background-image:url(' . htmlspecialchars($p_img) . ')"' : '' ?>></div>
-            <div class="tint"></div><div class="au au1"></div><div class="au au2"></div><div class="sheen"></div>
-            <span class="cn tl"></span><span class="cn br"></span>
-            <div class="pm-ct">
-              <?php if ($p_date !== ''): ?><span class="dt"><?= htmlspecialchars($p_date) ?></span><?php endif; ?>
-              <?php if ($p_ttl !== ''): ?><h3><?= $promo_title($p_ttl) ?></h3><?php endif; ?>
-              <?php if ($p_blb !== ''): ?><p><?= htmlspecialchars($p_blb) ?></p><?php endif; ?>
-              <?php if ($p_cta !== ''): ?><a class="cta" href="<?= htmlspecialchars($p_href) ?>"<?= $p_ext ?>><?= htmlspecialchars($p_cta) ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><?php endif; ?>
-            </div>
-          </div>
-          <?php endforeach; ?>
-        </div>
-        <div class="pm-queue" id="pmQueue" style="--n:<?= max(1, count($promos)) ?>">
-          <?php foreach ($promos as $k => $pr): $pid = (int)$pr['id'];
-            $p_img = $imgu((string)($pr['gambar'] ?? ''));
-            $p_ttl = trim(strip_tags((string)tr_field('solutions_promo', $pid, 'judul', $pr['judul'] ?? '')));
-            $p_ttl = preg_replace('/[\[\]]/', '', $p_ttl);
-          ?>
-          <button type="button" class="pm-thumb<?= $k === 0 ? ' on' : '' ?>" data-i="<?= $k ?>" aria-label="<?= htmlspecialchars($p_ttl) ?>">
-            <span class="ph"<?= $p_img ? ' style="background-image:url(' . htmlspecialchars($p_img) . ')"' : '' ?>></span>
-            <span class="cap"><?= htmlspecialchars($p_ttl) ?></span><span class="bar"></span>
-          </button>
-          <?php endforeach; ?>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script src="<?= theme_asset('assets/js/solpromo.js') ?>" defer></script>
-  <?php elseif ($banner_img): $banner_has_link = ($banner_url !== '' && $banner_url !== '#'); ?>
-  <div class="ind2-promo">
-    <?php if ($banner_has_link): ?>
-    <a class="sol-banner" href="<?= htmlspecialchars($banner_url) ?>"<?= preg_match('#^https?:#', $banner_url) ? ' target="_blank" rel="noopener"' : '' ?>>
-      <img src="<?= htmlspecialchars($banner_img) ?>" alt="" data-fallback="remove">
-    </a>
-    <?php else: ?>
-    <div class="sol-banner"><img src="<?= htmlspecialchars($banner_img) ?>" alt="" data-fallback="remove"></div>
-    <?php endif; ?>
-  </div>
-  <?php endif; ?>
+  <!-- (News & Promotions spotlight removed per client request — the dark hero now
+       flows straight into the "Industries we power" intro, bridged by .ind2-lead::before.) -->
 
   <?php if ($rows): ?>
   <!-- Intro -->
