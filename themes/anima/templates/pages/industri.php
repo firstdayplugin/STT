@@ -80,6 +80,19 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
     <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
     <h2><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
     <p><?= htmlspecialchars($c('rail_sub', 'One partner across every sector. Scroll through to see how we tailor technology to each.')) ?></p>
+    <?php if ($n > 1): ?>
+    <!-- Sectors at a glance — quick jump into the rail below (fills the space the promo left). -->
+    <div class="ind2-chips" aria-label="<?= htmlspecialchars(t('sectors', 'Sectors')) ?>">
+      <?php foreach ($rows as $r):
+        $cslug  = trim((string)($r['slug'] ?? ''));
+        $clabel = tr_field('industri', (int)$r['id'], 'label', $r['label']);
+        $cac    = ($IND_META[$cslug] ?? $IND_FALLBACK)[0];
+        $chref  = $cslug !== '' ? url('industri/' . $cslug) : '#';
+      ?>
+      <a class="ind2-chip" href="<?= htmlspecialchars($chref) ?>" style="--ac:<?= htmlspecialchars($cac) ?>"><span class="dot" aria-hidden="true"></span><span class="notranslate" translate="no"><?= htmlspecialchars($clabel) ?></span></a>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
   </section>
 
   <!-- Horizontal pinned sector rail (vertical stack on mobile / reduced-motion) -->
