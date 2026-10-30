@@ -91,6 +91,18 @@ foreach ($slide_rows as $r) {
             if ($__lg !== '' && !in_array($__lg, $logos, true)) $logos[] = $__lg;
         }
     }
+    // Dedup by brand (strip -vN version + extension) so a slide asset and its
+    // /solutions counterpart don't render as two copies; prefer a trimmed -vN asset.
+    if (count($logos) > 1) {
+        $__byBrand = [];
+        foreach ($logos as $__u) {
+            if ($__u === '') continue;
+            $__base  = strtolower(preg_replace('/\.[a-z0-9]+$/i', '', basename((string)$__u)));
+            $__brand = preg_replace('/-v\d+$/', '', $__base);
+            if (!isset($__byBrand[$__brand]) || preg_match('/-v\d+$/', $__base)) $__byBrand[$__brand] = $__u;
+        }
+        $logos = array_values($__byBrand);
+    }
     $slides_json[] = [
         'eyebrow' => (string)($r['eyebrow'] ?? ''),
         'h'       => (string)($r['judul'] ?? ''),

@@ -1683,9 +1683,24 @@ html,body{top:0!important;position:static!important}
 .tsc-vid{object-fit:cover;display:block}
 .tsc-embed iframe{width:100%;height:100%;border:0;display:block}
 .tsc-poster,.tsc-abs{background-size:cover;background-position:center}
-.tsc-abs{background-color:#101a2e;background-image:
-  radial-gradient(60% 55% at 22% 20%,rgba(90,150,255,.45),transparent),
-  radial-gradient(55% 55% at 82% 78%,rgba(60,210,190,.38),transparent)}
+/* Text (no-video) testimonials: a generated abstract that matches the site —
+   layered mesh glow + a faint grid masked to the right (never fights the quote). */
+.tsc-abs{background-color:#0b1424;background-image:
+  radial-gradient(68% 60% at 20% 16%,rgba(90,150,255,.5),transparent 62%),
+  radial-gradient(60% 58% at 86% 84%,rgba(60,210,190,.42),transparent 62%),
+  radial-gradient(48% 48% at 66% 32%,rgba(132,96,255,.26),transparent 60%),
+  linear-gradient(135deg,#0f1d36,#0a1322)}
+.tsc-abs::before{content:"";position:absolute;inset:0;opacity:.6;background-image:
+  linear-gradient(rgba(150,185,255,.07) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(150,185,255,.07) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(72% 72% at 78% 42%,#000,transparent 76%);
+  mask-image:radial-gradient(72% 72% at 78% 42%,#000,transparent 76%)}
+.tsc-abs::after{content:"";position:absolute;width:300px;height:300px;right:-60px;top:-70px;border-radius:50%;
+  background:radial-gradient(circle,rgba(90,160,255,.22),transparent 68%);filter:blur(10px)}
+/* subtle per-card hue variety so several text testimonials don't look identical */
+.tsc-card.is-text:nth-of-type(3n+2) .tsc-abs{filter:hue-rotate(34deg)}
+.tsc-card.is-text:nth-of-type(3n) .tsc-abs{filter:hue-rotate(-30deg)}
 /* Full-bleed media legibility: dark on the left (under the text), fading right + up. */
 .tsc-media::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:
   linear-gradient(90deg,rgba(9,12,18,.94) 0%,rgba(9,12,18,.82) 36%,rgba(9,12,18,.4) 66%,rgba(9,12,18,.12) 100%),
@@ -1773,9 +1788,11 @@ html,body{top:0!important;position:static!important}
    compact marks a touch taller) and centred. A single CSS height then renders
    them all balanced, tight, and without distortion. Bump the height to scale
    the whole set up together. */
-.sh-logos{position:relative;margin-top:28px;min-height:84px;max-width:560px;display:flex;flex-wrap:wrap;
-  align-items:center;gap:10px 22px;transition:opacity .3s ease}
-.sh-logos img{height:46px;width:auto;filter:brightness(0) invert(1);opacity:.85;transition:opacity .25s}
+.sh-logos{position:relative;margin-top:28px;min-height:84px;max-width:540px;display:flex;flex-wrap:wrap;
+  align-items:center;gap:16px 12px;transition:opacity .3s ease}
+/* Fixed footprint per logo so the set reads uniform even when source assets are
+   trimmed differently (no more one logo dwarfing the rest). */
+.sh-logos img{width:120px;height:34px;object-fit:contain;object-position:left center;filter:brightness(0) invert(1);opacity:.82;transition:opacity .25s}
 .sh-logos img:hover{opacity:1}
 
 /* STAGE kanan — 3 panel kaca */
