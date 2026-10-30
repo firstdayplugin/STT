@@ -75,7 +75,8 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
        flows straight into the "Industries we power" intro, bridged by .ind2-lead::before.) -->
 
   <?php if ($rows): ?>
-  <!-- Intro -->
+  <!-- Intro — light band rising over the dark hero (keeps the dark/light/dark/light rhythm the promo gave). -->
+  <div class="ind2-intro">
   <section class="ind2-lead reveal">
     <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
     <h2><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
@@ -94,6 +95,7 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
     </div>
     <?php endif; ?>
   </section>
+  </div>
 
   <!-- Horizontal pinned sector rail (vertical stack on mobile / reduced-motion) -->
   <div class="ind2-rail" id="ind2Rail" data-count="<?= (int)$n ?>">
