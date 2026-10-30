@@ -81,11 +81,15 @@ foreach ($slide_rows as $r) {
             }
         }
     }
-    // Prefer the /solutions per-category logos (matched by the slide's url anchor).
+    // Merge the slide's own logos with the matched /solutions per-category logos
+    // (deduped) so every logo added in EITHER place shows on the prism — instead of
+    // the solutions set silently replacing the slide's own logos.
     $__anc = '';
     if (preg_match('/#(.+)$/', (string)($r['url'] ?? ''), $__m)) $__anc = $__m[1];
     if ($__anc !== '' && !empty($prism_logos_by_anchor[$__anc])) {
-        $logos = $prism_logos_by_anchor[$__anc];
+        foreach ($prism_logos_by_anchor[$__anc] as $__lg) {
+            if ($__lg !== '' && !in_array($__lg, $logos, true)) $logos[] = $__lg;
+        }
     }
     $slides_json[] = [
         'eyebrow' => (string)($r['eyebrow'] ?? ''),

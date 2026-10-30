@@ -35,7 +35,7 @@
   });
   function buildLogos(i){
     shLogos.innerHTML='';
-    (slides[i].logos||[]).slice(0,6).forEach(function(u){ if(!u)return; var im=document.createElement('img'); im.src=u; im.alt=''; im.loading='lazy'; shLogos.appendChild(im); });
+    (slides[i].logos||[]).slice(0,12).forEach(function(u){ if(!u)return; var im=document.createElement('img'); im.src=u; im.alt=''; im.loading='lazy'; im.onerror=function(){ this.remove(); }; shLogos.appendChild(im); });
   }
   function setCopy(i){
     var s=slides[i];
