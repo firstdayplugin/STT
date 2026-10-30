@@ -161,7 +161,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   <section class="mj-wrap" id="mjWrap" aria-label="Our Milestone">
     <div class="mj-pin">
       <div class="mj-head">
-        <div class="mj-eyebrow">Our Journey</div>
         <h2>Our <span class="b">Milestone</span></h2>
       </div>
       <div class="mj-stage"><div class="mj-track" id="mjTrack">
@@ -228,7 +227,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     <div class="aw-pin">
       <div class="aw-glow" aria-hidden="true"></div>
       <div class="aw-head">
-        <div class="aw-eyebrow">Recognition</div>
         <h2 class="aw-title"><?= ac('about', 'awards_title') ?: 'Awards' ?></h2>
         <p><?= ac('about', 'awards_intro') ?></p>
       </div>

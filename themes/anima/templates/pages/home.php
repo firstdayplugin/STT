@@ -367,15 +367,23 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
 
 <!-- ===== WHAT SETS US APART (scale.com/enterprise-style coverflow) ===== -->
 <section class="wsa" id="why">
-  <?php /* Heading styles inlined so they apply even if a cached anima.css is served. */ ?>
+  <?php /* Rewritten heading with a fresh class (.wsa-hd) + fully self-contained inline
+          CSS, so no cached .wsa-head rule or cached anima.css can affect its size. */ ?>
   <style>
-    .wsa-head h2{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif!important;font-weight:800!important;font-size:clamp(36px,5vw,60px)!important;line-height:1.08!important;letter-spacing:-.02em!important;color:#0b1220!important}
-    .wsa-head h2 .b{background:linear-gradient(100deg,#2f7be0 10%,#37c9bd)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
-    .wsa-head .wsa-intro{font-size:clamp(17px,1.9vw,22px)!important;font-weight:500!important;color:#39485f!important;max-width:720px!important;margin:20px auto 0!important;line-height:1.55!important}
+    .wsa-hd{text-align:center;max-width:900px;margin:0 auto 52px;padding:0 20px}
+    .wsa-hd .wsa-ttl{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif!important;font-weight:800!important;
+      font-size:clamp(34px,4.6vw,56px)!important;line-height:1.1!important;letter-spacing:-.022em!important;color:#0b1220!important;margin:0!important}
+    .wsa-hd .wsa-ttl .b{background:linear-gradient(100deg,#2f7be0,#37c9bd)!important;-webkit-background-clip:text!important;
+      background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
+    .wsa-hd .wsa-sub{font-family:Inter,system-ui,sans-serif!important;font-weight:500!important;
+      font-size:clamp(16px,1.6vw,19px)!important;line-height:1.5!important;color:#55657e!important;max-width:680px!important;margin:14px auto 0!important}
+    .wsa-hd .wsa-sub .b{color:#2f7be0!important}
   </style>
-  <div class="wsa-head">
-    <h2><?= hc('why_title') ?></h2>
-    <p class="wsa-intro"><?= hc('why_intro') ?></p>
+  <div class="wsa-hd">
+    <h2 class="wsa-ttl"><?= hc('why_title') ?></h2>
+    <?php $why_sub = hc('why_intro'); if (trim(strip_tags((string)$why_sub)) !== ''): ?>
+    <p class="wsa-sub"><?= $why_sub ?></p>
+    <?php endif; ?>
   </div>
   <div class="wsa-stage">
     <button type="button" class="wsa-arw prev" id="wsaPrev" aria-label="<?= htmlspecialchars(t('prev', 'Sebelumnya')) ?>">
