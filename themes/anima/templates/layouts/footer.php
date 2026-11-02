@@ -70,8 +70,10 @@
       </div>
 
       <div class="tel-footer-bottom">
-        <span>&copy; <?= date('Y') ?> <?= htmlspecialchars(get_setting('site_name', 'Sapta Tunas Teknologi')) ?> &nbsp;|&nbsp; <?= htmlspecialchars(t('all_rights_reserved', 'All Rights Reserved')) ?></span>
-        <span><a href="<?= url('privacy-policy') ?>"><?= htmlspecialchars(t('privacy_policy', 'Privacy Policy')) ?></a> &nbsp;|&nbsp; <a href="<?= url('compliance-policy') ?>"><?= htmlspecialchars(t('compliance_policy', 'Compliance Policy')) ?></a> &nbsp;|&nbsp; <span><?= htmlspecialchars(get_setting('site_tagline', 'Enterprise Solution Provider')) ?></span></span>
+        <span class="cpy">Copyright &copy; <?= date('Y') ?> <?= htmlspecialchars(get_setting('site_name', 'Sapta Tunas Teknologi')) ?></span>
+        <span class="sep" aria-hidden="true">|</span><span><?= htmlspecialchars(t('all_rights_reserved', 'All Rights Reserved')) ?></span>
+        <span class="sep" aria-hidden="true">|</span><a href="<?= url('privacy-policy') ?>"><?= htmlspecialchars(t('privacy_policy', 'Privacy Policy')) ?></a>
+        <span class="sep" aria-hidden="true">|</span><a href="<?= url('compliance-policy') ?>"><?= htmlspecialchars(t('compliance_policy', 'Compliance Policy')) ?></a>
       </div>
     </div>
   </div>
