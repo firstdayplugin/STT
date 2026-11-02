@@ -1456,8 +1456,15 @@ body.sol-modal-open{overflow:hidden}
 .aw-pin{position:sticky;top:0;height:100vh;overflow:hidden}
 .aw-head{position:absolute;left:0;right:0;top:max(54px,6.4%);text-align:center;z-index:6;padding:0 24px}
 .aw-eyebrow{font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#5a86c9;margin-bottom:10px}
-.aw-head h2.aw-title{font-size:clamp(28px,3.4vw,46px);font-weight:600;letter-spacing:-.03em;
-  background:linear-gradient(120deg,#2f7be0,#2560c8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.aw-head h2.aw-title{font-size:clamp(30px,3.6vw,50px);font-weight:800;letter-spacing:-.025em;color:#0b1220}
+.aw-head h2.aw-title .hl{background:linear-gradient(110deg,#2f7be0,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.aw-stat{display:inline-flex;align-items:baseline;gap:8px;margin-top:14px}
+.aw-stat b{font-size:clamp(26px,3vw,38px);font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#2f7be0,#37c9bd);-webkit-background-clip:text;background-clip:text;color:transparent}
+.aw-stat span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7c8aa3}
+/* hover: the spotlighted award image pops a bit bigger */
+.aw-card .ph{transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.aw-card:hover{box-shadow:0 46px 90px -30px rgba(20,50,110,.5),0 3px 10px rgba(20,50,110,.12);z-index:5}
+.aw-card:hover .ph{transform:scale(1.12)}
 .aw-head p{margin:12px auto 0;max-width:560px;color:#64748b;font-size:14px;line-height:1.5;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .aw-glow{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);width:620px;height:620px;z-index:1;pointer-events:none;

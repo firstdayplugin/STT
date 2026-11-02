@@ -227,8 +227,9 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     <div class="aw-pin">
       <div class="aw-glow" aria-hidden="true"></div>
       <div class="aw-head">
-        <h2 class="aw-title"><?= ac('about', 'awards_title') ?: 'Awards' ?></h2>
-        <p><?= ac('about', 'awards_intro') ?></p>
+        <div class="aw-eyebrow">Hall of Fame</div>
+        <h2 class="aw-title notranslate" translate="no">A Decade of <span class="hl">Recognition</span></h2>
+        <div class="aw-stat"><b><?= $awn ?>+</b><span>awards &amp; recognitions</span></div>
       </div>
       <div class="aw-stage" id="awStage">
         <?php foreach ($awards as $a): $ai = $aimgu($a);
@@ -244,7 +245,6 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
         <?php endforeach; ?>
       </div>
       <div class="aw-info" id="awInfo"><div class="org"></div><div class="ttl"></div></div>
-      <div class="aw-count" aria-hidden="true"><b><?= $awn ?>+</b><span>awards &amp;<br>recognitions</span></div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/aboutawards.js') ?>" defer></script>
