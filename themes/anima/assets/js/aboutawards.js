@@ -18,7 +18,13 @@
 
   var MQ = window.matchMedia('(max-width:860px), (prefers-reduced-motion:reduce)');
   var clamp = function (v, a, b) { return v < a ? a : (v > b ? b : v); };
-  var p = 0, running = false, lastAct = -1;
+  var p = 0, running = false, lastAct = -1, hoverIdx = -1;
+  // hover a card -> it enlarges, straightens and comes forward so the award reads clearly
+  cards.forEach(function (c, i) {
+    c._h = 0;
+    c.addEventListener('mouseenter', function () { hoverIdx = i; });
+    c.addEventListener('mouseleave', function () { if (hoverIdx === i) hoverIdx = -1; });
+  });
 
   function frame() {
     if (MQ.matches) { running = false; return; }
@@ -30,9 +36,12 @@
     cards.forEach(function (c, i) {
       var d = i - pos, ad = Math.abs(d);
       var tx = d * 170, tz = -Math.min(ad, 2.4) * 170, ry = clamp(-d, -1.3, 1.3) * 42, sc = 1 - Math.min(ad, 1) * 0.18;
+      var op = 1 - Math.min(ad, 2.4) * 0.34, zi = 100 - Math.round(ad * 10);
+      var h = (c._h += (((i === hoverIdx) ? 1 : 0) - c._h) * 0.18);   // eased 0..1 hover amount
+      if (h > 0.001) { sc *= (1 + 0.5 * h); ry *= (1 - 0.82 * h); tz += 150 * h; op = Math.max(op, h); if (h > 0.35) zi = 220; }
       c.style.transform = 'translateX(' + tx.toFixed(1) + 'px) translateZ(' + tz.toFixed(1) + 'px) rotateY(' + ry.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
-      c.style.opacity = (1 - Math.min(ad, 2.4) * 0.34).toFixed(3);
-      c.style.zIndex = String(100 - Math.round(ad * 10));
+      c.style.opacity = op.toFixed(3);
+      c.style.zIndex = String(zi);
     });
 
     var act = Math.round(pos), fract = Math.abs(pos - act);
