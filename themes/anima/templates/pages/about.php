@@ -233,8 +233,9 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
       </div>
       <div class="aw-stage" id="awStage">
         <?php foreach ($awards as $a): $ai = $aimgu($a);
-          $a_org = trim((string)$atr($a, 'teks'));
-          $a_ttl = trim((string)$atr($a, 'judul'));
+          // Plain text only — strip any stray HTML (e.g. a <p> wrapper from the CMS field) + decode entities.
+          $a_org = trim(strip_tags(html_entity_decode((string)$atr($a, 'teks'), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+          $a_ttl = trim(strip_tags(html_entity_decode((string)$atr($a, 'judul'), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
           $a_year = trim((string)($a['tahun'] ?? ''));
         ?>
           <div class="aw-card" data-org="<?= htmlspecialchars($a_org) ?>" data-ttl="<?= htmlspecialchars($a_ttl) ?>">
