@@ -155,6 +155,19 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
     ['2025', ['Partnership with infraon', 'Partnership with SenseTime', 'Partnership with Xeratic', 'Partner with Soca'], 'design3/imac-design.jpg'],
     ['Present', ['Partnership with AMD', 'Partnership with T-Innoware', 'Partnership with Redis'], 'design3/towers-up.jpg'],
   ];
+  // Photo override: let an admin swap ANY milestone photo from the CMS
+  // (Admin → Tentang Kami → Milestone → "Gambar milestone"), matched by year.
+  // The curated bullet text above stays authoritative; only the image changes.
+  // Keyed lowercase; a row flagged "now" also answers for the "Present" slide.
+  $mile_img_by_year = [];
+  foreach ($milestones as $m) {
+      $gb = trim((string)($m['gambar'] ?? ''));
+      if ($gb === '') continue;
+      $src = preg_match('#^(https?:|/|data:)#', $gb) ? $gb : uploads_url($gb);
+      $yk = strtolower(trim((string)($m['tahun'] ?? '')));
+      if ($yk !== '') $mile_img_by_year[$yk] = $src;
+      if (($m['kode'] ?? '') === 'now') $mile_img_by_year['present'] = $src;
+  }
   // Client: show the NEWEST year first everywhere — the journey starts at Present
   // and travels back through the years.
   $mile_data = array_reverse($mile_data);
@@ -179,7 +192,7 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
                 <div class="mj-single"><?= htmlspecialchars($items[0] ?? '') ?></div>
               <?php endif; ?>
             </div>
-            <div class="mj-media"><img src="<?= htmlspecialchars(uploads_url($img)) ?>" alt=""></div>
+            <div class="mj-media"><img src="<?= htmlspecialchars($mile_img_by_year[strtolower($yr)] ?? uploads_url($img)) ?>" alt=""></div>
           </div>
         <?php endforeach; ?>
       </div></div>
