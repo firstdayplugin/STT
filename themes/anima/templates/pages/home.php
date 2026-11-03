@@ -81,15 +81,15 @@ foreach ($slide_rows as $r) {
             }
         }
     }
-    // Merge the slide's own logos with the matched /solutions per-category logos
-    // (deduped) so every logo added in EITHER place shows on the prism — instead of
-    // the solutions set silently replacing the slide's own logos.
+    // The /solutions per-category logos (solution_logos) are the single source of
+    // truth for a matched section: use them verbatim and in their saved order (urutan),
+    // so the Home prism mirrors /solutions EXACTLY — same set, same order. This also
+    // means a logo removed in the Solutions admin disappears from Home too. The slide's
+    // own logos JSON is only a fallback for slides with no matching solutions section.
     $__anc = '';
     if (preg_match('/#(.+)$/', (string)($r['url'] ?? ''), $__m)) $__anc = $__m[1];
     if ($__anc !== '' && !empty($prism_logos_by_anchor[$__anc])) {
-        foreach ($prism_logos_by_anchor[$__anc] as $__lg) {
-            if ($__lg !== '' && !in_array($__lg, $logos, true)) $logos[] = $__lg;
-        }
+        $logos = $prism_logos_by_anchor[$__anc];
     }
     // Dedup by brand (strip -vN version + extension) so a slide asset and its
     // /solutions counterpart don't render as two copies; prefer a trimmed -vN asset.

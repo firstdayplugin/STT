@@ -4,6 +4,12 @@
 -- Matches by section title + logo name/filename (version-proof: dell-v4.png etc.),
 -- so it works regardless of exact file versions. Logos NOT in the reference list
 -- keep their place but move AFTER the ordered ones. Re-runnable.
+--
+-- It also REMOVES the two logos that are not in the reference photo:
+--   * Microsoft  — from Enterprise Infrastructure
+--   * Xeratic    — from AI Platforms & Applications (kept in Data Management!)
+-- These are hard-deleted. To hide them reversibly instead, replace the two
+-- DELETE statements with: UPDATE solution_logos SET is_active=0 WHERE ...
 -- Run in phpMyAdmin (SQL tab).
 -- ============================================================================
 SET NAMES utf8mb4;
@@ -13,6 +19,13 @@ SET @cyber := (SELECT id FROM solutions_section WHERE judul LIKE '%Cybersecurity
 SET @data  := (SELECT id FROM solutions_section WHERE judul LIKE '%Data%'           ORDER BY id LIMIT 1);
 SET @ai    := (SELECT id FROM solutions_section WHERE judul LIKE '%Artificial%'     ORDER BY id LIMIT 1);
 SET @aip   := (SELECT id FROM solutions_section WHERE judul LIKE '%Platform%'       ORDER BY id LIMIT 1);
+
+-- 0) REMOVE logos not present in the reference photo (scoped to their section).
+--    Xeratic stays in Data Management — only the AI-Platform copy is removed.
+DELETE FROM solution_logos
+ WHERE solution_id=@infra AND (LOWER(gambar) LIKE '%microsoft%' OR LOWER(nama) LIKE '%microsoft%');
+DELETE FROM solution_logos
+ WHERE solution_id=@aip   AND (LOWER(gambar) LIKE '%xeratic%'   OR LOWER(nama) LIKE '%xeratic%');
 
 -- Push every logo back first; the ordered ones below reclaim 1..N, extras trail after.
 UPDATE solution_logos SET urutan = urutan + 100 WHERE solution_id IN (@infra,@cyber,@data,@ai,@aip);
