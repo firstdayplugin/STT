@@ -62,7 +62,7 @@ function tier_cell($val, $hl) {
 
     <section class="svc-hero">
       <h1><?= htmlspecialchars($name) ?></h1>
-      <p><?= htmlspecialchars($intro) ?></p>
+      <p><?= pt($intro) ?></p>
     </section>
 
     <div class="svc-media">

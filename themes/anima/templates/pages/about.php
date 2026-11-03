@@ -24,7 +24,9 @@ $milestones = $about_q('milestone');
 $awards     = $about_q('award');
 $quality    = $about_q('quality');
 $certs      = $about_q('cert');
-$atr = fn($row, $field) => tr_field('about_items', (int)($row['id'] ?? 0), $field, $row[$field] ?? '');
+// about_items fields are all plain text: strip any stray HTML (e.g. a <p> wrapper from the
+// CMS/import) and decode entities so tags never render as literal text, anywhere on the page.
+$atr = fn($row, $field) => trim(strip_tags(html_entity_decode((string)tr_field('about_items', (int)($row['id'] ?? 0), $field, $row[$field] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
 $aimgu = fn($row) => !empty($row['gambar']) ? uploads_url($row['gambar']) : '';
 
 // group helper (awards by year, certs by brand) preserving order

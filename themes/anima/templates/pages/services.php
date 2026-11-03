@@ -105,7 +105,7 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
               <div class="sd-num"><?= sprintf('%02d', $i + 1) ?></div>
               <?php if (!empty($cr['badge'])): ?><span class="sd-badge"><?= htmlspecialchars($cr['badge']) ?></span><?php endif; ?>
               <h2 class="sd-title notranslate" translate="no"><?= $svc_acc($TP($c['row'], 'judul')) ?></h2>
-              <?php if (trim((string)$TP($c['row'], 'deskripsi')) !== ''): ?><p class="sd-desc"><?= htmlspecialchars($TP($c['row'], 'deskripsi')) ?></p><?php endif; ?>
+              <?php if (trim((string)$TP($c['row'], 'deskripsi')) !== ''): ?><p class="sd-desc"><?= pt($TP($c['row'], 'deskripsi')) ?></p><?php endif; ?>
               <?php if ($tags): ?><div class="sd-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
               <?php if ($has): ?><a class="sd-cta" href="<?= htmlspecialchars(url($cr['link_slug'])) ?>"><?= htmlspecialchars(t('learn_more', 'Learn more')) ?> <?= $arrow ?></a><?php endif; ?>
             </div>

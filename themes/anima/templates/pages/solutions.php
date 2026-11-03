@@ -97,7 +97,7 @@ if (strpos($hero_title_raw, '[') !== false) {
         <?php foreach ($sol_nodes as $nd): ?>
           <a class="scn-node" href="#<?= htmlspecialchars($nd['slug']) ?>">
             <span class="ic"><svg viewBox="0 0 24 24"><?= $nd['ic'] ?></svg></span>
-            <span class="nm"><?= htmlspecialchars($nd['nm']) ?><?php if ($nd['sub'] !== ''): ?><small><?= htmlspecialchars($nd['sub']) ?></small><?php endif; ?></span>
+            <span class="nm"><?= pt($nd['nm']) ?><?php if ($nd['sub'] !== ''): ?><small><?= pt($nd['sub']) ?></small><?php endif; ?></span>
           </a>
         <?php endforeach; ?>
       </div>
@@ -217,7 +217,7 @@ if (strpos($hero_title_raw, '[') !== false) {
               <div class="sd-num"><?= sprintf('%02d', $i + 1) ?></div>
               <h2 class="sd-title notranslate" translate="no"><?= $r['judul'] ?></h2>
               <div class="sd-lbl"><?= htmlspecialchars($lbl_solution) ?></div>
-              <?php if (trim($r['solusi']) !== ''): ?><p class="sd-desc"><?= nl2br(htmlspecialchars($r['solusi'])) ?></p><?php endif; ?>
+              <?php if (trim($r['solusi']) !== ''): ?><p class="sd-desc"><?= nl2br(pt($r['solusi'])) ?></p><?php endif; ?>
               <?php if ($r['logos']): ?>
                 <div class="sd-logos">
                   <?php foreach ($r['logos'] as $lg): $lsrc = $img((string)($lg['gambar'] ?? '')); if ($lsrc === '') continue; ?>

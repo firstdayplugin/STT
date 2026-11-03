@@ -118,7 +118,7 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
           <span class="num"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
           <span class="ic"><svg viewBox="0 0 24 24"><?= $icon ?></svg></span>
           <h3 class="notranslate" translate="no"><?= htmlspecialchars($label) ?></h3>
-          <?php if (trim((string)$isub) !== ''): ?><div class="sub"><?= htmlspecialchars($isub) ?></div><?php endif; ?>
+          <?php if (trim((string)$isub) !== ''): ?><div class="sub"><?= pt($isub) ?></div><?php endif; ?>
           <?php if ($tags): ?><div class="tags"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
           <span class="go"><?= htmlspecialchars(t('explore', 'Explore')) ?> <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
         </a>

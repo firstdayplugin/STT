@@ -887,6 +887,19 @@ function json_response(array $data, int $code = 200): void {
 // CONTENT BLOCKS HELPERS (editable text/image per page)
 // ============================================
 
+if (!function_exists('pt')) {
+    /**
+     * Plain-text CMS output. Strips any stray HTML (e.g. a <p> wrapper left by an
+     * import/seed), decodes entities, then HTML-escapes. Use wherever a CMS field
+     * must render as PLAIN TEXT so tags never leak as literal text (<p> …). Fields
+     * that are intentionally rich HTML must NOT use this (keep rendering them raw).
+     */
+    function pt($s): string {
+        $s = html_entity_decode((string)$s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return htmlspecialchars(trim(strip_tags($s)), ENT_QUOTES, 'UTF-8');
+    }
+}
+
 function get_content(string $page_key, string $block_key, string $default = ''): string {
     $lang = function_exists('current_lang') ? current_lang() : 'id';
     $def_lang = function_exists('default_lang') ? default_lang() : 'id';

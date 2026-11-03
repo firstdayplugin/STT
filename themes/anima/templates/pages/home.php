@@ -153,7 +153,7 @@ include theme_path('templates/layouts/header.php');
     </div>
     <div class="tk-below">
       <div class="tk-below-l">
-        <h2 class="tk-sub"><span class="blue" id="tkSub"><?= htmlspecialchars($h0['sub']) ?></span></h2>
+        <h2 class="tk-sub"><span class="blue" id="tkSub"><?= pt($h0['sub']) ?></span></h2>
         <p><?= hc('hero_subcopy') ?></p>
       </div>
       <div class="tk-discover">
@@ -353,7 +353,7 @@ if (!$orbit_cards) { for ($i = 1; $i <= 8; $i++) { $orbit_cards[] = ['label' => 
           </div>
           <div class="ncard-body">
             <h3><a href="<?= url('blog/' . $np['slug']) ?>"><?= htmlspecialchars($np['judul']) ?></a></h3>
-            <p><?= htmlspecialchars($np['excerpt'] ?? '') ?></p>
+            <p><?= pt($np['excerpt'] ?? '') ?></p>
             <a class="read" href="<?= url('blog/' . $np['slug']) ?>">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           </div>
         </article>
@@ -469,7 +469,7 @@ if (!function_exists('tsc_video')) {
         <?= $hasV && $vinfo['kind']==='mp4'   ? 'data-vmp4="'.htmlspecialchars($vinfo['mp4']).'"' : '' ?>
         <?= $hasV && $vinfo['kind']==='embed' ? 'data-vembed="'.htmlspecialchars($vinfo['embed']).'"' : '' ?>>
         <div class="tsc-body">
-          <p class="tsc-q">&ldquo;<?= htmlspecialchars($t['isi']) ?>&rdquo;</p>
+          <p class="tsc-q">&ldquo;<?= pt($t['isi']) ?>&rdquo;</p>
           <?php if ($stat !== ''): ?><div class="tsc-stat"><?= htmlspecialchars($stat) ?></div><?php if ($statcap !== ''): ?><div class="tsc-statcap"><?= htmlspecialchars($statcap) ?></div><?php endif; endif; ?>
           <?php if ($meta): ?><div class="tsc-meta"><?php foreach ($meta as $mk => $mv): ?><b><?= htmlspecialchars($mk) ?>:</b><span><?= htmlspecialchars($mv) ?></span><?php endforeach; ?></div><?php endif; ?>
           <div class="tsc-person">

@@ -126,7 +126,7 @@ include theme_path('templates/layouts/header.php');
           $heading = ($cell && $cell['heading'] !== null && $cell['heading'] !== '')
                    ? tr_field('industri_pilar', (int)$cell['id'], 'heading', $cell['heading']) : $pilar_nama;
           $konten  = ($cell && $cell['konten'] !== null && $cell['konten'] !== '')
-                   ? tr_field('industri_pilar', (int)$cell['id'], 'konten', $cell['konten']) : ('<p>' . htmlspecialchars($pilar_desk) . '</p>');
+                   ? tr_field('industri_pilar', (int)$cell['id'], 'konten', $cell['konten']) : ('<p>' . pt($pilar_desk) . '</p>');
           $fitur = [];
           if (!empty($cell['fitur'])) { $d = json_decode($cell['fitur'], true); if (is_array($d)) $fitur = $d; }
         ?>

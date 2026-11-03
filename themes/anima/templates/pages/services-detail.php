@@ -115,7 +115,7 @@ include theme_path('templates/layouts/header.php');
           <div class="csd-txt">
             <div class="csd-kick"><span class="step"><?= sprintf('%02d', $i + 1) ?></span><?php if (!empty($a['nama'])): ?><span class="name"><?= htmlspecialchars($a['nama']) ?></span><?php endif; ?></div>
             <h2><?= htmlspecialchars($TA('judul')) ?></h2>
-            <?php if (trim((string)$TA('deskripsi')) !== ''): ?><p class="csd-desc"><?= htmlspecialchars($TA('deskripsi')) ?></p><?php endif; ?>
+            <?php if (trim((string)$TA('deskripsi')) !== ''): ?><p class="csd-desc"><?= pt($TA('deskripsi')) ?></p><?php endif; ?>
             <?php if ($items): ?>
             <ul class="csd-caps">
               <?php foreach ($items as $k => $it): ?>
@@ -196,7 +196,7 @@ include theme_path('templates/layouts/header.php');
           <?php if ($feat): ?><span class="flag"><?= htmlspecialchars(t('recommended', 'Recommended')) ?></span><?php endif; ?>
           <div class="nm"><?= htmlspecialchars($tr['nama']) ?></div>
           <h3><?= htmlspecialchars(tr_field('service_tiers', $tid, 'judul', $tr['judul'] ?? '')) ?></h3>
-          <p><?= htmlspecialchars(tr_field('service_tiers', $tid, 'deskripsi', $tr['deskripsi'] ?? '')) ?></p>
+          <p><?= pt(tr_field('service_tiers', $tid, 'deskripsi', $tr['deskripsi'] ?? '')) ?></p>
         </div>
       <?php endforeach; ?>
     </div>
