@@ -132,7 +132,7 @@ $icCal   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
       <div class="cf-in">
         <h2 class="cf-h" data-text="<?= htmlspecialchars(html_entity_decode($cta_title, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>"></h2>
         <p class="cf-p"><?= $txt($cta_text) ?></p>
-        <div class="cf-btns"><a class="btn btn-p" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= $txt($cta_label) ?> <?= $arrow ?></a></div>
+        <div class="cf-btns"><a class="btn btn-p" href="<?= htmlspecialchars(url('career/apply')) ?>"><?= $txt($cta_label) ?> <?= $arrow ?></a></div>
       </div>
     </section>
   </div>

@@ -2364,6 +2364,13 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .cd-chip.loc{color:#8ff0e0;background:rgba(73,214,199,.14);border:1px solid rgba(73,214,199,.3)}
 .cd-chip.typ{color:#bcd0f5;background:rgba(120,160,235,.1);border:1px solid rgba(120,160,235,.26)}
 .cd-hero h1{font-size:clamp(27px,3.8vw,46px);font-weight:700;letter-spacing:-.03em;line-height:1.08;color:#fff;max-width:20ch}
+/* General application (Send your CV): centered form-only layout */
+.ca-hero{text-align:center}
+.ca-hero h1{max-width:none;margin:0 auto}
+.ca-hero .cd-back{justify-content:center}
+.ca-lead{margin:14px auto 0;max-width:60ch;color:#aebfe0;font-size:clamp(14px,1.4vw,16px);line-height:1.6}
+.ca-wrap{max-width:680px}
+.ca-card{position:static}
 .cd-meta{margin-top:18px;display:flex;gap:22px;flex-wrap:wrap;color:#aebfe0;font-size:14px}
 .cd-meta span{display:inline-flex;align-items:center;gap:7px}
 .cd-meta svg{width:16px;height:16px;flex:0 0 auto;stroke:#7fa0cf}

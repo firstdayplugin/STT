@@ -148,7 +148,10 @@ switch ($page) {
         break;
 
     case 'career':
-        if (!empty($slug)) {
+        if ($slug === 'apply') {
+            // General application / "Send your CV" — form only, no job description.
+            require_once theme_path('templates/pages/career-apply.php');
+        } elseif (!empty($slug)) {
             $career_data = $db->fetchOne('SELECT * FROM career WHERE slug = ? AND is_active = 1', [$slug]);
             if ($career_data) {
                 require_once theme_path('templates/pages/career-detail.php');
