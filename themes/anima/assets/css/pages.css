@@ -1871,6 +1871,37 @@ body.sol-modal-open{overflow:hidden}
 .svc-node:hover .ic{transform:scale(1.1);border-color:rgba(120,190,255,.8);box-shadow:0 20px 44px -14px rgba(40,110,255,.7),0 0 0 1px rgba(120,190,255,.5)}
 .svc-node:hover .ic{color:#cfe6ff}
 
+/* ---- Services hero — SPLIT layout: copy left, animated orbit right (fills the
+   width, fits one screen, keeps the animated mood). ---- */
+.svc-hero-split{min-height:100svh;justify-content:center;padding-top:clamp(92px,13vh,140px);padding-bottom:clamp(40px,6vh,72px)}
+.svc-split{position:relative;z-index:3;width:100%;max-width:1340px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(28px,5vw,64px);padding:0 clamp(24px,6vw,90px)}
+.svc-hero-split .svc-copy{position:relative;z-index:3;text-align:left;margin:0;padding:0}
+.svc-hero-split .svc-eye{margin-bottom:16px}
+.svc-hero-split .svc-title{font-size:clamp(30px,3.7vw,52px);max-width:17ch;margin:0;line-height:1.1}
+.svc-lead{margin-top:20px;max-width:46ch;color:#9fb3d6;font-size:clamp(14.5px,1.2vw,16.5px);line-height:1.7;text-wrap:pretty}
+.svc-cta{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap}
+.svc-btn{display:inline-flex;align-items:center;gap:9px;font-size:14.5px;font-weight:600;padding:13px 24px;border-radius:12px;text-decoration:none;transition:transform .22s,box-shadow .22s,background .22s,border-color .22s}
+.svc-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2}
+.svc-btn-p{color:#fff;background:linear-gradient(135deg,#2f7be0,#1f5fd0);box-shadow:0 18px 40px -16px rgba(47,123,224,.9)}
+.svc-btn-p:hover{transform:translateY(-2px)}
+.svc-btn-g{color:#cfe0ff;background:rgba(120,170,255,.1);border:1px solid rgba(120,170,255,.28)}
+.svc-btn-g:hover{background:rgba(120,170,255,.18)}
+.svc-orbit{position:relative;justify-self:center;width:min(460px,40vw);aspect-ratio:1;flex:none}
+.svc-ring{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(120,170,255,.22)}
+.svc-ring.r2{inset:15%;border-style:solid;border-color:rgba(120,170,255,.12)}
+.svc-core-glow{position:absolute;inset:27%;border-radius:50%;background:radial-gradient(circle,rgba(40,110,255,.4),transparent 70%);filter:blur(12px);animation:svcGlow 5s ease-in-out infinite}
+@keyframes svcGlow{0%,100%{opacity:.5}50%{opacity:.95}}
+.svc-core{position:absolute;inset:0;margin:auto;width:34%;height:34%;border-radius:50%;display:grid;place-content:center;text-align:center;
+  background:radial-gradient(circle at 50% 38%,rgba(40,80,160,.55),rgba(10,16,38,.92));border:1px solid rgba(120,170,255,.3);box-shadow:0 0 60px -12px rgba(40,110,255,.55)}
+.svc-core b{font-size:clamp(10px,1vw,13px);font-weight:800;letter-spacing:.14em;background:linear-gradient(120deg,#8fc0ff,#49d6c7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.svc-core span{display:block;font-size:9px;letter-spacing:.24em;color:#7d93c0;margin-top:3px;text-transform:uppercase}
+.svc-spin{position:absolute;inset:0;animation:svcSpin2 30s linear infinite}
+@keyframes svcSpin2{to{transform:rotate(360deg)}}
+.svc-chip{position:absolute;transform:translate(-50%,-50%);width:clamp(48px,4.6vw,64px);height:clamp(48px,4.6vw,64px);border-radius:50%;display:grid;place-items:center;color:#bcdcff;
+  background:radial-gradient(120% 120% at 30% 20%,rgba(40,70,130,.92),rgba(10,18,40,.95));border:1px solid rgba(120,170,255,.42);box-shadow:0 14px 32px -12px rgba(0,12,45,.9),inset 0 1px 0 rgba(255,255,255,.08)}
+.svc-chip svg{width:46%;height:46%;stroke:currentColor;fill:none;stroke-width:1.7;animation:svcUnspin 30s linear infinite}
+@keyframes svcUnspin{to{transform:rotate(-360deg)}}
+
 .svc-main{position:relative;z-index:1;background:#070d1a;padding:clamp(60px,10vh,110px) 0}
 .svc-wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 .svc-pillars{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -1908,6 +1939,14 @@ body.sol-modal-open{overflow:hidden}
 @media (max-width:860px),(prefers-reduced-motion:reduce){
   .svc-hero{height:auto;min-height:0;padding:110px 20px 54px}
   .svc-net{display:none}.svc-copy{position:static;margin-bottom:8px}.svc-hub{display:none}
+  /* Split hero → single centered column; orbit hidden on small / reduced-motion. */
+  .svc-hero-split{min-height:0;padding:104px 20px 56px}
+  .svc-split{grid-template-columns:1fr;gap:0;text-align:center}
+  .svc-hero-split .svc-copy{text-align:center}
+  .svc-hero-split .svc-title{max-width:22ch;margin:0 auto}
+  .svc-lead{margin-left:auto;margin-right:auto}
+  .svc-cta{justify-content:center}
+  .svc-orbit{display:none}
   .svc-stage{position:static;transform:none!important;margin-top:28px;width:100%;max-width:440px;aspect-ratio:auto;flex:initial}
   .svc-node{position:static!important;transform:none!important;width:100%;display:flex;align-items:center;gap:16px;text-align:left;
     padding:14px 16px;margin-bottom:12px;border-radius:16px;background:rgba(20,32,64,.55);border:1px solid rgba(120,160,235,.18)}

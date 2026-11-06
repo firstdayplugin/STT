@@ -57,24 +57,38 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
 
   <!-- Hero: "Lifecycle Loop" — delivery stages on a glowing loop with a travelling
        comet (continuous end-to-end cycle). Motion in svchero.js; static list on mobile. -->
-  <section class="svc-hero" id="svcHero" aria-label="<?= htmlspecialchars(strip_tags($T('headline') ?: ($p['judul'] ?? 'Services'))) ?>">
+  <?php
+  $svc_lead = get_content('services', 'hero_lead', 'From planning to optimization — we cover every stage of your technology journey as a single, accountable partner.');
+  $lc_n = max(1, count($lifecycle));
+  ?>
+  <section class="svc-hero svc-hero-split" id="svcHero" aria-label="<?= htmlspecialchars(strip_tags($T('headline') ?: ($p['judul'] ?? 'Services'))) ?>">
     <canvas class="svc-net" id="svcNet" aria-hidden="true"></canvas>
-    <div class="svc-copy" id="svcCopy">
-      <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="svc-eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
-      <h1 class="svc-title"><?= $svc_headline ?></h1>
-    </div>
-    <div class="svc-stage" id="svcStage">
-      <div class="svc-hub" id="svcHub" aria-hidden="true"><span class="ring2"></span><div class="lbl"><b>END&ndash;TO&ndash;END</b><span>Lifecycle</span></div></div>
-      <?php foreach ($lifecycle as $i => $step): ?>
-        <div class="svc-node">
-          <span class="step"><?= $i + 1 ?></span>
-          <span class="ic"><svg viewBox="0 0 24 24"><?= $lc_icons[$i % count($lc_icons)] ?></svg></span>
-          <span class="n"><?= htmlspecialchars($step) ?></span>
+    <div class="svc-split">
+      <div class="svc-copy" id="svcCopy">
+        <?php if (trim((string)$T('eyebrow')) !== ''): ?><div class="svc-eye"><?= htmlspecialchars($T('eyebrow')) ?></div><?php endif; ?>
+        <h1 class="svc-title"><?= $svc_headline ?></h1>
+        <?php if (trim(strip_tags((string)$svc_lead)) !== ''): ?><p class="svc-lead"><?= pt($svc_lead) ?></p><?php endif; ?>
+        <div class="svc-cta">
+          <a class="svc-btn svc-btn-p" href="#sdWrap"><?= htmlspecialchars(t('explore_services', 'Explore services')) ?> <?= $arrow ?></a>
+          <a class="svc-btn svc-btn-g" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('talk_to_team', 'Talk to our team')) ?></a>
         </div>
-      <?php endforeach; ?>
+      </div>
+      <div class="svc-orbit" aria-hidden="true">
+        <span class="svc-ring"></span><span class="svc-ring r2"></span><span class="svc-core-glow"></span>
+        <div class="svc-core"><b>END&ndash;TO&ndash;END</b><span>Lifecycle</span></div>
+        <div class="svc-spin">
+          <?php foreach ($lifecycle as $i => $step):
+            $ang = deg2rad(-90 + $i * (360 / $lc_n));
+            $x = 50 + 42 * cos($ang); $y = 50 + 42 * sin($ang);
+          ?>
+          <div class="svc-chip" style="left:<?= round($x, 2) ?>%;top:<?= round($y, 2) ?>%" title="<?= htmlspecialchars($step) ?>">
+            <svg viewBox="0 0 24 24"><?= $lc_icons[$i % count($lc_icons)] ?></svg>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
     </div>
   </section>
-  <script src="<?= theme_asset('assets/js/svchero.js') ?>" defer></script>
 
   <?php
   // Capabilities "Deck" — the 2 lead pillars + supporting capabilities as a single
