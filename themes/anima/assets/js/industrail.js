@@ -41,14 +41,7 @@
       dots.push(btn);
     }
 
-    // The "Pick your sector" lead-in now sits inside the rail, above the sticky pin,
-    // so the scrub must offset by its height: the deck only starts scrubbing once the
-    // pin actually sticks (after the lead has scrolled past). Adding leadH() to the
-    // rail height keeps the scrub travel (rail.offsetHeight - leadH - innerHeight)
-    // identical to before, so timing is unchanged.
-    var lead = document.getElementById('ind2Lead');
-    function leadH() { return (lead && !MQ.matches) ? lead.offsetHeight : 0; }
-    function railHeight() { return (N + 0.4) * 0.82 * innerHeight + leadH(); }
+    function railHeight() { return (N + 0.4) * 0.82 * innerHeight; }
     function layout() {
       if (MQ.matches) { rail.style.height = ''; track.style.transform = ''; return; }
       rail.style.height = railHeight() + 'px';
@@ -57,15 +50,14 @@
     function jump(idx) {
       if (MQ.matches) { cards[idx] && cards[idx].scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
       var p = N > 1 ? idx / (N - 1) : 0;
-      scrollTo({ top: rail.offsetTop + leadH() + p * (rail.offsetHeight - leadH() - innerHeight), behavior: 'smooth' });
+      scrollTo({ top: rail.offsetTop + p * (rail.offsetHeight - innerHeight), behavior: 'smooth' });
     }
 
     var cur = -1;
     function onScroll() {
       if (MQ.matches) return;
-      var H = leadH();
-      var h = rail.offsetHeight - H - innerHeight;
-      var p = h > 0 ? (scrollY - rail.offsetTop - H) / h : 0;
+      var h = rail.offsetHeight - innerHeight;
+      var p = h > 0 ? (scrollY - rail.offsetTop) / h : 0;
       p = Math.max(0, Math.min(1, p));
       var maxX = track.scrollWidth - innerWidth;
       if (maxX < 0) maxX = 0;
@@ -77,7 +69,7 @@
         if (num) num.textContent = String(idx + 1).padStart(2, '0');
         if (name && cards[idx]) name.textContent = cards[idx].getAttribute('data-name') || '';
         var ac = cards[idx] && cards[idx].style.getPropertyValue('--ac');
-        if (ac) pin.style.background = 'radial-gradient(120% 100% at 15% 0%,' + hexa(ac.trim(), .14) + ',transparent 60%),#070c17';
+        if (ac) pin.style.background = 'radial-gradient(120% 100% at 15% 0%,' + hexa(ac.trim(), .14) + ',transparent 55%),linear-gradient(180deg,#05080f,#070c17 clamp(120px,20vh,200px))';
         for (var k = 0; k < dots.length; k++) dots[k].className = (k === idx ? 'on' : '');
       }
     }

@@ -76,15 +76,16 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
        lead-in (normal flow): the dark hero flows straight into it, then the deck pins
        and the cards scrub beneath. No white band, no floating second heading. -->
   <div class="ind2-rail" id="ind2Rail" data-count="<?= (int)$n ?>">
-    <section class="ind2-lead reveal" id="ind2Lead">
-      <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
-      <h2><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
-      <p><?= htmlspecialchars($c('rail_sub', 'One partner across every sector. Scroll through to see how we tailor technology to each.')) ?></p>
-    </section>
     <div class="ind2-pin" id="ind2Pin">
       <canvas class="ind2-railnet" id="ind2RailNet" aria-hidden="true"></canvas>
+      <!-- The "Pick your sector" heading IS this pinned deck's header (left),
+           with the live progress on the right. The hero flows straight into the
+           deck — no separate heading block stacked under the hero. -->
       <div class="ind2-rail-head">
-        <div class="rk"><?= htmlspecialchars(t('sectors', 'Sectors')) ?></div>
+        <div class="rhd">
+          <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
+          <h2 class="rt"><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
+        </div>
         <div class="rc"><b id="ind2Num">01</b> / <?= str_pad((string)$n, 2, '0', STR_PAD_LEFT) ?> &nbsp;·&nbsp; <span id="ind2Name"></span></div>
       </div>
       <div class="ind2-track" id="ind2Track">
