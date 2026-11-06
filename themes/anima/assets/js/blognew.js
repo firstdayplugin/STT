@@ -129,5 +129,12 @@
     if (n && n !== state.page) { state.page = n; render(true); }
   });
 
+  // Arrived with a deep-linked filter (e.g. a category pill on an article page)?
+  // Focus the catalog instead of leaving the user stranded at the top of the hero.
+  var deepLinked = !!(state.cat || state.q || state.year);
   render(false); // initial page 1 (respects any deep-linked filter)
+  if (deepLinked) {
+    if ('scrollRestoration' in history) { try { history.scrollRestoration = 'manual'; } catch (e) {} }
+    requestAnimationFrame(function () { setTimeout(scrollToList, 60); });
+  }
 })();
