@@ -107,7 +107,7 @@ requestAnimationFrame(frame);
 ;
 (function(){if(!document.getElementById('prismCanvas'))return; /* disabled: #solutions now uses CSS/SVG solhero.js */
 let SLIDES=[
-  {eyebrow:"Modernize Infrastructure", h:'Modernize <b>Infrastructure</b>', p:'Private cloud, migrasi, hingga cloud repatriation — dirancang untuk kebutuhan Anda.', dark:'#0a1430',mid:'#123a6a',accent:'#42a0ff',label:'INFRA', logos:['dell','nut','vmware','sangfor']},
+  {eyebrow:"Enterprise Infrastructure", h:'Enterprise <b>Infrastructure</b>', p:'Private cloud, migrasi, hingga cloud repatriation — dirancang untuk kebutuhan Anda.', dark:'#0a1430',mid:'#123a6a',accent:'#42a0ff',label:'INFRA', logos:['dell','nut','vmware','sangfor']},
   {eyebrow:"Cybersecurity", h:'<b>Cybersecurity</b>', p:'Perlindungan menyeluruh untuk aset digital dan operasional bisnis.', dark:'#101430',mid:'#20306e',accent:'#6f8bff',label:'SECURITY', logos:['sangfor','redhat','microsoft']},
   {eyebrow:"Data", h:'Data & <b>Analytics</b>', p:'Dari data mentah menjadi keputusan cerdas yang terlindungi.', dark:'#0c1838',mid:'#164079',accent:'#4f9bff',label:'DATA', logos:['comm','hyu','vee','redhat']},
   {eyebrow:"AI", h:'Artificial <b>Intelligence</b>', p:'AI yang berjalan di atas infrastruktur nyata dan andal.', dark:'#0a1c3a',mid:'#12386e',accent:'#3f8bff',label:'AI', logos:['microsoft','intel','amd']},

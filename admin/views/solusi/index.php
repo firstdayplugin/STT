@@ -148,7 +148,7 @@ $csrf = generate_csrf();
       <div class="form-row">
         <div class="form-group">
           <label>Eyebrow</label>
-          <input type="text" name="eyebrow" value="<?= htmlspecialchars($edit_item['eyebrow'] ?? '') ?>" placeholder="Modernize Infrastructure">
+          <input type="text" name="eyebrow" value="<?= htmlspecialchars($edit_item['eyebrow'] ?? '') ?>" placeholder="Enterprise Infrastructure">
         </div>
         <div class="form-group">
           <label>Watermark Label</label>
@@ -159,7 +159,7 @@ $csrf = generate_csrf();
 
       <div class="form-group">
         <label>Judul (heading)</label>
-        <input type="text" name="judul" value="<?= htmlspecialchars($edit_item['judul'] ?? '') ?>" placeholder="Modernize &lt;b&gt;Infrastructure&lt;/b&gt;">
+        <input type="text" name="judul" value="<?= htmlspecialchars($edit_item['judul'] ?? '') ?>" placeholder="Enterprise &lt;b&gt;Infrastructure&lt;/b&gt;">
         <div class="form-hint">Boleh pakai <code>&lt;b&gt;...&lt;/b&gt;</code> untuk penekanan.</div>
       </div>
 

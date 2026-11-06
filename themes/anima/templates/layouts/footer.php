@@ -24,7 +24,7 @@
         if (!$__foot_cols) {
             $__foot_cols = [
               ['h' => t('footer_col_solutions', 'Solutions'), 'items' => [
-                 ['Modernize Infrastructure', url('solutions') . '#modernize-infrastructure'],
+                 ['Enterprise Infrastructure', url('solutions') . '#enterprise-infrastructure'],
                  ['Cybersecurity', url('solutions') . '#cybersecurity'],
                  ['Data Management', url('solutions') . '#data-management'],
                  ['Artificial Intelligence (AI)', url('solutions') . '#artificial-intelligence-ai'],

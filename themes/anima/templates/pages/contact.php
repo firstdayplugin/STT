@@ -96,7 +96,7 @@ $socials  = [
 ];
 ?>
 <?php
-$rp_solutions = ['Modernize Infrastructure','Cybersecurity','Data Management','Artificial Intelligence (AI)','AI Platform & Applications','Other'];
+$rp_solutions = ['Enterprise Infrastructure','Cybersecurity','Data Management','Artificial Intelligence (AI)','AI Platform & Applications','Other'];
 $site_name  = get_setting('site_name', 'Sapta Tunas Teknologi');
 $maps_q     = $address !== '' ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($address) : '';
 $maps_dir   = $address !== '' ? 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($address) : '';

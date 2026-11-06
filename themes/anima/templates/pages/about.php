@@ -72,7 +72,7 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
   // Order below traces the ring: TL → TR → R → bottom-centre → L.
   // [key, label, image(uploads path), isParent, left, top, size(px)]
   $abh_boxes = [
-    ['infra',  'Modernize Infrastructure',     'design3/about-infra.jpg',   false, '12%', '19%', 150],
+    ['infra',  'Enterprise Infrastructure',    'design3/about-infra.jpg',   false, '12%', '19%', 150],
     ['cyber',  'Cybersecurity',                'design3/about-cyber.jpg',   false, '78%', '19%', 150],
     ['ai',     'Artificial Intelligence (AI)', 'design3/about-ai.jpg',      false, '80%', '60%', 126],
     ['aiplat', 'AI Platform & Applications',   'design3/about-aiplat.jpg',  false, '45%', '74%', 132],

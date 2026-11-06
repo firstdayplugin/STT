@@ -126,7 +126,7 @@ $csrf = generate_csrf();
     <div class="card-header"><div class="card-title"><?= $action === 'create' ? 'Tambah' : 'Edit' ?> Section</div></div>
     <div class="card-body">
       <div class="form-group"><label>Judul *</label>
-        <input type="text" name="judul" required value="<?= htmlspecialchars($edit_item['judul'] ?? '') ?>" placeholder="Modernize &lt;b&gt;Infrastructure&lt;/b&gt;">
+        <input type="text" name="judul" required value="<?= htmlspecialchars($edit_item['judul'] ?? '') ?>" placeholder="Enterprise &lt;b&gt;Infrastructure&lt;/b&gt;">
         <div class="form-hint">Bungkus bagian yang ingin berwarna biru dengan <code>&lt;b&gt;...&lt;/b&gt;</code>.</div></div>
       <div class="form-group"><label>Solution (teks paragraf)</label>
         <textarea name="solusi" rows="3" class="no-wysiwyg"><?= htmlspecialchars($edit_item['solusi'] ?? '') ?></textarea></div>

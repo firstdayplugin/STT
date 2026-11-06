@@ -96,7 +96,7 @@ $csrf = generate_csrf();
     <div class="card-body">
       <div class="form-row">
         <div class="form-group"><label>Nama Pilar *</label>
-          <input type="text" name="nama" required value="<?= htmlspecialchars($edit_item['nama'] ?? '') ?>" placeholder="Modernize Infrastructure"></div>
+          <input type="text" name="nama" required value="<?= htmlspecialchars($edit_item['nama'] ?? '') ?>" placeholder="Enterprise Infrastructure"></div>
         <div class="form-group"><label>Slug</label>
           <input type="text" name="slug" value="<?= htmlspecialchars($edit_item['slug'] ?? '') ?>" placeholder="otomatis dari nama">
           <div class="form-hint">Dipakai di URL. Kosongkan untuk otomatis.</div></div>
