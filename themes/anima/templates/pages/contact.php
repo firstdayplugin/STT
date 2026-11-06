@@ -153,34 +153,67 @@ $maps_dir   = $address !== '' ? 'https://www.google.com/maps/dir/?api=1&destinat
           </form>
         </div>
 
-        <!-- Reach us -->
+        <!-- Reach us (two offices + grouped contacts, per client design) -->
         <div class="cu-card cu-ri reveal">
           <h3><?= $txt($cc('info_title', 'Reach us')) ?></h3>
           <p><?= $txt($cc('info_sub', "Prefer to talk directly? Here's how to find us.")) ?></p>
-          <?php if ($address): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_address', 'Address')) ?></div><div class="val"><?= htmlspecialchars($address) ?></div></div></div>
-          <?php endif; ?>
-          <?php if ($phone): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_phone', 'Phone')) ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$phone)) ?>"><?= htmlspecialchars($phone) ?></a></div></div></div>
-          <?php endif; ?>
-          <?php if ($prophone): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0116 0v1"/><rect x="2.5" y="13" width="3.5" height="6" rx="1.5"/><rect x="18" y="13" width="3.5" height="6" rx="1.5"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_prophone', 'ProSupport 7×24 Hotline')) ?></div><div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$prophone)) ?>"><?= htmlspecialchars($prophone) ?></a></div></div></div>
-          <?php endif; ?>
-          <?php if ($wa_num): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a8 8 0 01-11.9 7L4 20l1.6-4A8 8 0 1120 11.5z"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_wa', 'WhatsApp')) ?></div><div class="val"><a href="https://wa.me/<?= htmlspecialchars($wa_num) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($wa_disp) ?></a></div></div></div>
-          <?php endif; ?>
-          <?php if ($email): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_email', 'Email')) ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($email) ?>"><?= htmlspecialchars($email) ?></a></div></div></div>
-          <?php endif; ?>
-          <?php if ($proemail): ?>
-          <div class="cu-item"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
-            <div><div class="lbl"><?= $txt($cc('l_proemail', 'ProSupport Email')) ?></div><div class="val"><a href="mailto:<?= htmlspecialchars($proemail) ?>"><?= htmlspecialchars($proemail) ?></a></div></div></div>
-          <?php endif; ?>
+
+          <?php
+            // Both office headings are blue and link to Google Maps in a new tab.
+            $hq_url   = trim((string)$cc('hq_maps_url',  'https://www.google.com/maps?cid=4146779153142147700&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAMYASAF'));
+            $eec_url  = trim((string)$cc('eec_maps_url', 'https://maps.app.goo.gl/dyTdn9RLmyifqzcZ6'));
+            $hq_addr  = $cc('hq_addr',  "Komplek Perkantoran Agung Sedayu\nJalan Arteri Mangga Dua Raya Blok H No. 28-30\nJakarta Pusat 10730 – Indonesia");
+            $eec_addr = $cc('eec_addr', "Menara Jakarta – Fortune Tower 35th Floor\nJl. Kota Baru Bandar Kemayoran No. C-8,\nKemayoran, Jakarta Pusat 10610, Indonesia");
+          ?>
+          <div class="cu-item">
+            <span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <div class="cu-offwrap">
+              <a class="cu-offh" href="<?= htmlspecialchars($hq_url) ?>" target="_blank" rel="noopener"><?= $txt($cc('hq_label', 'Our Headquarter')) ?></a>
+              <address class="cu-offa"><?= nl2br($txt($hq_addr)) ?></address>
+              <a class="cu-offh" href="<?= htmlspecialchars($eec_url) ?>" target="_blank" rel="noopener"><?= $txt($cc('eec_label', 'Enterprise Experience Center (EEC)')) ?></a>
+              <address class="cu-offa"><?= nl2br($txt($eec_addr)) ?></address>
+            </div>
+          </div>
+
+          <?php
+            $mkt_phone = trim((string)$cc('mkt_phone', '+62 21-5028 1717'));
+            $mkt_email = trim((string)$cc('mkt_email', 'marketing@saptatunas.com'));
+            $mkt_wa    = trim((string)$cc('mkt_wa',    '+62 821-1000-1087'));
+            $mkt_wa_d  = preg_replace('/\D/', '', $mkt_wa);
+          ?>
+          <div class="cu-grp">
+            <div class="cu-glbl"><?= $txt($cc('mkt_label', 'Marketing Contact')) ?></div>
+            <?php if ($mkt_phone !== ''): ?>
+            <div class="cu-item cu-row"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L16 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span>
+              <div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$mkt_phone)) ?>"><?= $txt($mkt_phone) ?></a></div></div>
+            <?php endif; ?>
+            <?php if ($mkt_email !== ''): ?>
+            <div class="cu-item cu-row"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+              <div class="val"><a href="mailto:<?= htmlspecialchars($mkt_email) ?>"><?= $txt($mkt_email) ?></a></div></div>
+            <?php endif; ?>
+            <?php if ($mkt_wa !== ''): ?>
+            <div class="cu-item cu-row"><span class="cu-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a8 8 0 01-11.9 7L4 20l1.6-4A8 8 0 1120 11.5z"/></svg></span>
+              <div class="val"><a href="https://wa.me/<?= htmlspecialchars($mkt_wa_d) ?>" target="_blank" rel="noopener"><?= $txt($mkt_wa) ?></a></div></div>
+            <?php endif; ?>
+          </div>
+
+          <?php
+            $pro_phone = trim((string)$cc('pro_phone', '021-2410 1568'));
+            $pro_email = trim((string)$cc('pro_email', 'prosupport@saptatunas.com'));
+            $pro_hs = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0116 0v1"/><rect x="2.5" y="13" width="3.5" height="6" rx="1.5"/><rect x="18" y="13" width="3.5" height="6" rx="1.5"/></svg>';
+          ?>
+          <div class="cu-grp">
+            <div class="cu-glbl"><?= $txt($cc('pro_label', 'ProSupport 7×24 Hotline')) ?></div>
+            <?php if ($pro_phone !== ''): ?>
+            <div class="cu-item cu-row"><span class="cu-ic"><?= $pro_hs ?></span>
+              <div class="val"><a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/','',$pro_phone)) ?>"><?= $txt($pro_phone) ?></a></div></div>
+            <?php endif; ?>
+            <?php if ($pro_email !== ''): ?>
+            <div class="cu-item cu-row"><span class="cu-ic"><?= $pro_hs ?></span>
+              <div class="val"><a href="mailto:<?= htmlspecialchars($pro_email) ?>"><?= $txt($pro_email) ?></a></div></div>
+            <?php endif; ?>
+          </div>
+
           <?php if (!empty(array_filter($socials, fn($s) => trim((string)$s['url']) !== '' && trim((string)$s['url']) !== '#'))): ?>
           <div class="cu-social"><div class="lbl"><?= $txt($cc('social_title', 'Social Media')) ?></div>
             <div class="cu-social-row">
@@ -193,32 +226,11 @@ $maps_dir   = $address !== '' ? 'https://www.google.com/maps/dir/?api=1&destinat
       </div>
     </div>
 
-    <!-- Map finale -->
-    <section class="cu-mapsec"><div class="cu-wrap">
-      <div class="reveal"><div class="cu-k"><?= $txt($cc('map_kicker', 'Visit us')) ?></div>
-        <h2 class="cu-h"><?= $txt($cc('map_title', 'Come say')) ?> <span class="g"><?= $txt($cc('map_title2', 'hello')) ?></span></h2></div>
-      <div class="cu-mapcard reveal">
-        <?php $m = trim((string)$maps); if ($m !== ''): ?>
-          <div class="cu-map">
-            <?php if (stripos($m, '<iframe') !== false || str_starts_with($m, '<')): ?><?= $m ?>
-            <?php else: ?><iframe src="<?= htmlspecialchars($m) ?>" style="border:0;width:100%;height:100%" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="<?= htmlspecialchars($site_name) ?> — location"></iframe><?php endif; ?>
-          </div>
-        <?php else: ?>
-          <div class="cu-map cu-map-mock"><span class="road r1"></span><span class="road r2"></span><span class="road r3"></span><span class="water"></span>
-            <div class="pin"><div class="drop"></div><div class="pulse"></div></div>
-          </div>
-        <?php endif; ?>
-        <?php if ($address): ?>
-        <div class="cu-office">
-          <h4><?= htmlspecialchars($site_name) ?></h4>
-          <p><?= htmlspecialchars($address) ?></p>
-          <div class="cu-obtns">
-            <?php if ($maps_q): ?><a class="cu-ob cu-ob-p" href="<?= htmlspecialchars($maps_q) ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 1114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> <?= htmlspecialchars(t('open_in_maps', 'Open in Maps')) ?></a><?php endif; ?>
-            <?php if ($maps_dir): ?><a class="cu-ob cu-ob-g" href="<?= htmlspecialchars($maps_dir) ?>" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg> <?= htmlspecialchars(t('get_directions', 'Get directions')) ?></a><?php endif; ?>
-          </div>
-        </div>
-        <?php endif; ?>
-      </div>
+    <!-- Office photo (replaces the previous map embed) -->
+    <section class="cu-photosec"><div class="cu-wrap">
+      <figure class="cu-photo reveal">
+        <img src="<?= theme_asset('assets/img/contact-office.webp') ?>" alt="<?= htmlspecialchars($site_name) ?> — office" loading="lazy">
+      </figure>
     </div></section>
   </div>
 </main>
