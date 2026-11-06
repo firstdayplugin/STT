@@ -900,6 +900,18 @@ if (!function_exists('pt')) {
     }
 }
 
+if (!function_exists('nbhyph')) {
+    /**
+     * Keep hyphenated compounds (e.g. "E-Commerce") from splitting across lines:
+     * replace a hyphen that sits between two word characters with a NON-BREAKING
+     * hyphen (U+2011). Spaces, em dashes and standalone hyphens are left alone.
+     * Returns plain text (apply htmlspecialchars after, if escaping is needed).
+     */
+    function nbhyph($s): string {
+        return preg_replace('/(\w)-(\w)/u', "$1\u{2011}$2", (string)$s);
+    }
+}
+
 function get_content(string $page_key, string $block_key, string $default = ''): string {
     $lang = function_exists('current_lang') ? current_lang() : 'id';
     $def_lang = function_exists('default_lang') ? default_lang() : 'id';

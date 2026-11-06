@@ -72,8 +72,8 @@ $cap_svg = function (string $title) use ($IDC_ICONS) {
 $accent = function (string $raw): string {
     $raw = trim($raw);
     if ($raw === '') return '';
-    if (strpos($raw, '[') !== false) return preg_replace('/\[(.+?)\]/u', '<span class="g">$1</span>', htmlspecialchars($raw, ENT_QUOTES, 'UTF-8'));
-    $safe = htmlspecialchars($raw, ENT_QUOTES, 'UTF-8');
+    if (strpos($raw, '[') !== false) return preg_replace('/\[(.+?)\]/u', '<span class="g">$1</span>', nbhyph(htmlspecialchars($raw, ENT_QUOTES, 'UTF-8')));
+    $safe = nbhyph(htmlspecialchars($raw, ENT_QUOTES, 'UTF-8'));
     return preg_replace('/((?:\S+\s+)?\S+)(\s*)$/u', '<span class="g">$1</span>$2', $safe);
 };
 
