@@ -46,6 +46,32 @@
   (MQ.addEventListener ? MQ.addEventListener('change', start) : MQ.addListener(start));
   start();
 
+  // Open the matching panel when a hero constellation node (or a #hash deep-link)
+  // points at a solution. The panels are scroll-scrubbed, so a plain #id jump lands
+  // on the wrong one — map the id to its panel index and goTo() that scrub position.
+  function indexForId(id) {
+    if (!id) return -1;
+    for (var i = 0; i < panels.length; i++) { if (panels[i].id === id) return i; }
+    return -1;
+  }
+  [].slice.call(document.querySelectorAll('.scn-node[href^="#"]')).forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = (a.getAttribute('href') || '').slice(1);
+      var idx = indexForId(id);
+      if (idx < 0 || MQ.matches) return;            // mobile stack: let the native #jump work
+      e.preventDefault();
+      if (history.replaceState) { try { history.replaceState(null, '', '#' + id); } catch (er) {} }
+      goTo(idx);
+    });
+  });
+  function syncHash() {
+    if (MQ.matches) return;
+    var idx = indexForId((location.hash || '').slice(1));
+    if (idx >= 0) setTimeout(function () { goTo(idx); }, 70);
+  }
+  addEventListener('hashchange', syncHash);
+  syncHash();   // honour a deep-link on load
+
   // ambient dust
   var cv = document.getElementById('sdBg');
   if (cv && cv.getContext) {

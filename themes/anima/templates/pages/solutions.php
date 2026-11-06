@@ -60,8 +60,9 @@ foreach ($sections as $s) {
     if ($nm === '') continue;
     $slug = make_slug(strip_tags((string)($s['judul'] ?? '')));
     $sub  = trim(strip_tags(tr_field('solutions_section', $sid, 'solusi', $s['solusi'] ?? '')));
-    if (($cp = mb_strpos($sub, ',')) !== false) $sub = mb_substr($sub, 0, $cp);
-    if (mb_strlen($sub) > 40) $sub = rtrim(mb_substr($sub, 0, 38)) . '…';
+    // Clean sub-headline = the first clause (up to the first . , or newline), with NO
+    // mid-word truncation — the hero node shows it clamped and reveals it in full on hover.
+    if (preg_match('/^(.+?)\s*[.,\n]/u', $sub, $m)) $sub = trim($m[1]);
     $sol_nodes[] = ['nm' => $nm, 'sub' => $sub, 'slug' => $slug, 'ic' => $node_icon($nm)];
 }
 
@@ -193,6 +194,18 @@ if (strpos($hero_title_raw, '[') !== false) {
           'logos'      => $Q("SELECT gambar, nama FROM solution_logos WHERE solution_id=? AND is_active=1 ORDER BY urutan, id", [$sid]),
       ];
   }
+  // Per-solution "Contact Us" target inside the See More modal. Keyword-matched on the
+  // title so it keeps working after the "Modernize → Enterprise Infrastructure" rename.
+  $modal_cta = function (string $judul): array {
+      $n = mb_strtolower(strip_tags($judul));
+      if (strpos($n, 'cyber') !== false || strpos($n, 'security') !== false)
+          return ['url' => url('services/cybersecurity-services'), 'ext' => false];
+      if (preg_match('/\bai\b/u', $n) || strpos($n, 'intelligence') !== false || strpos($n, 'platform') !== false || strpos($n, 'application') !== false)
+          return ['url' => 'https://ai.saptatunas.com', 'ext' => true];
+      if (strpos($n, 'infra') !== false || strpos($n, 'modern') !== false)
+          return ['url' => url('services/infrastructure-services'), 'ext' => false];
+      return ['url' => url('contact-us'), 'ext' => false]; // Data Management + anything else
+  };
   ?>
 
   <?php if ($sections): $sol_n = count($sol_rows); ?>
@@ -257,7 +270,8 @@ if (strpos($hero_title_raw, '[') !== false) {
       </div>
       <div class="sol-modal-foot">
         <span class="sol-modal-note"><?= htmlspecialchars($c('modal_note', "Let's design the right solution for your business.")) ?></span>
-        <a class="sol-modal-cta" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+        <?php $mc = $modal_cta($r['judul']); ?>
+        <a class="sol-modal-cta" href="<?= htmlspecialchars($mc['url']) ?>"<?= $mc['ext'] ? ' target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars(t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
       </div>
     </div>
   </div>
