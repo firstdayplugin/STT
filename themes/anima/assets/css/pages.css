@@ -1852,9 +1852,9 @@ body.sol-modal-open{overflow:hidden}
 .svc-net{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 .svc-copy{position:relative;z-index:6;text-align:center;padding:0 4px;margin-bottom:clamp(26px,5vh,54px)}
 .svc-eye{font-size:12px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#6f93d8;margin-bottom:14px}
-.svc-title{font-size:clamp(24px,3vw,40px);font-weight:600;letter-spacing:-.03em;color:#fff;line-height:1.1;max-width:19ch;margin:0 auto}
+.svc-title{font-size:clamp(26px,3.3vw,46px);font-weight:600;letter-spacing:-.03em;color:#fff;line-height:1.12;max-width:30ch;margin:0 auto;text-wrap:balance}
 .svc-title .b{background:linear-gradient(120deg,#5aa0ff,#49d6c7);-webkit-background-clip:text;background-clip:text;color:transparent}
-.svc-stage{position:relative;z-index:3;width:min(540px,88vw,52vh);aspect-ratio:1/0.98;margin:0 auto;flex:none}
+.svc-stage{position:relative;z-index:3;width:min(760px,92vw,70vh);aspect-ratio:1/0.98;margin:0 auto;flex:none}
 .svc-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;text-align:center}
 .svc-hub .ring2{position:absolute;left:50%;top:50%;width:92px;height:92px;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(120,170,255,.35);animation:svcSpin 24s linear infinite}
 @keyframes svcSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}

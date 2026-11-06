@@ -83,6 +83,9 @@ $svc_headline = $svc_acc($T('headline') ?: ($p['judul'] ?? 'Services'));
   $caps = [];
   foreach ($pillars as $i => $pl)   $caps[] = ['row' => $pl, 'icon' => $pillar_icons[$i] ?? 'layers'];
   foreach ($supporting as $i => $s) $caps[] = ['row' => $s,  'icon' => $support_icons[$i] ?? 'box'];
+  // Client request: show only services 1 & 2 for now — HIDE 3, 4, 5 (data kept in
+  // the DB, just not rendered). To restore every capability, delete this one line.
+  $caps = array_slice($caps, 0, 2);
   $cap_n = count($caps);
   ?>
   <?php if ($caps): ?>
