@@ -71,21 +71,16 @@ $IND_FALLBACK = ['#2f7be0', [], '<path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 1
     </div>
   </section>
 
-  <!-- (News & Promotions spotlight removed per client request — the dark hero now
-       flows straight into the "Industries we power" intro, bridged by .ind2-lead::before.) -->
-
   <?php if ($rows): ?>
-  <!-- Intro — light band rising over the dark hero (keeps the dark/light/dark/light rhythm the promo gave). -->
-  <div class="ind2-intro">
-  <section class="ind2-lead reveal">
-    <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
-    <h2><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
-    <p><?= htmlspecialchars($c('rail_sub', 'One partner across every sector. Scroll through to see how we tailor technology to each.')) ?></p>
-  </section>
-  </div>
-
-  <!-- Horizontal pinned sector rail (vertical stack on mobile / reduced-motion) -->
+  <!-- One cohesive SECTORS section. The "Pick your sector" heading is the rail's own
+       lead-in (normal flow): the dark hero flows straight into it, then the deck pins
+       and the cards scrub beneath. No white band, no floating second heading. -->
   <div class="ind2-rail" id="ind2Rail" data-count="<?= (int)$n ?>">
+    <section class="ind2-lead reveal" id="ind2Lead">
+      <div class="k"><?= htmlspecialchars($c('rail_kicker', 'Industries we power')) ?></div>
+      <h2><?= htmlspecialchars($c('rail_title', 'Pick your')) ?> <span class="g"><?= htmlspecialchars($c('rail_title2', 'sector')) ?></span> <?= htmlspecialchars($c('rail_title3', '— scroll to explore')) ?></h2>
+      <p><?= htmlspecialchars($c('rail_sub', 'One partner across every sector. Scroll through to see how we tailor technology to each.')) ?></p>
+    </section>
     <div class="ind2-pin" id="ind2Pin">
       <canvas class="ind2-railnet" id="ind2RailNet" aria-hidden="true"></canvas>
       <div class="ind2-rail-head">
