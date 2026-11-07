@@ -216,12 +216,21 @@ include theme_path('templates/layouts/header.php');
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <div class="sh-logos" id="shLogos"></div>
         </div>
+        <?php $sh_n = is_array($slides_json ?? null) ? count($slides_json) : 0; ?>
         <div class="sh-stage">
           <div class="sh-deck" id="shDeck">
             <div class="sh-panel sh-glass" id="shB"><div class="sh-face"><div class="sh-art" id="shArtB"></div></div></div>
             <div class="sh-panel sh-media" id="shM"><div class="sh-face"><div class="sh-mediawrap" id="shMedia"></div><div class="sh-art" id="shArtM"></div><span class="sh-chip" id="shChip"><i></i><b></b></span></div></div>
             <div class="sh-panel sh-glass" id="shF"><div class="sh-face"><div class="sh-art" id="shArtF"></div></div></div>
           </div>
+          <?php if ($sh_n > 1): ?>
+          <!-- Minimal prev/next — only shown once the deck has docked (solhero.js). -->
+          <div class="sh-nav" id="shNav" aria-hidden="true">
+            <button type="button" class="sh-nav-prev" aria-label="Previous solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <span class="sh-nav-count"><b id="shNavNum">01</b> / <?= str_pad((string)$sh_n, 2, '0', STR_PAD_LEFT) ?></span>
+            <button type="button" class="sh-nav-next" aria-label="Next solution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+          <?php endif; ?>
         </div>
         <div class="sh-over" id="shOver">
           <div class="sh-eye" id="shOverEye"></div>

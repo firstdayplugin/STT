@@ -1800,8 +1800,19 @@ html,body{top:0!important;position:static!important}
 .sh-logos img:hover{opacity:1}
 
 /* STAGE kanan — 3 panel kaca */
-.sh-stage{grid-column:2;perspective:1200px;perspective-origin:50% 48%;display:flex;align-items:center;justify-content:center;height:100%}
+.sh-stage{grid-column:2;position:relative;perspective:1200px;perspective-origin:50% 48%;display:flex;align-items:center;justify-content:center;height:100%}
 .sh-deck{position:relative;width:min(33vw,460px);height:min(42vh,300px);transform-style:preserve-3d;will-change:transform;transform-origin:center center}
+/* Minimal prev/next under the docked deck — faded until it docks, subtle until hovered. */
+.sh-nav{position:absolute;left:50%;bottom:clamp(4px,3vh,30px);transform:translateX(-50%);z-index:25;
+  display:inline-flex;align-items:center;gap:16px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.sh-nav.show{opacity:.5;pointer-events:auto}
+.sh-nav.show:hover{opacity:1}
+.sh-nav button{background:none;border:0;padding:0;margin:0;width:18px;height:18px;display:grid;place-items:center;color:#cfe0ff;cursor:pointer;-webkit-appearance:none;appearance:none;transition:transform .2s}
+.sh-nav button:hover{transform:scale(1.2)}
+.sh-nav button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4}
+.sh-nav-count{font-size:12px;font-weight:600;letter-spacing:.08em;color:#bcd0ee;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sh-nav-count b{color:#eaf1ff}
+@media(max-width:860px){.sh-nav{display:none}}
 .sh-panel{position:absolute;inset:0;border-radius:15px;transform-style:preserve-3d}
 .sh-face{position:absolute;inset:0;border-radius:15px;overflow:hidden}
 .sh-glass .sh-face{background:rgba(130,160,210,.07);border:1.3px solid rgba(200,220,252,.72);box-shadow:0 30px 60px -40px rgba(10,20,45,.4)}

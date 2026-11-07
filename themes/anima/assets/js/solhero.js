@@ -52,8 +52,21 @@
     setTimeout(function(){ setCopy(i); buildLogos(i); shLogos.style.opacity='1'; }, 260);
   }
   setSlide(0,true);
-  var cur=0;
-  setInterval(function(){ cur=(cur+1)%slides.length; setSlide(cur,false); }, 4600);
+  var cur=0, N=slides.length;
+
+  /* ---------- minimal prev/next nav (shown only when docked; see frame) ---------- */
+  var shNav=document.getElementById('shNav'), shNavNum=document.getElementById('shNavNum');
+  function pad2(n){ return (n<10?'0':'')+n; }
+  function updateCount(){ if(shNavNum) shNavNum.textContent=pad2(cur+1); }
+  updateCount();
+  function tick(){ cur=(cur+1)%N; setSlide(cur,false); updateCount(); }
+  var auto=setInterval(tick,4600);
+  function go(dir){ clearInterval(auto); cur=(cur+dir+N)%N; setSlide(cur,false); updateCount(); auto=setInterval(tick,4600); }
+  if(shNav){
+    var _pv=shNav.querySelector('.sh-nav-prev'), _nx=shNav.querySelector('.sh-nav-next');
+    if(_pv) _pv.addEventListener('click',function(){ go(-1); });
+    if(_nx) _nx.addEventListener('click',function(){ go(1); });
+  }
 
   /* ---------- line-art: kontur melengkung + blob + garis titik + bendera ---------- */
   function contY(x,y,i,t){return y+30*Math.sin(x*0.0105+t*0.55+i*1.3)+15*Math.sin(x*0.0229+t*0.9+i*2.1)+7*Math.sin(x*0.049+t*1.35+i*0.7);}
@@ -108,6 +121,7 @@
     pB.style.transform='translate3d('+(74*e)+'px,'+(-24*e)+'px,'+(-72*e)+'px)';
     shOver.style.opacity=cl(1-(p-0.04)/0.26,0,1).toFixed(2);
     shCopy.style.opacity=cl((p-0.5)/0.28,0,1).toFixed(2);
+    if(shNav) shNav.classList.toggle('show', p>0.9);   // reveal nav only once docked
     var dp=cl((p-0.42)/0.5,0,1);
     artB.style.opacity=artM.style.opacity=artF.style.opacity=cl(dp*1.2,0,1).toFixed(2);
     var T=(ts||0)/1000; updateLayer(LM,T); updateLayer(LF,T+1.3); updateLayer(LB,T+2.6);
