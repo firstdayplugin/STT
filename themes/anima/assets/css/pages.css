@@ -1186,8 +1186,11 @@ body.sol-modal-open{overflow:hidden}
 .abh{position:relative;width:100%;min-height:clamp(600px,92vh,960px);overflow:hidden;
   background:radial-gradient(130% 90% at 50% -10%,#f3f7fe 0%,#ffffff 42%,#ffffff 100%)}
 .abh-links{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.abh-links path{fill:none;stroke:#c7cdd8;stroke-width:1}
-.abh-links path.flow{stroke:#9fb6da;stroke-width:1.3;stroke-linecap:round}
+.abh-links path{fill:none;stroke:#bccbe6;stroke-width:1.1}
+/* Connector pulse — "dipertegas": a bright blue→teal energy streak with a soft
+   glow halo riding each line (gradient + glow filter are injected in abouthero.js). */
+.abh-links path.flowGlow{stroke:#5ab6ef;stroke-width:7;stroke-linecap:round;opacity:.5;filter:url(#abhGlow)}
+.abh-links path.flow{stroke:url(#abhFlowGrad);stroke-width:2.7;stroke-linecap:round}
 .abh-copy{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:5;
   width:min(500px,37vw);text-align:center;pointer-events:none}
 .abh-copy h1{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:clamp(27px,3.0vw,44px);
@@ -1232,7 +1235,8 @@ body.sol-modal-open{overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){
   .abh-k svg{animation:none}
-  .abh-links path.flow{animation:none!important}
+  .abh-links path.flow,.abh-links path.flowGlow{animation:none!important}
+  .abh-links path.flowGlow{display:none}
 }
 
 /* ============================================================================

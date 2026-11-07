@@ -12,6 +12,31 @@
   var svg  = document.getElementById('abhLinks');
   if (!hero || !svg) return;
 
+  // Inject the connector-pulse gradient (blue→teal) + a glow filter, so the energy
+  // streak reads clearly on the light hero instead of a faint grey tick.
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  (function injectDefs() {
+    if (svg.querySelector('#abhFlowGrad')) return;
+    var defs = document.createElementNS(SVGNS, 'defs');
+    var grad = document.createElementNS(SVGNS, 'linearGradient');
+    grad.setAttribute('id', 'abhFlowGrad');
+    grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0'); grad.setAttribute('x2', '1'); grad.setAttribute('y2', '0');
+    [['0', '#2f7be0'], ['0.5', '#36a7e6'], ['1', '#49d6c7']].forEach(function (s) {
+      var st = document.createElementNS(SVGNS, 'stop');
+      st.setAttribute('offset', s[0]); st.setAttribute('stop-color', s[1]);
+      grad.appendChild(st);
+    });
+    defs.appendChild(grad);
+    var filt = document.createElementNS(SVGNS, 'filter');
+    filt.setAttribute('id', 'abhGlow');
+    filt.setAttribute('x', '-60%'); filt.setAttribute('y', '-60%'); filt.setAttribute('width', '220%'); filt.setAttribute('height', '220%');
+    var blur = document.createElementNS(SVGNS, 'feGaussianBlur');
+    blur.setAttribute('stdDeviation', '2.6');
+    filt.appendChild(blur);
+    defs.appendChild(filt);
+    svg.appendChild(defs);
+  })();
+
   // Ring: connect each card to the next in DOM order and close the loop, so the
   // lines trace the perimeter around the centre copy (markup orders them that way).
   var keys = [].slice.call(document.querySelectorAll('.abh-box')).map(function (b) { return b.getAttribute('data-k'); });
@@ -40,13 +65,19 @@
   // create persistent path elements (so the CSS flow animation never resets)
   var paths = [];
   EDGES.forEach(function (e, i) {
-    var base = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    var flow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    var base = document.createElementNS(SVGNS, 'path');
+    var glow = document.createElementNS(SVGNS, 'path');
+    var flow = document.createElementNS(SVGNS, 'path');
+    var dur = (3.2 + i * 0.2) + 's';
+    // A brighter, longer streak (30px) + a blurred halo travelling in lock-step.
+    glow.setAttribute('class', 'flowGlow');
+    glow.setAttribute('stroke-dasharray', '30 230');
+    glow.style.animation = 'abhDash ' + dur + ' linear infinite';
     flow.setAttribute('class', 'flow');
-    flow.setAttribute('stroke-dasharray', '6 260');
-    flow.style.animation = 'abhDash ' + (3.8 + i * 0.22) + 's linear infinite';
-    svg.appendChild(base); svg.appendChild(flow);
-    paths.push({ base: base, flow: flow, e: e });
+    flow.setAttribute('stroke-dasharray', '30 230');
+    flow.style.animation = 'abhDash ' + dur + ' linear infinite';
+    svg.appendChild(base); svg.appendChild(glow); svg.appendChild(flow);
+    paths.push({ base: base, glow: glow, flow: flow, e: e });
   });
 
   // cursor position, normalised to [-1,1] from hero centre
@@ -93,7 +124,7 @@
       var off = Math.min(58, len * 0.12) * (i % 2 ? 1 : -1);
       var cx = mx + (-ddy / len) * off, cy = my + (ddx / len) * off;
       var ds = 'M ' + p1.x.toFixed(1) + ' ' + p1.y.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + p2.x.toFixed(1) + ' ' + p2.y.toFixed(1);
-      P.base.setAttribute('d', ds); P.flow.setAttribute('d', ds);
+      P.base.setAttribute('d', ds); P.glow.setAttribute('d', ds); P.flow.setAttribute('d', ds);
     });
     requestAnimationFrame(frame);
   }
