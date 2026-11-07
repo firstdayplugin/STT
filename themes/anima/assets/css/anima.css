@@ -822,7 +822,7 @@ width:210px;height:auto;max-height:70px;object-fit:contain;
 /* ISO / accreditation badges under the social icons — single row, small, flush */
 .tel-footer-certs{display:flex;align-items:center;gap:6px;margin-top:20px}
 .tel-cert{display:inline-flex;background:#fff;line-height:0}
-.tel-cert img{height:24px;width:auto;display:block}
+.tel-cert img{height:31px;width:auto;display:block}
 @media(max-width:860px){
   .tel-footer-certs{gap:5px}
   .tel-cert img{height:20px}
@@ -1813,7 +1813,7 @@ html,body{top:0!important;position:static!important}
 /* Minimal prev/next under the docked deck — faded until it docks, subtle until hovered. */
 /* Sit the nav just under the DOCKED deck (deck is vertically centred in the stage,
    docked shifts it ~60px left): centre + half the deck height + a small gap. */
-.sh-nav{position:absolute;left:calc(50% - 34px);top:calc(50% + min(21vh,150px) + 26px);transform:translateX(-50%);z-index:25;
+.sh-nav{position:absolute;left:calc(50% - 34px);top:calc(50% + min(21vh,150px) + 56px);transform:translateX(-50%);z-index:25;
   display:inline-flex;align-items:center;gap:16px;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .sh-nav.show{opacity:.5;pointer-events:auto}
 .sh-nav.show:hover{opacity:1}
