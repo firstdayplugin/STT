@@ -55,6 +55,21 @@
               <a href="<?= htmlspecialchars($u) ?>" target="_blank" rel="noopener" aria-label="<?= ucfirst($net) ?>"><svg viewBox="0 0 24 24"><?= $__soc_svg[$net] ?></svg></a>
             <?php endforeach; ?>
           </div>
+          <?php
+            // ISO / accreditation certifications (shown below the social icons).
+            $__certs = [
+              ['iso-9001.png',  'ISO 9001'],
+              ['iso-14001.png', 'ISO 14001'],
+              ['iso-45001.png', 'ISO 45001'],
+              ['iso-27001.png', 'ISO/IEC 27001'],
+              ['iso-37001.png', 'ISO 37001'],
+            ];
+          ?>
+          <div class="tel-footer-certs" aria-label="<?= htmlspecialchars(t('certifications', 'Certifications')) ?>">
+            <?php foreach ($__certs as $c): ?>
+              <span class="tel-cert"><img src="<?= theme_asset('assets/img/cert/'.$c[0]) ?>" alt="<?= htmlspecialchars($c[1]) ?>" loading="lazy" decoding="async"></span>
+            <?php endforeach; ?>
+          </div>
         </div>
 
         <nav class="tel-footer-links" aria-label="Footer navigation">
