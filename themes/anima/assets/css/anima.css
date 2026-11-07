@@ -1550,8 +1550,8 @@ html,body{top:0!important;position:static!important}
 
 .wsa-cap{position:absolute;left:22px;right:22px;bottom:22px;z-index:2}
 .wsa-t{margin:0;font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;
-  font-size:clamp(18px,1.45vw,23px);line-height:1.22;letter-spacing:-.012em;color:#fff}
-.wsa-s{margin:9px 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.82);max-width:38ch;
+  font-size:clamp(20px,1.6vw,25px);line-height:1.22;letter-spacing:-.012em;color:#fff}
+.wsa-s{margin:10px 0 0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.82);max-width:38ch;
   opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s ease}
 .wsa-card.is-active .wsa-s{opacity:1;transform:none}
 
