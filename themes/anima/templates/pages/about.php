@@ -202,7 +202,7 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
           <div class="mj-yr" style="left:<?= $mile_n > 1 ? (($i / ($mile_n - 1)) * 100) : 0 ?>%"><b></b><?= htmlspecialchars($m[0]) ?></div>
         <?php endforeach; ?>
       </div>
-      <div class="mj-hint" aria-hidden="true">scroll to travel through the years &rarr;</div>
+      <div class="mj-hint" aria-hidden="true">hover a photo to travel through the years &rarr;</div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/aboutmile.js') ?>" defer></script>

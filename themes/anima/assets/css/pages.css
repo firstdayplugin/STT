@@ -1386,8 +1386,11 @@ body.sol-modal-open{overflow:hidden}
    fills. Full-width band between Vision/Mission and Our Value. Static vertical
    stack on mobile.
    ========================================================================== */
-.mj-wrap{position:relative;z-index:1;height:1040vh}
-.mj-pin{position:sticky;top:0;height:100vh;overflow:hidden;
+/* Option B: the milestone no longer consumes ~10 screens of scroll. The section is
+   ~one screen tall, so vertical scroll flows straight down; the years are travelled
+   sideways only when the cursor hovers a photo (auto-pan + zoom, in aboutmile.js). */
+.mj-wrap{position:relative;z-index:1;height:auto}
+.mj-pin{position:relative;height:clamp(600px,94vh,940px);overflow:hidden;
   background:radial-gradient(120% 90% at 50% -10%,#f4f8ff 0%,#fff 46%,#fff 100%)}
 .mj-head{position:absolute;left:0;right:0;top:11%;text-align:center;z-index:5;padding:0 24px}
 .mj-eyebrow{font-size:12px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#5a86c9;margin-bottom:10px}
@@ -1413,8 +1416,11 @@ body.sol-modal-open{overflow:hidden}
 .mj-list li{position:relative;list-style:none;padding-left:22px;font-size:clamp(13.5px,1.02vw,16px);line-height:1.4;color:#2a3342;font-weight:500}
 .mj-list li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#2f7be0,#37c9bd)}
 .mj-single{margin-top:20px;font-size:clamp(15px,1.2vw,18px);line-height:1.5;color:#2a3342;font-weight:500;max-width:420px}
-.mj-media{position:relative;height:min(46vh,368px);border-radius:22px;overflow:hidden;
+.mj-media{position:relative;height:min(46vh,368px);border-radius:22px;overflow:hidden;cursor:pointer;
+  transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s;
   box-shadow:0 40px 80px -36px rgba(20,50,110,.4),0 2px 8px rgba(20,50,110,.08)}
+/* Hover a centred photo → it zooms a touch while the timeline auto-pans sideways. */
+.mj-slide.zoom .mj-media{transform:scale(1.045);box-shadow:0 56px 104px -38px rgba(20,50,110,.5),0 4px 12px rgba(20,50,110,.12)}
 .mj-media img{position:absolute;inset:-6% -12%;width:124%;height:112%;object-fit:cover;will-change:transform}
 .mj-media::after{content:"";position:absolute;inset:0;border-radius:22px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
 .mj-rail{position:absolute;left:clamp(24px,6vw,96px);right:clamp(24px,6vw,96px);bottom:9%;height:60px;z-index:6}
