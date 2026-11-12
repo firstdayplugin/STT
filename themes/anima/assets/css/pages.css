@@ -1532,6 +1532,12 @@ body.sol-modal-open{overflow:hidden}
 .qs-meta .t{font-size:clamp(15px,1.3vw,18px);font-weight:700;letter-spacing:-.01em;color:#fff}
 .qs-meta .s{margin-top:5px;font-size:12.5px;letter-spacing:.04em;color:#8ea4cf}
 .qs-foot{position:relative;z-index:2;text-align:center;margin-top:62px;color:#7c91bb;font-size:13px;letter-spacing:.03em}
+/* 4+ standards in one row (client: 5 ISO seals) — wider rail, tighter gap/padding/label */
+.qs-rail-wrap.many{max-width:1240px}
+.many .qs-grid{gap:clamp(14px,1.7vw,26px)}
+.many .qs-frame{padding:18px 20px}
+.many .qs-meta{margin-top:16px}
+.many .qs-meta .t{font-size:clamp(12.5px,1.08vw,16px)}
 
 /* =====================================================================
    About Us — List of Certification "Brand Credential Wall" (light, pinned,
@@ -1596,6 +1602,11 @@ body.sol-modal-open{overflow:hidden}
   .qs-rail,.qs-node{display:none}
   .qs-card{opacity:1!important;transform:none!important}
   .qs-frame{aspect-ratio:16/8.6}
+  .many .qs-grid{grid-template-columns:1fr 1fr;gap:14px;max-width:560px}
+  .many .qs-frame{padding:14px 14px}
+  .many .qs-meta{margin-top:12px}
+  .many .qs-meta .t{font-size:13.5px}
+  .many .qs-grid .qs-card:last-child:nth-child(odd){grid-column:1/-1;width:calc(50% - 7px);margin:0 auto}
   /* Certification → static per-category grid */
   .cw-wrap{height:auto!important;background:#f7faff;border-radius:26px 26px 0 0}
   .cw-pin{position:static;height:auto;display:block}

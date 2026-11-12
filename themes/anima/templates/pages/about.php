@@ -278,9 +278,9 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
       <h2><?= ac('about', 'quality_title', true) ?></h2>
       <p><?= ac('about', 'quality_intro') ?></p>
     </div>
-    <div class="qs-rail-wrap">
+    <div class="qs-rail-wrap<?= $qn > 3 ? ' many' : '' ?>">
       <div class="qs-rail" aria-hidden="true"><i id="qsFill"></i></div>
-      <div class="qs-grid" id="qsGrid" style="--n:<?= min(3, max(1, $qn)) ?>">
+      <div class="qs-grid" id="qsGrid" style="--n:<?= min(5, max(1, $qn)) ?>">
         <?php foreach ($quality as $q): $qi = $aimgu($q);
           $q_ttl = trim((string)$atr($q, 'judul'));
           $q_sub = trim((string)$atr($q, 'teks'));

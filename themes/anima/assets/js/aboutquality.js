@@ -24,8 +24,10 @@
     var r = sec.getBoundingClientRect(), vh = innerHeight;
     var prog = clamp((vh * 0.85 - r.top) / (vh * 0.5), 0, 1);
     if (fill) fill.style.width = (prog * 100) + '%';
+    // stagger step shrinks with more cards so the LAST one still reaches full opacity at prog=1
+    var step = cards.length > 1 ? Math.min(0.16, 0.6 / (cards.length - 1)) : 0;
     cards.forEach(function (c, i) {
-      var local = clamp((prog - i * 0.16) / 0.4, 0, 1);
+      var local = clamp((prog - i * step) / 0.4, 0, 1);
       c.style.opacity = local.toFixed(3);
       c.style.transform = 'translateY(' + ((1 - local) * 40).toFixed(1) + 'px)';
       if (local > 0.02 && nodes[i]) nodes[i].style.opacity = '1';
