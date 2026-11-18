@@ -1569,7 +1569,7 @@ body.sol-modal-open{overflow:hidden}
 .cw-nav li.past::before{background:#8fb6ef}
 .cw-wall{position:relative;height:100%}
 .cw-layer{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
-  grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1vw,18px) clamp(10px,1vw,18px);opacity:0;pointer-events:none}
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.2vw,22px) clamp(12px,1.1vw,20px);opacity:0;pointer-events:none}
 .cw-layer.on{opacity:1;pointer-events:auto}
 .cw-layer.few{grid-template-columns:repeat(3,minmax(0,150px));justify-content:center}
 @media(min-width:861px) and (max-width:1120px){.cw-body{grid-template-columns:220px 1fr;gap:20px;padding:3vh 24px 4vh}}

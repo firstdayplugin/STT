@@ -26,6 +26,7 @@
   var clamp = function (v, a, b) { return v < a ? a : (v > b ? b : v); };
   var N = slides.length;
   var p = 0, target = 0, hovering = false, running = false;
+  var dir = 1, armed = true;   // dir: +1 toward oldest (2015), -1 back toward newest; a fresh hover flips it at each end
   var SPEED = 1 / Math.max(1, (N - 1)) / 90;   // ~ full sweep in a few seconds, scales with year count
 
   function render() {
@@ -52,7 +53,11 @@
 
   function loop() {
     if (MQ.matches) { running = false; return; }
-    if (hovering && target < 1) target = Math.min(1, target + SPEED);   // auto-pan toward the end
+    if (hovering && armed) {                          // auto-pan in the current direction
+      target = clamp(target + dir * SPEED, 0, 1);
+      if (target >= 1) { target = 1; dir = -1; armed = false; }       // hit 2015 → the next hover travels back
+      else if (target <= 0) { target = 0; dir = 1; armed = false; }   // hit the newest → next hover travels forward
+    }
     p += (target - p) * 0.09;
     if (Math.abs(target - p) < 0.0004) p = target;
     render();
@@ -63,14 +68,19 @@
   // Hover is "active" only while the pointer is over a photo (.mj-media) — so the
   // non-photo area leaves vertical scrolling untouched, exactly as asked.
   stage.addEventListener('mousemove', function (e) {
-    hovering = !!(e.target.closest && e.target.closest('.mj-media'));
+    var h = !!(e.target.closest && e.target.closest('.mj-media'));
+    if (!h) armed = true;   // leaving a photo re-arms the next sweep, so "hover again" reverses once at an end
+    hovering = h;
   });
-  stage.addEventListener('mouseleave', function () { hovering = false; });
+  stage.addEventListener('mouseleave', function () { hovering = false; armed = true; });
 
   // Click a year on the rail to jump straight to it.
   yrs.forEach(function (y, i) {
     y.style.cursor = 'pointer';
-    y.addEventListener('click', function () { target = clamp(i / (N - 1 || 1), 0, 1); });
+    y.addEventListener('click', function () {
+      target = clamp(i / (N - 1 || 1), 0, 1); armed = true;
+      if (target >= 1) dir = -1; else if (target <= 0) dir = 1;   // keep direction sane after a jump to an end
+    });
   });
 
   (MQ.addEventListener ? MQ.addEventListener('change', start) : MQ.addListener(start));
