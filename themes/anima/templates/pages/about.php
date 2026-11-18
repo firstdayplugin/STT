@@ -238,7 +238,7 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
        and the org + title read below. Motion in aboutawards.js; static grid on
        mobile. CMS: about_items 'award' (tahun / teks=org / judul / gambar). -->
   <?php if ($awards): $awn = count($awards); ?>
-  <section class="aw-wrap" id="awWrap" aria-label="Awards" style="height:<?= max(480, ($awn + 1) * 86) ?>vh">
+  <section class="aw-wrap" id="awWrap" aria-label="Awards">
     <div class="aw-pin">
       <div class="aw-glow" aria-hidden="true"></div>
       <div class="aw-head">
@@ -261,6 +261,7 @@ $abhero = aimg('about', 'hero_img', uploads_url('design3/towers-up.jpg'));
         <?php endforeach; ?>
       </div>
       <div class="aw-info" id="awInfo"><div class="org"></div><div class="ttl"></div></div>
+      <div class="aw-hint" aria-hidden="true">hover an award to travel through the years &rarr;</div>
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/aboutawards.js') ?>" defer></script>
