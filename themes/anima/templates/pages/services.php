@@ -48,7 +48,7 @@ $ring_icons = [
   '<path d="M3 3v18h18"/><path d="M7 15l3-3 3 3 5-6"/>',
   '<path d="M4 20l5-5 3 3 8-8"/><path d="M15 10h5v5"/>',
 ];
-$ring_pos = [[50,3],[93,29],[93,71],[50,97],[7,71],[7,29]];
+$ring_pos = [[50,3],[91,27],[91,73],[50,97],[9,73],[9,27]]; // hexagon on a 47% circle (dot syncs to these)
 $ring_caps = [ // keyed by node label → [blurb, link text, link href]
   'Assess'   => [$gc('cap_assess', 'We map your environment, risks, and goals before recommending anything.'), '→ Infrastructure · Cybersecurity', url('services/infrastructure-services')],
   'Design'   => [$gc('cap_design', 'We architect the right solution for your workloads and constraints.'), '→ Infrastructure Services', url('services/infrastructure-services')],
@@ -92,7 +92,8 @@ include theme_path('templates/layouts/header.php');
       </div>
       <div class="svl-right" aria-hidden="true">
         <div class="svl-stage">
-          <div class="svl-orings"><span class="r r1"><i class="d"></i></span><span class="r r2"><i class="d"></i></span><span class="r r3"></span></div>
+          <div class="svl-orings"><span class="r r1"></span><span class="r r2"></span><span class="r r3"></span></div>
+          <div class="svl-adot"><i></i></div>
           <div class="svl-hub"><b>END&ndash;TO&ndash;END</b><span class="lc"><?= htmlspecialchars($gc('hero_core_label', 'Lifecycle')) ?></span><span class="sub"><?= htmlspecialchars($gc('hero_core_sub', '10+ years · 200+ clients')) ?></span></div>
           <?php foreach ($lifecycle as $i => $lab): if ($i > 5) break; [$lx,$ty] = $ring_pos[$i]; ?>
             <div class="svl-node" style="--i:<?= $i ?>;left:<?= $lx ?>%;top:<?= $ty ?>%"><div class="ic"><svg viewBox="0 0 24 24"><?= $ring_icons[$i % count($ring_icons)] ?></svg></div><div class="n"><?= htmlspecialchars($lab) ?></div></div>
@@ -135,6 +136,21 @@ include theme_path('templates/layouts/header.php');
   // Show only services 1 & 2 for now (data kept in DB). Delete this line to restore all.
   $caps = array_slice($caps, 0, 2);
   $cap_n = count($caps);
+  // Per-panel extras (bullets + "How we deliver" card) — mockup copy, CMS-overridable.
+  $deck_extra = [
+    0 => [
+      'checks' => [$gc('d1_c1',"Capacity sized for today's workloads and tomorrow's growth, including AI"), $gc('d1_c2','Seamless infrastructure deployment, integration, migration, and relocation — with minimal business disruption'), $gc('d1_c3','Proactive 24/7 infrastructure management to ensure reliability, performance, and business continuity')],
+      'how_ic' => '<path d="M3 3v18h18"/><path d="M7 15l3-3 3 3 5-6"/>',
+      'how' => [[$gc('d1_h1t','Consulting'),$gc('d1_h1d','Know exactly where you stand, and the shortest path to where you need to be.')],[$gc('d1_h2t','Deployment'),$gc('d1_h2d','Go live with infrastructure that is integrated, documented, and tested.')],[$gc('d1_h3t','Managed Infrastructure'),$gc('d1_h3d','24×7 helpdesk and a maximum 1-hour response, backed by your SLA.')]],
+      'mini' => [],
+    ],
+    1 => [
+      'checks' => [$gc('d2_c1','Identify and prioritize security risks based on business impact.'), $gc('d2_c2','Strengthen compliance readiness for OJK, BI, UU PDP, and ISO 27001.'), $gc('d2_c3','Rapid security response with SLA targets as short as 15 minutes.')],
+      'how_ic' => '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+      'how' => [[$gc('d2_h1t','Assess'),$gc('d2_h1d','Uncover vulnerabilities, assess exposure, and prioritize risks before they impact your business.')],[$gc('d2_h2t','Govern'),$gc('d2_h2d','Strengthen security governance and compliance with practical, audit-ready controls.')],[$gc('d2_h3t','Protect'),$gc('d2_h3d','Protect your business with 24/7 SOC monitoring, proactive threat detection, and rapid incident response.')]],
+      'mini' => [[$gc('d2_m1t','VAPT'),$gc('d2_m1d','Security Assessment & Penetration Testing')],[$gc('d2_m2t','Compliance'),$gc('d2_m2d','Regulatory Compliance Consulting & Audit Readiness')],[$gc('d2_m3t','SOC'),$gc('d2_m3d','SOC as a Service with Managed Threat Detection & Response')]],
+    ],
+  ];
   ?>
   <?php if ($caps): ?>
   <section class="sd-wrap svc-deck" id="sdWrap" aria-label="<?= htmlspecialchars(t('supporting_capability', 'What we deliver')) ?>" style="height:<?= max(320, $cap_n * 112) ?>vh">
@@ -157,12 +173,20 @@ include theme_path('templates/layouts/header.php');
               <?php if (!empty($cr['badge'])): ?><span class="sd-badge"><?= htmlspecialchars($cr['badge']) ?></span><?php endif; ?>
               <h2 class="sd-title notranslate" translate="no"><?= $svc_acc($TP($c['row'], 'judul')) ?></h2>
               <?php if (trim((string)$TP($c['row'], 'deskripsi')) !== ''): ?><p class="sd-desc"><?= pt($TP($c['row'], 'deskripsi')) ?></p><?php endif; ?>
+              <?php $dx = $deck_extra[$i] ?? null; if ($dx && array_filter($dx['checks'])): ?>
+              <ul class="sd-checks"><?php foreach ($dx['checks'] as $ck): if (trim((string)$ck) === '') continue; ?><li><?= $check ?><span><?= htmlspecialchars($ck) ?></span></li><?php endforeach; ?></ul>
+              <?php endif; ?>
               <?php if ($tags): ?><div class="sd-chips" translate="no"><?php foreach ($tags as $tg): ?><span><?= htmlspecialchars($tg) ?></span><?php endforeach; ?></div><?php endif; ?>
               <?php if ($has): ?><a class="sd-cta" href="<?= htmlspecialchars(url($cr['link_slug'])) ?>"><?= htmlspecialchars(t('learn_more', 'Learn more')) ?> <?= $arrow ?></a><?php endif; ?>
             </div>
-            <div class="sd-media sd-emblem" aria-hidden="true">
-              <span class="glow"></span><span class="ring r1"></span><span class="ring r2"></span>
-              <span class="ic"><?= icon($c['icon'], 60) ?></span>
+            <div class="sd-media sd-how">
+              <?php if ($dx): ?>
+              <div class="cap"><?= htmlspecialchars(t('how_we_deliver','How we deliver')) ?> <span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><?= $dx['how_ic'] ?></svg></span></div>
+              <?php foreach ($dx['how'] as $k => $row): ?>
+                <div class="sd-howrow"><span class="n"><?= $k + 1 ?></span><div><b><?= htmlspecialchars($row[0]) ?></b><p><?= htmlspecialchars($row[1]) ?></p></div></div>
+              <?php endforeach; ?>
+              <?php if (!empty($dx['mini'])): ?><div class="sd-mini"><?php foreach ($dx['mini'] as $m): ?><div><b><?= htmlspecialchars($m[0]) ?></b><span><?= htmlspecialchars($m[1]) ?></span></div><?php endforeach; ?></div><?php endif; ?>
+              <?php endif; ?>
             </div>
           </div>
         <?php endforeach; ?>
@@ -173,7 +197,7 @@ include theme_path('templates/layouts/header.php');
   <?php endif; ?>
 
   <!-- TWO AREAS (animated connectors) + BUNDLE -->
-  <section class="sx-band">
+  <section class="sx-band sx-outro">
     <div class="sx-wrap">
       <div class="sx-two">
         <div class="sx-eye"><?= htmlspecialchars(t('better_together','Better together')) ?></div>
@@ -182,7 +206,7 @@ include theme_path('templates/layouts/header.php');
         <div class="sx-diagram">
           <span class="sx-conn l"><i class="d"></i></span><span class="sx-conn r"><i class="d"></i></span>
           <div class="sx-acard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4"/></svg></div><h4><?= htmlspecialchars($gc('two_a1_t','Infrastructure Services')) ?></h4><p><?= htmlspecialchars($gc('two_a1_d','Resilient enterprise foundations, built and managed end to end.')) ?></p><div class="meta"><?= htmlspecialchars($gc('two_a1_m','Consulting · Deployment · Managed Infrastructure')) ?></div></div>
-          <div class="sx-hub2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><circle cx="12" cy="11" r="2.4"/><path d="M12 8.6V6M9.9 12.2l-2 1.1M14.1 12.2l2 1.1"/></svg></div><b><?= htmlspecialchars($gc('two_hub_t','Unified Expertise')) ?></b><span><?= htmlspecialchars($gc('two_hub_s','Sapta Tunas Teknologi')) ?></span></div>
+          <div class="sx-hub2"><img class="stt" src="<?= theme_asset('assets/img/stt-mark-glow.png') ?>" alt="Sapta Tunas Teknologi" width="40" height="40"><b><?= htmlspecialchars($gc('two_hub_t','Unified Expertise')) ?></b><span><?= htmlspecialchars($gc('two_hub_s','Sapta Tunas Teknologi')) ?></span></div>
           <div class="sx-acard cy"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h4><?= htmlspecialchars($gc('two_a2_t','Cybersecurity Services')) ?></h4><p><?= htmlspecialchars($gc('two_a2_d','Assess, govern and protect against evolving cyber threats.')) ?></p><div class="meta"><?= htmlspecialchars($gc('two_a2_m','Assess · Govern · Protect')) ?></div></div>
         </div>
         <div class="sx-benes">
