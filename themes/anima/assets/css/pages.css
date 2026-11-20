@@ -3063,18 +3063,18 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 }
 
 /* Services deck (.svc-deck) — right panel becomes a "How we deliver" card (scoped; Solutions deck untouched) */
-.svc-deck .sd-media.sd-how{height:min(64vh,520px);border-radius:24px;overflow:hidden;padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;justify-content:center;
+.svc-deck .sd-media.sd-how{height:auto;min-height:min(52vh,420px);border-radius:24px;overflow:visible;padding:clamp(22px,2.6vw,32px);display:flex;flex-direction:column;justify-content:center;
   background:linear-gradient(170deg,rgba(20,32,62,.72),rgba(10,18,40,.85));border:1px solid rgba(120,160,235,.18);box-shadow:0 30px 70px -36px rgba(0,8,30,.8)}
 .svc-deck .sd-media.sd-how::after{display:none}
-.sd-how .cap{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7d93c0;margin-bottom:18px}
+.sd-how .cap{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7d93c0;margin-bottom:15px}
 .sd-how .cap .em{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#8fc0ff;background:rgba(47,123,224,.14);border:1px solid rgba(120,170,255,.24)}
 .sd-how .cap .em svg{width:17px;height:17px;fill:none;stroke:currentColor}
-.sd-howrow{display:flex;gap:16px;padding:15px 0;border-top:1px solid rgba(120,160,235,.1)}
-.sd-howrow:first-of-type{border-top:0}
+.sd-howrow{display:flex;gap:16px;padding:12px 0;border-top:1px solid rgba(120,160,235,.1)}
+.sd-howrow:first-of-type{border-top:0;padding-top:2px}
 .sd-howrow .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#9fc3ff;background:#0b1326;border:1px solid rgba(120,170,255,.4)}
 .sd-howrow b{display:block;color:#eaf1ff;font-size:14.5px;font-weight:600;margin-bottom:3px}
 .sd-howrow p{margin:0;color:#93a6c8;font-size:12.5px;line-height:1.5}
-.sd-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(120,160,235,.14)}
+.sd-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(120,160,235,.14)}
 .sd-mini b{display:block;color:#fff;font-size:13.5px;font-weight:600;margin-bottom:5px}
 .sd-mini span{color:#8ea6d4;font-size:11px;line-height:1.45}
 .sd-checks{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:11px}
@@ -3089,11 +3089,16 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 
 /* Services deck header — eyebrow + heading + divider on top (replaces overlapping .sd-eye) */
 .svc-deck .sd-eye{display:none}
-.svc-deck .svc-deckhead .sx-eye{margin-bottom:12px}
-.svc-deck .svc-deckhead .sx-h2{font-size:clamp(22px,2.9vw,38px);padding-bottom:20px;border-bottom:1px solid rgba(120,160,235,.16)}
+.svc-deck .svc-deckhead .sx-eye{margin-bottom:10px}
+.svc-deck .svc-deckhead .sx-h2{font-size:clamp(21px,2.5vw,33px);line-height:1.12;padding-bottom:15px;border-bottom:1px solid rgba(120,160,235,.16)}
 @media (min-width:861px){
-  .svc-deck .svc-deckhead{position:absolute;left:clamp(24px,6vw,92px);right:clamp(24px,6vw,92px);top:max(44px,5.5vh);z-index:6}
-  .svc-deck .sd-panel{align-items:start;padding-top:clamp(150px,21vh,220px)}
+  .svc-deck .svc-deckhead{position:absolute;left:clamp(24px,6vw,92px);right:clamp(24px,6vw,92px);top:max(36px,4vh);z-index:6}
+  .svc-deck .sd-panel{align-items:start;padding-top:clamp(132px,18vh,186px)}
+  /* kolom kiri deck dipadatkan supaya tombol "Learn more" tak terpotong di viewport pendek */
+  .svc-deck .sd-num{font-size:clamp(40px,4.6vw,70px);margin-bottom:2px}
+  .svc-deck .sd-checks{margin-top:13px;gap:9px}
+  .svc-deck .sd-chips{margin-top:15px}
+  .svc-deck .sd-cta{margin-top:17px}
 }
 @media (max-width:860px){
   .svc-deck .svc-deckhead{padding:0 20px 10px}
