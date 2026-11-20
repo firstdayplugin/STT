@@ -1,0 +1,22 @@
+{
+  "name": "Omah",
+  "slug": "omah",
+  "version": "1.0.0",
+  "description": "Tema properti/real estate hasil konversi pixel-faithful dari situs Framer difaproperty.framer.website. Geist font, clean white/dark/blue palette, scroll reveal bertingkat, property cards, sticky FAQ, dan hero full-viewport.",
+  "author": "Custom build for DIFA Property",
+  "tags": ["property", "real-estate", "framer", "white", "clean"],
+  "screenshot": "screenshot.png",
+  "supports": {
+    "settings_accent_color": true,
+    "settings_logo": true,
+    "settings_logo_dark": true,
+    "hero_settings": true,
+    "flex_blocks": true,
+    "grid_icon_box": true
+  },
+  "requires": {
+    "cms": "Reklamepedia CMS >= 1.0.0",
+    "php": ">=8.0",
+    "browser": "Evergreen (Chrome/Edge/Safari/Firefox terbaru)"
+  }
+}
