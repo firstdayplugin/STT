@@ -156,7 +156,10 @@ include theme_path('templates/layouts/header.php');
   <section class="sd-wrap svc-deck" id="sdWrap" aria-label="<?= htmlspecialchars(t('supporting_capability', 'What we deliver')) ?>" style="height:<?= max(320, $cap_n * 112) ?>vh">
     <div class="sd-pin">
       <canvas class="sd-bg" id="sdBg" aria-hidden="true"></canvas>
-      <div class="sd-eye"><?= htmlspecialchars(t('what_we_deliver', 'What we deliver')) ?></div>
+      <div class="svc-deckhead">
+        <div class="sx-eye"><?= htmlspecialchars(t('what_we_deliver', 'What we deliver')) ?></div>
+        <h2 class="sx-h2 notranslate" translate="no"><?= $gc('deliver_h_pre','End-to-End Infrastructure &amp; ') ?><span class="b"><?= $gc('deliver_h_hl','Cybersecurity') ?></span> <?= $gc('deliver_h_post','Services.') ?></h2>
+      </div>
       <div class="sd-rail" id="sdRail">
         <?php foreach ($caps as $i => $c): ?>
           <button type="button" data-i="<?= $i ?>" class="<?= $i === 0 ? 'on' : '' ?>" aria-label="<?= htmlspecialchars(strip_tags($TP($c['row'], 'judul'))) ?>"><span class="d"></span><span class="idx"><?= sprintf('%02d', $i + 1) ?></span></button>

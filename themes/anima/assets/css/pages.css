@@ -3086,3 +3086,16 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
   .svc-deck .sd-media.sd-how{height:auto;aspect-ratio:auto;margin-top:18px}
   .sd-mini{grid-template-columns:1fr}
 }
+
+/* Services deck header — eyebrow + heading + divider on top (replaces overlapping .sd-eye) */
+.svc-deck .sd-eye{display:none}
+.svc-deck .svc-deckhead .sx-eye{margin-bottom:12px}
+.svc-deck .svc-deckhead .sx-h2{font-size:clamp(22px,2.9vw,38px);padding-bottom:20px;border-bottom:1px solid rgba(120,160,235,.16)}
+@media (min-width:861px){
+  .svc-deck .svc-deckhead{position:absolute;left:clamp(24px,6vw,92px);right:clamp(24px,6vw,92px);top:max(44px,5.5vh);z-index:6}
+  .svc-deck .sd-panel{align-items:start;padding-top:clamp(150px,21vh,220px)}
+}
+@media (max-width:860px){
+  .svc-deck .svc-deckhead{padding:0 20px 10px}
+  .svc-deck .svc-deckhead .sx-h2{border-bottom:0;padding-bottom:0}
+}
