@@ -1,20 +1,24 @@
 <?php
 /**
  * Anima — Services SUB-PAGE (route: /services/[slug]).
- * Two archetypes by $service_page['tipe']:
- *   capability -> "Capability Deck" immersive layout: dark constellation hero, a
- *                 pinned scroll deck where each service area (Consult/Deploy/Manage
- *                 ...) snaps into focus with its capabilities staggering in, a
- *                 Data & AI band, and a light finale. Motion in svcdetail.js.
- *   package    -> tiers (Gold/Platinum/Diamond) + comparison matrix (table desktop,
- *                 cards mobile), in the centered .svd-* / .sv2-* layout.
- * Data from service_areas/items and service_tiers/matrix. Language-aware via tr_field.
+ * Layout mengikuti mockup klien, dirender dalam design language situs (font
+ * Space Grotesk + Inter, token warna existing). Dua archetype by tipe:
+ *   capability -> hero split + AT A GLANCE, Service Areas (3 kartu), Plan
+ *                 Positioning (teaser paket), cross-sell, final CTA.
+ *   package    -> hero split + AT A GLANCE, Compare plans (matrix), What happens
+ *                 next (3 langkah), cross-sell, final CTA.
+ * Hero constellation (#csdNet) & reveal animasi via svcdetail.js (element-guarded).
+ * Data: service_areas/items, service_tiers, service_matrix (tr_field aware).
+ * Konten extra mockup (tombol/glance/steps/cross-sell/plan-teaser) default di
+ * template, dapat dioverride via content_blocks(slug,key) lewat get_content().
  */
 $db  = $db ?? (class_exists('Database') ? Database::getInstance() : null);
 $p   = $service_page ?? [];
 $pid = (int)($p['id'] ?? 0);
+$slug = (string)($p['slug'] ?? '');
 $tipe = $p['tipe'] ?? 'capability';
-$T = fn(string $f) => tr_field('service_pages', $pid, $f, $p[$f] ?? '');
+$T  = fn(string $f) => tr_field('service_pages', $pid, $f, $p[$f] ?? '');
+$gc = fn(string $k, string $d = '') => function_exists('get_content') ? get_content($slug, $k, $d) : $d;
 
 $areas = $tiers = $matrix = [];
 try {
@@ -29,36 +33,85 @@ try {
         $matrix = $db->fetchAll("SELECT * FROM service_matrix WHERE page_id=? ORDER BY urutan, id", [$pid]);
     }
 } catch (\Throwable $e) {}
-
-// Group matrix rows by 'grup' (preserving order).
 $mgroups = [];
 foreach ($matrix as $row) { $mgroups[(string)($row['grup'] ?? '')][] = $row; }
-$dataAiLines = array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', (string)$T('data_ai_body')))));
 
-// Pick an icon per capability area from its code/name (falls back to a rotation).
-$area_icon_map = [
-    'consult'=>'search','consulting'=>'search','assess'=>'search','plan'=>'search','discovery'=>'search',
-    'deploy'=>'box','deployment'=>'box','build'=>'box','implement'=>'box','integration'=>'box',
-    'manage'=>'settings','managed'=>'settings','operate'=>'settings','maintenance'=>'settings','support'=>'settings',
-    'govern'=>'lock','protect'=>'lock','secure'=>'lock','security'=>'lock','compliance'=>'lock',
-    'optimize'=>'rocket','optimise'=>'rocket','improve'=>'rocket','transform'=>'sparkles',
+/* -------- per-page mockup config (EN defaults; override via content_blocks) ---- */
+$CFG_ALL = [
+  'services/infrastructure-services' => [
+    'crumb'      => [['Services','services']],
+    'crumb_last' => 'Infrastructure Services',
+    'btn1' => ['Compare Service Packages','services/managed-infrastructure-packages'],
+    'btn2' => ['Talk to an Expert','contact-us'],
+    'glance' => [['23','Capabilities across 3 service areas'],['24×7','Helpdesk service SLA'],['3','Service plans: Gold, Platinum, Diamond'],['ISO 27001','Certified information security']],
+    'areas_head' => ['Service Areas','Three areas, one accountable team','Start anywhere in the lifecycle. Every area connects to the next.'],
+    'plan' => [
+      'eye'=>'Package Positioning','h'=>'Choose Your Plan',
+      'sub'=>'Managed Infrastructure Services matched to your environment\'s criticality, support needs, maintenance frequency, and onsite requirements.',
+      'tiers'=>[
+        ['GOLD','Essential Infrastructure Support',false,['Preventive maintenance 2× / year','6 corrective maintenance tickets','2 move, add & change tickets']],
+        ['PLATINUM','Enhanced Operational Support',true,['Preventive maintenance 4× / year','12 corrective maintenance tickets','6 move, add & change tickets','Yearly maintenance review']],
+        ['DIAMOND','Comprehensive Managed Infrastructure',false,['Monthly preventive maintenance','Unlimited corrective and MAC tickets','1 onsite standby engineer (office hours)','Maintenance review 2× / year']],
+      ],
+      'note'=>'All plans include a 24×7 helpdesk, max. 1 hour response time, and a 1-year minimum period.',
+      'cta'=>['Compare all plans','services/managed-infrastructure-packages'],
+    ],
+    'final' => ['Not sure which plan fits?','Tell us about your environment. We will recommend a plan and send a tailored proposal.',['Discuss Your SLA Needs','contact-us']],
+  ],
+  'services/cybersecurity-services' => [
+    'alert' => ['Under attack or suspect a breach?','Talk to our team now','contact-us'],
+    'crumb'      => [['Services','services']],
+    'crumb_last' => 'Cybersecurity Services',
+    'btn1' => ['Explore SOC Plans','services/soc-as-a-service'],
+    'btn2' => ['Talk to a Security Expert','contact-us'],
+    'glance' => [['15 min','SOC Acknowledgement SLA Target'],['GRC','Regulatory & Privacy Compliance Consulting'],['SOC','SOC as a Service with Managed Threat Detection & Response'],['ISO 27001','Certified information security']],
+    'areas_head' => ['Service Areas','Three areas, one accountable team','Start with an assessment, build governance, then protect continuously.'],
+    'plan' => [
+      'eye'=>'Package Positioning','h'=>'Choose Your Plan',
+      'sub'=>'SOC as a Service plans matched to your monitoring hours, log coverage, response time, and incident-handling needs.',
+      'tiers'=>[
+        ['GOLD','Essential SOC Monitoring',false,['Security monitoring 8 × 5','Up to 25 assets','Log ingest 5 GB / day','Detection & recommendation','Monthly security reporting']],
+        ['PLATINUM','Managed Detection & Investigation',true,['Security monitoring 24 × 7','Up to 50 assets','Log ingest 10 GB / day','Co-managed incident handling with SOAR','VA: 4 credits / year','Monthly & annual security reporting']],
+        ['DIAMOND','Comprehensive Cyber Defense',false,['Security monitoring 24 × 7','Up to 100 assets / source logs','Log ingest 30 GB / day','Fully managed incident handling with SOAR','Threat hunting & pentest credits','Monthly, half & annual reporting']],
+      ],
+      'note'=>'All plans include 30 days of log retention.',
+      'cta'=>['Compare all SOC plans','services/soc-as-a-service'],
+    ],
+    'final' => ['Not sure where to start?','Tell us about your environment and regulatory needs. We will map the right services and send a tailored proposal.',['Discuss Your SOC Needs','contact-us']],
+  ],
+  'services/managed-infrastructure-packages' => [
+    'crumb'      => [['Services','services'],['Infrastructure Services','services/infrastructure-services']],
+    'crumb_last' => 'Managed Infrastructure Packages',
+    'btn1' => ['Discuss Your SLA Needs','contact-us'],
+    'btn2' => ['Back to Infrastructure Services','services/infrastructure-services'],
+    'glance' => [['3','Plans: Gold, Platinum, Diamond'],['24×7','Helpdesk service SLA'],['1 hour','Maximum response time'],['1 year','Minimum period']],
+    'plan_head' => ['Choose Your Plan','Compare plans in detail','Full coverage for every plan, side by side. Platinum is our recommended plan.'],
+    'steps' => ['What happens next','From first call to signed plan',[
+      ['Share your environment','Tell us what you run and how critical it is.'],
+      ['We recommend a plan','A written recommendation with scope and SLA.'],
+      ['Proposal & onboarding','Agree on the proposal, then we take over operations.'],
+    ]],
+    'cross' => ['Protecting what you run?','Pair managed infrastructure with security monitoring from our SOC.',['Explore SOC as a Service','services/soc-as-a-service']],
+    'final' => ['Not sure which plan fits?','Tell us about your environment. We will recommend a plan and send a tailored proposal.',['Discuss Your SLA Needs','contact-us']],
+  ],
+  'services/soc-as-a-service' => [
+    'alert' => ['Under attack or suspect a breach?','Talk to our team now','contact-us'],
+    'crumb'      => [['Services','services'],['Cybersecurity Services','services/cybersecurity-services']],
+    'crumb_last' => 'SOC as a Service',
+    'btn1' => ['Discuss Your SOC Needs','contact-us'],
+    'btn2' => ['Back to Cybersecurity Services','services/cybersecurity-services'],
+    'glance' => [['3','Plans: Gold, Platinum, Diamond'],['24×7','Monitoring on Platinum and Diamond'],['15 min','Fastest response time'],['30 days','Log retention on all plans']],
+    'plan_head' => ['Choose Your Plan','Compare plans in detail','Full coverage for every plan, side by side. Platinum is our recommended plan.'],
+    'steps' => ['What happens next','From first call to live monitoring',[
+      ['Share your scope','Tell us your assets, log sources, and regulatory needs.'],
+      ['We recommend a plan','A written recommendation with coverage and response times.'],
+      ['Proposal & onboarding','Agree on the proposal, then we connect your log sources.'],
+    ]],
+    'cross' => ['Want the full picture?','See how assessment, governance, and managed protection fit together.',['Back to Cybersecurity Services','services/cybersecurity-services']],
+    'final' => ['Not sure which plan fits?','Tell us about your environment and regulatory needs. We will map the right services and send a tailored proposal.',['Discuss Your SOC Needs','contact-us']],
+  ],
 ];
-$area_icon_fallback = ['search','box','settings','lock','rocket','layers'];
-$pick_area_icon = function (array $a, int $i) use ($area_icon_map, $area_icon_fallback) {
-    foreach ([$a['kode'] ?? '', $a['nama'] ?? ''] as $k) {
-        $k = strtolower(trim((string)$k));
-        if ($k !== '' && isset($area_icon_map[$k])) return $area_icon_map[$k];
-        foreach ($area_icon_map as $word => $ic) { if ($k !== '' && str_contains($k, $word)) return $ic; }
-    }
-    return $area_icon_fallback[$i % count($area_icon_fallback)];
-};
-// Hero emblem: a shield for security/cyber pages, stacked layers otherwise.
-$slugl = strtolower((string)($p['slug'] ?? ''));
-$hero_icon = (str_contains($slugl, 'cyber') || str_contains($slugl, 'security') || str_contains($slugl, 'soc')) ? 'lock' : 'layers';
-$deck_h = max(360, count($areas) * 140);   // vh — scales with number of areas
-// Package pages: an optional service flow (service_pages.extra2, "A -> B -> C").
-$flow = array_values(array_filter(array_map('trim', explode('→', (string)$T('extra2')))));
-$flow_icons = ['search', 'box', 'settings', 'lock', 'rocket', 'sparkles'];
+$C = $CFG_ALL[$slug] ?? [];
 
 $seo = ['title' => ($p['judul'] ?? 'Services') . ' — ' . get_setting('site_name', 'Sapta Tunas Teknologi'),
         'description' => mb_substr(strip_tags($T('body')), 0, 160)];
@@ -67,161 +120,176 @@ $arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
 $check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
 $cell = function ($v) use ($check) {
     $v = trim((string)$v);
-    if ($v === '' || $v === '-') return '<span class="svd-dash">—</span>';
+    if ($v === '' || $v === '-' || strcasecmp($v, 'No') === 0) return '<span class="svd-dash">—</span>';
     if (strcasecmp($v, 'Yes') === 0) return '<span class="svd-yes">' . $check . '</span>';
-    if (strcasecmp($v, 'No') === 0)  return '<span class="svd-dash">—</span>';
     return '<span class="svd-val">' . htmlspecialchars($v) . '</span>';
 };
-include theme_path('templates/layouts/header.php');
-?>
-<?php if ($tipe === 'capability'): /* ===== immersive capability layout ===== */ ?>
-<main class="page-body csd">
 
-  <!-- Hero: dark constellation field + glowing emblem (motion in svcdetail.js). -->
-  <section class="csd-hero" id="csdHero">
-    <canvas class="csd-net" id="csdNet" aria-hidden="true"></canvas>
-    <a class="csd-back" href="<?= url('services') ?>">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-      <?= htmlspecialchars(t('services', 'Services')) ?></a>
-    <div class="csd-emblem-hero" aria-hidden="true">
-      <span class="glow"></span><span class="ring r2"></span><span class="ring r3"></span>
-      <span class="ic"><?= icon($hero_icon, 50) ?></span>
-    </div>
-    <?php if (trim((string)$T('tagline')) !== ''): ?><div class="csd-eye"><?= htmlspecialchars($T('tagline')) ?></div><?php endif; ?>
-    <h1 class="csd-h1"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
-    <?php if (trim((string)$T('body')) !== ''): ?><p class="csd-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
-    <?php if (!empty($p['cta_label'])): ?>
-      <a class="csd-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
+// Shared render helpers --------------------------------------------------------
+$render_hero = function () use ($C, $T, $p, $arrow, $slug) {
+    $btn1 = $C['btn1'] ?? [($T('cta_label') ?: 'Contact Us'), ($p['cta_target'] ?: 'contact-us')];
+    $btn2 = $C['btn2'] ?? null;
+    ?>
+    <?php if (!empty($C['alert'])): ?>
+      <a class="csd-alert" href="<?= htmlspecialchars(url($C['alert'][2])) ?>">
+        <span class="al-dot" aria-hidden="true"></span>
+        <strong><?= htmlspecialchars($C['alert'][0]) ?></strong>
+        <span class="al-go"><?= htmlspecialchars($C['alert'][1]) ?> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
     <?php endif; ?>
-    <div class="csd-scroll" aria-hidden="true"><span></span>Scroll</div>
-  </section>
-
-  <?php if ($areas): ?>
-  <!-- Pinned area deck: each service area snaps into focus as you scroll. -->
-  <section class="csd-deck" id="csdDeck" style="height:<?= (int)$deck_h ?>vh">
-    <div class="csd-pin">
-      <div class="csd-deck-eye"><?= htmlspecialchars(t('service_areas', 'Service Areas')) ?></div>
-      <div class="csd-rail" id="csdRail">
-        <?php foreach ($areas as $i => $a): ?>
-          <div class="csd-seg<?= $i === 0 ? ' on' : '' ?>">
-            <span class="dot"></span><span class="num"><?= sprintf('%02d', $i + 1) ?></span><span class="lbl"><?= htmlspecialchars($a['nama'] ?? '') ?></span>
-          </div>
-        <?php endforeach; ?>
-      </div>
-      <?php foreach ($areas as $i => $a): $aid = (int)$a['id'];
-        $TA = fn($f) => tr_field('service_areas', $aid, $f, $a[$f] ?? '');
-        $items = $a['items'] ?? []; ?>
-        <div class="csd-panel<?= $i === 0 ? ' on' : '' ?>" data-p="<?= $i ?>">
-          <div class="csd-txt">
-            <div class="csd-kick"><span class="step"><?= sprintf('%02d', $i + 1) ?></span><?php if (!empty($a['nama'])): ?><span class="name"><?= htmlspecialchars($a['nama']) ?></span><?php endif; ?></div>
-            <h2><?= htmlspecialchars($TA('judul')) ?></h2>
-            <?php if (trim((string)$TA('deskripsi')) !== ''): ?><p class="csd-desc"><?= pt($TA('deskripsi')) ?></p><?php endif; ?>
-            <?php if ($items): ?>
-            <ul class="csd-caps">
-              <?php foreach ($items as $k => $it): ?>
-                <li style="--i:<?= (int)$k ?>"><span class="chk"><?= $check ?></span><span><?= htmlspecialchars(tr_field('service_area_items', (int)$it['id'], 'teks', $it['teks'])) ?></span></li>
-              <?php endforeach; ?>
-            </ul>
-            <?php endif; ?>
-          </div>
-          <div class="csd-emblem" aria-hidden="true">
-            <span class="halo"></span><span class="ring a"></span><span class="ring b"></span>
-            <span class="core"><?= icon($pick_area_icon($a, $i), 64) ?></span>
-            <span class="count"><?= count($items) ?> <?= htmlspecialchars(t('capabilities', 'capabilities')) ?></span>
+    <section class="csd-hero sxd" id="csdHero">
+      <canvas class="csd-net" id="csdNet" aria-hidden="true"></canvas>
+      <div class="sxd-inner">
+        <div class="sxd-copy">
+          <?php if (!empty($C['crumb'])): ?>
+          <nav class="svc-crumb" aria-label="Breadcrumb">
+            <?php foreach ($C['crumb'] as $cr): ?><a href="<?= htmlspecialchars(url($cr[1])) ?>"><?= htmlspecialchars($cr[0]) ?></a><span class="sep">/</span><?php endforeach; ?>
+            <span class="cur"><?= htmlspecialchars($C['crumb_last'] ?? ($p['judul'] ?? '')) ?></span>
+          </nav>
+          <?php endif; ?>
+          <?php if (trim((string)$T('tagline')) !== ''): ?><div class="csd-eye notranslate"><?= htmlspecialchars($T('tagline')) ?></div><?php endif; ?>
+          <h1 class="csd-h1"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
+          <?php if (trim((string)$T('body')) !== ''): ?><p class="csd-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
+          <div class="sxd-btns">
+            <a class="csd-cta" href="<?= htmlspecialchars(url($btn1[1])) ?>"><?= htmlspecialchars($btn1[0]) ?> <?= $arrow ?></a>
+            <?php if ($btn2): ?><a class="csd-cta2" href="<?= htmlspecialchars(url($btn2[1])) ?>"><?= htmlspecialchars($btn2[0]) ?></a><?php endif; ?>
           </div>
         </div>
+        <?php if (!empty($C['glance'])): ?>
+        <aside class="svc-glance">
+          <div class="gl-eye"><?= htmlspecialchars(t('at_a_glance','At a Glance')) ?></div>
+          <div class="gl-grid">
+            <?php foreach ($C['glance'] as $g): ?>
+              <div class="gl-cell"><div class="gl-n notranslate"><?= htmlspecialchars($g[0]) ?></div><div class="gl-c"><?= htmlspecialchars($g[1]) ?></div></div>
+            <?php endforeach; ?>
+          </div>
+        </aside>
+        <?php endif; ?>
+      </div>
+    </section>
+    <?php
+};
+
+$render_cross = function () use ($C, $arrow) {
+    if (empty($C['cross'])) return; $x = $C['cross']; ?>
+    <section class="svc-cross">
+      <div class="xc-inner">
+        <div class="xc-txt"><h3><?= htmlspecialchars($x[0]) ?></h3><p><?= htmlspecialchars($x[1]) ?></p></div>
+        <a class="xc-btn" href="<?= htmlspecialchars(url($x[2][1])) ?>"><?= htmlspecialchars($x[2][0]) ?> <?= $arrow ?></a>
+      </div>
+    </section>
+    <?php
+};
+
+$render_final = function () use ($C, $T, $p, $arrow) {
+    $f = $C['final'] ?? ['One Partner. End-to-End Capability.','', [($T('cta_label') ?: 'Contact Us'), ($p['cta_target'] ?: 'contact-us')]];
+    ?>
+    <section class="csd-finale">
+      <h2><?= htmlspecialchars($f[0]) ?></h2>
+      <?php if (!empty($f[1])): ?><p class="fin-sub"><?= htmlspecialchars($f[1]) ?></p><?php endif; ?>
+      <a class="csd-fbtn" href="<?= htmlspecialchars(url($f[2][1])) ?>"><?= htmlspecialchars($f[2][0]) ?> <?= $arrow ?></a>
+    </section>
+    <?php
+};
+
+include theme_path('templates/layouts/header.php');
+?>
+<?php if ($tipe === 'capability'): /* ===== capability: areas + plan teaser ===== */ ?>
+<main class="page-body csd csd2<?= !empty($C['alert']) ? ' has-alert' : '' ?>">
+
+  <?php $render_hero(); ?>
+
+  <?php if ($areas): $ah = $C['areas_head'] ?? ['Service Areas','Three areas, one accountable team','']; ?>
+  <section class="svc-areas">
+    <div class="svc-sec-head">
+      <div class="eye"><?= htmlspecialchars($ah[0]) ?></div>
+      <h2><?= htmlspecialchars($ah[1]) ?></h2>
+      <?php if (!empty($ah[2])): ?><p><?= htmlspecialchars($ah[2]) ?></p><?php endif; ?>
+    </div>
+    <div class="svc-areagrid">
+      <?php foreach ($areas as $i => $a): $aid = (int)$a['id'];
+        $TA = fn($f) => tr_field('service_areas', $aid, $f, $a[$f] ?? '');
+        $items = $a['items'] ?? []; $tot = count($items); $show = array_slice($items, 0, 4); $rest = $tot - count($show); ?>
+        <article class="svc-areacard pkg-reveal">
+          <div class="ac-kick"><span class="num"><?= htmlspecialchars($a['kode'] ?: sprintf('%02d',$i+1)) ?></span><span class="sep">·</span><span class="code notranslate"><?= htmlspecialchars($a['nama'] ?? '') ?></span></div>
+          <h3><?= htmlspecialchars($TA('judul')) ?></h3>
+          <?php if (trim((string)$TA('deskripsi')) !== ''): ?><p class="ac-desc"><?= htmlspecialchars($TA('deskripsi')) ?></p><?php endif; ?>
+          <?php if ($show): ?>
+          <ul class="ac-caps">
+            <?php foreach ($show as $it): ?><li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars(tr_field('service_area_items',(int)$it['id'],'teks',$it['teks'])) ?></span></li><?php endforeach; ?>
+          </ul>
+          <?php endif; ?>
+          <?php if ($tot): ?><div class="ac-more"><?php if ($rest>0): ?>+ <?= (int)$rest ?> more · <?php endif; ?><?= (int)$tot ?> <?= htmlspecialchars(t('capabilities','capabilities')) ?> in total</div><?php endif; ?>
+        </article>
       <?php endforeach; ?>
     </div>
   </section>
   <?php endif; ?>
 
-  <?php if (trim((string)$T('data_ai_title')) !== '' || $dataAiLines): ?>
-  <section class="csd-dataai">
-    <span class="spark"><?= icon('sparkles', 30) ?></span>
-    <h2><?= htmlspecialchars($T('data_ai_title') ?: 'Data & AI') ?></h2>
-    <div class="csd-ailines">
-      <?php foreach ($dataAiLines as $line): ?><div><span class="chk"><?= $check ?></span><span><?= htmlspecialchars($line) ?></span></div><?php endforeach; ?>
+  <?php if (!empty($C['plan'])): $pl = $C['plan']; ?>
+  <section class="svc-plan">
+    <div class="svc-sec-head">
+      <div class="eye"><?= htmlspecialchars($pl['eye']) ?></div>
+      <h2><?= htmlspecialchars($pl['h']) ?></h2>
+      <?php if (!empty($pl['sub'])): ?><p><?= htmlspecialchars($pl['sub']) ?></p><?php endif; ?>
     </div>
+    <div class="pkg-tiers">
+      <?php foreach ($pl['tiers'] as $tr): $feat = !empty($tr[2]); ?>
+        <div class="pkg-tier pkg-reveal<?= $feat ? ' feat' : '' ?>">
+          <?php if ($feat): ?><span class="flag"><?= htmlspecialchars(t('recommended','Recommended')) ?></span><?php endif; ?>
+          <div class="nm notranslate"><?= htmlspecialchars($tr[0]) ?></div>
+          <h3><?= htmlspecialchars($tr[1]) ?></h3>
+          <ul class="pt-bullets">
+            <?php foreach ($tr[3] as $b): ?><li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars($b) ?></span></li><?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endforeach; ?>
+    </div>
+    <?php if (!empty($pl['note'])): ?><div class="svc-plan-note"><?= htmlspecialchars($pl['note']) ?></div><?php endif; ?>
+    <?php if (!empty($pl['cta'])): ?><div class="svc-plan-cta"><a class="csd-cta2 wide" href="<?= htmlspecialchars(url($pl['cta'][1])) ?>"><?= htmlspecialchars($pl['cta'][0]) ?> <?= $arrow ?></a></div><?php endif; ?>
   </section>
   <?php endif; ?>
 
-  <section class="csd-finale">
-    <h2><?= htmlspecialchars(t('services_closing', 'One Partner. End-to-End Capability.')) ?></h2>
-    <a class="csd-fbtn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
-  </section>
+  <?php $render_cross(); ?>
+  <?php $render_final(); ?>
 
 </main>
 <script src="<?= theme_asset('assets/js/svcdetail.js') ?>" defer></script>
 
-<?php else: /* ===== immersive package layout (tiers + comparison matrix) ===== */ ?>
-<main class="page-body csd">
+<?php else: /* ===== package: compare matrix + steps ===== */ ?>
+<main class="page-body csd csd2<?= !empty($C['alert']) ? ' has-alert' : '' ?>">
 
-  <!-- Hero: dark constellation (same family as the capability pages). -->
-  <section class="csd-hero" id="csdHero">
-    <canvas class="csd-net" id="csdNet" aria-hidden="true"></canvas>
-    <a class="csd-back" href="<?= url('services') ?>">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
-      <?= htmlspecialchars(t('services', 'Services')) ?></a>
-    <div class="csd-emblem-hero" aria-hidden="true">
-      <span class="glow"></span><span class="ring r2"></span><span class="ring r3"></span>
-      <span class="ic"><?= icon($hero_icon, 50) ?></span>
-    </div>
-    <?php if (trim((string)$T('tagline')) !== ''): ?><div class="csd-eye"><?= htmlspecialchars($T('tagline')) ?></div><?php endif; ?>
-    <h1 class="csd-h1"><?= htmlspecialchars($T('headline') ?: ($p['judul'] ?? '')) ?></h1>
-    <?php if (trim((string)$T('body')) !== ''): ?><p class="csd-lead"><?= htmlspecialchars($T('body')) ?></p><?php endif; ?>
-    <?php if (!empty($p['cta_label'])): ?>
-      <a class="csd-cta" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label')) ?> <?= $arrow ?></a>
-    <?php endif; ?>
-    <div class="csd-scroll" aria-hidden="true"><span></span>Scroll</div>
-  </section>
-
-  <?php if (count($flow) > 1): ?>
-  <!-- Service flow (service_pages.extra2) — glowing nodes on a connecting line. -->
-  <section class="pkg-flow">
-    <div class="eye"><?= htmlspecialchars(t('service_flow', 'Service Flow')) ?></div>
-    <div class="pkg-flowline">
-      <?php foreach ($flow as $fi => $step): ?>
-        <div class="pkg-fn"><span class="node"><?= icon($flow_icons[$fi % count($flow_icons)], 24) ?></span><span class="lbl"><?= htmlspecialchars($step) ?></span></div>
-      <?php endforeach; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <?php if ($tiers): ?>
-  <section class="pkg-tiers-sec">
-    <div class="pkg-head"><div class="eye"><?= htmlspecialchars(t('package_positioning', 'Package Positioning')) ?></div><h2><?= htmlspecialchars(t('choose_your_plan', 'Choose Your Plan')) ?></h2></div>
-    <div class="pkg-tiers">
-      <?php foreach ($tiers as $i => $tr): $tid = (int)$tr['id']; $feat = ($i === 1); ?>
-        <div class="pkg-tier pkg-reveal<?= $feat ? ' feat' : '' ?>">
-          <?php if ($feat): ?><span class="flag"><?= htmlspecialchars(t('recommended', 'Recommended')) ?></span><?php endif; ?>
-          <div class="nm"><?= htmlspecialchars($tr['nama']) ?></div>
-          <h3><?= htmlspecialchars(tr_field('service_tiers', $tid, 'judul', $tr['judul'] ?? '')) ?></h3>
-          <p><?= pt(tr_field('service_tiers', $tid, 'deskripsi', $tr['deskripsi'] ?? '')) ?></p>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
-  <?php endif; ?>
+  <?php $render_hero(); ?>
 
   <?php if ($matrix):
     $tier_labels = [];
-    foreach ($tiers as $tr) { $tier_labels[] = $tr['nama']; }
-    if (!$tier_labels) $tier_labels = ['Gold', 'Platinum', 'Diamond'];
+    foreach ($tiers as $tr) { $tier_labels[] = $tr; }
+    $ph = $C['plan_head'] ?? ['Choose Your Plan','Compare plans in detail',''];
+    $feat_idx = 1; // Platinum
   ?>
   <section class="pkg-cmp-sec">
-    <div class="pkg-head"><div class="eye"><?= htmlspecialchars(t('compare', 'Compare')) ?></div><h2><?= htmlspecialchars(t('package_comparison', 'Package Comparison')) ?></h2></div>
-    <div class="pkg-cmp">
+    <div class="svc-sec-head">
+      <div class="eye"><?= htmlspecialchars($ph[0]) ?></div>
+      <h2><?= htmlspecialchars($ph[1]) ?></h2>
+      <?php if (!empty($ph[2])): ?><p><?= htmlspecialchars($ph[2]) ?></p><?php endif; ?>
+    </div>
+    <div class="pkg-cmp pkg-cmp-rich">
       <div class="crow head">
-        <div><?= htmlspecialchars(t('service_coverage', 'Service Coverage')) ?></div>
-        <div><?= htmlspecialchars($tier_labels[0] ?? 'Gold') ?></div>
-        <div class="feat"><?= htmlspecialchars($tier_labels[1] ?? 'Platinum') ?></div>
-        <div><?= htmlspecialchars($tier_labels[2] ?? 'Diamond') ?></div>
+        <div class="cmpintro"><?= htmlspecialchars(t('whats_different',"What's Different")) ?></div>
+        <?php foreach ($tiers as $ti => $tr): $tid=(int)$tr['id']; $isf = ($ti===$feat_idx); ?>
+          <div class="tcol<?= $isf ? ' feat' : '' ?>">
+            <?php if ($isf): ?><span class="tflag"><?= htmlspecialchars(t('recommended','Recommended')) ?></span><?php endif; ?>
+            <span class="tn notranslate"><?= htmlspecialchars($tr['nama']) ?></span>
+            <span class="tt"><?= htmlspecialchars(tr_field('service_tiers',$tid,'judul',$tr['judul'] ?? '')) ?></span>
+            <?php $td = tr_field('service_tiers',$tid,'deskripsi',$tr['deskripsi'] ?? ''); if (trim((string)$td)!==''): ?><span class="td"><?= htmlspecialchars($td) ?></span><?php endif; ?>
+          </div>
+        <?php endforeach; ?>
       </div>
       <?php foreach ($mgroups as $gname => $rows): ?>
-        <?php if ($gname !== '' && $gname !== 'Service Coverage'): ?><div class="cgroup"><?= htmlspecialchars($gname) ?></div><?php endif; ?>
+        <?php if ($gname !== ''): ?><div class="cgroup"><?= htmlspecialchars($gname) ?></div><?php endif; ?>
         <?php foreach ($rows as $r): ?>
           <div class="crow item pkg-reveal">
-            <div><?= htmlspecialchars(tr_field('service_matrix', (int)$r['id'], 'baris', $r['baris'])) ?></div>
+            <div><?= htmlspecialchars(tr_field('service_matrix',(int)$r['id'],'baris',$r['baris'])) ?></div>
             <div><?= $cell($r['v_gold']) ?></div><div class="feat"><?= $cell($r['v_platinum']) ?></div><div><?= $cell($r['v_diamond']) ?></div>
           </div>
         <?php endforeach; ?>
@@ -230,10 +298,22 @@ include theme_path('templates/layouts/header.php');
   </section>
   <?php endif; ?>
 
-  <section class="csd-finale">
-    <h2><?= htmlspecialchars(t('services_closing', 'One Partner. End-to-End Capability.')) ?></h2>
-    <a class="csd-fbtn" href="<?= htmlspecialchars(url($p['cta_target'] ?: 'contact-us')) ?>"><?= htmlspecialchars($T('cta_label') ?: t('contact_us', 'Contact Us')) ?> <?= $arrow ?></a>
+  <?php if (!empty($C['steps'])): $st = $C['steps']; ?>
+  <section class="svc-steps">
+    <div class="svc-sec-head">
+      <div class="eye"><?= htmlspecialchars($st[0]) ?></div>
+      <h2><?= htmlspecialchars($st[1]) ?></h2>
+    </div>
+    <div class="svc-steprow">
+      <?php foreach ($st[2] as $k => $s): ?>
+        <div class="svc-step pkg-reveal"><span class="sn"><?= sprintf('%02d',$k+1) ?></span><h4><?= htmlspecialchars($s[0]) ?></h4><p><?= htmlspecialchars($s[1]) ?></p></div>
+      <?php endforeach; ?>
+    </div>
   </section>
+  <?php endif; ?>
+
+  <?php $render_cross(); ?>
+  <?php $render_final(); ?>
 
 </main>
 <script src="<?= theme_asset('assets/js/svcdetail.js') ?>" defer></script>
