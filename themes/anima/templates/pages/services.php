@@ -64,7 +64,7 @@ $trust_logos = [['erha.png','Erha',20],['cinema-xxi.png','Cinema XXI',22],['dell
 // Benefit cards for "Two Areas".
 $benes = [
   ['<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>', $gc('b1_t','Stronger Business Continuity'), $gc('b1_d','Improve resilience and recovery readiness when disruptions occur.'), false],
-  ['<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>', $gc('b2_t','Reduced Business Risk'), $gc('b2_d','Identify vulnerabilities and strengthen protection across your IT environment.'), true],
+  ['<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>', $gc('b2_t','Reduced Business Risk'), $gc('b2_d','Identify vulnerabilities and strengthen protection across your IT environment.'), false],
   ['<rect x="3" y="4" width="18" height="5" rx="1.5"/><rect x="3" y="12" width="18" height="5" rx="1.5"/>', $gc('b3_t','Simplified IT Management'), $gc('b3_d','One partner to coordinate your infrastructure and security needs.'), false],
   ['<path d="M3 12h4l3 8 4-16 3 8h4"/>', $gc('b4_t','Reliable IT Operations'), $gc('b4_d','Keep critical systems performing with coordinated support and monitoring.'), false],
 ];
@@ -96,12 +96,12 @@ include theme_path('templates/layouts/header.php');
           <div class="svl-adot"><i></i></div>
           <div class="svl-hub"><b>END&ndash;TO&ndash;END</b><span class="lc"><?= htmlspecialchars($gc('hero_core_label', 'Lifecycle')) ?></span><span class="sub"><?= htmlspecialchars($gc('hero_core_sub', '10+ years · 200+ clients')) ?></span></div>
           <?php foreach ($lifecycle as $i => $lab): if ($i > 5) break; [$lx,$ty] = $ring_pos[$i]; ?>
-            <div class="svl-node" style="--i:<?= $i ?>;left:<?= $lx ?>%;top:<?= $ty ?>%"><div class="ic"><svg viewBox="0 0 24 24"><?= $ring_icons[$i % count($ring_icons)] ?></svg></div><div class="n"><?= htmlspecialchars($lab) ?></div></div>
+            <div class="svl-node<?= $i === 0 ? ' lit' : '' ?>" style="--i:<?= $i ?>;left:<?= $lx ?>%;top:<?= $ty ?>%"><div class="ic"><svg viewBox="0 0 24 24"><?= $ring_icons[$i % count($ring_icons)] ?></svg></div><div class="n"><?= htmlspecialchars($lab) ?></div></div>
           <?php endforeach; ?>
         </div>
         <div class="svl-caps">
           <?php foreach ($lifecycle as $i => $lab): if ($i > 5) break; $cap = $ring_caps[$lab] ?? null; if (!$cap) continue; ?>
-            <div class="svl-cap" style="--i:<?= $i ?>"><b><?= htmlspecialchars($lab) ?></b><p><?= htmlspecialchars($cap[0]) ?></p><a href="<?= htmlspecialchars($cap[2]) ?>"><?= htmlspecialchars($cap[1]) ?></a></div>
+            <div class="svl-cap<?= $i === 0 ? ' lit' : '' ?>" style="--i:<?= $i ?>"><b><?= htmlspecialchars($lab) ?></b><p><?= htmlspecialchars($cap[0]) ?></p><a href="<?= htmlspecialchars($cap[2]) ?>"><?= htmlspecialchars($cap[1]) ?></a></div>
           <?php endforeach; ?>
         </div>
       </div>
@@ -254,5 +254,6 @@ include theme_path('templates/layouts/header.php');
     </div>
   </section>
   <script src="<?= theme_asset('assets/js/ctafinale.js') ?>" defer></script>
+  <script src="<?= theme_asset('assets/js/svcindex.js') ?>" defer></script>
 </main>
 <?php include theme_path('templates/layouts/footer.php'); ?>

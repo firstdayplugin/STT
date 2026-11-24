@@ -68,4 +68,15 @@
       reveals.forEach(function (e) { rio.observe(e); });
     }
   }
+
+  // ---- capability pages: click "+N more" to expand the full capability list ----
+  var mores = [].slice.call(document.querySelectorAll('.svc-areacard button.ac-more'));
+  mores.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.svc-areacard');
+      if (!card) return;
+      var open = card.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
 })();

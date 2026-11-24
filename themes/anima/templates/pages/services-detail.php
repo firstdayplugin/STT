@@ -209,17 +209,22 @@ include theme_path('templates/layouts/header.php');
     <div class="svc-areagrid">
       <?php foreach ($areas as $i => $a): $aid = (int)$a['id'];
         $TA = fn($f) => tr_field('service_areas', $aid, $f, $a[$f] ?? '');
-        $items = $a['items'] ?? []; $tot = count($items); $show = array_slice($items, 0, 4); $rest = $tot - count($show); ?>
+        $items = $a['items'] ?? []; $tot = count($items); $rest = max(0, $tot - 4); ?>
         <article class="svc-areacard pkg-reveal">
           <div class="ac-kick"><span class="num"><?= htmlspecialchars($a['kode'] ?: sprintf('%02d',$i+1)) ?></span><span class="sep">·</span><span class="code notranslate"><?= htmlspecialchars($a['nama'] ?? '') ?></span></div>
           <h3><?= htmlspecialchars($TA('judul')) ?></h3>
           <?php if (trim((string)$TA('deskripsi')) !== ''): ?><p class="ac-desc"><?= htmlspecialchars($TA('deskripsi')) ?></p><?php endif; ?>
-          <?php if ($show): ?>
+          <?php if ($items): ?>
           <ul class="ac-caps">
-            <?php foreach ($show as $it): ?><li><span class="chk"><?= $check ?></span><span><?= htmlspecialchars(tr_field('service_area_items',(int)$it['id'],'teks',$it['teks'])) ?></span></li><?php endforeach; ?>
+            <?php foreach ($items as $k => $it): ?><li<?= $k >= 4 ? ' class="extra"' : '' ?>><span class="chk"><?= $check ?></span><span><?= htmlspecialchars(tr_field('service_area_items',(int)$it['id'],'teks',$it['teks'])) ?></span></li><?php endforeach; ?>
           </ul>
           <?php endif; ?>
-          <?php if ($tot): ?><div class="ac-more"><?php if ($rest>0): ?>+ <?= (int)$rest ?> more · <?php endif; ?><?= (int)$tot ?> <?= htmlspecialchars(t('capabilities','capabilities')) ?> in total</div><?php endif; ?>
+          <?php if ($rest > 0): ?>
+            <button type="button" class="ac-more" aria-expanded="false">
+              <span class="ac-lbl"><span class="more">+ <?= (int)$rest ?> more</span><span class="less"><?= htmlspecialchars(t('show_less','Show less')) ?></span> · <?= (int)$tot ?> <?= htmlspecialchars(t('capabilities','capabilities')) ?> in total</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          <?php elseif ($tot): ?><div class="ac-more static"><?= (int)$tot ?> <?= htmlspecialchars(t('capabilities','capabilities')) ?> in total</div><?php endif; ?>
         </article>
       <?php endforeach; ?>
     </div>
