@@ -1,0 +1,8 @@
+/* PREVIEW-ONLY override (not part of the theme): neutralize scroll-reveal & sticky-pin
+   so a static headless screenshot shows every section. Never shipped in the theme. */
+.reveal,.reveal *{opacity:1!important;transform:none!important;filter:none!important}
+.hslide,.oc-word,.stmt .word,[class*="reveal"]{opacity:1!important;transform:none!important}
+.tfi,.tfi-pin{position:static!important;height:auto!important}
+.tfi-media{position:relative!important}
+.prism .stage,.statement .stmt-sticky,.ind2{position:static!important;height:auto!important}
+.stmt{opacity:1!important}
