@@ -3217,8 +3217,11 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .csd2 .csd-cta2.wide{padding:15px 32px}
 
 /* rich comparison matrix header (tier name+title+desc inside the head row) */
-.csd2 .pkg-cmp-rich .crow.head{grid-template-columns:1.7fr 1fr 1fr 1fr;align-items:stretch;background:#0c1b30}
-.csd2 .pkg-cmp-rich .crow.head>div{padding:22px 16px 32px}
+/* NOT sticky: position:sticky here made the header box taller than the space it
+   reserves, so the first group band + rows rendered behind it (text looked like it
+   overlapped the first row). Static fixes it and reveals the first group band. */
+.csd2 .pkg-cmp-rich .crow.head{grid-template-columns:1.7fr 1fr 1fr 1fr;align-items:stretch;background:#0c1b30;position:static;top:auto}
+.csd2 .pkg-cmp-rich .crow.head>div{padding:22px 16px 26px}
 .csd2 .pkg-cmp-rich .cmpintro{display:flex;align-items:flex-end;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6f8ab0;text-align:left}
 .csd2 .pkg-cmp-rich .tcol{position:relative;display:flex;flex-direction:column;gap:5px;text-align:center}
 .csd2 .pkg-cmp-rich .tcol.feat{background:rgba(47,123,224,.1)}
