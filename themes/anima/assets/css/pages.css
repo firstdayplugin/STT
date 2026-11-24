@@ -3056,8 +3056,10 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .sx-flag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#49d6c7;padding:6px 12px;border-radius:999px;background:rgba(55,201,189,.12);border:1px solid rgba(55,201,189,.3);margin-bottom:18px}
 .sx-bundle h3{font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(21px,2.2vw,28px);font-weight:600;color:#fff;margin:0 0 13px;letter-spacing:-.01em}
 .sx-bundle .lead{color:#a9b9d8;font-size:14.5px;line-height:1.65;margin:0 0 24px}
-.sx-bbtns{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.sx-blink{font-size:13.5px;font-weight:600;color:#9fc3ff;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.sx-bbtns{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+.sx-blinks{display:flex;flex-wrap:wrap;gap:14px 28px}
+.sx-blink{font-size:13.5px;font-weight:600;color:#9fc3ff;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:color .2s}
+.sx-blink:hover{color:#cfe4ff}
 .sx-blink svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2}
 .sx-points{list-style:none;margin:0;padding:0;display:grid;gap:16px;align-content:center}
 .sx-points li{display:flex;gap:11px;color:#c4d2ec;font-size:14px;line-height:1.5}
@@ -3192,15 +3194,15 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 .csd2 .ac-caps .chk svg{width:15px;height:15px;stroke:currentColor;fill:none}
 .csd2 .ac-caps li.extra{display:none}
 .csd2 .svc-areacard.open .ac-caps li.extra{display:flex}
-.csd2 .ac-more{margin-top:12px;padding-top:14px;border-top:1px solid rgba(120,160,235,.1);font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#6f93d8}
-.csd2 button.ac-more{width:100%;display:flex;align-items:center;gap:8px;appearance:none;background:none;text-align:left;
-  font-family:inherit;cursor:pointer;transition:color .2s}
+/* "+N more" is a plain inline text toggle — no box / border / select look */
+.csd2 .ac-more{margin-top:14px;font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#6f93d8}
+.csd2 button.ac-more{display:inline-flex;align-items:center;gap:7px;width:auto;appearance:none;-webkit-appearance:none;
+  background:none;border:0;padding:0;font:inherit;font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#6f93d8;cursor:pointer;transition:color .2s}
 .csd2 button.ac-more:hover{color:#9fc3ff}
-.csd2 button.ac-more .ac-lbl{flex:1 1 auto}
 .csd2 button.ac-more .less{display:none}
 .csd2 .svc-areacard.open button.ac-more .more{display:none}
 .csd2 .svc-areacard.open button.ac-more .less{display:inline}
-.csd2 button.ac-more .chev{flex:none;width:15px;height:15px;transition:transform .25s}
+.csd2 button.ac-more .chev{flex:none;width:14px;height:14px;transition:transform .25s}
 .csd2 .svc-areacard.open button.ac-more .chev{transform:rotate(180deg)}
 .csd2 .ac-more.static{color:#6f93d8}
 
@@ -3216,7 +3218,7 @@ button.idc-node{background:none;border:0;padding:0;margin:0;font:inherit;color:i
 
 /* rich comparison matrix header (tier name+title+desc inside the head row) */
 .csd2 .pkg-cmp-rich .crow.head{grid-template-columns:1.7fr 1fr 1fr 1fr;align-items:stretch;background:#0c1b30}
-.csd2 .pkg-cmp-rich .crow.head>div{padding:20px 16px}
+.csd2 .pkg-cmp-rich .crow.head>div{padding:22px 16px 32px}
 .csd2 .pkg-cmp-rich .cmpintro{display:flex;align-items:flex-end;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6f8ab0;text-align:left}
 .csd2 .pkg-cmp-rich .tcol{position:relative;display:flex;flex-direction:column;gap:5px;text-align:center}
 .csd2 .pkg-cmp-rich .tcol.feat{background:rgba(47,123,224,.1)}

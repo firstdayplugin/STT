@@ -121,7 +121,8 @@ $check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
 $cell = function ($v) use ($check) {
     $v = trim((string)$v);
     if ($v === '' || $v === '-' || strcasecmp($v, 'No') === 0) return '<span class="svd-dash">—</span>';
-    if (strcasecmp($v, 'Yes') === 0) return '<span class="svd-yes">' . $check . '</span>';
+    // "Yes" and "Checklist" both render as the check (centang) icon.
+    if (strcasecmp($v, 'Yes') === 0 || strcasecmp($v, 'Checklist') === 0) return '<span class="svd-yes">' . $check . '</span>';
     return '<span class="svd-val">' . htmlspecialchars($v) . '</span>';
 };
 

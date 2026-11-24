@@ -227,8 +227,10 @@ include theme_path('templates/layouts/header.php');
             <p class="lead"><?= htmlspecialchars($gc('bundle_lead','One partner from your data center to your security operations. Fewer vendors to manage, fewer gaps to cover.')) ?></p>
             <div class="sx-bbtns">
               <a class="svc-btn svc-btn-p" href="<?= htmlspecialchars(url('contact-us')) ?>"><?= htmlspecialchars(t('request_combined_proposal','Request a Combined Proposal')) ?> <?= $arrow ?></a>
-              <a class="sx-blink" href="<?= htmlspecialchars(url('services/managed-infrastructure-packages')) ?>"><?= htmlspecialchars(t('infrastructure_plans','Infrastructure plans')) ?> <?= $arrow ?></a>
-              <a class="sx-blink" href="<?= htmlspecialchars(url('services/soc-as-a-service')) ?>"><?= htmlspecialchars(t('soc_plans','SOC plans')) ?> <?= $arrow ?></a>
+              <div class="sx-blinks">
+                <a class="sx-blink" href="<?= htmlspecialchars(url('services/managed-infrastructure-packages')) ?>"><?= htmlspecialchars(t('infrastructure_plans','Infrastructure plans')) ?> <?= $arrow ?></a>
+                <a class="sx-blink" href="<?= htmlspecialchars(url('services/soc-as-a-service')) ?>"><?= htmlspecialchars(t('soc_plans','SOC plans')) ?> <?= $arrow ?></a>
+              </div>
             </div>
           </div>
           <ul class="sx-points">

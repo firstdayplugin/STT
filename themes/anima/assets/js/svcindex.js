@@ -9,27 +9,34 @@
    Both element-guarded.
    ========================================================================== */
 (function () {
-  // ---- 1) ring: light nearest node/caption to the orbiting dot ----
+  // ---- 1) ring: a node glows ONLY while the orbiting dot is actually over it
+  //        (pixel overlap, not "nearest") so it never lights before the dot
+  //        reaches it. The caption holds the last node the dot touched. ----
   var dot = document.querySelector('.svl-adot');
   var nodes = [].slice.call(document.querySelectorAll('.svl-node'));
   var caps  = [].slice.call(document.querySelectorAll('.svl-cap'));
   var stage = document.querySelector('.svl-stage');
   if (dot && stage && nodes.length >= 2) {
-    var cur = -1;
-    function centre(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+    var litNow = -1, capNow = 0;
+    function centre(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width }; }
     function tick() {
-      var s = stage.getBoundingClientRect(), cx = s.left + s.width / 2, cy = s.top + s.height / 2;
       var dc = centre(dot.querySelector('i'));
-      var best = Infinity, bi = 0;
+      var best = Infinity, bi = -1, touchR = 30;
       for (var i = 0; i < nodes.length; i++) {
-        var nc = centre(nodes[i].querySelector('.ic'));
+        var ic = nodes[i].querySelector('.ic');
+        var nc = centre(ic);
+        touchR = nc.w * 0.5;                       // the dot must enter the icon's circle
         var d = Math.hypot(nc.x - dc.x, nc.y - dc.y);
         if (d < best) { best = d; bi = i; }
       }
-      if (bi !== cur) {
-        cur = bi;
-        for (var j = 0; j < nodes.length; j++) nodes[j].classList.toggle('lit', j === bi);
-        for (var k = 0; k < caps.length; k++) caps[k].classList.toggle('lit', k === bi);
+      var over = (best <= touchR) ? bi : -1;        // node the dot is currently on (or none)
+      if (over !== litNow) {
+        litNow = over;
+        for (var j = 0; j < nodes.length; j++) nodes[j].classList.toggle('lit', j === over);
+      }
+      if (over !== -1 && over !== capNow) {         // caption follows, and holds between nodes
+        capNow = over;
+        for (var k = 0; k < caps.length; k++) caps[k].classList.toggle('lit', k === over);
       }
       requestAnimationFrame(tick);
     }
